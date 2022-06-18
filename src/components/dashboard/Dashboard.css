@@ -1,0 +1,16 @@
+.Dashboard {
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-content: baseline;
+	overflow: overlay;
+	padding: 17px 0px 0px 30px;
+}
+
+@media (max-width: 1358px) {
+	.Dashboard {
+		justify-content: center;
+		padding: 17px 0px 0px 0px;
+	}
+}

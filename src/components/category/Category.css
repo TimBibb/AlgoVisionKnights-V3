@@ -1,0 +1,7 @@
+.Category {
+	display: flex;
+	flex-direction: column;
+	overflow: overlay;
+	align-items: center;
+	padding: 15px 0px 0px 0px;
+}

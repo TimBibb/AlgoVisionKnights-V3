@@ -1,0 +1,32 @@
+#button-group-web {
+	margin: 0px 5px 0px 10px;
+}
+
+#information-button {
+	border-right: 1px solid #ffffff;
+}
+
+#information-button,
+#visualizer-button {
+	text-transform: none;
+}
+
+#more-button {
+	color: #ffffff;
+	padding: 12px 0px 12px 12px;
+}
+
+#mobile-menu {
+	margin: 44px 0px 0px 0px;
+}
+
+/* Overrides */
+div.MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+	padding: 0;
+	background-color: #262d4a;
+	border-radius: 0px;
+}
+
+ul.MuiList-root.MuiMenu-list.MuiList-padding {
+	padding: 0;
+}

@@ -1,0 +1,37 @@
+/* Scroll Bar */
+/* width */
+::-webkit-scrollbar {
+	width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #ff335c;
+	border-radius: 10px;
+}
+
+#drawer {
+	height: 100%;
+}
+
+#toolbar-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#nav-title {
+	font-size: 1.7em;
+	font-weight: 700;
+	color: #ff335c;
+}
+
+#dashboard-nav-button {
+	color: #ffffff;
+}

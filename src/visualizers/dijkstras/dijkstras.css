@@ -1,0 +1,21 @@
+.dark-mode {
+	background-color: #112;
+	color: #d3d3d3;
+}
+
+.center-screen {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#message-pane {
+	height: 150px;
+	width: 100%;
+}
+
+#banner {
+	height: 50px;
+	width: 100%;
+}

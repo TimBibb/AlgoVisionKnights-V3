@@ -1,0 +1,33 @@
+html,
+body,
+#root,
+.App {
+	height: 100%;
+	background-color: #1b203d;
+	color: #ffffff;
+}
+
+.App {
+	font-family: Roboto;
+}
+
+.App {
+	display: flex;
+	flex-direction: row;
+}
+
+.Main {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+#markdown-renderer {
+	background-color: #1b203d;
+}
+
+.Link {
+	text-decoration: none;
+	color: '#ffffff';
+	display: contents;
+}

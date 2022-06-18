@@ -1,0 +1,68 @@
+.BubbleSort,
+.SelectionSort,
+.InsertionSort,
+.QuickSort,
+.MergeSort,
+.HeapSort,
+.LinearSearch,
+.BinarySearch,
+.SinglyLinkedList,
+.Dijkstras,
+.BellmanFord,
+.BreadthFirstSearch,
+.DepthFirstSearch,
+.Prims,
+.AVL,
+.BinarySearchTree,
+.Preorder,
+.Inorder,
+.Postorder,
+.Queens,
+.TowersOfHanoi,
+.FibonacciSequence,
+.HashTable {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#card-info div {
+	margin: 0px 20px 0px 0px;
+	width: 100%;
+}
+
+#card-info div td {
+	padding: 6px;
+}
+
+#card-info div td span {
+	text-align: left !important;
+	margin: 0px;
+}
+
+#card-info img {
+	border-radius: 10px;
+}
+
+#card-info div .SubHeader {
+	font-size: 1.1em;
+}
+
+#card-info img {
+	width: auto;
+	height: 200px;
+}
+
+#card-info table {
+	color: #99afc2;
+	width: 100%;
+}
+
+#card-info table tr:nth-child(even) {
+	background-color: #272b3f;
+}
+
+#card-info table tr {
+	text-align: left !important;
+	margin: 0px;
+}

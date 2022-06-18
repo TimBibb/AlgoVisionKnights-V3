@@ -1,0 +1,4 @@
+h1 {
+  font-size: 3em; /* A font size to fall back on if vw doesn't work */
+  font-size: 2.3vw;
+}

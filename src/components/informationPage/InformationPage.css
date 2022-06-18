@@ -1,0 +1,13 @@
+.InformationPage {
+	margin: 20px 30px 20px 30px;
+	background-color: #262d4a;
+	padding: 13px 25px 25px 25px;
+}
+
+table {
+	color: #262d4a;
+}
+
+a {
+	color: #ff335c !important;
+}

@@ -16,7 +16,7 @@ span.MuiButton-label {
 	align-items: center;
 	width: 100%;
 	height: 100%;
-	background-color: #262d4a;
+	background-color: #181818;
 	border-radius: 15px;
 }
 
@@ -55,7 +55,7 @@ span.MuiButton-label {
 
 #card-info {
 	font-size: 1.14em;
-	color: #99afc2;
+	color: #ffffff;
 }
 
 @media (max-width: 639px) {

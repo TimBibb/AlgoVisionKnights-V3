@@ -4,7 +4,7 @@ import './PageToggle.css';
 import { Button, ButtonGroup, Typography } from '@material-ui/core';
 
 function PageToggle({ setAlgoPage, algoPage }) {
-	const color = '#ff335c';
+	const color = '#FFC904';
 
 	const handleInformationPage = () => {
 		setAlgoPage('information');

@@ -16,15 +16,15 @@
 }
 
 #download-button:hover {
-	border-color: #ff335c;
+	border-color: #FFC904;
 }
 
 #download-button:hover #os-container #os-icon {
-       color: #ff335c;
+       color: #FFC904;
 }       
 
 #download-button:hover #download-icon-container {
-	background-color: #ff335c;
+	background-color: #FFC904;
 }
 
 #os-icon, #download-icon {

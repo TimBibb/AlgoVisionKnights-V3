@@ -20,10 +20,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
 	burger: {
-		backgroundColor: '#262d4a',
+		backgroundColor: '#000000',
 	},
 	drawer: {
-		backgroundColor: '#262d4a',
+		backgroundColor: '#000000',
 		color: '#ffffff',
 		position: 'inherit',
 		width: '200px',
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 		width: '0px',
-		backgroundColor: '#262d4a',
+		backgroundColor: '#000000',
 	},
 }));
 
@@ -89,7 +89,7 @@ function Navigation({
 							style={{
 								color:
 									page === 'Dashboard'
-										? '#ff335c'
+										? '#FFC904'
 										: '#ffffff',
 							}}
 							onClick={handleChange('Dashboard')}

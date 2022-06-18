@@ -25,7 +25,7 @@ function NavGroup({ title, algorithms, panel, expanded, handleChange }) {
 					<ListItemText
 						id='nav-item-text'
 						style={{
-							color: expanded === panel ? '#ff335c' : '#ffffff',
+							color: expanded === panel ? '#FFC904' : '#ffffff',
 						}}>
 						{title}
 					</ListItemText>

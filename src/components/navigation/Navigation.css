@@ -11,7 +11,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #ff335c;
+	background: #FFC904;
 	border-radius: 10px;
 }
 
@@ -29,7 +29,7 @@
 #nav-title {
 	font-size: 1.7em;
 	font-weight: 700;
-	color: #ff335c;
+	color: #FFC904;
 }
 
 #dashboard-nav-button {

@@ -24,7 +24,7 @@ const groups = [
 	{
 		path: 'trees',
 		title: 'Trees',
-		description: 'Trees are a nonlinear data structure. Instead, they have a hierarchical structure. Trees are a useful data structure for fast read and writes of data. Some of the most known trees are binary trees, avl trees, and 2-4 trees.',
+		description: 'Trees are a nonlinear data structure. Instead, they have a hierarchical structure. Trees are a useful data structure for fast read and writes of data. Some of the most known trees are binary trees, AVL trees, and 2-4 trees.',
 	},
 	// {
 	// 	path: 'probabilisticdatastructures',
@@ -46,11 +46,11 @@ const groups = [
 	// 	title: 'Divide and Conquer',
 	// 	description: 'Yet to be filled.',
 	// },
-	// {
-	// 	path: 'dynamicprogramming',
-	// 	title: 'Dynamic Programming',
-	// 	description: 'Yet to be filled.',
-	// },
+	{
+		path: 'dynamicprogramming',
+		title: 'Dynamic Programming',
+		description: 'Dynamic Programming is mainly an optimization over plain recursion. The idea is to simply store the results of subproblems, so that we do not have to re-compute them when needed later. This simple optimization reduces time complexities from exponential to polynomial.',
+	},
 	{
 		path: 'recursion',
 		title: 'Recursion',

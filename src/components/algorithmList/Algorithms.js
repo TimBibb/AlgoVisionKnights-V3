@@ -101,6 +101,18 @@ const algorithms = {
 			type: 'js',
 			description: <HashTable />,
 		},
+		{
+			name: 'Tries',
+			path: 'tries'
+		},
+		{
+			name: 'Queues',
+			path: 'queues'
+		},
+		{
+			name: 'Stacks',
+			path: 'stacks'
+		},
 	],
 	graphs: [
 		// { name: 'Overview', description: <Graphs /> },
@@ -134,6 +146,10 @@ const algorithms = {
 			type: 'js',
 			description: <Prims />,
 		},
+		{
+			name: "Kruskal's",
+			path: 'kruskals'
+		},
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },
@@ -162,6 +178,14 @@ const algorithms = {
 			type: 'unity',
 			description: <Postorder />,
 		},
+		{
+			name: 'Heaps',
+			path: 'heaps'
+		},
+		{
+			name: 'Huffman Coding Tree',
+			path: 'lcs'
+		},
 	],
 	// probabilisticdatastructures: [
 	// 	{ name: 'Bloom Filters', path: 'bloomfilters' },
@@ -185,7 +209,20 @@ const algorithms = {
 	// 	{ name: 'Merge Sort', path: 'mergesort' },
 	// 	{ name: 'Quick Sort', path: 'quicksort' },
 	// ],
-	// dynamicprogramming: [{ name: 'Floyd-Warshal', path: 'floydwarshall' }],
+	dynamicprogramming: [
+		{ 
+			name: 'Sequence Alignment', 
+			path: 'sequencealignment' 
+		},
+		{
+			name: 'Knapsack',
+			path: 'knapsack'
+		},
+		{
+			name: 'Longest Common Subsequence',
+			path: 'lcs'
+		},
+	],
 	recursion: [
 		{
 			name: 'Fibonacci Sequence',
@@ -198,6 +235,10 @@ const algorithms = {
 			path: 'towersofhanoi', 
 			type: 'js',
 			description: <TowersofHanoi />
+		},
+		{
+			name: 'Floodfill',
+			path: 'floodfill'
 		},
 	],
 };

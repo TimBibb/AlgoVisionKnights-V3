@@ -1,11 +1,9 @@
 import React from "react";
-import "./template.css"; // These end up being the same for every algorithm / data structure
-						 // so it could be just as well for you to make one file you import
-						 // for all visualizers
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
-import createDefaultGraph from "../../foundation/graph/createDefaultGraph";
+import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
+import { ConsoleView } from "react-device-detect";
 
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
@@ -87,122 +85,41 @@ export default class LinearSearch extends React.Component {
 		this.run = this.run.bind(this);
 	}
 
-    initialize(){
-        d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
-
-        let isWeighted = false;
-        let isDirected = false;
-
-        let graph = createDefaultGraph(this.ref, isWeighted, isDirected);
-        let stack = [];
-        stack.push(new Number(this.ref, "stack", "7%", "10%", "Stack", "grey", "visible"));
-
-        this.setState({graph: graph, stack: stack});
-    }
-
     printArray(arr, size){
         for(let i = 0; i < size; i++){
             console.log(arr[i]);
         }
     }
 
-    sort(arr, length, item, stepTime){
+    sort(arr, ids, length, stepTime){
 
         var steps = [];
-        var message = [];
+        var messages = [];
 
-        message.push("<h1>Beginning Linear Search!</h1>");
+        messages.push("<h1>Beginning Linear Search!</h1>");
         steps.push(new EmptyStep());
-
         for(let i = 0; i < length; i++){
-            message.push("<h1>Searching Index " + i + "for Value " + item + ".</h1>");
-            steps.push(new ColorSwapStep());
-            if(arr[i] == item){
-                message.push("<h1>Found Item at Index " + i + ".</h1>");
-                return i;
-                //steps.push(new ColorFound());
+            messages.push("<h1>Searching Index " + i + "for Value " + this.state.target + ".</h1>");
+            steps.push(new ColorSwapStep(i, i+1, ids));
+            if(arr[i] == this.state.target){
+                messages.push("<h1>Found Item at Index " + i + ".</h1>");
+				steps.push(new EmptyStep());
+				break;
+				//steps.push(new ColorFound());
                 //remove second id from color swap step for new color (Gold)
             }
             else{
-                message.push("<h1>" + arr[i] + " != " + item + " </h1>");
+                messages.push("<h1>" + arr[i] + " != " + this.state.target + " </h1>");
+				steps.push(new EmptyStep());
             }
-        
-        steps.push(new EmptyStep());
-        
         }
-        message.push("<h1>Requested Item Not Found");
-        return -1;
-    }
 
-	// Main function - example of pushing to messages and steps queues
-	// **NOTE: steps.length == messages.length MUST be true
-	// You may need to push EmptyStep's or repeat messages depending on what you're doing
-	
-    /*sort(arr, ids, size, stepTime)
-	{
-		var steps = [];
-		var messages = [];
-        var i, j;
+        // messages.push("<h1>Requested Item Not Found");
 
-		messages.push("<h1>Beginning Bubble Sort!</h1>");
-		steps.push(new EmptyStep());
-
-        for (i = 0; i < size; i++) {
-            messages.push("<h1>Select the leftmost element.</h1>");
-		    steps.push(new BubbleSwapStep(0, 0, ids));
-
-            for(j = 0; j < size - i - 1; j++){
-                messages.push("<h1>Attempt to Bubble Up.</h1>");
-		        steps.push(new QSwapStep(j+1, ids));
-                
-                if (arr[j] > arr[j+1]) {
-					messages.push("<h1>" + arr[j] + " > " + arr[j+1] + "</h1>");
-		            steps.push(new EmptyStep());
-
-                    messages.push("<h1>Bubble Up!</h1>");
-		            steps.push(new SwapStep(j, j+1, ids, stepTime));
-                    [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
-
-                    messages.push("<h1>Bubble Up!</h1>");
-		            steps.push(new UncolorStep(j, ids));
-                }
-                else {
-					messages.push("<h1>" + arr[j] + " < " + arr[j + 1] + "</h1>");
-		            steps.push(new EmptyStep());
-
-                    messages.push("<h1>No change.</h1>");
-		            steps.push(new UncolorStep(j+1, ids));
-
-                    messages.push("<h1>Increment our Bubble pointer.</h1>");
-                    steps.push(new BubbleSwapStep(j, j+1, ids, stepTime));
-                }
-            }
-
-			messages.push("<h1>Reached the end of the unsorted array.</h1>");
-			steps.push(new EmptyStep());
-
-            messages.push("<h1>" + arr[j] + " sorted.</h1>");
-		    steps.push(new SortedStep(j, ids));
-
-            messages.push("<h1>" + arr[j] + " is now it its sorted position.</h1>");
-		    steps.push(new EmptyStep());
-
-            if (i !== size - 1) {
-                messages.push("<h1>Reset our Bubble pointer.</h1>");
-		        steps.push(new EmptyStep());
-            }
-        } 
-
-		messages.push("<h1>Finished Bubble Sort!</h1>");
-		steps.push(new EmptyStep());
-
-		// Always do setState at the end of a function if possible since it could
-		// trigger componentDidUpdate
 		this.setState({steps: steps});
 		this.setState({messages: messages});
-	}
+    }
 
-	// Ran once the component is mounted aka the first function that is ran*/
 	
     // Initializes the data to be used in the visualizer
 	dataInit(size) {
@@ -214,9 +131,10 @@ export default class LinearSearch extends React.Component {
 			arr[i] = 15 + Math.floor(Math.random() * 56);
 		}
 
-        target = arr[Math.floor(Math.random() * arr.length)];
-
-		this.setState({arr: arr});
+		this.setState({
+			arr: arr,
+			target: arr[Math.floor(Math.random() * arr.length)]
+		});
 	}
 
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
@@ -346,6 +264,7 @@ export default class LinearSearch extends React.Component {
 	}
 
 	turnOffRunning() {
+		console.log("setting running to false");
 		this.setState({running: false});
 	}
 
@@ -375,31 +294,9 @@ export default class LinearSearch extends React.Component {
 
 		var stepId = this.state.stepId - 1;
 
-		// Easy backward functions so just run that
-		if (this.state.steps[stepId] instanceof EmptyStep || this.state.steps[stepId] instanceof PartitionStep ||
-			this.state.steps[stepId] instanceof UnpartitionStep || this.state.steps[stepId] instanceof SwapStep)
-		{
-			console.log(this.state.steps[stepId]);
-			this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
-		}
-
-		// Or make a new svg and run steps up until step before
-		else
-		{
-			d3.select(this.ref.current).select("svg").remove();
-
-			var svg = this.initialize();
-
-			for (var i = 0; i < stepId; i++) {
-				this.state.steps[i].fastForward(svg);
-				console.log(this.state.steps[i]);
-			}
-
-			svg.attr("visibility", "visible");
-		}
-
-		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Bubble Sort!</h1>" : this.state.messages[stepId - 1];
-
+		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+        console.log(this.state.steps[stepId]);
+		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Insertion Sort!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
 		d3.timeout(this.turnOffRunning, this.state.waitTime);
 	}
@@ -411,10 +308,8 @@ export default class LinearSearch extends React.Component {
 			this.setState({running: false});
 			return;
 		}
-
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
 	}
@@ -437,7 +332,7 @@ export default class LinearSearch extends React.Component {
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "<h1>Welcome to Bubble Sort!</h1>";
 
-        this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
 	// First function to run
@@ -453,21 +348,18 @@ export default class LinearSearch extends React.Component {
 			this.printArray(this.state.arr, this.state.size);
 			this.initialize(this.state.arr, this.state.size, this.ref.current);
 		}
-
 		// Visualizer initialized -> Sort copy of array and get steps
 		else if (this.state.ids.length > prevState.ids.length) {
 			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+			console.log("ran visualizer");
 		}
-
 		// Part of restart -> Reinitialize with original array
         else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
 			console.log("Steps changed");
 			var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
 			svg.attr("visibility", "visible");
 		}
-
-		//
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
 			this.run();

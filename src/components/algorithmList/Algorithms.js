@@ -76,7 +76,7 @@ const algorithms = {
 		{
 			name: 'Linear Search',
 			path: 'linearsearch',
-			type: 'unity',
+			type: 'js',
 			description: <LinearSearch />,
 		},
 		{

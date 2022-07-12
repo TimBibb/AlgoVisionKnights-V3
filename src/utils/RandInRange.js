@@ -2,5 +2,6 @@
 function randInRange(lo, hi) {
   return Math.floor(Math.random() * (hi - lo)) + lo;
 }
+// test
 
 export default randInRange;

@@ -82,7 +82,7 @@ const algorithms = {
 		{
 			name: 'Binary Search',
 			path: 'binarysearch',
-			type: 'unity',
+			type: 'js',
 			description: <BinarySearch />,
 		},
 	],

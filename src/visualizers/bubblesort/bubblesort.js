@@ -616,10 +616,8 @@ export default class BubbleSort extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "<h1>Welcome to Bubble Sort!</h1>";
-
         this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 

@@ -14,11 +14,12 @@ function renderVisualizer(path, type) {
 		});
 
 		return <Unity className='Unity' unityContext={unityContext} />;
+	
 	} else if (type === 'js') {
 		const JSVisual =
 			require(`../../visualizers/${path}/${path}.js`).default;
-
-		return <JSVisual />;
+		
+			return <JSVisual />;
 	}
 }
 

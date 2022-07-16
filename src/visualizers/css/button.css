@@ -1,6 +1,6 @@
 .button {
-  background-color: #1b203d;
-  border: 2px solid white;
+  background-color: #181818;
+  border: 2.5px solid white;
   color: white;
   padding: 5px 10px;
   text-align: center;
@@ -9,8 +9,9 @@
   font-size: 24px;
   font-weight: bold;
   margin: 4px 4px;
-  transition-duration: 0.4s;
+  transition-duration: 0.2s;
   cursor: pointer;
+  border-radius: 15px;
 }
 
 .button:hover {
@@ -19,6 +20,34 @@
 }
 
 .button:active {
-  background-color: gray;
+  background-color: black;
   color: white;
+}
+
+.button2 {
+  background-color: #FFC904;
+  border: 2.5px solid #FFC904;
+  color: black;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 4px 4px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.button2:hover {
+  background-color: #FFC904;
+  border: 2.5px solid #FFC904;
+  color: white;
+}
+
+.button2:active {
+  background-color: #e0b20b;
+  border: 2.5px solid #e0b20b;
+  color: black;
 }

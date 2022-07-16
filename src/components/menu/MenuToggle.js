@@ -10,7 +10,7 @@ import {
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 function MenuToggle({ setAlgoPage, algoPage, viewWidth }) {
-	const color = '#ff335c';
+	const color = '#FFC904';
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleInformationPage = () => {

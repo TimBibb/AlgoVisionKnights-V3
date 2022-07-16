@@ -352,6 +352,10 @@ export default class BubbleSort extends React.Component {
 		this.run = this.run.bind(this);
 	}
 
+	NavigateToDashboard(){
+		window.location.href = "/";
+	}
+
 	printArray(arr, size) {
 		for (let i = 0; i < size; i++)
 		{
@@ -655,13 +659,19 @@ export default class BubbleSort extends React.Component {
 			<div>
 				<div class="center-screen" id="banner">
 					<button class="button" onClick={this.play}>Play</button>
-          <button class="button" onClick={this.pause}>Pause</button>
-          <button class="button" onClick={this.restart}>Restart</button>
-          <button class="button" onClick={this.backward}>Step Backward</button>
-          <button class="button" onClick={this.forward}>Step Forward</button>
+					<button class="button" onClick={this.pause}>Pause</button>
+					<button class="button" onClick={this.restart}>Restart</button>
+					<button class="button" onClick={this.backward}>Step Backward</button>
+					<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Bubble Sort!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
+
+				<div class="button-location">
+					<button class="button" onClick={this.NavigateToDashboard}>Dashboard</button>
+					<button class="button2" >More Information</button>
+				</div>
+		  
 			</div>
 		)
 	}

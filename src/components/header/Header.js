@@ -269,16 +269,16 @@ function Header({
 											}
 										/>
 										<Route
-                                                                                        exact={true}
-                                                                                        path={'/' + key + '/' + algorithm.path}
-                                                                                        element={
-                                                                                                <MenuToggle
-                                                                                                        setAlgoPage={setAlgoPage}
-                                                                                                        algoPage={algoPage}
-                                                                                                        viewWidth={viewWidth}
-                                                                                                />
-                                                                                        }
-                                                                                />
+										exact={true}
+										path={'/' + key + '/' + algorithm.path}
+										element={
+												<MenuToggle
+													setAlgoPage={setAlgoPage}
+													algoPage={algoPage}
+													viewWidth={viewWidth}
+												/>
+										}
+								/>
 									</>
 								))
 							)}

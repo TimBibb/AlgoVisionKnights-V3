@@ -1,9 +1,12 @@
 import React from "react";
+import "./linearsearch.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
+import UserInput from "../../components/userInput/UserInput";
 import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
 import { ConsoleView } from "react-device-detect";
+import { Component } from "react";
 
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
@@ -21,6 +24,57 @@ class EmptyStep {
 	}
 }
 
+class FirstColor{
+	constructor(id1, ids){
+		this.id1 = id1;
+		this.ids = ids;
+	}
+
+	forward(svg){
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+	}
+
+	fastForward(svg) {
+		this.forward(svg);
+	}
+
+	backward(svg) {
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+
+		svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		if (this.id1 !== this.id2) {
+			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		}
+	}
+}
+
+class ColorFound{
+	constructor(id1, ids){
+		this.id1 = id1;
+		this.ids = ids;
+	}
+
+	forward(svg){
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFD700");
+	}
+
+	fastForward(svg) {
+		this.forward(svg);
+	}
+
+	backward(svg) {
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+
+		svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		if (this.id1 !== this.id2) {
+			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		}
+	}
+}
 class ColorSwapStep{
     constructor(id1, id2, ids){
         this.id1 = id1;
@@ -98,19 +152,20 @@ export default class LinearSearch extends React.Component {
 
         messages.push("<h1>Beginning Linear Search!</h1>");
         steps.push(new EmptyStep());
+		steps.push(new FirstColor(0, ids));
+
         for(let i = 0; i < length; i++){
-            messages.push("<h1>Searching Index " + i + "for Value " + this.state.target + ".</h1>");
-            steps.push(new ColorSwapStep(i, i+1, ids));
+			steps.push(new EmptyStep());
+            messages.push("<h1>Searching Index [" + i + "] for Value " + this.state.target + ".</h1>");
             if(arr[i] == this.state.target){
-                messages.push("<h1>Found Item at Index " + i + ".</h1>");
-				steps.push(new EmptyStep());
+				steps.push(new ColorFound(i, ids));
+                messages.push("<h1>Found Item at Index [" + i + "].</h1>");
+				messages.push("<h1>Linear Search Complete!<h1>");
 				break;
-				//steps.push(new ColorFound());
-                //remove second id from color swap step for new color (Gold)
             }
-            else{
-                messages.push("<h1>" + arr[i] + " != " + this.state.target + " </h1>");
-				steps.push(new EmptyStep());
+            else if(arr[i] != this.state.target){
+				steps.push(new ColorSwapStep(i, i+1, ids));
+                messages.push("<h1>" + arr[i] + " does NOT equal " + this.state.target + ".</h1>");
             }
         }
 
@@ -139,9 +194,9 @@ export default class LinearSearch extends React.Component {
 
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize(arr, size, ref) {
-		const barWidth = 70;
-		const barOffset = 30;
-		const height = 450;
+		const barWidth = 100;
+		const barOffset = 1;
+		const height = 100;
 
 		// Used for scaling the bar heights in reference to the maximum value of the data array
 		let yScale = d3.scaleLinear()
@@ -163,15 +218,13 @@ export default class LinearSearch extends React.Component {
 		
 		bars.append("rect")
 				.attr("width", barWidth)
-				.attr("height", (d) => {
-					return yScale(d);
-				})
+				.attr("height", height)
 				.attr("x", (_, i) => {
 					return (i * (barWidth + barOffset)) + 65;
 				})
-				.attr("y", (d) => {
-					return (height + 100) - yScale(d);
-				})
+				.attr("y", height)
+				.attr("stroke", "rgb(255,255,255)")
+				.attr("stroke-width", "2")
 				.style("fill", "gray");
 
 		bars.append("text")
@@ -296,7 +349,7 @@ export default class LinearSearch extends React.Component {
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
         console.log(this.state.steps[stepId]);
-		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Insertion Sort!</h1>" : this.state.messages[stepId - 1];
+		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Linear Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
 		d3.timeout(this.turnOffRunning, this.state.waitTime);
 	}
@@ -330,7 +383,7 @@ export default class LinearSearch extends React.Component {
 		console.log("RESTART CLICKED");
 
 		d3.select(this.ref.current).select("svg").remove();
-        document.getElementById("message").innerHTML = "<h1>Welcome to Bubble Sort!</h1>";
+        document.getElementById("message").innerHTML = "<h1>Welcome to Linear Search!</h1>";
 
 		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
@@ -377,7 +430,7 @@ export default class LinearSearch extends React.Component {
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
-				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Template!</h1></span></div>
+				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Linear Search!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 			</div>
 		)

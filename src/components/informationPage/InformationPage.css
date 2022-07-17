@@ -11,3 +11,11 @@ table {
 a {
 	color: #FFC904 !important;
 }
+
+h3{
+	font-family: Segoe UI,Helvetica,Arial,sans-serif, Apple Color Emoji,Segoe UI Emoji;
+}
+
+hr{
+	border-bottom: 0.4px solid #eaecef;
+}

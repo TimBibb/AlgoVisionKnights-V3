@@ -251,7 +251,7 @@ function Header({
 							</div>
 						)}
 					</div>
-
+						
 					<div className='RightMenus'>
 						<Routes>
 							{Object.keys(algorithms).map((key) =>

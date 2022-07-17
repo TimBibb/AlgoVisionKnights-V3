@@ -8,6 +8,8 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
 import { ConsoleView } from "react-device-detect";
 import { Component } from "react";
 
+// Update file name
+
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
 class EmptyStep {

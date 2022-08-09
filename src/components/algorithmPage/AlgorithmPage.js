@@ -24,7 +24,6 @@ function AlgorithmPage({ path, type, algoPage }) {
 				<div className="button-location">
 					<button class="button" onClick={NavigateToDashboard}>Dashboard</button>
 					<button class="button2" onClick={()=> setShow(!show)}>More Information</button>
-					{show && <InformationPage path={path} />}
 				</div>
 				<div className='checkbox-location'>
 					<FormControlLabel
@@ -46,6 +45,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 					/>
 				</div>
 			</div>
+			{show && <InformationPage path={path} />}
 			<br/><br/>
 			
 

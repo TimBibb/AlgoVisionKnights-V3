@@ -667,10 +667,10 @@ export default class BubbleSort extends React.Component {
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Bubble Sort!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 
-				<div class="button-location">
+				{/* <div class="button-location">
 					<button class="button" onClick={this.NavigateToDashboard}>Dashboard</button>
 					<button class="button2" >More Information</button>
-				</div>
+				</div> */}
 		  
 			</div>
 		)

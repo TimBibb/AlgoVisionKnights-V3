@@ -19,8 +19,8 @@ function InformationPage({ path }) {
 
 	return (
 		<div className='InformationPage'>
-			<h3 style={{textAlign: "center"}}>more information below</h3>
-			<hr ></hr>
+			<h3>more information below</h3>
+			<hr></hr>
 			<br/><br/><br/>
 			<MarkdownPreview source={markdown} style={{ color: 'white' }} />
 		</div>

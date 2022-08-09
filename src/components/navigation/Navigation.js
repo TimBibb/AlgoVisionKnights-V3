@@ -64,6 +64,8 @@ function Navigation({
 	const classes = useStyles();
 
 	return (
+		// If we want to add a line to the navigator:
+		// <div className='Navigation' style={{borderRight: "0.5px solid #FFC904"}}></div>
 		<div className='Navigation'>
 			<Drawer
 				id='drawer'
@@ -83,6 +85,7 @@ function Navigation({
 					<Typography id='nav-title'>AVK</Typography>
 				</div>
 				<List>
+					
 					<Link className='Link' to='/'>
 						<ListItem
 							id='dashboard-nav-button'

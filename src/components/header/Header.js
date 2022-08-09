@@ -4,6 +4,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 // Assets
 import queries from './queries';
+import UCF from './UCF_logo.png';
 
 // Child Components
 import MenuToggle from '../menu/MenuToggle';
@@ -251,8 +252,15 @@ function Header({
 							</div>
 						)}
 					</div>
-						
+					
 					<div className='RightMenus'>
+						<a href="https://www.cs.ucf.edu/" target="_blank" rel="noreferrer">
+							<img src={UCF} alt="UCF Logo" hr height={45} width={65}></img>
+						</a>
+					</div>
+
+					{/* Right Menus removed by the new More Information button at the bottom */}
+					{/* <div className='RightMenus'>
 						<Routes>
 							{Object.keys(algorithms).map((key) =>
 								algorithms[key].map((algorithm) => (
@@ -283,9 +291,10 @@ function Header({
 								))
 							)}
 						</Routes>
-					</div>
+					</div> */}
 				</Toolbar>
 			</AppBar>
+			<hr className='hr-color'></hr>
 		</div>
 	);
 }

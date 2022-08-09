@@ -102,3 +102,9 @@
 		margin: 0px 0px 0px 10px;
 	}
 }
+
+.hr-color{
+	height: 0.10px;
+    background-color: #FFC904;
+    border: none;
+}

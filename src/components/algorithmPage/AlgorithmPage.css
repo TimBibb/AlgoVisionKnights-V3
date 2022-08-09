@@ -3,3 +3,17 @@
 	width: 100%;
 	height: 100%;
 }
+.button-location{
+	margin-left: 3%;
+	display: flex;
+	float: left;
+}
+.checkbox-location{
+	margin-right: 5%;
+	margin-top: -1.5%;
+	display: flex;
+	float: right;
+}
+.container{
+	width: 100%;
+}

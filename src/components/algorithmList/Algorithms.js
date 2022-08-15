@@ -158,7 +158,7 @@ const algorithms = {
 		{ 
 			name: 'AVL', 
 			path: 'avl', 
-			type: 'unity', 
+			type: 'js', 
 			description: <AVL /> 
 		},
 		{

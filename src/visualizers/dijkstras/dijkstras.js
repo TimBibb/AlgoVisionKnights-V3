@@ -197,11 +197,11 @@ export default class Dijkstras extends React.Component {
 					continue;
 				}
 
-				message.push(this.compareMessage(v, head[0]));
+				messages.push(this.compareMessage(v, head[0]));
 				steps.push(new ColorNodeStep(v, (graph.visited[head[0]]) ? "black" : "gray", "#EF3F88"));
 
 				if (graph.distances[v] === -1) {
-					message.push(this.compareMessage(v, head[0]));
+					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " < ∞.</h1>");
@@ -221,14 +221,14 @@ export default class Dijkstras extends React.Component {
 
 					graph.distances[v] = graph.distances[head[0]] + weight;
 
-					message.push(this.newDistanceMessage(v, graph.distances[v]));
+					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 					steps.push(new ColorEdgeStep(edge, "white", "#1ACA1E"));
 
-					message.push(this.newDistanceMessage(v, graph.distances[v]));
+					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 
 				}
 				else if (graph.distances[head[0]] + weight < graph.distances[v]) {
-					message.push(this.compareMessage(v, head[0]));
+					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " < " + graph.distances[v] + ".</h1>");
@@ -243,19 +243,19 @@ export default class Dijkstras extends React.Component {
 					graph.parents[v] = head[0];
 					graph.parentEdges[v] = edge;
 
-					message.push(this.newDistanceMessage(v, parseInt(graph.distances[head[0]] + weight)));
+					messages.push(this.newDistanceMessage(v, parseInt(graph.distances[head[0]] + weight)));
 					steps.push(new SetInfoStep(v, -1, -1, graph.distances[v], graph.distances[head[0]] + weight));
 
 					graph.distances[v] = graph.distances[head[0]] + weight;
 					
-					message.push(this.newDistanceMessage(v, graph.distances[v]));
+					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 					steps.push(new ColorEdgeStep(edge, "white", "#1ACA1E"));
 
-					message.push(this.newDistanceMessage(v, graph.distances[v]));
+					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 				}
 				else
 				{
-					message.push(this.compareMessage(v, head[0]));
+					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " > " + graph.distances[v] + ".</h1>");

@@ -1,7 +1,7 @@
 import React from "react";
 import * as d3 from "d3";
 import "../css/button.css";
-import "./binarysearch.css";
+import "./singlylinkedlist.css";
 import "../css/messages.css";
 import "../css/input.css";
 
@@ -96,12 +96,17 @@ class ColorFound{
 	}
 }
 
+class Node {
+	constructor(element) {
+		this.element = element;
+		this.next = null;
+	}
+}
 
-
-export default class binarysearch extends React.Component {
+export default class singlylinkedlist extends React.Component {
 	constructor(props) {
+		// Constructor for Visualization
 		super(props);
-
 		// Initial state - changes to the state trigger componentDidUpdate
 		this.state = {
 			arr: [], // Elements to be sorted
@@ -126,55 +131,137 @@ export default class binarysearch extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+	
+		// Constructor for Linked List
+		this.head = null;
+		this.size = 0;
+
 	}
 
+	// --------------------------------LL functions-----------------------------
+	initial() {
+		var steps = [];
+		var messages = [];
 
-    search(arr, target, ids, length, stepTime){
-        var steps = [];
-        var messages = [];
-        messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
-        steps.push(new EmptyStep());
-	
-		let recursiveSearch = function (arr, target, start, end) {
-			if (start > end) {
-				messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
-				steps.push(new EmptyStep());
-				return false;
-			}
-
-			let mid = Math.floor((start + end) / 2);
-			messages.push("<h1> Find midpoint from index " + start + " to " + end + "</h1>");
-			steps.push(new FirstColor(mid, ids));
-			
-			if(arr[mid] === target) {
-				messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
-				steps.push(new ColorFound(mid, ids));
-				return true;
-			}
-
-			messages.push("<h1>" + target + " does NOT equal to " + arr[mid] + "</h1>");
-			steps.push(new EmptyStep());
-			
-			if (arr[mid] > target) {
-				messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
-				//steps.push(new EmptyStep());
-				
-				steps.push(new OldColor(mid,ids));
-				return recursiveSearch(arr,  target, start, mid-1);
-			}
-			else {
-				messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
-				steps.push(new OldColor(mid,ids));
-				return recursiveSearch(arr,  target, mid+1, end);
-			}
-		
-		}
-		if (recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
-		else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+	}
+
+	// insert element towards the end of the list
+    insert(element, ids, length, stepTime) {
+        // Functions for add
+		var node = new Node(element);
+		var current;
+		
+		if (this.head == null) this.head = node;
+		else {
+			current = this.head;
+			while (current.next) current = current.next;
+			current.next = node;
+		}
+		this.size++;
     }
+
+	// remove element from the list
+	remove(element, index, ids, length, stepTime) {
+		var current = this.head;
+		var previous = null;
+	 
+		// iterate over the list
+		while (current != null) {
+			// comparing element with current
+			// element if found then remove the
+			// and return true
+			if (current.element === element) {
+				if (previous == null) {
+					this.head = current.next;
+				} else {
+					previous.next = current.next;
+				}
+				this.size--;
+				return current.element;
+			}
+			previous = current;
+			current = current.next;
+		}
+		return -1;
+	}
+
+	// insert at specific position
+	insertAt(element, index, ids, length, stepTime) {
+		if (index < 0 || index > this.size) return console.log("Please enter valid index");
+		else {
+			var node = new Node(element);
+			var current, previous;
+
+			current = this.head;
+
+			if (index == 0) {
+				node.next = this.head;
+				this.head = node;
+			} else {
+				current = this.head;
+				var it = 0;
+
+				while (it < index) {
+					it++;
+					previous = current;
+					current = current.next;
+				}
+
+				node.next = current;
+				previous.next = node;
+			}
+			this.size++;
+		}
+	}
+
+	// Remove element from specified position
+	removeFrom(element, index, ids, length, stepTime) { 
+		if (index < 0 || index >= this.size) return console.log("Please Enter a valid index");
+    	else {
+			var current, previous, it = 0;
+			current = this.head;
+			previous = current;
 	
+			// deleting first element
+			if (index === 0) 
+				this.head = current.next;
+			else {
+				// iterate over the list to the
+				// position to removce an element
+				while (it < index) {
+					it++;
+					previous = current;
+					current = current.next;
+				}
+				// remove the element
+				previous.next = current.next;
+			}
+		}
+		this.size--;
+        // return the remove element
+        return current.element;
+	}
+
+	isEmpty() {
+		return this.size == 0;
+	}
+	size_of_list() {
+		console.log(this.size);
+	}
+	printList() {
+		var curr = this.head;
+    	var str = "";
+    	while (curr) {
+        	str += curr.element + " ";
+        	curr = curr.next;
+    	}
+   	 	console.log(str);
+	}
+
+	// --------------------------------End of LL functions---------------------------
+
     // Initializes the data to be used in the visualizer
 	dataInit(size) {
 		var arr = [];
@@ -186,7 +273,6 @@ export default class binarysearch extends React.Component {
 			target: arr[Math.floor(Math.random() * arr.length)]
 		});
 	}
-
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize(arr, size, ref) {
 		const barWidth = 70;
@@ -344,13 +430,31 @@ export default class binarysearch extends React.Component {
 		this.run();
 	}
 
-	handleSearch() {
+	handleInsert() {
+		// Check if position input is 
+		var posInput = document.getElementById("posVal").value;
+		if (posInput && posInput.value) console.log("insertAt(val,pos)");
+		else console.log("insert(val)");
+
 		let input = document.getElementById("value").value;
 		console.log("Searching for " + input + ".");
-		// console.log(`called search(${x})`);
-		// if (this.state.running) return;
-		// this.setState({running: true});
-		// this.run();
+		console.log(`called search(${input})`);
+		if (this.state.running) return;
+		this.setState({running: true});
+		this.run();
+	}
+
+	handleRemove() {
+		var posInput = document.getElementById("posVal").value;
+		if (posInput && posInput.value) console.log("removeFrom(val,pos)");
+		else console.log("remove(val)");
+
+		let input = document.getElementById("value").value;
+		console.log("Searching for " + input + ".");
+		console.log(`called search(${input})`);
+		if (this.state.running) return;
+		this.setState({running: true});
+		this.run();
 	}
 
 	pause() {
@@ -381,7 +485,7 @@ export default class binarysearch extends React.Component {
 		else if (this.state.ids.length > prevState.ids.length) {
 			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 			// 30 -> will implement user input
-			this.search([...this.state.arr], this.state.arr[Math.floor(Math.random() * this.state.arr.length)], this.state.ids, this.state.size, this.state.stepTime);
+			this.initial([...this.state.arr], this.state.arr[Math.floor(Math.random() * this.state.arr.length)], this.state.ids, this.state.size, this.state.stepTime);
 			console.log("ran visualizer");
 		}
 		// Part of restart -> Reinitialize with original array
@@ -401,15 +505,22 @@ export default class binarysearch extends React.Component {
 		return (
 			<div>
 				<div class="center-screen" id="banner">	
-					<input type="number" id="value" class="inputValue"></input>
-					<button class="button" onClick={this.handleSearch}>Search</button>
-					{/* <button class="button" onClick={this.play}>Play</button> */}
+					<button class="button" onClick={this.play}>Play</button>
 		        	<button class="button" onClick={this.pause}>Pause</button>
 		        	<button class="button" onClick={this.restart}>Restart</button>
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
-				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search!</h1></span></div>
+                <div class="center-screen">
+                    <button class="button"id="insertBut" onClick={this.handleInsert}>Insert</button>
+                    <input  type="number" id="inputBox" placeholder="Val"></input>
+                    <input  type="number" id="inputBox" placeholder="Pos"></input>
+					<button class="button"id="removeBut" onClick={this.handleRemove}>Remove</button>
+                    <input  type="number" id="inputBox" placeholder="Val"></input>
+                    <input  type="number" id="inputBox" placeholder="Pos"></input>
+                </div>
+				
+				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Singly Linked List!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 			</div>
 		)

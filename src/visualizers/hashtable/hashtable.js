@@ -115,6 +115,7 @@ export default class HashTable extends React.Component {
     // this.handleInsertion = this.handleInsertion.bind(this);
     // this.handleDeletion = this.handleDeletion.bind(this);
     // this.handleSearch = this.handleSearch.bind(this);
+  
   }
 
   initialize() {
@@ -701,57 +702,57 @@ export default class HashTable extends React.Component {
     this.running = false;
   }
 
-  // isRunningCheck(id) {
-  //   if (this.running) {
-  //     d3.select(id).property("value", "Error: Visualizer Running");
-  //     return true;
-  //   }
+  isRunningCheck(id) {
+    if (this.running) {
+      d3.select(id).property("value", "Error: Visualizer Running");
+      return true;
+    }
 
-  //   return false;
-  // }
+    return false;
+  }
 
-  // handleInsertion() {
-  //   let x = d3.select("#insertionValue").property("value");
-  //   console.log(`Called insertion(${x})`);
-  //   console.log(`Rendered: ${this.state.rendered}`);
+  handleInsertion() {
+    let x = d3.select("#insertionValue").property("value");
+    console.log(`Called insertion(${x})`);
+    console.log(`Rendered: ${this.state.rendered}`);
 
-  //   let isRunning = this.isRunningCheck("#insertionValue");
-  //   if (isRunning) return;
-  //   this.fastForward();
+    let isRunning = this.isRunningCheck("#insertionValue");
+    if (isRunning) return;
+    this.fastForward();
 
-  //   this.insertion(parseInt(x));
-  //   this.play();
-  // }
+    this.insertion(parseInt(x));
+    this.play();
+  }
 
-  // handleDeletion() {
-  //   let x = d3.select("#deletionValue").property("value");
-  //   console.log(`Called deletion(${x})`);
+  handleDeletion() {
+    let x = d3.select("#deletionValue").property("value");
+    console.log(`Called deletion(${x})`);
 
-  //   let isRunning = this.isRunningCheck("#deletionValue");
-  //   if (isRunning) return;
-  //   this.fastForward();
+    let isRunning = this.isRunningCheck("#deletionValue");
+    if (isRunning) return;
+    this.fastForward();
 
-  //   this.deletion(x);
-  //   this.play();
-  // }
+    this.deletion(x);
+    this.play();
+  }
 
-  // handleSearch() {
-  //   let x = d3.select("#searchValue").property("value");
-  //   console.log(`Called search(${x})`);
+  handleSearch() {
+    let x = d3.select("#searchValue").property("value");
+    console.log(`Called search(${x})`);
 
-  //   let isRunning = this.isRunningCheck("#searchValue");
-  //   if (isRunning) return;
-  //   this.fastForward();
+    let isRunning = this.isRunningCheck("#searchValue");
+    if (isRunning) return;
+    this.fastForward();
 
-  //   this.search(x);
-  //   this.play();
-  // }
+    this.search(x);
+    this.play();
+  }
 
   render() {
     return (
       <div>
         <div class="center-screen">
-          {/* <div id="insertion" class="center-screen">
+          <div id="insertion" class="center-screen">
             <label>Value to insert:</label>
             <input type="number" id="insertionValue"></input>
             <button onClick={this.handleInsertion}>Insert</button>
@@ -767,7 +768,7 @@ export default class HashTable extends React.Component {
             <label>Value to search:</label>
             <input type="number" id="searchValue"></input>
             <button onClick={this.handleSearch}>Search</button>
-          </div> */}
+          </div>
 
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>

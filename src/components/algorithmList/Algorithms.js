@@ -92,7 +92,7 @@ const algorithms = {
 		{
 			name: 'Singly Linked List',
 			path: 'singlylinkedlist',
-			type: 'unity',
+			type: 'js',
 			description: <SinglyLinkedList />,
 		},
 		{

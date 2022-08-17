@@ -1,0 +1,32 @@
+/* custom-tree.css */
+
+.node__root > circle {
+    fill: white;
+    color: white !important;
+  }
+g > text {
+    fill: white !important;
+}
+  
+  .node__branch > circle {
+    fill: white;
+  }
+  
+  .node__leaf > circle {
+    fill: black;
+    /* Let's also make the radius of leaf nodes larger */
+    r: 40;
+  }
+
+.label__title {
+    color: white;
+}
+
+.custom-link{
+    stroke: white !important;
+}
+
+.hidden-link{
+    visibility: hidden;
+    stroke: black !important;
+}

@@ -25,6 +25,18 @@
 	padding-left: 50px;
 }
 
-#insertionValue {
-	border-radius: 10px;
+#inputBox {
+	font-size: 15px;
+	border-radius: 15px;
+    width: 50px;
+    height: 40px;
+	padding-left: 10px;
+    
+}
+#removeBut {
+	margin-left: 50px;
+	color: red;
+}
+#insertBut {
+	color: green;
 }

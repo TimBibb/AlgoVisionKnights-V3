@@ -92,7 +92,7 @@ const algorithms = {
 		{
 			name: 'Singly Linked List',
 			path: 'singlylinkedlist',
-			type: 'unity',
+			type: 'js',
 			description: <SinglyLinkedList />,
 		},
 		{
@@ -148,16 +148,29 @@ const algorithms = {
 		},
 		{
 			name: "Kruskal's",
-			path: 'kruskals'
+			path: 'kruskals',
+			type: 'js',
+			description: <Dijkstras />,
 		},
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },
-		{ name: 'AVL', path: 'avl', type: 'unity', description: <AVL /> },
+		{ 
+			name: 'AVL', 
+			path: 'avl', 
+			type: 'js', 
+			description: <AVL /> 
+		},
+		{
+			name: 'Binary Search Tree',
+			path: 'binarysearchtre',
+			type: 'unity',
+			description: <BinarySearchTree />,
+		},
 		{
 			name: 'Binary Search Tree',
 			path: 'binarysearchtree',
-			type: 'unity',
+			type: 'js',
 			description: <BinarySearchTree />,
 		},
 		{

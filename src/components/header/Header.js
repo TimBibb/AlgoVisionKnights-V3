@@ -4,10 +4,12 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 // Assets
 import queries from './queries';
+import Switch from "./Switch";
 import UCF from './UCF_logo.png';
 
 // Child Components
 import MenuToggle from '../menu/MenuToggle';
+import styled from "styled-components";
 //import Download from '../download/Download';
 
 // Material UI
@@ -115,6 +117,8 @@ function Header({
 
 		setFilterData(result);
 	};
+
+	const [value, setValue] = React.useState(false);
 
 	// NOTE: For V1 only
 	// Check which device the user in on.
@@ -254,6 +258,17 @@ function Header({
 					</div>
 					
 					<div className='RightMenus'>
+						<div style={{marginRight: '5px'}}>
+							<h3>ColorBlind Mode</h3>
+						</div>
+						<div style={{marginRight: '50px'}} className='RightMenus'>
+							<Switch
+								isOn={value}
+								onColor="#FFC904"
+								handleToggle={() => setValue(!value)}
+							/>
+						</div>
+
 						<a href="https://www.cs.ucf.edu/" target="_blank" rel="noreferrer">
 							<img src={UCF} alt="UCF Logo" hr height={45} width={65}></img>
 						</a>

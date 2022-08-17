@@ -9,7 +9,6 @@ import UCF from './UCF_logo.png';
 
 // Child Components
 import MenuToggle from '../menu/MenuToggle';
-import styled from "styled-components";
 //import Download from '../download/Download';
 
 // Material UI

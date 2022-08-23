@@ -161,12 +161,12 @@ const algorithms = {
 			type: 'js', 
 			description: <AVL /> 
 		},
-		{
-			name: 'Binary Search Tree',
-			path: 'binarysearchtre',
-			type: 'unity',
-			description: <BinarySearchTree />,
-		},
+		// {
+		// 	name: 'Binary Search Tree',
+		// 	path: 'binarysearchtre',
+		// 	type: 'unity',
+		// 	description: <BinarySearchTree />,
+		// },
 		{
 			name: 'Binary Search Tree',
 			path: 'binarysearchtree',

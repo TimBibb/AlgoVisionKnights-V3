@@ -12,6 +12,7 @@ import Category from './components/category/Category';
 // Algorithm Objects
 import categories from './components/algorithmList/Categories';
 import algorithms from './components/algorithmList/Algorithms';
+import category from './components/algorithmList/Algorithms';
 
 function App() {
 	console.log('App.js');
@@ -82,50 +83,93 @@ function App() {
 								/>
 							}
 						/>
-
-						{categories.map((category) => (
+						{categories.map((category, i) => {
 							<Route
 								exact={true}
 								path={category.path}
 								element={
 									<Category
+										category={category}
 										inCategory={true}
-										algorithms={algorithms[category.path]}
+										subcategories={algorithms[category.path]}
 									/>
 								}
 							/>
-						))}
+						})
+
+						}
+						{/* {categories.map((category) => (
+							algorithms[category.path]?.forEach(subcategory => {
+								{console.log("TESTESTTES")}
+								{console.log(algorithms[category.path])}
+								subcategory.algorithms?.forEach(algorithm => {
+									<Route
+										exact={true}
+										path={category.path}
+										element={
+											<Category
+												inCategory={true}
+												subcategory={algorithms[category.path]}
+												algo={algorithm}
+											/>
+										}
+									/>
+								})
+							})
+							// category.algorithms?.forEach(algorithm => {
+							// 	<Route
+							// 		exact={true}
+							// 		path={category.path}
+							// 		element={
+							// 			<Category
+							// 				inCategory={true}
+							// 				subcategory={algorithms[category.path]}
+							// 				algo={algorithm}
+							// 			/>
+							// 		}
+							// 	/>
+							// })
+						))} */}
 
 						{/* Temporary Fix :( */}
 						{/* TODO: V1 team needs to overhaul and refactor navigation system after V2 team is done.  */}
 						{Object.keys(algorithms).map((key) =>
-							algorithms[key].map((algorithm) => {
-								return (
-									<>
-										<Route
-											exact={true}
-											path={algorithm.path}
-											element={
-												<AlgorithmPage
+							algorithms[key].map((subcategory) => {
+								console.log(subcategory)
+								subcategory.algorithms.forEach(algorithm => {
+									console.log(algorithm)
+										return (
+											<>
+												<Route
+													exact={true}
 													path={algorithm.path}
-													type={algorithm.type}
-													algoPage={algoPage}
+													element={
+														<AlgorithmPage
+															path={algorithm.path}
+															type={algorithm.type}
+															algoPage={algoPage}
+														/>
+													}
 												/>
-											}
-										/>
-										<Route
-											exact={true}
-											path={key + '/' + algorithm.path}
-											element={
-												<AlgorithmPage
-													path={algorithm.path}
-													type={algorithm.type}
-													algoPage={algoPage}
+												<Route
+													exact={true}
+													path={key + '/' + algorithm.path}
+													element={
+														<AlgorithmPage
+															path={algorithm.path}
+															type={algorithm.type}
+															algoPage={algoPage}
+														/>
+													}
 												/>
-											}
-										/>
-									</>
-								);
+											</>
+										);
+								});
+								// subcategory.forEach(element => {
+								// 	element.algorithms.forEach(algorithm => {
+
+								// 	});
+								// });
 							})
 						)}
 					</Routes>

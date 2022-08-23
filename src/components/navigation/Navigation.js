@@ -101,11 +101,13 @@ function Navigation({
 						</ListItem>
 					</Link>
 					{categories.map((category, i) => {
+						{console.log(algorithms[category.path])}
+						{console.log(category.title)}
 						return (
 							<Link className='Link' to={category.path}>
 								<NavGroup
 									title={category.title}
-									algorithms={algorithms[category.path]}
+									subcategories={algorithms[category.path]}
 									key={category.title}
 									panel={category.title}
 									expanded={expanded}

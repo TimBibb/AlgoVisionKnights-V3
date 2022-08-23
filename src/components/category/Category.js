@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom';
 // Child Components
 import Algorithm from '../algorithm/Algorithm';
 
-function Category({ inCategory, algorithms }) {
+function Category({ category, inCategory, subcategories }) {
 	console.log('Category');
-	console.log(algorithms);
+	console.log(subcategories);
 
 	return (
 		<div className='Category'>
-			{algorithms.map((algorithm) => (
-				<Link className='Link' to={algorithm.path}>
+			{subcategories.map((subcategory, i) => (
+				<Link className='Link' to={category.path + "/"+ subcategory.path}>
 					<Algorithm
-						title={algorithm.name}
-						key={algorithm.name}
-						description={algorithm.description}
+						title={subcategory.name}
+						key={subcategory.name}
+						description={subcategory.description}
 						width={'100%'}
 						height={'auto'}
 						inCategory={inCategory}

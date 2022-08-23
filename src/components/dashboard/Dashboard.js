@@ -8,7 +8,7 @@ function Dashboard({ categories, inCategory }) {
 
 	return (
 		<div className='Dashboard'>
-			{categories.map((category) => (
+			{categories.map((category, i) => (
 				<Link className='Link' to={category.path}>
 					<Algorithm
 						title={category.title}

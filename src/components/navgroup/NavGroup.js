@@ -13,8 +13,9 @@ import {
 
 // Child Components
 import NavLink from '../navlink/NavLink';
+import algorithms from '../algorithmList/Algorithms';
 
-function NavGroup({ title, algorithms, panel, expanded, handleChange }) {
+function NavGroup({ title, subcategories, panel, expanded, handleChange }) {
 	return (
 		<Accordion
 			id='nav-group'
@@ -32,10 +33,14 @@ function NavGroup({ title, algorithms, panel, expanded, handleChange }) {
 				</AccordionSummary>
 			</ListItem>
 			<AccordionDetails id='accordion-details' ref={React.createRef()}>
-				{algorithms.map((algorithm, i) => (
-					<Link className='Link' to={algorithm.path}>
-						<NavLink name={algorithm.name} key={algorithm.name} />
-					</Link>
+				{console.log(subcategories)}
+				{subcategories?.map((subcategory) => (
+					subcategory.algorithms?.forEach(algorithm => {
+						{console.log(algorithm.path)}
+						<Link className='Link' to={algorithm.path}>
+							<NavLink name={algorithm.name} key={algorithm.name} />
+						</Link>
+					})
 				))}
 			</AccordionDetails>
 		</Accordion>

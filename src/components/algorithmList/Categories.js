@@ -3,8 +3,7 @@ const groups = [
 	{
 		path: 'sorting',
 		title: 'Sorting',
-		description:
-			'Sorting algorithms are used to rearrange elements in an array or list. Some of the most commonly used sorting algorithms include bubble sort, merge sort, and quick sort.',
+		description:'Sorting algorithms are used to rearrange elements in an array or list. Some of the most commonly used sorting algorithms include bubble sort, merge sort, and quick sort.',
 	},
 	{
 		path: 'searching',

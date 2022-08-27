@@ -11,7 +11,7 @@ import Tilt from 'react-tilt';
 // import FavoriteIcon from '@material-ui/icons/Favorite';
 
 // Algorithm card for the dashboard.
-function Algorithm({ title, description, width, height, inCategory }) {
+function Algorithm({ title, algo, description, width, height, inCategory }) {
 	console.log(`Render: ${title} card`);
 
 	return (
@@ -26,6 +26,7 @@ function Algorithm({ title, description, width, height, inCategory }) {
 						</div>
 						<div className='CardBody'>
 							<Typography id='card-info'>
+								{algo}
 								{description}
 							</Typography>
 						</div>

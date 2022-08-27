@@ -83,7 +83,7 @@ function App() {
 							}
 						/>
 
-						{categories.map((category) => (
+						{/* {categories.map((category) => (
 							<Route
 								exact={true}
 								path={category.path}
@@ -94,7 +94,7 @@ function App() {
 									/>
 								}
 							/>
-						))}
+						))} */}
 
 						{/* Temporary Fix :( */}
 						{/* TODO: V1 team needs to overhaul and refactor navigation system after V2 team is done.  */}

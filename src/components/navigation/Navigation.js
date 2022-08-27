@@ -102,7 +102,7 @@ function Navigation({
 					</Link>
 					{categories.map((category, i) => {
 						return (
-							<Link className='Link' to={category.path}>
+							<Link className='Link' to={"/"}>
 								<NavGroup
 									title={category.title}
 									algorithms={algorithms[category.path]}
@@ -114,6 +114,7 @@ function Navigation({
 							</Link>
 						);
 					})}
+					
 				</List>
 			</Drawer>
 		</div>

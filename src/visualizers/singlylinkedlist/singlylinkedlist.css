@@ -40,3 +40,11 @@
 #insertBut {
 	color: green;
 }
+
+.gbar:hover rect{
+	fill:#FFC904 !important;
+	}
+  
+  .gbar:hover text{
+	font-weight:700;
+	}

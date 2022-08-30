@@ -308,17 +308,32 @@ export default class singlylinkedlist extends React.Component {
 			.append("g")
 			.attr("class", "gbar")
 		
+		// Gradient to split rectangle color by half
+		let grad = svg.append("defs")
+			.append("linearGradient")
+			.attr("id", "grad")
+			.attr("x1", "35%").attr("x2", "100%").attr("y1", "100%").attr("y2", "100%");
+		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(153,204,255)");
+		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
+		
 		containers.append('rect')
 			.attr('height', barHeight)
 			.attr('width', barWidth)
-			// Each box is ith 0 to 8
 			.attr('x', function (d, i) { return 150 * i; })
 			.attr('y', '50')
-			.style("fill", "rgb(153,204,255)")
+			.style("fill", "url(#grad)")
 			.attr("stroke-width", "2")
 			.attr("stroke", "grey")
-				
-
+			
+		// Line to split the rectangle 
+		containers.append('line')
+			.style("stroke", "grey")
+			.style("stroke-width", 2)
+			.attr("x1", function (d,i) { return (150 * i) + 60})
+			.attr("y1", 50)
+			.attr("x2", function (d,i) { return (150 * i) + 60})
+			.attr("y2", 100)
+		
 		containers.append("text")
 			.text((d) => {
 				console.log("BAR" + d);
@@ -330,7 +345,6 @@ export default class singlylinkedlist extends React.Component {
 			.style("font-size", "28px")
 			.style("fill", "white");
 
-		
 		containers.append('line')
 			.data(arrLine)
 			.style("stroke", "white")
@@ -358,12 +372,9 @@ export default class singlylinkedlist extends React.Component {
 			.attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
 			.style("stroke", "white");
 
-		
-
-
-		
-
-		
+		let ids = [];
+		for (let i = 0; i < 8; i++) ids.push("g" + i);
+		this.setState({ids: ids});
 		// Triggers componentDidUpdate to run the main function for the steps and messages queues
 		// svg.attr("visibility", "hidden");
 		return svg;

@@ -61,7 +61,7 @@ const algorithms = {
 		{
 			name: 'Merge Sort',
 			path: 'mergesort',
-			type: 'unity',
+			type: 'js',
 			description: <MergeSort />,
 		},
 		{

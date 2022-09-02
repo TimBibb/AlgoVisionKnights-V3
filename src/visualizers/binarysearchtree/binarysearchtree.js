@@ -18,6 +18,8 @@ var j = 0;
 var MAX_NODE = 10;
 var temp_x = 0;
 var temp_y = 0;
+var temp_x2 = 0;
+var temp_y2 = 0;
 
 function randInRange(lo, hi) {
     return Math.floor(Math.random() * (hi - lo)) + lo;
@@ -101,7 +103,7 @@ class Node {
             this.y + "%",
             this.value,
             "visible",
-            "gray"
+            "white"
         );
     }
 }
@@ -135,7 +137,7 @@ export default class binarysearchtree extends React.Component {
 
     initialize() {
         d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
-    
+
         let tree = new Tree();
         //tree.addnew(this.ref, 50);
         // tree.addnew(this.ref, 2);
@@ -182,9 +184,12 @@ export default class binarysearchtree extends React.Component {
                         } else {
                             temp_x = node.x - 15;
                             temp_y = node.y + 10;
+                            temp_x2 = node.x - 12.25;
+                            temp_y2 = node.y + 8;
                             node.left = new Node(this.ref, val, temp_x, temp_y, i);
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
+                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
+                            let edge2 = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             i++;
                             j++;
                             return;
@@ -195,9 +200,11 @@ export default class binarysearchtree extends React.Component {
                         } else {
                             temp_x = node.x + 15;
                             temp_y = node.y + 10;
+                            temp_x2 = node.x + 12.25;
+                            temp_y2 = node.y + 8;
                             node.right = new Node(this.ref, val, temp_x, temp_y, i);
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
+                            let edge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             i++;
                             j++;
                             return;

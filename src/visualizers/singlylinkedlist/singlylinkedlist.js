@@ -402,11 +402,9 @@ export default class singlylinkedlist extends React.Component {
 		  console.log("SIZE CHANGED");
 		  this.initialize();
 		} else if (this.state.rendered !== prevState.rendered) {
-		console.log(this.flag)
-		if (this.flag === true) {
-			console.log("s");
-			this.simulation();
-		  }
+			if (this.flag === true) {
+				this.simulation();
+			}
 			console.log("steps created");
 		}
 	}
@@ -433,4 +431,3 @@ export default class singlylinkedlist extends React.Component {
 		)
 	}
 }
-

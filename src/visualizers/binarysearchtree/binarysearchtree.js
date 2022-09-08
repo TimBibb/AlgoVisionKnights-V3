@@ -88,12 +88,15 @@ class Tree {
 }
 
 class Node {
-    constructor(ref, value, x, y, i) {
+    constructor(ref, value, x, y, i, level, leftEdge, rightEdge) {
         this.value = value;
         this.left = null;
         this.right = null;
         this.x = x;
         this.y = y;
+        this.level = level;
+        this.lEdge = leftEdge;
+        this.rEdge = rightEdge;
 
         let node = new LabeledNode(
             ref,
@@ -120,6 +123,7 @@ export default class binarysearchtree extends React.Component {
             running: false,
             stepId: 0,
             messages: [],
+            maxLevel: 0,
         };
         
 		// Bindings
@@ -162,9 +166,20 @@ export default class binarysearchtree extends React.Component {
         console.log("PAUSE CLICKED");
     }
 
+    adjustDistances(root) {
+        if (root == null) {
+            return;
+        }
+
+        this.adjustDistances(root.left);
+        this.adjustDistances(root.right);
+    }
+
     add(){
         console.log("ADD CLICKED");
         var val = Math.floor(Math.random() * 100);
+        var level = 0;
+        var modifier = 5;
 
         if(i < MAX_NODE){
             if(!this.root) {
@@ -177,19 +192,24 @@ export default class binarysearchtree extends React.Component {
                 //y += 10;
 
                 while(true) {
+                    var tempMod = level*modifier;
                     //console.log(node.value);
                     if(val < node.value) {
                         if(node.left != null) {
                             node = node.left;
                         } else {
-                            temp_x = node.x - 15;
+                            temp_x = node.x - 20 + tempMod;
                             temp_y = node.y + 10;
-                            temp_x2 = node.x - 12.25;
+                            temp_x2 = node.x - 17.25 + tempMod;
                             temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i);
+                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level);
+                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            let edge2 = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
+                            if (level > this.maxLevel) {
+                                this.setState({maxLevel: level});
+                                this.adjustDistances(this.root);
+                            }
                             i++;
                             j++;
                             return;
@@ -198,11 +218,11 @@ export default class binarysearchtree extends React.Component {
                         if(node.right != null) {
                             node = node.right;
                         } else {
-                            temp_x = node.x + 15;
+                            temp_x = node.x + 20 - tempMod;
                             temp_y = node.y + 10;
-                            temp_x2 = node.x + 12.25;
+                            temp_x2 = node.x + 17.25 - tempMod;
                             temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i);
+                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level);
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             let edge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             i++;
@@ -210,6 +230,7 @@ export default class binarysearchtree extends React.Component {
                             return;
                         }
                     }
+                    level++;
                 }
             }
         } else {

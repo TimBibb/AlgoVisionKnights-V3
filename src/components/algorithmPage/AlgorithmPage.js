@@ -19,7 +19,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 	return (
 		<div className='AlgorithmPage'> 
 			<Visualizer path={path} type={type}/>
-			<br/>
+			<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 			<div className='container'>
 				<div className="button-location">
 					<button class="button" onClick={NavigateToDashboard}>Dashboard</button>

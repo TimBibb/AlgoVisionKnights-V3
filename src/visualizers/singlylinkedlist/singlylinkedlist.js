@@ -36,6 +36,7 @@ class AddNodeStep {
 	forward(svg) {
 		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
 		svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+		//svg.select("#g0").selectAll("rect, text, line, #arrow").attr("visibility", "visible");
 	}
 	fastForward(svg) {
 		this.forward(svg);
@@ -78,17 +79,17 @@ export default class singlylinkedlist extends React.Component {
 		// Constructor for Visualization
 		super(props);
 		this.state = {
-			rendered: false
+			rendered: false,
+			steps : [],
+			ids : [],
+			messages : [],
+			running : false,
+			stepId : 0,
+			stepTime : 4000,
+			waitTime : 1000,
+			flag : false
 		};
-		this.steps = [];
-		this.ids = [];
-		this.messages = [];
-		this.running = false;
-		this.stepId = 0;
-		this.stepTime = 4000;
-		this.waitTime = 2000;
-		this.head = null;
-
+	
 		// Bindings
 		this.ref = React.createRef(); // Where the visualizer will be
 		this.play = this.play.bind(this);
@@ -102,103 +103,16 @@ export default class singlylinkedlist extends React.Component {
 		// Constructor for Linked List
 		this.head = null;
 		this.size = 0;
-		this.flag = false;
+		
 		//this.isRunningCheck = this.isRunningCheck.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
 
 	}
-
-	simulation() {
-		this.messages.push("<h1>Beginning Singly Linked List!</h1>");
-		this.steps.push(new EmptyStep());
-		let num = [33, 67, 22, 44, 32, 12, 30, 42];
-
-		for (let i = 0; i < 8; i++) {
-			//let rand = Math.floor(Math.random() * 100);
-			this.messages.push("<h1>Inserting " + num[i] + " into the Linked List.</h1>");
-			this.steps.push(new AddNodeStep(num[i],i,this.ids));
-			this.insert(num[i]);
-		}
-		for (let k = 0; k < 8; k++) {
-			this.messages.push("<h1>Removing " + num[k] + " from the linked list</h1>");
-			this.steps.push(new RemoveNodeStep(k,this.ids));
-			this.remove(num[k]);
-		}
-	}
-
-	// insert element towards the end of the list
-	insert(element) {
-		// Functions for add
-		let node = new Node(element);
-		let current;
-		//this.steps.push(new AddNodeStep(element))
-		if (this.head == null)  {
-			this.head = node;
-			this.messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
-			this.steps.push(new AddNodeStep(element,0,this.ids));
-			console.log(element)
-		}
-		else {
-			current = this.head;
-			while (current.next) current = current.next;
-			current.next = node;
-		}
-		this.size++;
-		this.printList();
-		this.setState({ steps: this.state.steps });
-		this.setState({ messages: this.state.messages });
-	}
-
-	// remove next occurent element from the list
-	remove(element) {
-		let current = this.head;
-		let previous = null;
-
-		// iterate over the list
-		while (current != null) {
-			// comparing element with current
-			// element if found then remove the
-			// and return true
-			if (current.element === element) {
-				if (previous == null) {
-					this.head = current.next;
-				} else {
-					previous.next = current.next;
-				}
-				this.size--;
-				return;
-			}
-			previous = current;
-			current = current.next;
-		}
-		this.printList();
-		this.setState({ steps: this.state.steps });
-		this.setState({ messages: this.state.messages });
-		console.log("No value found");
-	}
-
-
-	isEmpty() {
-		return this.state.size === 0;
-	}
-	size_of_list() {
-		console.log(this.state.size);
-	}
-	printList() {
-		let curr = this.head;
-		let str = "";
-		while (curr) {
-			str += curr.element + " ";
-			curr = curr.next;
-		}
-		console.log(str);
-	}
-
-
+	
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize() {
-		const width = 1300;
+		console.log("Building the visualizer");
 		const height = 300;
 		const barHeight = 50;
 		const barWidth = 90;
@@ -273,7 +187,6 @@ export default class singlylinkedlist extends React.Component {
 			.attr("y2", 75)
 			.attr("marker-end", "url(#arrow)")
 
-
 		containers.append("svg:defs").append("svg:marker")
 			.attr("id", "arrow")
 			.attr("viewBox", "0 0 12 12")
@@ -290,14 +203,112 @@ export default class singlylinkedlist extends React.Component {
 		let ids = [];
 		for (let i = 0; i < 8; i++) ids.push("g" + i);
 		svg.attr("visibility", "hidden");
-		this.setState({rendered : true});
-		this.ids = ids;
+		
+		this.setState({ids: ids});
+		this.setState({rendered: true});
 		return svg;
 	}
 
-	createMessage(msg) {
-		this.messages.push("<h1>" + msg + "</h1>");
-	  }
+	simulation() {
+		let messages = [];
+		let steps = [];
+		console.log("Running stimulation");
+		messages.push("<h1>Beginning Singly Linked List!</h1>");
+		steps.push(new EmptyStep());
+		let num = [33, 67, 22, 44, 32, 12, 30, 42];
+
+		for (let i = 0; i < 8; i++) {
+			//let rand = Math.floor(Math.random() * 100);
+			messages.push("<h1>Inserting " + num[i] + " into the Linked List.</h1>");
+			steps.push(new AddNodeStep(num[i],i,this.state.ids));
+			//this.insert(num[i]);
+		}
+		for (let k = 0; k < 8; k++) {
+			messages.push("<h1>Removing " + num[k] + " from the linked list</h1>");
+			steps.push(new RemoveNodeStep(k,this.state.ids));
+		//	this.remove(num[k]);
+		}
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+	}
+
+	// insert element towards the end of the list
+	insert(element) {
+		let messages = [];
+		let steps = [];
+		let i = 0;
+		// Functions for add
+		let node = new Node(element);
+		let current;
+		if (this.head == null)  {
+			this.head = node;
+			messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+			steps.push(new AddNodeStep(element,0,this.state.ids));
+			//console.log("head: " + element);
+		}
+		else {
+			console.log("HI!");
+			current = this.head;
+			while (current.next) {
+				current = current.next;
+				i++;
+			}
+				current.next = node;
+				messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+				steps.push(new AddNodeStep(element,i,this.state.ids));
+		}
+		this.size++;
+		this.printList();
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+	}
+
+	// remove next occurent element from the list
+	remove(element) {
+		let steps = [];
+		let messages = [];
+		let current = this.head;
+		let previous = null;
+
+		// iterate over the list
+		while (current != null) {
+			// comparing element with current
+			// element if found then remove the
+			// and return true
+			if (current.element === element) {
+				if (previous == null) {
+					this.head = current.next;
+				} else {
+					previous.next = current.next;
+				}
+				this.size--;
+				return;
+			}
+			previous = current;
+			current = current.next;
+		}
+		this.printList();
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+		console.log("No value found");
+	}
+
+	isEmpty() {
+		return this.state.size === 0;
+	}
+	size_of_list() {
+		console.log(this.state.size);
+	}
+	printList() {
+		let curr = this.head;
+		let str = "";
+		while (curr) {
+			str += curr.element + " ";
+			curr = curr.next;
+		}
+		//console.log(str);
+	}
+
 
 	turnOffRunning() {
 		console.log("setting running to false");
@@ -309,12 +320,12 @@ export default class singlylinkedlist extends React.Component {
 		console.log("FORWARD CLICKED");
 		if (this.state.running) return; // The user can't step forward while running via the play
 		// button so as not to ruin the visualizer
-		if (this.stepId === this.steps.length) return; // At the end of the step queue
+		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
-		this.steps[this.stepId].fastForward(d3.select(this.ref.current).select("svg"));
-		document.getElementById("message").innerHTML = this.messages[this.stepId];
-		this.setState({ stepId: this.stepId + 1 });
-		d3.timeout(this.turnOffRunning, this.waitTime); // Calls function after wait time
+		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+		this.setState({ stepId: this.state.stepId + 1 });
+		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
 	}
 
 	// Step backward button
@@ -332,37 +343,45 @@ export default class singlylinkedlist extends React.Component {
 
 	// For the autoplay button
 	run() {
-		if (!this.running) return;
-		console.log(this.stepId);
-		console.log(this.steps.length);
-		if (this.stepId === this.steps.length) {
-			this.running = false;
+		console.log("Inside run()");
+		if (!this.state.running) {
+			console.log("Not running");
 			return;
 		}
-		this.steps[this.stepId].forward(d3.select(this.ref.current).select("svg"));
-		document.getElementById("message").innerHTML = this.messages[this.stepId];
-		this.stepId = this.stepId + 1;
-		d3.timeout(this.run, this.waitTime);
+		console.log("Stepid: " + this.state.stepId);
+		console.log("Total Steps: " + this.state.steps.length);
+		if (this.state.stepId === this.state.steps.length) {
+			console.log("We are the end!");
+			this.setState({running: false});
+			return;
+		}
+		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+		this.setState({stepId :this.state.stepId + 1});
+		d3.timeout(this.run, this.state.waitTime);
 	}
 
 	play() {
-		this.flag = true;
-		if (this.running) return;
-		this.running = true;
+		console.log("Play clicked");
+		if (this.state.running) return;
+		this.setState({flag : true});
+		this.setState({running: true});
 		this.run();
 	}
 
 	handleInsert() {
 		let input = document.getElementById("insertVal").value;
 		// If there is an input then check for posinput
+		if (this.state.running) return;
 		if (input) {
 			this.insert(input);
+			this.setState({running: true});
+			//this.run();
+			//this.forward();
 		}
 		else console.log("No Input");
-		if (this.state.running) return;
-		//this.setState({running: true});
-		this.run();
-		this.forward();
+		
+		
 	}
 
 	handleRemove() {
@@ -391,21 +410,24 @@ export default class singlylinkedlist extends React.Component {
 		this.setState({ running: false, steps: [], ids: [], messages: [], stepId: 0 });
 	}
 
-	// First function to run
+	// First function to run when launch the page
 	componentDidMount() {
+		console.log("Component is mounted, rendering visualizer");
 		this.initialize();
 	}
 
 	//Calls functions depending on the change in state
+	// Important needs to tweak
 	componentDidUpdate(prevProps, prevState) {
-		if (this.state.size !== prevState.size) {
-		  console.log("SIZE CHANGED");
-		  this.initialize();
-		} else if (this.state.rendered !== prevState.rendered) {
-			if (this.flag === true) {
-				this.simulation();
-			}
-			console.log("steps created");
+		if (this.state.rendered !== prevState.rendered) {
+			console.log("Current state has been rendered");
+			console.log("Running visualizer");
+			this.simulation();	
+		}
+		else if (this.state.running !== prevState.running && this.state.running === true)
+		{
+			this.run();
+			console.log("We ran");
 		}
 	}
 	

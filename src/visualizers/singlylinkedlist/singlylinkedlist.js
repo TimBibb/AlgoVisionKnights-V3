@@ -112,7 +112,9 @@ export default class singlylinkedlist extends React.Component {
 	
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize() {
-		console.log("Building the visualizer");
+		console.log("---------------------");
+		console.log("Initialize() - Building the visualizer");
+		
 		const height = 300;
 		const barHeight = 50;
 		const barWidth = 90;
@@ -212,7 +214,8 @@ export default class singlylinkedlist extends React.Component {
 	simulation() {
 		let messages = [];
 		let steps = [];
-		console.log("Running stimulation");
+		console.log("---------------------");
+		console.log("Stimulation () - Running stimulation");
 		messages.push("<h1>Beginning Singly Linked List!</h1>");
 		steps.push(new EmptyStep());
 		let num = [33, 67, 22, 44, 32, 12, 30, 42];
@@ -374,8 +377,13 @@ export default class singlylinkedlist extends React.Component {
 		// If there is an input then check for posinput
 		if (this.state.running) return;
 		if (input) {
+			console.log("handleInsert: " + input);
 			this.insert(input);
 			this.setState({running: true});
+			/*
+			Step pushed for head, and then step id == step length -> end of steps. 
+			How can we increment step for next input?
+			*/
 			//this.run();
 			//this.forward();
 		}
@@ -406,13 +414,14 @@ export default class singlylinkedlist extends React.Component {
 	restart() {
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
-		document.getElementById("message").innerHTML = "<h1>Welcome to Binary Search!</h1>";
-		this.setState({ running: false, steps: [], ids: [], messages: [], stepId: 0 });
+		document.getElementById("message").innerHTML = "<h1>Welcome to Linked List!</h1>";
+		this.setState({ rendered: false, running: false, steps: [], ids: [], messages: [], stepId: 0, flag : true});
 	}
 
 	// First function to run when launch the page
 	componentDidMount() {
-		console.log("Component is mounted, rendering visualizer");
+		console.log("---------------------");
+		console.log("componentDidMount() - Component is mounted, rendering visualizer");
 		this.initialize();
 	}
 
@@ -420,9 +429,16 @@ export default class singlylinkedlist extends React.Component {
 	// Important needs to tweak
 	componentDidUpdate(prevProps, prevState) {
 		if (this.state.rendered !== prevState.rendered) {
-			console.log("Current state has been rendered");
+			console.log("---------------------");
+			console.log("componentDidUpdate() - Current state has been rendered");
 			console.log("Running visualizer");
 			this.simulation();	
+		}
+		// Restart
+		else if (this.state.steps.length !== prevState.steps.length && this.state.flag === true) {
+			console.log("---------------------");
+			console.log("componentDidUpdate() - Restart");
+			this.initialize();
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{

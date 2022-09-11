@@ -9,7 +9,14 @@ import "../css/input.css";
 import { ConsoleView } from "react-device-detect";
 import { Component } from "react";
 import UserInput from "../../components/userInput/UserInput";
+import { svg } from "d3";
 
+class Node {
+	constructor(element) {
+		this.element = element;
+		this.next = null;
+	}
+}
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
 class EmptyStep {
@@ -20,106 +27,23 @@ class EmptyStep {
 	backward(svg) { }
 }
 
-class FirstColor {
-	constructor(id1, ids) {
-		this.id1 = id1;
-		this.ids = ids;
-	}
-
-	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-	}
-
-	fastForward(svg) {
-		this.forward(svg);
-	}
-
-	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
-
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
-	}
-}
-class OldColor {
-	constructor(id1, ids) {
-		this.id1 = id1;
-		this.ids = ids;
-	}
-
-	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#f08bb5");
-	}
-
-	fastForward(svg) {
-		this.forward(svg);
-	}
-
-	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#f08bb5");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
-
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
-	}
-}
-class ColorFound {
-	constructor(id1, ids) {
-		this.id1 = id1;
-		this.ids = ids;
-	}
-
-	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFD700");
-	}
-
-	fastForward(svg) {
-		this.forward(svg);
-	}
-
-	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
-
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
-	}
-}
-
-class Node {
-	constructor(element) {
-		this.element = element;
-		this.next = null;
-	}
-}
-
 class AddNodeStep {
-	constructor(ids) {
+	constructor(element,id1,ids) {
+		this.element = element;
 		this.ids = ids;
+		this.id1 = id1;
 	}
-
 	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
+		svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+		//svg.select("#g0").selectAll("rect, text, line, #arrow").attr("visibility", "visible");
 	}
-
 	fastForward(svg) {
 		this.forward(svg);
 	}
-
 	backward(svg) {
 		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
 		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
-
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -127,6 +51,28 @@ class AddNodeStep {
 		}
 	}
 }
+class RemoveNodeStep {
+	constructor(id1,ids) {
+		this.ids = ids;
+		this.id1 = id1;
+	}
+	forward(svg) {
+		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line").attr("visibility", "hidden");
+	}
+	fastForward(svg) {
+		this.forward(svg);
+	}
+	backward(svg) {
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		if (this.id1 !== this.id2) {
+			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		}
+	}
+}
+
 
 export default class singlylinkedlist extends React.Component {
 	constructor(props) {
@@ -134,18 +80,16 @@ export default class singlylinkedlist extends React.Component {
 		super(props);
 		this.state = {
 			rendered: false,
-			steps: [],
-			ids: [],
-			messages: [], // Message queue for the messages that will appear at the top
-			running: false, // "Running" aka autoplay of going through the step and message queues
-			// via the Play button
-			stepId: 0, // ID of the current step
-			stepTime: 4000, // Milliseconds for transition durations aka duration of each animation
-			waitTime: 2000,
-			size: 0,
-			head: null
+			steps : [],
+			ids : [],
+			messages : [],
+			running : false,
+			stepId : 0,
+			stepTime : 4000,
+			waitTime : 1000,
+			flag : false
 		};
-
+	
 		// Bindings
 		this.ref = React.createRef(); // Where the visualizer will be
 		this.play = this.play.bind(this);
@@ -159,135 +103,16 @@ export default class singlylinkedlist extends React.Component {
 		// Constructor for Linked List
 		this.head = null;
 		this.size = 0;
-
+		
 		//this.isRunningCheck = this.isRunningCheck.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
 
 	}
-
-	simulation() {
-		let num = [33, 67, 22, 44, 56];
-		for (let i = 0; i < 5; i++) {
-			let rand = Math.floor(Math.random() * 100);
-			console.log("Inserting " + rand + " into the linked list");
-			this.insert(rand);
-		}
-		for (let j = 0; j < 5; j++) {
-			let rand = Math.floor(Math.random() * this.size);
-			console.log("Inserting " + num[j] + " into position " + rand);
-			this.insertAt(num[j], rand);
-
-		}
-		for (let k = 0; k < 5; k++) {
-			console.log("Removing " + num[k] + " from the linked list");
-			this.remove(num[k]);
-		}
-
-	}
-
-
-	// insert element towards the end of the list
-	insert(element) {
-		// Functions for add
-		let node = new Node(element);
-		let current;
-		this.state.steps.push(new AddNodeStep(element))
-		if (this.head == null) this.head = node;
-		else {
-			current = this.head;
-			while (current.next) current = current.next;
-			current.next = node;
-		}
-		this.setState.size++;
-		this.printList();
-		this.setState({ steps: this.state.steps });
-		this.setState({ messages: this.state.messages });
-	}
-
-	// remove next occurent element from the list
-	remove(element) {
-		let current = this.head;
-		let previous = null;
-
-		// iterate over the list
-		while (current != null) {
-			// comparing element with current
-			// element if found then remove the
-			// and return true
-			if (current.element === element) {
-				if (previous == null) {
-					this.head = current.next;
-				} else {
-					previous.next = current.next;
-				}
-				this.setState.size--;
-				this.printList();
-				return;
-			}
-			previous = current;
-			current = current.next;
-		}
-		this.printList();
-		this.setState({ steps: this.state.steps });
-		this.setState({ messages: this.state.messages });
-		console.log("No value found");
-	}
-
-	// insert at specific position
-	insertAt(element, index) {
-		if (index < 0 || index > this.state.size) {
-			return console.log("Please enter valid index from 0 to " + this.state.size + ".");
-		}
-		else {
-			let node = new Node(element);
-			let current, previous;
-
-			current = this.head;
-
-			if (index === 0) {
-				node.next = this.head;
-				this.head = node;
-			} else {
-				current = this.head;
-				let it = 0;
-
-				while (it < index) {
-					it++;
-					previous = current;
-					current = current.next;
-				}
-
-				node.next = current;
-				previous.next = node;
-			}
-			this.setState.size++;
-		}
-		this.printList();
-		this.setState({ steps: this.state.steps });
-		this.setState({ messages: this.state.messages });
-	}
-
-	isEmpty() {
-		return this.state.size === 0;
-	}
-	size_of_list() {
-		console.log(this.state.size);
-	}
-	printList() {
-		let curr = this.head;
-		let str = "";
-		while (curr) {
-			str += curr.element + " ";
-			curr = curr.next;
-		}
-		console.log(str);
-	}
-
-
+	
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize() {
-		const width = 1300;
+		console.log("Building the visualizer");
 		const height = 300;
 		const barHeight = 50;
 		const barWidth = 90;
@@ -307,6 +132,9 @@ export default class singlylinkedlist extends React.Component {
 			.enter()
 			.append("g")
 			.attr("class", "gbar")
+			.attr("id", function (_, i) {
+				return "g" + i;
+			});
 		
 		// Gradient to split rectangle color by half
 		let grad = svg.append("defs")
@@ -325,6 +153,7 @@ export default class singlylinkedlist extends React.Component {
 			.attr("stroke-width", "2")
 			.attr("stroke", "grey")
 			
+			
 		// Line to split the rectangle 
 		containers.append('line')
 			.style("stroke", "grey")
@@ -336,7 +165,7 @@ export default class singlylinkedlist extends React.Component {
 		
 		containers.append("text")
 			.text((d) => {
-				console.log("BAR" + d);
+				//console.log("BAR" + d);
 				return d;
 			})
 			.attr("y", '83')
@@ -358,7 +187,6 @@ export default class singlylinkedlist extends React.Component {
 			.attr("y2", 75)
 			.attr("marker-end", "url(#arrow)")
 
-
 		containers.append("svg:defs").append("svg:marker")
 			.attr("id", "arrow")
 			.attr("viewBox", "0 0 12 12")
@@ -374,11 +202,113 @@ export default class singlylinkedlist extends React.Component {
 
 		let ids = [];
 		for (let i = 0; i < 8; i++) ids.push("g" + i);
+		svg.attr("visibility", "hidden");
+		
 		this.setState({ids: ids});
-		// Triggers componentDidUpdate to run the main function for the steps and messages queues
-		// svg.attr("visibility", "hidden");
+		this.setState({rendered: true});
 		return svg;
 	}
+
+	simulation() {
+		let messages = [];
+		let steps = [];
+		console.log("Running stimulation");
+		messages.push("<h1>Beginning Singly Linked List!</h1>");
+		steps.push(new EmptyStep());
+		let num = [33, 67, 22, 44, 32, 12, 30, 42];
+
+		for (let i = 0; i < 8; i++) {
+			//let rand = Math.floor(Math.random() * 100);
+			messages.push("<h1>Inserting " + num[i] + " into the Linked List.</h1>");
+			steps.push(new AddNodeStep(num[i],i,this.state.ids));
+			//this.insert(num[i]);
+		}
+		for (let k = 0; k < 8; k++) {
+			messages.push("<h1>Removing " + num[k] + " from the linked list</h1>");
+			steps.push(new RemoveNodeStep(k,this.state.ids));
+		//	this.remove(num[k]);
+		}
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+	}
+
+	// insert element towards the end of the list
+	insert(element) {
+		let messages = [];
+		let steps = [];
+		let i = 0;
+		// Functions for add
+		let node = new Node(element);
+		let current;
+		if (this.head == null)  {
+			this.head = node;
+			messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+			steps.push(new AddNodeStep(element,0,this.state.ids));
+			//console.log("head: " + element);
+		}
+		else {
+			console.log("HI!");
+			current = this.head;
+			while (current.next) {
+				current = current.next;
+				i++;
+			}
+				current.next = node;
+				messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+				steps.push(new AddNodeStep(element,i,this.state.ids));
+		}
+		this.size++;
+		this.printList();
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+	}
+
+	// remove next occurent element from the list
+	remove(element) {
+		let steps = [];
+		let messages = [];
+		let current = this.head;
+		let previous = null;
+
+		// iterate over the list
+		while (current != null) {
+			// comparing element with current
+			// element if found then remove the
+			// and return true
+			if (current.element === element) {
+				if (previous == null) {
+					this.head = current.next;
+				} else {
+					previous.next = current.next;
+				}
+				this.size--;
+				return;
+			}
+			previous = current;
+			current = current.next;
+		}
+		this.printList();
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+		console.log("No value found");
+	}
+
+	isEmpty() {
+		return this.state.size === 0;
+	}
+	size_of_list() {
+		console.log(this.state.size);
+	}
+	printList() {
+		let curr = this.head;
+		let str = "";
+		while (curr) {
+			str += curr.element + " ";
+			curr = curr.next;
+		}
+		//console.log(str);
+	}
+
 
 	turnOffRunning() {
 		console.log("setting running to false");
@@ -411,47 +341,47 @@ export default class singlylinkedlist extends React.Component {
 		d3.timeout(this.turnOffRunning, this.state.waitTime);
 	}
 
-	// For the play button
+	// For the autoplay button
 	run() {
-		if (!this.state.running) return;
+		console.log("Inside run()");
+		if (!this.state.running) {
+			console.log("Not running");
+			return;
+		}
+		console.log("Stepid: " + this.state.stepId);
+		console.log("Total Steps: " + this.state.steps.length);
 		if (this.state.stepId === this.state.steps.length) {
-			this.setState({ running: false });
+			console.log("We are the end!");
+			this.setState({running: false});
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-		this.setState({ stepId: this.state.stepId + 1 });
+		this.setState({stepId :this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
 	}
 
 	play() {
-		console.log("PLAY CLICKED");
-		this.simulation();
-		//if (this.state.running) return;
-		//this.setState({running: true});
-		//this.run();
+		console.log("Play clicked");
+		if (this.state.running) return;
+		this.setState({flag : true});
+		this.setState({running: true});
+		this.run();
 	}
 
 	handleInsert() {
 		let input = document.getElementById("insertVal").value;
 		// If there is an input then check for posinput
+		if (this.state.running) return;
 		if (input) {
-			let posInput = document.getElementById("insertPos").value;
-			// Check if position input exists
-			if (posInput) {
-				// If there is a position input proceed to insertAt();
-				this.insertAt(input, posInput);
-			}
-			else {
-				// If no position input proceed to insert();
-				this.insert(input);
-			}
+			this.insert(input);
+			this.setState({running: true});
+			//this.run();
+			//this.forward();
 		}
 		else console.log("No Input");
-
-		// if (this.state.running) return;
-		// this.setState({running: true});
-		// this.run();
+		
+		
 	}
 
 	handleRemove() {
@@ -463,8 +393,6 @@ export default class singlylinkedlist extends React.Component {
 			console.log("No input entered")
 			console.log(this.state.size);
 		}
-
-
 		// if (this.state.running) return;
 		// this.setState({running: true});
 		// this.run();
@@ -482,27 +410,32 @@ export default class singlylinkedlist extends React.Component {
 		this.setState({ running: false, steps: [], ids: [], messages: [], stepId: 0 });
 	}
 
-	// First function to run
+	// First function to run when launch the page
 	componentDidMount() {
+		console.log("Component is mounted, rendering visualizer");
 		this.initialize();
 	}
 
 	//Calls functions depending on the change in state
+	// Important needs to tweak
 	componentDidUpdate(prevProps, prevState) {
-		if (this.state.size > prevState.size) {
-			console.log("SIZE CHANGED");
-			this.initialize();
+		if (this.state.rendered !== prevState.rendered) {
+			console.log("Current state has been rendered");
+			console.log("Running visualizer");
+			this.simulation();	
+		}
+		else if (this.state.running !== prevState.running && this.state.running === true)
+		{
+			this.run();
+			console.log("We ran");
 		}
 	}
-
-
-
-
+	
 	render() {
 		return (
 			<div>
 				<div class="center-screen" id="banner">
-					<button class="button" onClick={this.play}>Play</button>
+					<button class="button" onClick={this.play}>Autoplay</button>
 					<button class="button" onClick={this.pause}>Pause</button>
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>
@@ -511,15 +444,12 @@ export default class singlylinkedlist extends React.Component {
 				<div class="center-screen">
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 					<input type="number" class="inputBox" id="insertVal" placeholder="Val"></input>
-					<input type="number" class="inputBox" id="insertPos" placeholder="Pos"></input>
 					<button class="button" id="removeBut" onClick={this.handleRemove}>Remove</button>
 					<input type="number" class="inputBox" id="removeVal" placeholder="Val"></input>
 				</div>
-
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Singly Linked List!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 			</div>
 		)
 	}
 }
-

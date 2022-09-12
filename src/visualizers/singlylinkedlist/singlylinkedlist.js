@@ -10,6 +10,7 @@ import { ConsoleView } from "react-device-detect";
 import { Component } from "react";
 import UserInput from "../../components/userInput/UserInput";
 import { svg } from "d3";
+import { ExitToApp } from "@material-ui/icons";
 
 class Node {
 	constructor(element) {
@@ -87,7 +88,8 @@ export default class singlylinkedlist extends React.Component {
 			stepId : 0,
 			stepTime : 4000,
 			waitTime : 1000,
-			flag : false
+			flag : false,
+			UI : false
 		};
 	
 		// Bindings
@@ -98,11 +100,13 @@ export default class singlylinkedlist extends React.Component {
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
+		this.runInsert = this.runInsert.bind(this);
 		this.run = this.run.bind(this);
 
 		// Constructor for Linked List
 		this.head = null;
 		this.size = 0;
+		
 		
 		//this.isRunningCheck = this.isRunningCheck.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
@@ -221,14 +225,13 @@ export default class singlylinkedlist extends React.Component {
 		let num = [33, 67, 22, 44, 32, 12, 30, 42];
 
 		for (let i = 0; i < 8; i++) {
-			//let rand = Math.floor(Math.random() * 100);
 			messages.push("<h1>Inserting " + num[i] + " into the Linked List.</h1>");
 			steps.push(new AddNodeStep(num[i],i,this.state.ids));
 			//this.insert(num[i]);
 		}
-		for (let k = 0; k < 8; k++) {
-			messages.push("<h1>Removing " + num[k] + " from the linked list</h1>");
+		for (let k = 7; k >= 0; k--) {
 			steps.push(new RemoveNodeStep(k,this.state.ids));
+			messages.push("<h1>Removing " + num[k] + " from the linked list</h1>");
 		//	this.remove(num[k]);
 		}
 		this.setState({ steps: steps });
@@ -363,6 +366,26 @@ export default class singlylinkedlist extends React.Component {
 		this.setState({stepId :this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
 	}
+	runInsert() {
+		console.log("Inside runInsert()");
+		if (!this.state.running) {
+			console.log("Not running");
+			return;
+		}
+		console.log("Stepid: " + this.state.stepId);
+		console.log("Total Steps: " + this.state.steps.length);
+		//this.state.steps.length = 17;
+		console.log(this.state.steps);
+		if (this.state.stepId === this.state.steps.length) {
+			console.log("We are the end!");
+			this.setState({running: false});
+			return;
+		}
+		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+		this.setState({stepId :this.state.stepId + 1});
+		d3.timeout(this.runInsert, this.state.waitTime);
+	}
 
 	play() {
 		console.log("Play clicked");
@@ -380,11 +403,13 @@ export default class singlylinkedlist extends React.Component {
 			console.log("handleInsert: " + input);
 			this.insert(input);
 			this.setState({running: true});
+			this.setState({UI: true});
+			
 			/*
 			Step pushed for head, and then step id == step length -> end of steps. 
 			How can we increment step for next input?
 			*/
-			//this.run();
+			this.runInsert();
 			//this.forward();
 		}
 		else console.log("No Input");
@@ -414,7 +439,7 @@ export default class singlylinkedlist extends React.Component {
 	restart() {
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
-		document.getElementById("message").innerHTML = "<h1>Welcome to Linked List!</h1>";
+		document.getElementById("message").innerHTML = "<h1>Welcome to Singly Linked List!</h1>";
 		this.setState({ rendered: false, running: false, steps: [], ids: [], messages: [], stepId: 0, flag : true});
 	}
 
@@ -442,7 +467,9 @@ export default class singlylinkedlist extends React.Component {
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
-			this.run();
+			if (this.state.UI === true) 
+				this.runInsert();
+			else this.run();
 			console.log("We ran");
 		}
 	}

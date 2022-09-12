@@ -370,18 +370,18 @@ export default class binarysearchtree extends React.Component {
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
-            messages.push("The next value we will insert into the tree is " + val);
+            messages.push("<h1>The next value we will insert into the tree is " + val + "</h1>");
 
             if(!root) {
                 root = new Node(this.ref, val, x, y, i);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
+                messages.push("<h1>The tree is empty, let's add "+ val + " as the root node.</h1>");
                 
                 // steps.push(new UnHighlightNodeStep(this.state.root, null));
                 steps.push(new UnHighlightPathStep(root, val));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
+                messages.push("<h1>The tree is empty, let's add "+ val + " as the root node.</h1>");
                 i++;
             } else {
                 let node = root;
@@ -394,7 +394,7 @@ export default class binarysearchtree extends React.Component {
                     //console.log(node.value);
                     if (firstStep) {
                         steps.push(new HighlightNodeStep(node, null));
-                        messages.push("The next value we will insert into the tree is " + val);
+                        messages.push("<h1>The next value we will insert into the tree is " + val + "</h1>");
                         firstStep = false;
                     } else {
                         steps.push(new HighlightNodeStep(node, null));
@@ -403,7 +403,7 @@ export default class binarysearchtree extends React.Component {
 
                     if(val < node.value) {
                         steps.push(new EmptyStep());
-                        messages.push(val + " is less than " + node.value);
+                        messages.push("<h1>" + val + " is less than " + node.value + "</h1>");
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is less than " + node.value);
@@ -412,7 +412,7 @@ export default class binarysearchtree extends React.Component {
                             var edge = node.lEdge;
                             node = node.left;
                             steps.push(new HighlightNodeStep(node, edge));
-                            messages.push("Let's traverse to the left edge of the node.");
+                            messages.push("<h1>Let's traverse to the left edge of the node.</h1>");
 
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the left edge of the node.");
@@ -426,14 +426,14 @@ export default class binarysearchtree extends React.Component {
                             node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
-                            messages.push(node.value + " has no left child.");
+                            messages.push("<h1>" + node.value + " has no left child.</h1>");
 
                             steps.push(new NewNodeStep(node.left, node.lEdge));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value);
+                            messages.push("<h1>Let's insert " + val + " to the left of node " + node.value + "</h1>");
 
                             // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
                             steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value);
+                            messages.push("<h1>Let's insert " + val + " to the left of node " + node.value + "</h1>");
 
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
@@ -447,7 +447,7 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else if (val > node.value) {
                         steps.push(new EmptyStep());
-                        messages.push(val + " is greater than " + node.value);
+                        messages.push("<h1>" + val + " is greater than " + node.value + "</h1>");
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is greater than " + node.value);
@@ -456,7 +456,7 @@ export default class binarysearchtree extends React.Component {
                             var edge = node.rEdge
                             node = node.right;
                             steps.push(new HighlightNodeStep(node, edge));
-                            messages.push("Let's traverse to the right edge of the node.");
+                            messages.push("<h1>Let's traverse to the right edge of the node.</h1>");
 
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the right edge of the node.");
@@ -469,14 +469,14 @@ export default class binarysearchtree extends React.Component {
                             node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
-                            messages.push(node.value + " has no right child.");
+                            messages.push("<h1>" + node.value + " has no right child.</h1>");
 
                             steps.push(new NewNodeStep(node.right, node.rEdge));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value);
+                            messages.push("<h1>Let's insert " + val + " to the right of node " + node.value + "</h1>");
 
                             // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
                             steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value);
+                            messages.push("<h1>Let's insert " + val + " to the right of node " + node.value + "</h1>");
 
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             if (level > this.state.maxLevel) {
@@ -489,11 +489,11 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else {
                         steps.push(new EmptyStep());
-                        messages.push(val + " is equal to " + node.value);
+                        messages.push("<h1>" + val + " is equal to " + node.value + "</h1>");
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         steps.push(new UnHighlightPathStep(root, val));
-                        messages.push("There cannot be duplicate values in a BST, so we will move on.");
+                        messages.push("<h1>There cannot be duplicate values in a BST, so we will move on.<h1>");
                     }
                     level++;
                 }
@@ -501,7 +501,7 @@ export default class binarysearchtree extends React.Component {
         }
 
         steps.push(new EmptyStep())
-        messages.push("Binary Search Tree insertion complete!");
+        messages.push("<h1>Binary Search Tree insertion complete!</h1>");
         console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});
@@ -574,6 +574,9 @@ export default class binarysearchtree extends React.Component {
         document.getElementById("message").innerHTML = "<h1>Welcome to Binary Search!</h1>";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
+        i = 0;
+        j = 0;
+
 	}
 
     componentDidMount() {

@@ -13,9 +13,61 @@ import { svg } from "d3";
 import { ExitToApp } from "@material-ui/icons";
 
 class Node {
-	constructor(element) {
+	constructor(element, id, next, ref) {
 		this.element = element;
-		this.next = null;
+		this.id = id;
+		this.next = next ? next : null;
+		this.ref = ref;
+
+		// d3.select(ref.current)
+		// 	.select("svg g")
+		// 	.append('rect')
+		// 	.attr('height', barHeight)
+		// 	.attr('width', barWidth)
+		// 	.attr('x', function (d, i) { return 150 * i; })
+		// 	.attr('y', '50')
+		// 	.style("fill", "url(#grad)")
+		// 	.attr("stroke-width", "2")
+		// 	.attr("stroke", "grey")
+
+		// 	// Line to split the rectangle 
+		// d3.select(ref.current)
+		// 	.select("svg g")
+		// 	.append('line')
+		// 	.style("stroke", "grey")
+		// 	.style("stroke-width", 2)
+		// 	.attr("x1", function (d,i) { return (150 * i) + 60})
+		// 	.attr("y1", 50)
+		// 	.attr("x2", function (d,i) { return (150 * i) + 60})
+		// 	.attr("y2", 100)
+		
+		// d3.select(ref.current)
+		// 	.select("svg g")
+		// 	.append("text")
+		// 	.text((d) => {
+		// 		//console.log("BAR" + d);
+		// 		return d;
+		// 	})
+		// 	.attr("y", '83')
+		// 	.attr("x", function (d,i) { return (150 * i) + 20})
+		// 	.style("text-anchor", "middle")
+		// 	.style("font-size", "28px")
+		// 	.style("fill", "white");
+
+		// d3.select(ref.current)
+		// 	.select("svg g")
+		// 	.append('line')
+		// 	.data(arrLine)
+		// 	.style("stroke", "white")
+		// 	.style("stroke-width", 5)
+		// 	.attr("x1", function (d, i) {
+		// 		d = 90
+		// 		return (d + 150 * (i))
+		// 	})
+		// 	.attr("y1", 75)
+		// 	.attr("x2", function (d, i) { return (150 * (i + 1)) })
+		// 	.attr("y2", 75)
+		// 	.attr("marker-end", "url(#arrow)")
 	}
 }
 // When nothing in the visualizer changes but you want to push a new message
@@ -150,6 +202,9 @@ export default class singlylinkedlist extends React.Component {
 			.append("svg")
 			.attr("width", (10 * (barWidth + barOffset)) + 200)
 			.attr("height", height);
+			// .append("g")
+		
+		// return svg
 		
 		let arr = [0, 0, 0, 0, 0, 0, 0, 0]
 		let arrLine = [0, 0, 0, 0, 0, 0, 0]
@@ -267,10 +322,14 @@ export default class singlylinkedlist extends React.Component {
 		let steps = [];
 		let i = 0;
 		// Functions for add
+		// let node = new Node(element, this.state.lastId, null, this.ref)
+		// get rid of arrays
+		// get rid of ids list
 		let node = new Node(element);
 		let current;
 		if (this.head == null)  {
 			this.head = node;
+			this.head.id = 
 			messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 			steps.push(new AddNodeTailStep(element,0,this.state.ids));
 			//console.log("head: " + element);

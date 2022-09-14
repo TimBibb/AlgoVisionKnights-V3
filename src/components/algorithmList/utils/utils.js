@@ -918,6 +918,43 @@ export function Postorder() {
 	);
 }
 
+export function Heaps() {
+	return (
+		<div className='Heaps'>
+			<MathJax.Provider>
+				<div>
+					<p className='SubHeader'>Time Complexity:</p>
+					<table>
+						<tr>
+							<th>Cases</th>
+							<th>Runtime</th>
+						</tr>
+						<tr>
+							<td>Worst Case</td>
+							<td>{linear}</td>
+						</tr>
+					</table>
+				</div>
+				<div>
+					<p className='SubHeader'>Space Complexity:</p>
+					<table>
+						<tr>
+							<th>Cases</th>
+							<th>Space</th>
+						</tr>
+
+						<tr>
+							<td>Worst Case</td>
+							<td>{linear}</td>
+						</tr>
+					</table>
+				</div>
+			</MathJax.Provider>
+			
+		</div>
+	);
+}
+
 // Backtracking
 export function Backtracking() {
 	return <div className='Backtracking'>Backtracking JSX</div>;

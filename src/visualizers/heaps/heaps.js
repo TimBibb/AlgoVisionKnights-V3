@@ -223,7 +223,7 @@ export default class heaps extends React.Component {
     restart(){
         console.log("RESTART CLICKED");
         d3.select(this.ref.current).select("svg").remove();
-        document.getElementById("message").innerHTML = "<h1>Welcome to Heaps</h1>";
+        document.getElementById("message").innerHTML = "<h1>Welcome to Heaps!</h1>";
         i = 0;
         j = 0;
         this.root = null;

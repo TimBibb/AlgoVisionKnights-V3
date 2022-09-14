@@ -12,14 +12,81 @@ import UserInput from "../../components/userInput/UserInput";
 import { svg } from "d3";
 import { ExitToApp } from "@material-ui/icons";
 
+
+
 class Node {
-	constructor(element) {
+	constructor(element, id, ref, x) {
 		this.element = element;
-		this.next = null;
-	}
+        this.id = "g" + id;
+        this.next = null;
+        this.ref = ref;
+        this.x = x;
+			
+		let container = d3.select(this.ref.current)
+			.select("svg")
+			.append("g")
+			.attr("class","gbar")
+			.attr("id", this.id)
+			.attr("visibility", "hidden")
+	
+		container
+            .append('rect')
+			.attr("class", "nodes")
+            .attr('height', 50)
+            .attr('width',90)
+            .attr('x', (150 * this.x))
+            .attr('y','50')
+            .style("fill", "url(#grad)")
+            .attr("stroke-width", "2")
+            .attr("stroke", "grey")
+			
+		container
+            .append('line')
+            .style("stroke", "grey")
+            .style("stroke-width", 2)
+		 	.attr("x1", (150 * this.x) + 60)
+		 	.attr("y1", 50)
+		 	.attr("x2", (150 * this.x) + 60)
+		 	.attr("y2", 100)
+			
+		container
+			.append("text")
+			.text(this.element)
+			.attr("y", '83')
+			.attr("x", (150 * this.x) + 20)
+			.style("text-anchor", "middle")
+			.style("font-size", "28px")
+			.style("fill", "white")
+			
+		container
+			.append('line')
+			.style("stroke", "white")
+			.style("stroke-width", 5)
+			.attr("x1", (150 * this.x) + 90)
+			.attr("y1", 75)
+			.attr("x2", 150 * (this.x + 1))
+			.attr("y2", 75)
+			.attr("marker-end", "url(#arrow)")
+			
+		
+		container
+			.append("svg:marker")
+			.attr("id", "arrow")
+			.attr("viewBox", "0 0 12 12")
+			.attr("refX", 10.5)
+			.attr("refY", 6)
+			.attr("markerUnits", "strokeWidth")
+			.attr("markerWidth", 8)
+			.attr("markerHeight", 30)
+			.attr("orient", "auto")
+			.append("path")
+			.attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
+			.style("stroke", "white")
+    
+    ;}
+
 }
-// When nothing in the visualizer changes but you want to push a new message
-// aka for alignment between messages and steps
+
 class EmptyStep {
 	forward(svg) { }
 
@@ -28,22 +95,20 @@ class EmptyStep {
 	backward(svg) { }
 }
 
-class AddNodeTailStep {
-	constructor(element,id1,ids) {
-		this.element = element;
-		this.ids = ids;
+class ShowNodeStep {
+	constructor(id1,idArr) {
+		this.idArr = idArr;
 		this.id1 = id1;
 	}
 	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
-		svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+		svg.select("#" + this.idArr[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
 	}
 	fastForward(svg) {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -51,22 +116,20 @@ class AddNodeTailStep {
 		}
 	}
 }
-class AddNodeHeadStep {
-	constructor(element,id1,ids) {
-		this.element = element;
-		this.ids = ids;
+class HideNodeStep {
+	constructor(id1,idArr) {
+		this.idArr = idArr;
 		this.id1 = id1;
 	}
 	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
-		svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+		svg.select("#" + this.idArr[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "hidden");
 	}
 	fastForward(svg) {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -76,19 +139,19 @@ class AddNodeHeadStep {
 }
 
 class RemoveNodeStep {
-	constructor(id1,ids) {
-		this.ids = ids;
+	constructor(id1,idArr) {
+		this.idArr = idArr;
 		this.id1 = id1;
 	}
 	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line").attr("visibility", "hidden");
+		svg.select("#" + this.idArr[this.id1]).selectAll("rect, text, line").attr("visibility", "hidden");
 	}
 	fastForward(svg) {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -104,15 +167,20 @@ export default class singlylinkedlist extends React.Component {
 		super(props);
 		this.state = {
 			rendered: false,
-			steps : [],
-			ids : [],
-			messages : [],
+			stepsArr : [],
+			idArr : [],
+			messagesArr : [],
 			running : false,
 			stepId : 0,
 			stepTime : 4000,
 			waitTime : 1000,
 			flag : false,
-			arr : []
+			inputFlag : false,
+			nodeID : 0,
+			nodeCounter: 0,
+			MAX_NODE : 8,
+			MAX_INPUT : 999,
+			MIN_INPUT : -999,
 		};
 	
 		// Bindings
@@ -122,46 +190,25 @@ export default class singlylinkedlist extends React.Component {
 		this.restart = this.restart.bind(this);
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
-		this.turnOffRunning = this.turnOffRunning.bind(this);
-		
+		//this.turnOffRunning = this.turnOffRunning.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 		this.run = this.run.bind(this);
-
 		// Constructor for Linked List
 		this.head = null;
-		this.size = 0;
-		
-		/* this.isRunningCheck = this.isRunningCheck.bind(this);
-		this.handleInsert = this.handleInsert.bind(this);
-		this.handleRemove = this.handleRemove.bind(this); */
-
+		this.size = 0;		
 	}
 	
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize() {
-		console.log("---------------------");
-		console.log("Initialize() - Building the visualizer");
-		
+		console.log("Building the visualizer");
 		const height = 300;
-		const barHeight = 50;
 		const barWidth = 90;
 		const barOffset = 5;
 
 		let svg = d3.select(this.ref.current)
 			.append("svg")
-			.attr("width", (10 * (barWidth + barOffset)) + 200)
+			.attr("width", 1140)
 			.attr("height", height);
-		
-		let arr = [0, 0, 0, 0, 0, 0, 0, 0]
-		let arrLine = [0, 0, 0, 0, 0, 0, 0]
-
-		let containers = svg.selectAll(".containers")
-			.data(arr)
-			.enter()
-			.append("g")
-			.attr("class", "gbar")
-			.attr("id", function (_, i) {
-				return "g" + i;
-			});
 		
 		// Gradient to split rectangle color by half
 		let grad = svg.append("defs")
@@ -171,162 +218,116 @@ export default class singlylinkedlist extends React.Component {
 		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(153,204,255)");
 		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
 		
-		containers.append('rect')
-			.attr('height', barHeight)
-			.attr('width', barWidth)
-			.attr('x', function (d, i) { return 150 * i; })
-			.attr('y', '50')
-			.style("fill", "url(#grad)")
-			.attr("stroke-width", "2")
-			.attr("stroke", "grey")
-			
-			
-		// Line to split the rectangle 
-		containers.append('line')
-			.style("stroke", "grey")
-			.style("stroke-width", 2)
-			.attr("x1", function (d,i) { return (150 * i) + 60})
-			.attr("y1", 50)
-			.attr("x2", function (d,i) { return (150 * i) + 60})
-			.attr("y2", 100)
-		
-		containers.append("text")
-			.text((d) => {
-				//console.log("BAR" + d);
-				return d;
-			})
-			.attr("y", '83')
-			.attr("x", function (d,i) { return (150 * i) + 20})
-			.style("text-anchor", "middle")
-			.style("font-size", "28px")
-			.style("fill", "white");
 
-		containers.append('line')
-			.data(arrLine)
-			.style("stroke", "white")
-			.style("stroke-width", 5)
-			.attr("x1", function (d, i) {
-				d = 90
-				return (d + 150 * (i))
-			})
-			.attr("y1", 75)
-			.attr("x2", function (d, i) { return (150 * (i + 1)) })
-			.attr("y2", 75)
-			.attr("marker-end", "url(#arrow)")
-
-		containers.append("svg:defs").append("svg:marker")
-			.attr("id", "arrow")
-			.attr("viewBox", "0 0 12 12")
-			.attr("refX", 10.5)
-			.attr("refY", 6)
-			.attr("markerUnits", "strokeWidth")
-			.attr("markerWidth", 8)
-			.attr("markerHeight", 30)
-			.attr("orient", "auto")
-			.append("path")
-			.attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
-			.style("stroke", "white");
-
-		let ids = [];
-		for (let i = 0; i < 8; i++) ids.push("g" + i);
-		svg.attr("visibility", "hidden");
-		
-		this.setState({ids: ids});
-		this.setState({rendered: true});
+		this.setState({ rendered : true});
 		return svg;
 	}
 
-	simulation(num) {
-		let messages = [];
-		let steps = [];
-		let rand;
-		console.log("---------------------");
-		console.log("Stimulation () - Running stimulation");
-		messages.push("<h1>Beginning Singly Linked List!</h1>");
-		steps.push(new EmptyStep());
-
+	simulation() {
+		let arr = [];
+		for (let i = 0; i < 8; i++) arr[i] = Math.floor(Math.random() * 100);
+		
+		console.log("Running stimulation");
+		this.state.messagesArr.push("<h1>Beginning Singly Linked List!</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		
+		this.state.messagesArr.push("<h1>Let's insert the nodes from the tail.</h1>");
+		this.state.stepsArr.push(new EmptyStep());
 		for (let i = 0; i < 8; i++) {
-			rand = Math.floor((Math.random() * 3) + 1);
-			console.log(rand)
-			messages.push("<h1>Inserting " + num[i] + " into the Linked List.</h1>");
-			steps.push(new AddNodeTailStep(num[i],i,this.state.ids));
-			//this.insert(num[i]);
+			this.insert(arr[i], i);
 		}
-		for (let k = 7; k >= 0; k--) {
-			steps.push(new RemoveNodeStep(k,this.state.ids));
-			messages.push("<h1>Removing " + num[k] + " from the linked list at the tail</h1>");
-		//	this.remove(num[k]);
+
+		this.state.messagesArr.push("<h1>Let's remove some nodes from the tail.</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		for (let k = 7; k >= 3; k--) {
+			this.remove(arr[k],k);
 		}
-		this.setState({ steps: steps });
-		this.setState({ messages: messages });
+
+		this.state.messagesArr.push("<h1>Let's insert the nodes back.</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		for (let i = 3; i < 8; i++) {
+			this.insert(arr[i], i);
+		}
+
+		this.setState({ stepsArr: this.state.stepsArr }, () => {
+			console.log(this.state.stepsArr.length)
+		});
+		this.setState({ messagesArr: this.state.messagesArr }, () => {
+			console.log(this.state.messagesArr.length)
+		});
+		
 	}
 
 	// insert element towards the end of the list
-	insert(element) {
-		let messages = [];
-		let steps = [];
-		let i = 0;
-		// Functions for add
-		let node = new Node(element);
+	insert(element,id) {
+		// Create node object
+		let node = new Node(element,id, this.ref, id);
+		// Push into ids array for referencing
+		this.state.idArr.push(node.id);
+		
 		let current;
 		if (this.head == null)  {
 			this.head = node;
-			messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
-			steps.push(new AddNodeTailStep(element,0,this.state.ids));
-			//console.log("head: " + element);
+			this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+			this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
 		}
 		else {
-			console.log("HI!");
 			current = this.head;
 			while (current.next) {
 				current = current.next;
-				i++;
 			}
 				current.next = node;
-				messages.push("<h1>Inserting " + element + " into the Linked List.</h1>");
-				steps.push(new AddNodeTailStep(element,i,this.state.ids));
+				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
+				this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
 		}
 		this.size++;
-		this.printList();
-		this.setState({ steps: steps });
-		this.setState({ messages: messages });
-	}
 
+		//this.printList();
+		this.setState({stepsArr: this.state.stepsArr }, () => {
+			//console.log(this.state.stepsArr.length)
+		});
+		this.setState({messagesArr: this.state.messagesArr }, () => {
+			//console.log(this.state.messagesArr.length)
+		});
+		this.setState({idArr : this.state.idArr});
+	}
 	// remove next occurent element from the list
-	// remove(element) {
-	// 	let steps = [];
-	// 	let messages = [];
-	// 	let current = this.head;
-	// 	let previous = null;
+	remove(element, id) {
+		let current = this.head;
+		let previous = null;
 
-	// 	// iterate over the list
-	// 	while (current != null) {
-	// 		// comparing element with current
-	// 		// element if found then remove the
-	// 		// and return true
-	// 		if (current.element === element) {
-	// 			if (previous == null) {
-	// 				this.head = current.next;
-	// 			} else {
-	// 				previous.next = current.next;
-	// 			}
-	// 			this.size--;
-	// 			return;
-	// 		}
-	// 		previous = current;
-	// 		current = current.next;
-	// 	}
-	// 	this.printList();
-	// 	this.setState({ steps: steps });
-	// 	this.setState({ messages: messages });
-	// 	console.log("No value found");
-	// }
-
-	isEmpty() {
-		return this.state.size === 0;
-	}
-	size_of_list() {
-		console.log(this.state.size);
+		// iterate over the list
+		while (current != null) {
+			// comparing element with current
+			// element if found then remove the
+			// and return true
+			if (current.element === element) {
+				if (previous == null) {
+					// If the value is at the head
+					this.state.messagesArr.push("<h1>Removing " + element + " at the head.</h1>");
+					this.state.stepsArr.push(new HideNodeStep(id,this.state.idArr));
+					this.head = current.next;
+				} else {
+					// Take previous next and assign to successor node next
+					this.state.messagesArr.push("<h1>Removing " + element + ".</h1>");
+					this.state.stepsArr.push(new HideNodeStep(id,this.state.idArr));
+					previous.next = current.next;
+				}
+				this.size--;
+				return;
+			}
+			previous = current;
+			current = current.next;
+		}
+		this.printList();
+		this.setState({stepsArr: this.state.stepsArr }, () => {
+			//console.log(this.state.stepsArr.length)
+		});
+		this.setState({messagesArr: this.state.messagesArr }, () => {
+			//console.log(this.state.messagesArr.length)
+		});
+		this.setState({idArr : this.state.idArr});
+		console.log("No value found");
 	}
 	printList() {
 		let curr = this.head;
@@ -335,28 +336,23 @@ export default class singlylinkedlist extends React.Component {
 			str += curr.element + " ";
 			curr = curr.next;
 		}
-		//console.log(str);
+		console.log(str);
 	}
 
-	turnOffRunning() {
-		console.log("setting running to false");
-		this.setState({ running: false });
-	}
-
-	// Step forward button
+	//Step forward button
 	forward() {
 		console.log("FORWARD CLICKED");
 		if (this.state.running) return; // The user can't step forward while running via the play
 		// button so as not to ruin the visualizer
-		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
+		if (this.state.stepId === this.state.stepsArr.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
-		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.state.stepsArr[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({ stepId: this.state.stepId + 1 });
 		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
 	}
 
-	// Step backward button
+	//Step backward button
 	backward() {
 		console.log("BACKWARD CLICKED");
 		if (this.state.running) return;
@@ -369,7 +365,7 @@ export default class singlylinkedlist extends React.Component {
 		d3.timeout(this.turnOffRunning, this.state.waitTime);
 	}
 
-	// For the autoplay button
+	//For the autoplay button
 	run() {
 		console.log("Inside run()");
 		if (!this.state.running) {
@@ -377,58 +373,26 @@ export default class singlylinkedlist extends React.Component {
 			return;
 		}
 		console.log("Stepid: " + this.state.stepId);
-		console.log("Total Steps: " + this.state.steps.length);
-		if (this.state.stepId === this.state.steps.length) {
+		console.log("Total Steps: " + this.state.stepsArr.length);
+		if (this.state.stepId === this.state.stepsArr.length) {
 			console.log("We are the end!");
 			this.setState({running: false});
 			return;
 		}
-		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
-		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-		this.setState({stepId :this.state.stepId + 1});
+		this.state.stepsArr[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
+		this.setState({stepId : this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
 	}
-
 
 	play() {
 		console.log("Play clicked");
 		if (this.state.running) return;
 		this.setState({flag : true});
 		this.setState({running: true});
+		this.simulation();
 		this.run();
 	}
-
-	// handleInsert() {
-	// 	let input = document.getElementById("insertVal").value;
-	// 	// If there is an input then check for posinput
-	// 	if (this.state.running) return;
-	// 	if (input) {
-	// 		this.insert(input);
-	// 		this.setState({running: true});
-	// 		/*
-	// 		Step pushed for head, and then step id == step length -> end of steps. 
-	// 		How can we increment step for next input?
-	// 		*/
-			
-	// 		this.run();
-	// 		//this.forward();
-	// 	}
-	// 	else console.log("No Input");
-	// } 
-
-	/* handleRemove() {
-		let input = document.getElementById("removeVal").value;
-		if (input) {
-			this.remove(input);
-		}
-		else {
-			console.log("No input entered")
-			console.log(this.state.size);
-		}
-		// if (this.state.running) return;
-		// this.setState({running: true});
-		// this.run();
-	} */
 
 	pause() {
 		console.log("PAUSE CLICKED");
@@ -439,41 +403,26 @@ export default class singlylinkedlist extends React.Component {
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
 		document.getElementById("message").innerHTML = "<h1>Welcome to Singly Linked List!</h1>";
-		this.setState({ rendered: false, running: false, steps: [], ids: [], messages: [], stepId: 0, flag : true});
-	}
-
-	dataInit() {
-		let arr = [];
-		// fills arr with random numbers [15, 70]
-		for (let i = 0; i < 8; i++) arr[i] = Math.floor(Math.random() * 100);
-
-		this.setState({ arr: arr });
+		this.setState({ rendered: false, running: false, stepsArr: [], messagesArr: [], stepId: 0, flag : true});
 	}
 
 	// First function to run when launch the page
 	componentDidMount() {
-		console.log("---------------------");
-		console.log("componentDidMount() - Component is mounted, rendering visualizer");
-		//this.initialize();
-		this.dataInit();
+		console.log("Mounting our D3");
+		this.initialize();
 	}
 
 	//Calls functions depending on the change in state
-	// Important needs to tweak
 	componentDidUpdate(prevProps, prevState) {
-		if (this.state.arr.length > prevState.arr.length) {
-			this.initialize();
-		}
-		if (this.state.rendered !== prevState.rendered) {
-			console.log("---------------------");
-			console.log("componentDidUpdate() - Current state has been rendered");
-			this.simulation(this.state.arr);	
+		if (this.state.rendered !== prevState.rendered && this.state.flag === false) {
+			console.log("Current state has been rendered");
+			// this.simulation();	
 		}
 		// Restart
-		else if (this.state.steps.length !== prevState.steps.length && this.state.flag === true) {
-			console.log("---------------------");
-			console.log("componentDidUpdate() - Restart");
+		else if (this.state.stepsArr.length !== prevState.stepsArr.length && this.state.flag === true) {
+			console.log("Restart");
 			this.initialize();
+			//this.simulation();
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
@@ -481,7 +430,41 @@ export default class singlylinkedlist extends React.Component {
 			console.log("We ran");
 		}
 	}
+
+	handleInsert() {
+		let input = document.getElementById("insertVal").value;
+		// If there is an input then check for posinput
+		if (this.state.running) return;
+		this.setState({running: true});
+		if (input && this.state.nodeCounter < this.state.MAX_NODE) {
+			this.insert(input,this.state.nodeID);
+			this.setState({nodeID : this.state.nodeID + 1, 
+						   nodeCounter : this.state.nodeCounter + 1});
+			this.run();
+		}
+		else{
+			console.log("No Input");
+			if (this.state.nodeID >= 7){
+				document.getElementById("message").innerHTML = "<h1>Sorry! The limit is 8 nodes</h1>";
+				return;
+			}
+		} 
+	} 
+
+	handleRemove() {
+		let input = document.getElementById("removeVal").value;
+		if (this.state.running) return;
+		this.setState({running : true});
+		if (input) {
+			this.remove(input);
+		}
+		else {
+			console.log("No input entered")
+		}
+		
+	}
 	
+
 	render() {
 		return (
 			<div>
@@ -492,15 +475,21 @@ export default class singlylinkedlist extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
-				{/* <div class="center-screen">
+				<div class="center-screen">
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
-					<input type="number" class="inputBox" id="insertVal" placeholder="Val"></input>
+					<input type="number" class="inputBox" id="insertVal" placeholder="Val"></input> 
 					<button class="button" id="removeBut" onClick={this.handleRemove}>Remove</button>
 					<input type="number" class="inputBox" id="removeVal" placeholder="Val"></input>
-				</div> */}
+				</div> 
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Singly Linked List!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 			</div>
 		)
 	}
 }
+
+
+
+ 
+	
+	

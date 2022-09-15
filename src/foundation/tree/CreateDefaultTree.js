@@ -3,15 +3,16 @@ import Edge from "./Edge";
 import LabeledNode from "../graph/LabeledNode";
 
 function createDefaultTree(ref){
-    let numberOfNodes = 6;
+    let numberOfNodes = 7;
     var nodes = []
-    let numberOfEdges = 5;
+    let numberOfEdges = 6;
     var edges = [
         [0, 1],
         [0, 2],
         [1, 3],
         [1, 4],
         [2, 5],
+        [2, 6],
     ];
 
     let tree = {
@@ -22,8 +23,8 @@ function createDefaultTree(ref){
         nodeInfo: [],
     };
 
-    var xs = [50, 30, 70, 15, 45, 85];
-    var ys = [10, 20, 20, 40, 40, 40];
+    var xs = [50, 30, 70, 15, 45, 85, 57];
+    var ys = [10, 20, 20, 40, 40, 40, 40];
 
     for (let i = 0; i < numberOfEdges; i++) {
         let [node1, node2] = edges[i];

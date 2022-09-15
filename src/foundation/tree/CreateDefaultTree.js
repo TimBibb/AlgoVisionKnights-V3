@@ -4,7 +4,7 @@ import LabeledNode from "../graph/LabeledNode";
 
 function createDefaultTree(ref){
     let numberOfNodes = 6;
-    var nodes = [50, 35, 75, 20, 40, 80]
+    var nodes = []
     let numberOfEdges = 5;
     var edges = [
         [0, 1],

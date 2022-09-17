@@ -403,7 +403,7 @@ export default class binarysearch extends React.Component {
 				<div class="center-screen" id="banner">	
 					<input type="number" id="value" class="inputValue"></input>
 					<button class="button" onClick={this.handleSearch}>Search</button>
-					{/* <button class="button" onClick={this.play}>Play</button> */}
+					<button class="button" onClick={this.play}>Play</button> 
 		        	<button class="button" onClick={this.pause}>Pause</button>
 		        	<button class="button" onClick={this.restart}>Restart</button>
 		        	<button class="button" onClick={this.backward}>Step Backward</button>

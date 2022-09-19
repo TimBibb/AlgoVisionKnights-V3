@@ -176,7 +176,7 @@ const algorithms = {
 		{
 			name: 'Preorder',
 			path: 'preorder',
-			type: 'unity',
+			type: 'js',
 			description: <Preorder />,
 		},
 		{

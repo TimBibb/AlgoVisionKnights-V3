@@ -1,8 +1,6 @@
 import React from "react";
-import "./binarysearchtree.css";
+import "./preorder.css";
 import * as d3 from "d3";
-import createDefaultTree from "../../foundation/tree/CreateDefaultTree";
-import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
 import LabeledNode from "../../foundation/tree/LabeledNode";
@@ -184,7 +182,7 @@ class Node {
             this.x + "%",
             this.y + "%",
             this.value,
-            "hidden",
+            "visible",
             "white"
         );
     }
@@ -212,7 +210,6 @@ export default class binarysearchtree extends React.Component {
 
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
-        this.add = this.add.bind(this);
 		this.restart = this.restart.bind(this);
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
@@ -248,100 +245,6 @@ export default class binarysearchtree extends React.Component {
 
     pause(){
         console.log("PAUSE CLICKED");
-    }
-
-    // adjustDistances(root, level, side) {
-    //     if (root == null) {
-    //         return;
-    //     }
-
-    //     d3.selectAll(".level1").attr("x", "5%");
-    //     console.log("flsfs")
-
-    //     if (side === "left") {
-    //         // // root.node.attr("cx", function(d) {return d.x + -5})
-    //         // d3.select("#" + root.id).attr("cx", (root.x-5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x-5) + "%");
-    //     } else if (side === "right") {
-    //         // d3.select("#" + root.id).attr("cx", (root.x+5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x+5) + "%");
-    //     } else {
-
-    //     }
-    //     // console.log(root.value)
-    //     // this.adjustDistances(root.left, level+1, "left");
-    //     // this.adjustDistances(root.right, level+1, "right");
-    // }
-
-    add(){
-        console.log("ADD CLICKED");
-        var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
-
-        if(i < MAX_NODE){
-            if(!this.state.root) {
-                this.state.root = new Node(this.ref, val, x, y, i);
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                console.log(this.state.root);
-                i++;
-            } else {
-                let node = this.state.root;
-                //y += 10;
-                level = 0
-
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if(val < node.value) {
-                        if(node.left != null) {
-                            node = node.left;
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
-                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    } else {
-                        if(node.right != null) {
-                            node = node.right;
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    }
-                    level++;
-                }
-            }
-        } else {
-            console.log("Max node reached please restart tree.");
-            //this.messages.push("<h1>Max node reached please restart tree.</h1>");
-            document.getElementById("message").innerHTML = "Max node reached please restart tree.";
-            return;
-        }
     }
 
     simulate() {
@@ -408,7 +311,7 @@ export default class binarysearchtree extends React.Component {
                             temp_x2 = node.x - 17 + tempMod;
                             temp_y2 = node.y + 8;
 
-                            node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+                            node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
@@ -451,7 +354,7 @@ export default class binarysearchtree extends React.Component {
                             temp_y = node.y + 10;
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
                             node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
@@ -492,6 +395,37 @@ export default class binarysearchtree extends React.Component {
         console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});
+    }
+
+    preorder() {
+        var steps = []
+        var messages = []
+
+        // # create an empty stack and push root to it
+        nodeStack = []
+        nodeStack.append(this.state.root)
+    
+        // # Pop all items one by one. Do following for every popped item
+        // # a) print it
+        // # b) push its right child
+        // # c) push its left child
+        // # Note that right child is pushed first so that left
+        // # is processed first
+        while(len(nodeStack) > 0){
+            // # Pop the top item from stack and print it
+            node = nodeStack.pop()
+            print (node.data, end=" ")
+            
+            // # Push right and left children of the popped node
+            // # to stack
+            if (node.right != null) {
+                nodeStack.append(node.right)
+            }
+            if (node.left != null) {
+                nodeStack.append(node.left)
+            }
+        }  
+
     }
 
     turnOffRunning() {

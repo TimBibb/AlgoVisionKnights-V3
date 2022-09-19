@@ -20,6 +20,7 @@ function createDefaultTree(ref){
         numberOfEdges: numberOfEdges,
         adjacencyList: Array.from({length: numberOfNodes}, () => []),
         edges: edges,
+        edgeInfo: [],
         nodeInfo: [],
     };
 

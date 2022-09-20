@@ -346,20 +346,25 @@ export default class binarysearchtree extends React.Component {
 
     simulate() {
         console.log("SIMULATING");
-        var val = Math.floor(Math.random() * 100);
+        var val = Math.floor((Math.random() * 15) + 16);
+        var val_left = Math.floor(Math.random() * 15);
+        var val_right = Math.floor((Math.random() * 15) + 31);
         var level = 0;
         var modifier = 4;
+        var hf = 0;
         var steps = []
         var messages = []
         var root = null;
 
         while (i < MAX_NODE) {
-            val = Math.floor(Math.random() * 100);
+            val = Math.floor((Math.random() * 15) + 31);
+            val_left = Math.floor((Math.random() * 15) + 16 - hf);
+            val_right = Math.floor((Math.random() * 15) + 61 - hf);
             steps.push(new EmptyStep());
             messages.push("The next value we will insert into the tree is " + val );
             console.log("level " + level);
             if(!root) {
-                root = new Node(this.ref, null, x, y, i);
+                root = new Node(this.ref, val, x, y, i);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -387,7 +392,7 @@ export default class binarysearchtree extends React.Component {
                         messages.push("");
                     }
 
-                    if(val < node.value) {
+                    if(val_left < node.value) {
                         steps.push(new EmptyStep());
                         messages.push( val + " is less than " + node.value );
 
@@ -409,17 +414,17 @@ export default class binarysearchtree extends React.Component {
                             temp_y2 = node.y + 8;
 
                             node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
-                            node.left = new Node(this.ref, null, temp_x, temp_y, i, level===1);
+                            node.left = new Node(this.ref, val_left, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no left child.");
 
                             steps.push(new NewNodeStep(node.left, node.lEdge));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
+                            messages.push("Let's insert " + val_left + " to the left of node " + node.value );
 
                             // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
                             steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
+                            messages.push("Let's insert " + val_left + " to the left of node " + node.value );
 
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
@@ -429,9 +434,11 @@ export default class binarysearchtree extends React.Component {
                             // }
                             i++;
                             j++;
+                            hf += 3;
+                            console.log("Left node created: " + node.value + " " + node.id)
                             break;
                         }
-                    } else if (val > node.value) {
+                    } else if (val_right > node.value) {
                         steps.push(new EmptyStep());
                         messages.push( val + " is greater than " + node.value );
 
@@ -452,17 +459,17 @@ export default class binarysearchtree extends React.Component {
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
                             node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
-                            node.right = new Node(this.ref, null, temp_x, temp_y, i, level===1);
+                            node.right = new Node(this.ref, val_right, temp_x, temp_y, i, level===1);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no right child.");
 
                             steps.push(new NewNodeStep(node.right, node.rEdge));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
+                            messages.push("Let's insert " + val_right + " to the right of node " + node.value );
 
                             // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
-                            steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
+                            steps.push(new UnHighlightPathStep(root, val_right));
+                            messages.push("Let's insert " + val_right + " to the right of node " + node.value );
 
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             // if (level > this.state.maxLevel) {

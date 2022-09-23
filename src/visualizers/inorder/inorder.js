@@ -1,5 +1,5 @@
 import React from "react";
-import "./preorder.css";
+import "./inorder.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
@@ -206,7 +206,7 @@ export default class binarysearchtree extends React.Component {
 		this.run = this.run.bind(this);
         this.handleZoom = this.handleZoom.bind(this);
         this.buildtree = this.buildTree.bind(this);
-        this.playPreorder = this.playPreorder.bind(this);
+        this.playinorder = this.playinorder.bind(this);
 	}
 
     handleZoom(e) {
@@ -314,36 +314,37 @@ export default class binarysearchtree extends React.Component {
         return root;
     }
 
-    preorder(root) {
+    inorder(root) {
         var steps = []
         var messages = []
         var list = [];
-        console.log("preordering");
+        console.log("inordering");
         console.log(root);
-        [steps, messages, list] = this.preorderRecursive(root, steps, messages, list);
-        messages.push("Finished preorder! our final list is ", list)
+        [steps, messages, list] = this.inorderRecursive(root, steps, messages, list);
+        messages.push("Finished inorder! our final list is ", list)
         this.setState({steps: steps, messages: messages})
     }
 
-    preorderRecursive(root, steps, messages, list) {
+    inorderRecursive(root, steps, messages, list) {
         var node = root;
         // messages.push("funco pop")
         if (node == null) return;
-        console.log(node.value)
-        list.push(node.value)
-        messages.push(list.toString());
-        steps.push(new HighlightNodeStep(node, null));
+        
         // # Push right and left children of the popped node
         // # to stack
         if (node.left != null) {
             messages.push(list.toString());
             steps.push(new HighlightNodeStep(node.left, node.lEdge));
-            this.preorderRecursive(node.left, steps, messages, list);
+            this.inorderRecursive(node.left, steps, messages, list);
         }
+        console.log(node.value)
+        list.push(node.value)
+        messages.push(list.toString());
+        steps.push(new HighlightNodeStep(node, null));
         if (node.right != null) {
             messages.push(list.toString());
             steps.push(new HighlightNodeStep(node.right, node.rEdge));
-            this.preorderRecursive(node.right, steps, messages, list);
+            this.inorderRecursive(node.right, steps, messages, list);
         }
         messages.push(list.toString());
         steps.push(new UnHighlightNodeStep(node, node.lEdge, node.rEdge));
@@ -397,8 +398,8 @@ export default class binarysearchtree extends React.Component {
 		d3.timeout(this.run, this.state.waitTime);
     }
 
-    playPreorder() {
-        console.log("PLAY PREORDER CLICKED");
+    playinorder() {
+        console.log("PLAY inorder CLICKED");
 		if (this.state.running) return;
 		this.setState({running: true});
     }
@@ -429,7 +430,7 @@ export default class binarysearchtree extends React.Component {
     componentDidMount() {
         this.initialize();   
         var root = this.buildTree();
-        this.preorder(root);
+        this.inorder(root);
     }
 
     // Calls functions depending on the change in state
@@ -440,7 +441,7 @@ export default class binarysearchtree extends React.Component {
 			console.log("Steps changed");
 			var svg = this.initialize();
             var root = this.buildTree();
-            this.preorder(root);
+            this.inorder(root);
 			svg.attr("visibility", "visible");
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
@@ -455,7 +456,7 @@ export default class binarysearchtree extends React.Component {
             <div>
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
-                    <button class="button" onClick={this.playPreorder}>Preorder</button>
+                    <button class="button" onClick={this.playinorder}>inorder</button>
                     {/* <button class="button" onClick={this.pause}>Pause</button> */}
                     <button class="button" onClick={this.add}>Add</button>
                     <button class="button" onClick={this.restart}>Restart</button>

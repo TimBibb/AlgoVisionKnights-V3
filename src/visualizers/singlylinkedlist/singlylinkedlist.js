@@ -242,8 +242,8 @@ export default class singlylinkedlist extends React.Component {
 			idArr : [],
 			messagesArr : [],
 			stepId : 0,
-			stepTime : 2000,
-			waitTime : 1000,
+			stepTime : 4000,
+			waitTime : 2000,
 			nodeID : 0,
 			nodeCounter: 0,
 			MAX_NODE : 8,
@@ -408,11 +408,13 @@ export default class singlylinkedlist extends React.Component {
 	
 		// Linked List Removal
 		let current = this.head;
-		while (current.next.next != null) {
-			current = current.next;
-		} 
-		current.next = null;
-
+		if (current.next === null) current = null;
+		else { 
+			while (current.next.next != null) {
+				current = current.next;
+			} 
+			current.next = null;
+		}
 	}
 
 

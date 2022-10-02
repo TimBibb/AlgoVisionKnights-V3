@@ -4,6 +4,7 @@ import "../css/button.css";
 import "./singlylinkedlist.css";
 import "../css/messages.css";
 import "../css/input.css";
+import Line from "../../foundation/pseudocode/Line";
 
 
 
@@ -78,6 +79,32 @@ class Node {
     
     ;}
 
+}
+
+class HighlightLineStep {
+	// pass in the line number you want to highlight
+	// pass in the lines array
+	// it will unhighlight every line except the specific line you want to highlight
+	constructor(lineNum, lines) {
+		this.lineNum = lineNum
+		//  lines array that holds every line
+		this.lines = lines
+	}
+
+	forward(pseudocodeSvg) {
+		// var count = 0;
+		// for (var line in this.lines) {
+		// 	pseudocodeSvg.select("#line" + count).attr("visibility", "hidden");
+		// }
+		for (var i = 0; i < this.lines.length; i++) {
+			pseudocodeSvg.select("#line" + i).attr("visibility", "hidden");
+		}
+		pseudocodeSvg.select("#line" + this.lineNum).attr("visibility", "visible");
+	}
+
+	fastForward(svg) {
+		this.forward(svg);
+	}
 }
 
 class EmptyStep {
@@ -220,6 +247,9 @@ export default class singlylinkedlist extends React.Component {
 			stepsArr : [],
 			idArr : [],
 			messagesArr : [],
+			linesArr: [],
+			// this holds the highlighting steps
+			pseudocodeArr: [],
 			stepId : 0,
 			stepTime : 4000,
 			waitTime : 2000,
@@ -272,15 +302,26 @@ export default class singlylinkedlist extends React.Component {
 			.append("svg")
 			.attr("width", 400)
 			.attr("height", 300)
-			.attr("id", "pseudoSvg")
-		
-		pseudocodeSvg.append('rect')
-			.attr('height', 100)
-            .attr('width', 370)	
-			.style("fill", "#FFD700")
-			.attr("y", 100)
-			.attr("x", 15)
-			.attr("rx",15)
+			.attr("id", "pseudoSvg");
+
+		this.state.linesArr.push(new Line("func insert():", 0, pseudocodeSvg));
+		this.state.linesArr.push(new Line("\u00A0\u00A0\u00A0\u00A0for 1...10:", 1, pseudocodeSvg));
+
+		var lineNum = 0;
+		// pseudocodeSvg.select("#line" + lineNum).attr("visibility", "hidden");
+
+		// for (line in pseudocodeFile) {
+			// this.state.linesArr.push((new Line(line, lineNum, pseudocodeSvg)))
+			// lineNum++;
+		// }
+
+		// pseudocodeSvg.append('rect')
+		// 	.attr('height', 100)
+        //     .attr('width', 370)	
+		// 	.style("fill", "#FFD700")
+		// 	.attr("y", 100)
+		// 	.attr("x", 15)
+		// 	.attr("rx",15)
 
 
 		this.setState({ rendered : true});
@@ -294,29 +335,39 @@ export default class singlylinkedlist extends React.Component {
 		console.log("Running stimulation");
 		this.state.messagesArr.push("<h1>Beginning Singly Linked List!</h1>");
 		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
 		
 		for (let i = 0; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
 			this.insert(arr[i], i);
 		}
 
 		this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		for (let k = 7; k >= 3; k--) {
 			this.removeTail();
 		}
 
 		this.state.messagesArr.push("<h1>Let's insert the nodes back.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		for (let i = 3; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " back at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(1, this.state.linesArr));
+
 			this.insert(arr[i], i);
 		}
 
 		this.state.messagesArr.push("<h1>We are now done.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		
 		this.setState({ stepsArr: this.state.stepsArr }, () => {
 			//console.log(this.state.stepsArr.length)
@@ -341,17 +392,24 @@ export default class singlylinkedlist extends React.Component {
 			this.head = node;
 			this.state.messagesArr.push("<h1>Creating head node " + element + ".</h1>");
 			this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
+			this.state.pseudocodeArr.push(new HighlightLineStep(1, this.state.linesArr));
 		}
 		else {
 			let i = 1;
 			this.state.messagesArr.push("<h1>Let current = head</h1>");
 			this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
+			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 			let current = this.head;
 			while (current.next) {
 				this.state.messagesArr.push("<h1>While current.next != null</h1>");
 				this.state.stepsArr.push(new EmptyStep());
+				this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 				this.state.messagesArr.push("<h1>current = current.next</h1>");
 				this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
+				this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 				current = current.next;
 				i++;
 			}
@@ -359,8 +417,12 @@ export default class singlylinkedlist extends React.Component {
 				current.next = node;
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
+				this.state.pseudocodeArr.push(new HighlightLineStep(1, this.state.linesArr));
+
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new RevertColorNodeStep(id - 1,this.state.idArr));
+				this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		}
 		this.size++;
 		this.setState({stepsArr: this.state.stepsArr }, () => {
@@ -369,6 +431,7 @@ export default class singlylinkedlist extends React.Component {
 		this.setState({messagesArr: this.state.messagesArr }, () => {
 			//console.log(this.state.messagesArr.length)
 		});
+		this.setState({pseudocodeArr: this.state.pseudocodeArr});
 		this.setState({idArr : this.state.idArr});
 	}
 	
@@ -387,21 +450,35 @@ export default class singlylinkedlist extends React.Component {
 		let i = 0;
 		this.state.messagesArr.push("<h1>let current = head</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		// "LL iteration D3"
 		for (i = 1; i < this.state.idArr.length; i++) {
 			this.state.messagesArr.push("<h1>while current != null</h1>");
 			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(1, this.state.linesArr));
+
 			this.state.messagesArr.push("<h1>current = current.next</h1>");
 			this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
+			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		}
 		// remove after
 		let tailID = this.state.idArr.pop();
 		this.state.messagesArr.push("<h1>current === null, we are now at the tail</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep(tailID,this.state.idArr));
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.state.linesArr));
+
 		this.state.messagesArr.push("<h1>Tail node has been removed.</h1>");
 		this.state.stepsArr.push(new RemoveNodeStep(tailID,this.state.idArr));
-		this.setState({stepsArr: this.state.stepsArr, messagesArr: this.state.messagesArr
-					   ,idArr : this.state.idArr});
+		this.state.pseudocodeArr.push(new HighlightLineStep(1, this.state.linesArr));
+
+		this.setState({
+			stepsArr: this.state.stepsArr,
+			messagesArr: this.state.messagesArr,
+			idArr : this.state.idArr,
+			pseudocodeArr: this.state.pseudocodeArr
+		});
 	
 		// Linked List Removal
 		let current = this.head;
@@ -433,6 +510,7 @@ export default class singlylinkedlist extends React.Component {
 		if (this.state.stepId === this.state.stepsArr.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
 		this.state.stepsArr[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.state.pseudocodeArr[this.state.stepId].fastForward(d3.select("#pseudoSvg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({ stepId: this.state.stepId + 1 });
 		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
@@ -466,6 +544,7 @@ export default class singlylinkedlist extends React.Component {
 			return;
 		}
 		this.state.stepsArr[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.state.pseudocodeArr[this.state.stepId].forward(d3.select("#pseudoSvg"));
 		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
 		this.setState({stepId : this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
@@ -498,10 +577,11 @@ export default class singlylinkedlist extends React.Component {
 						stepId: 0, flag : true,
 						nodeID : 0, nodeCounter : 0,
 						idArr : [], inputMode: false,
-						stepTime: 4000, waitTime : 2000});
+						stepTime: 4000, waitTime : 2000,
+						pseudocodeArr: [], linesArr: []
+					});
 		this.head = null;
 		this.size = 0;
-		
 	}
 
 	// First function to run when launch the page

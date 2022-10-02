@@ -9,14 +9,15 @@ class Line {
         .attr("y", (30 * lineNumber) + 15)
         .attr("width", 370)
         .attr("height", 25)
-        .attr("visibility", "visible")
+        .attr("visibility", "hidden")
         .attr("fill", "#FFD700")
-        
+        .attr("rx", 5)
+
     pseudocodeSvg
         .append("text")
         .attr("id", "text"+lineNumber)
-        .attr("x", 15)
-        .attr("y", (30 * lineNumber) + 15)
+        .attr("x", 20)
+        .attr("y", (30 * lineNumber) + 32)
         .attr("width", 370)
         .attr("height", 25)
         .attr("visibility", "visible")

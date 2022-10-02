@@ -109,27 +109,6 @@ class ShowNodeStep {
 		}
 	}
 }
-class HideNodeStep {
-	constructor(id1,idArr) {
-		this.idArr = idArr;
-		this.id1 = id1;
-	}
-	forward(svg) {
-		svg.select("#" + this.idArr[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "hidden");
-	}
-	fastForward(svg) {
-		this.forward(svg);
-	}
-	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
-	}
-}
 
 class RemoveNodeStep {
 	constructor(id1,idArr) {
@@ -273,10 +252,12 @@ export default class singlylinkedlist extends React.Component {
 		console.log("Building the visualizer");
 		const height = 300;
 
+		// Svg for our visualizer
 		let svg = d3.select(this.ref.current)
 			.append("svg")
 			.attr("width", 1140)
-			.attr("height", height);
+			.attr("height", height)
+			.attr("id", "visualizer");
 		
 		// Gradient to split rectangle color by half
 		let grad = svg.append("defs")
@@ -286,8 +267,24 @@ export default class singlylinkedlist extends React.Component {
 		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(153,204,255)");
 		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
 		
+		// Svg for our pseudocode
+		let pseudocodeSvg = d3.select("#pseudocodeDiv")
+			.append("svg")
+			.attr("width", 400)
+			.attr("height", 300)
+			.attr("id", "pseudoSvg")
+		
+		pseudocodeSvg.append('rect')
+			.attr('height', 100)
+            .attr('width', 370)	
+			.style("fill", "#FFD700")
+			.attr("y", 100)
+			.attr("x", 15)
+			.attr("rx",15)
+
+
 		this.setState({ rendered : true});
-		return svg;
+		//return svg;
 	}
 
 	simulation() {
@@ -494,6 +491,7 @@ export default class singlylinkedlist extends React.Component {
 	restart() {
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
+		d3.select("#pseudoSvg").remove();
 		document.getElementById("message").innerHTML = "<h1>Welcome to Singly Linked List!</h1>";
 		this.setState({ rendered: false, running: false, 
 						stepsArr: [], messagesArr: [], 
@@ -612,7 +610,10 @@ export default class singlylinkedlist extends React.Component {
 					<button class="button" id="removeBut" onClick={this.handleRemoveTail}>Remove Tail</button>
 				</div> 
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Singly Linked List!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<div id="pseudocodeDiv" class="right-screen"></div>
+				</div>
 			</div>
 		)
 	}

@@ -10,6 +10,11 @@
 	text-align: center;
 }
 
+.parent-svg {
+	display: flex;
+	justify-content: space-around;
+}
+
 #message-pane {
 	height: 150px;
 	width: 100%;
@@ -48,3 +53,11 @@
   .gbar:hover text{
 	font-weight:700;
 	}
+
+#pseudocodeDiv {
+	border: solid 1px #FFC904;
+	background-color: white;
+	display: block;
+	border-radius: 15px;
+}
+

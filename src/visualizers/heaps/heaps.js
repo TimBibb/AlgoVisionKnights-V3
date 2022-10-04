@@ -26,7 +26,7 @@ var rpm = 0;
 function randInRange(lo, hi) {
     return Math.floor(Math.random() * (hi - lo)) + lo;
   }
-  
+
 class EmptyStep {
     forward() {}
     backward() {}
@@ -60,10 +60,86 @@ class changeValue {
 
     forward(svg) {
         svg.select("#" + this.node.textId).text(this.newVal);
-        console.log(" EDGE EXISTS " + this.edge)
+        this.node.value = this.newVal;
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
 }
+
+function sort(arr)
+    {
+        var N = arr.length;
+        var steps = [];
+ 
+        // Build heap (rearrange array)
+        for (var i = Math.floor(N / 2) - 1; i >= 0; i--)
+            heapify(arr, N, i);
+ 
+        // One by one extract an element from heap
+        for (var i = N - 1; i > 0; i--) {
+            // Move current root to end
+            var temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+ 
+            // call max heapify on the reduced heap
+            heapify(arr, i, 0);
+        }
+    }
+ 
+    // To heapify a subtree rooted with node i which is
+    // an index in arr[]. n is size of heap
+    function heapify(arr, N, i)
+    {
+        var largest = i; // Initialize largest as root
+        var l = 2 * i + 1; // left = 2*i + 1
+        var r = 2 * i + 2; // right = 2*i + 2
+ 
+        // If left child is larger than root
+        if (l < N && arr[l] > arr[largest])
+            largest = l;
+ 
+        // If right child is larger than largest so far
+        if (r < N && arr[r] > arr[largest])
+            largest = r;
+ 
+        // If largest is not root
+        if (largest != i) {
+            var swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+ 
+            // Recursively heapify the affected sub-tree
+            heapify(arr, N, largest);
+        }
+    }
+ 
+    /* A utility function to print array of size n */
+    function printArray(arr)
+    {
+        var N = arr.length;
+        for (var i = 0; i < N; ++i)
+            console.log(arr[i] + " ");
+         
+    }
+
+// insert(item) {
+//     this.heap.push(item);
+//     var index = this.heap.length - 1;
+//     var parent = this.parentIndex(index);
+//     while(this.heap[parent] && this.heap[parent] < this.heap[index]) {
+//         this.swap(parent, index);
+//         index = this.parentIndex(index);
+//         parent = this.parentIndex(index);
+//     }
+// }
+
+// swap(a, b) {
+//     let temp = this.heap[a];
+//     this.heap[a] = this.heap[b];
+//     this.heap[b] = temp;
+// }
+
+
 
 class HighlightNodeStep {
     constructor(node, edge) {
@@ -378,7 +454,9 @@ export default class binarysearchtree extends React.Component {
         var temp = "";
         var steps = []
         var messages = []
+        var arr = []
         var root = null;
+        var k = 0;
 
         // root node
         root = new Node(this.ref, val, x, y, 0);
@@ -416,25 +494,171 @@ export default class binarysearchtree extends React.Component {
         console.log("node.left.rigth.value: " + node.left.right.value)
 
         steps.push(new EmptyStep())
-        messages.push("Starting to work on the Heaps!");
+        messages.push("Starting to work on the tree!");
 
-        if(node.left.left.value > node.left.value){
-            temp = node.left.left.value;
+        console.log("node.left.value: " + node.left.value + " < node.left.left.value: " + node.left.left.value)
 
-            // node.left.left.value = node.left.value;
-            // node.left.value = temp;
+        while(k < 5){
+            if(node.left.left.value > node.left.value || node.left.right.value > node.left.value){
+                if(node.left.left.value > node.left.right.value){
+                    temp = node.left.value;
 
-            steps.push(new changeValue(node.left.left, null, node.left.value))
+                    steps.push(new EmptyStep());
+                    messages.push( node.left.left.value + " is greater than " + node.left.right.value);
 
-            steps.push(new changeValue(node.left, null, temp));
+                    steps.push(new HighlightNodeStep(node.left.left, null));
+                    messages.push("");
 
-            //svg.select("#" + node.left.textId).text(temp);
+                    steps.push(new HighlightNodeStep(node.left.right, null));
+                    messages.push("");
 
-            console.log(node.left)
-            d3.select(node.left).text(temp);
+                    steps.push(new EmptyStep());
+                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
 
-            console.log("It should show node.left.value: " + node.left.value + " id: " + node.left.id)
-            console.log("It should show node.left.left.value: " + node.left.left.value + " id: " + node.left.left.id)
+                    steps.push(new changeValue(node.left, null,node.left.left.value))
+                    node.left.value = node.left.left.value;
+                    steps.push(new changeValue(node.left.left, null, temp))
+                    node.left.left.value = temp;
+                }
+                else{
+                    temp = node.left.value;
+
+                    // steps.push(new EmptyStep());
+                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+
+                    steps.push(new HighlightNodeStep(node.left.right, null));
+                    messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+
+                    steps.push(new HighlightNodeStep(node.left.left, null));
+                    messages.push("");
+
+                    steps.push(new UnHighlightNodeStep(node.left.left, null));
+                    messages.push("");
+
+                    steps.push(new HighlightNodeStep(node.left, null));
+                    steps.push(new changeValue(node.left, null,node.left.right.value))
+                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
+                    node.left.value = node.left.right.value;
+
+                    steps.push(new EmptyStep());
+                    steps.push(new changeValue(node.left.right, null, temp))
+                    steps.push(new UnHighlightNodeStep(node.left.right, null));
+                    steps.push(new UnHighlightNodeStep(node.left, null));
+                    node.left.right.value = temp;
+                    messages.push("");
+                    messages.push("");
+                    messages.push("");
+                }
+            }
+            if(node.right.left.value > node.right.value || node.right.right.value > node.right.value){
+                
+                steps.push(new EmptyStep());
+                messages.push( "On the other end, we can see that another triangle forms.");
+
+                if(node.right.left.value > node.right.right.value){
+                    temp = node.right.value;
+
+                    steps.push(new EmptyStep());
+                    messages.push( node.right.left.value + " is greater than " + node.right.right.value);
+
+                    steps.push(new HighlightNodeStep(node.right.left, null));
+                    messages.push("");
+
+                    steps.push(new HighlightNodeStep(node.right.right, null));
+                    messages.push("");
+
+                    steps.push(new EmptyStep());
+                    messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
+
+                    steps.push(new changeValue(node.right, null,node.right.left.value))
+                    node.right.value = node.right.left.value;
+                    steps.push(new changeValue(node.right.left, null, temp))
+                    node.right.left.value = temp;
+                }
+                else if(node.right.left.value < node.right.right.value){
+                    temp = node.right.value;
+
+                    // steps.push(new EmptyStep());
+                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+
+                    steps.push(new HighlightNodeStep(node.right.right, null));
+                    messages.push( node.right.right.value + " is greater than " + node.right.left.value);
+
+                    steps.push(new HighlightNodeStep(node.right.left, null));
+                    messages.push("");
+
+                    steps.push(new UnHighlightNodeStep(node.right.left, null));
+                    messages.push("");
+
+                    steps.push(new HighlightNodeStep(node.right, null));
+                    steps.push(new changeValue(node.right, null,node.right.right.value))
+                    messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
+                    node.right.value = node.right.right.value;
+
+                    steps.push(new EmptyStep());
+                    steps.push(new changeValue(node.right.right, null, temp))
+                    node.right.right.value = temp;
+                    steps.push(new UnHighlightNodeStep(node.right.right, null));
+                    steps.push(new UnHighlightNodeStep(node.right, null));
+                    messages.push("");
+                    messages.push("");
+                    messages.push("");
+                }
+            }
+            if(node.left.value > root.value || node.right.value > root.value){
+                
+                steps.push(new EmptyStep());
+                messages.push("Now we got to the top triangle, where we have the main root with its childs");
+
+                if(node.left.value > node.right.value){
+                    temp = root.value;
+
+                    steps.push(new EmptyStep());
+                    messages.push( node.left.value + " is greater than " + node.right.value);
+
+                    steps.push(new HighlightNodeStep(node.left, null));
+                    messages.push("");
+
+                    steps.push(new HighlightNodeStep(node.right, null));
+                    messages.push("");
+
+                    steps.push(new EmptyStep());
+                    messages.push("So we swap " + node.left.value + " with the parent " + root.value);
+
+                    steps.push(new changeValue(root, null, node.left.value))
+                    steps.push(new changeValue(node.left, null, temp))
+                }
+                else if(node.left.value < node.right.value){
+                    temp = root.value;
+
+                    // steps.push(new EmptyStep());
+                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+
+                    steps.push(new HighlightNodeStep(node.right, null));
+                    messages.push( node.right.value + " is greater than " + node.left.value);
+
+                    steps.push(new HighlightNodeStep(node.left, null));
+                    messages.push("");
+
+                    steps.push(new UnHighlightNodeStep(node.left, null));
+                    messages.push("");
+
+                    steps.push(new HighlightNodeStep(root, null));
+                    steps.push(new changeValue(root, null, node.right.value))
+                    messages.push("So we swap " + node.right.value + " with the parent " + root.value);
+                    root.value = node.right.value;
+
+                    steps.push(new EmptyStep());
+                    steps.push(new changeValue(node.right, null, temp))
+                    node.right.value = temp
+                    steps.push(new UnHighlightNodeStep(node.right, null));
+                    steps.push(new UnHighlightNodeStep(root, null));
+                    messages.push("");
+                    messages.push("");
+                    messages.push("");
+                }
+            }
+            k++
         }
 
         // while (i < MAX_NODE) {

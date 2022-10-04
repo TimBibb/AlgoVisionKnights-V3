@@ -268,13 +268,36 @@ export default class singlylinkedlist extends React.Component {
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
-		//this.handleRemoveHead = this.handleRemoveHead.bind(this);
 		this.handleRemoveTail = this.handleRemoveTail.bind(this);
 		this.run = this.run.bind(this);
 		
 		// Constructor for Linked List
 		this.head = null;
 		this.size = 0;		
+
+		this.tab = "\u00A0\u00A0\u00A0\u00A0"
+
+		this.pseudoSLL = [
+			"insert(element) {",
+			this.tab + "let node = new Node(element,id, this.ref, id);",
+			this.tab + "if (this.head == null) this.head = node;",
+			this.tab + "else {",
+			this.tab + this.tab + "let current = this.head;",
+			this.tab + this.tab + "while (current.next) current = current.next;",
+			this.tab + this.tab + "current.next = node;",
+			this.tab + "}",
+			this.tab + "this.size++;",
+			"}",
+			"removeTail() {",
+			this.tab + "let current = this.head;",
+			this.tab + "if (current.next === null) current = null;",
+			this.tab + "else { ",
+			this.tab + this.tab + "while (current.next.next != null) current = current.next;",
+			this.tab + this.tab + "current.next = null;",
+			this.tab + "}",
+			"}"
+		];
+		
 	}
 	
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
@@ -301,30 +324,24 @@ export default class singlylinkedlist extends React.Component {
 		let pseudocodeSvg = d3.select("#pseudocodeDiv")
 			.append("svg")
 			.attr("width", 400)
-			.attr("height", 300)
+			.attr("height", 550)
 			.attr("id", "pseudoSvg");
 
-		this.state.linesArr.push(new Line("func insert():", 0, pseudocodeSvg));
-		this.state.linesArr.push(new Line("\u00A0\u00A0\u00A0\u00A0for 1...10:", 1, pseudocodeSvg));
+		//this.state.linesArr.push(new Line("func insert():", 0, pseudocodeSvg));
+		//this.state.linesArr.push(new Line("\u00A0\u00A0\u00A0\u00A0for 1...10:", 1, pseudocodeSvg));
 
-		var lineNum = 0;
+		let lineNum = 0;
 		// pseudocodeSvg.select("#line" + lineNum).attr("visibility", "hidden");
 
-		// for (line in pseudocodeFile) {
-			// this.state.linesArr.push((new Line(line, lineNum, pseudocodeSvg)))
-			// lineNum++;
-		// }
-
-		// pseudocodeSvg.append('rect')
-		// 	.attr('height', 100)
-        //     .attr('width', 370)	
-		// 	.style("fill", "#FFD700")
-		// 	.attr("y", 100)
-		// 	.attr("x", 15)
-		// 	.attr("rx",15)
+		for (let line in this.pseudoSLL) {
+			console.log(line)
+			this.state.linesArr.push(new Line(this.pseudoSLL[line], lineNum, pseudocodeSvg))
+			lineNum++;
+		}
+		
 
 
-		this.setState({ rendered : true});
+		this.setState({ rendered : true });
 		//return svg;
 	}
 
@@ -434,16 +451,6 @@ export default class singlylinkedlist extends React.Component {
 		this.setState({pseudocodeArr: this.state.pseudocodeArr});
 		this.setState({idArr : this.state.idArr});
 	}
-	
-	// removeHead() {
-	// 	this.state.messagesArr.push("<h1>Removing from the head.</h1>");
-	// 	this.state.stepsArr.push(new HideNodeStep(0,this.state.idArr));
-	// 	console.log(this.state.idArr);
-	// 	let temp = this.head;
-	// 	this.head = this.head.next;
-	// 	this.setState({stepsArr: this.state.stepsArr });
-	// 	this.setState({messagesArr: this.state.messagesArr});
-	// }
 
 	removeTail() {
 		// D3 Removal
@@ -568,6 +575,8 @@ export default class singlylinkedlist extends React.Component {
 	}
 
 	restart() {
+		// If statement solves an issue where the svg gets entirely removed and not reinit before running visualizer
+		if (this.state.stepsArr.length === 0) return;
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
 		d3.select("#pseudoSvg").remove();
@@ -597,7 +606,7 @@ export default class singlylinkedlist extends React.Component {
 		}
 		// Restart
 		else if (this.state.stepsArr.length !== prevState.stepsArr.length && this.state.flag === true) {
-			console.log("Restart");
+			console.log("Did it Restarted??");
 			this.initialize();
 			this.setState({flag:false});
 		}
@@ -636,24 +645,6 @@ export default class singlylinkedlist extends React.Component {
 			}
 		} 
 	} 
-
-	// handleRemoveHead() {
-	// 	if (this.state.running) return;
-	// 	if (this.state.nodeCounter > 0) {
-	// 		console.log("Removing")
-	// 		this.removeHead(0);
-	// 		this.setState({running : true});
-	// 		this.setState({nodeCounter : this.state.nodeCounter - 1});
-	// 		this.run();
-	// 	}
-	// 	else {
-	// 		console.log("No Input Entered")
-	// 		if (this.state.nodeCounter === 0 ){
-	// 			document.getElementById("message").innerHTML = "<h1>There are no nodes to be removed.</h1>";
-	// 			return;
-	// 		}
-	// 	}
-	// }
 
 	handleRemoveTail() {
 		if (this.state.running) return;
@@ -698,3 +689,31 @@ export default class singlylinkedlist extends React.Component {
 		)
 	}
 }
+
+// handleRemoveHead() {
+	// 	if (this.state.running) return;
+	// 	if (this.state.nodeCounter > 0) {
+	// 		console.log("Removing")
+	// 		this.removeHead(0);
+	// 		this.setState({running : true});
+	// 		this.setState({nodeCounter : this.state.nodeCounter - 1});
+	// 		this.run();
+	// 	}
+	// 	else {
+	// 		console.log("No Input Entered")
+	// 		if (this.state.nodeCounter === 0 ){
+	// 			document.getElementById("message").innerHTML = "<h1>There are no nodes to be removed.</h1>";
+	// 			return;
+	// 		}
+	// 	}
+	// }
+
+	// removeHead() {
+	// 	this.state.messagesArr.push("<h1>Removing from the head.</h1>");
+	// 	this.state.stepsArr.push(new HideNodeStep(0,this.state.idArr));
+	// 	console.log(this.state.idArr);
+	// 	let temp = this.head;
+	// 	this.head = this.head.next;
+	// 	this.setState({stepsArr: this.state.stepsArr });
+	// 	this.setState({messagesArr: this.state.messagesArr});
+	// }

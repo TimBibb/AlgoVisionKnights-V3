@@ -59,5 +59,7 @@
 	background-color: white;
 	display: block;
 	border-radius: 15px;
+	height: 300px;
+	overflow: scroll;
 }
 

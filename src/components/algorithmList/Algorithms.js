@@ -25,6 +25,7 @@ import {
 	Inorder,
 	Postorder,
 	Heaps,
+	HuffmanCodingTree,
 	// Backtracking,
 	Queens,
 	// Recursion
@@ -200,7 +201,9 @@ const algorithms = {
 		},
 		{
 			name: 'Huffman Coding Tree',
-			path: 'lcs'
+			path: 'huffmancodingtree',
+			type: 'js',
+			description: <HuffmanCodingTree />
 		},
 	],
 	// probabilisticdatastructures: [

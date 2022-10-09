@@ -205,54 +205,6 @@ class Tree {
     toObject() {
         return this.root;
     }
-    // addnew(ref, num) {
-    //     if(i < MAX_NODE){
-    //         if(!this.root) {
-    //             this.root = new Node(ref, num, x, y, i);
-    //             //this.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-    //             console.log(this.root);
-    //             i++;
-    //         } else {
-    //             let node = this.root;
-    //             //y += 10;
-
-    //             while(true) {
-    //                 //console.log(node.value);
-    //                 if(num < node.value) {
-    //                     if(node.left != null) {
-    //                         node = node.left;
-    //                     } else {
-    //                         temp_x = node.x - 15;
-    //                         temp_y = node.y + 10;
-    //                         node.left = new Node(ref, num, temp_x, temp_y, i);
-    //                         //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-    //                         let edge = new Edge(ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-    //                         i++;
-    //                         j++;
-    //                         return;
-    //                     }
-    //                 } else {
-    //                     if(node.right != null) {
-    //                         node = node.right;
-    //                     } else {
-    //                         temp_x = node.x + 15;
-    //                         temp_y = node.y + 10;
-    //                         node.right = new Node(ref, num, temp_x, temp_y, i);
-    //                         //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-    //                         let edge = new Edge(ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-    //                         i++;
-    //                         j++;
-    //                         return;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         console.log("Max node reached please restart tree.");
-    //         this.messages.push("<h1>Max node reached please restart tree.</h1>");
-    //         return;
-    //     }
-    // }
 }
 
 class Node {
@@ -341,98 +293,8 @@ export default class binarysearchtree extends React.Component {
         console.log("PAUSE CLICKED");
     }
 
-    // adjustDistances(root, level, side) {
-    //     if (root == null) {
-    //         return;
-    //     }
-
-    //     d3.selectAll(".level1").attr("x", "5%");
-    //     console.log("flsfs")
-
-    //     if (side === "left") {
-    //         // // root.node.attr("cx", function(d) {return d.x + -5})
-    //         // d3.select("#" + root.id).attr("cx", (root.x-5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x-5) + "%");
-    //     } else if (side === "right") {
-    //         // d3.select("#" + root.id).attr("cx", (root.x+5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x+5) + "%");
-    //     } else {
-
-    //     }
-    //     // console.log(root.value)
-    //     // this.adjustDistances(root.left, level+1, "left");
-    //     // this.adjustDistances(root.right, level+1, "right");
-    // }
-
     add(){
         console.log("ADD CLICKED");
-        var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
-
-        if(i < MAX_NODE){
-            if(!this.state.root) {
-                this.state.root = new Node(this.ref, null, x, y, i);
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                console.log(this.state.root);
-                i++;
-            } else {
-                let node = this.state.root;
-                //y += 10;
-                level = 0
-
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if(val < node.value) {
-                        if(node.left != null) {
-                            node = node.left;
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, null, temp_x, temp_y, i, level===1);
-                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    } else {
-                        if(node.right != null) {
-                            node = node.right;
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, null, temp_x, temp_y, i, level===1);
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    }
-                    level++;
-                }
-            }
-        } else {
-            console.log("Max node reached please restart tree.");
-            //this.messages.push("<h1>Max node reached please restart tree.</h1>");
-            document.getElementById("message").innerHTML = "Max node reached please restart tree.";
-            return;
-        }
     }
 
     simulate() {
@@ -570,7 +432,7 @@ export default class binarysearchtree extends React.Component {
                     steps.push(new EmptyStep());
                     messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
 
-                    steps.push(new changeValue(node.right, null,node.right.left.value))
+                    steps.push(new changeValue(node.right, null, node.right.left.value))
                     node.right.value = node.right.left.value;
                     steps.push(new changeValue(node.right.left, null, temp))
                     node.right.left.value = temp;

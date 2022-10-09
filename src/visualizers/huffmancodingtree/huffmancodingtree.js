@@ -11,21 +11,57 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 
-var x = 50;
+var x = 35;
 var mid = 0;
-var y = 10;
+var y = 50;
 var i = 0;
 var j = 0;
-var MAX_NODE = 7;
+var MAX_NODE = 0;
 var temp_x = 0;
 var temp_y = 0;
 var temp_x2 = 0;
 var temp_y2 = 0;
 var rpm = 0;
+// for usage of randomWords: https://www.npmjs.com/package/random-words
+var randomWords = require('random-words');
+
+const letterMap = new Map();
+
+// Get value from the Hash Map (["a", 0] you are grabbing the "0")
+function getByValue(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+        if (key === searchValue)
+        return value;
+    }
+}
+
+// Get letter from the Hash Map (["a", 0], you are grabbing the "a")
+function getByLetter(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+        if (value === searchValue)
+        return key;
+    }
+}
+
+function parentSum(left, right){
+    return left+right;
+}
 
 function randInRange(lo, hi) {
     return Math.floor(Math.random() * (hi - lo)) + lo;
   }
+
+function Traverse(node){
+    if(node != null){
+        Traverse(node.left);
+        Traverse(node.right);
+
+    //   if(node.left == null && node.right == null)
+    //     node.height = 0;
+    //   else
+    //     node.height = 1 + max(height(node.left), height(node.right));
+    }
+}
 
 class EmptyStep {
     forward() {}
@@ -52,16 +88,55 @@ class NewNodeStep {
 }
 
 class changeValue {
-    constructor(node, edge, newVal) {
+    constructor(node, edge, newVal, lEdge, rEdge) {
         this.node = node;
         this.edge = edge;
         this.newVal = newVal;
+        this.lEdge = lEdge;
+        this.rEdge = rEdge;
     }
 
     forward(svg) {
+        svg.select("#" + this.node.id).attr("visibility", "visible");
+        svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         svg.select("#" + this.node.textId).text(this.newVal);
         this.node.value = this.newVal;
+        svg.select("#" + this.lEdge.id).attr("visibility", "visible");
+        svg.select("#" + this.rEdge.id).attr("visibility", "visible");
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+	}
+}
+
+class ChangeCoordinates {
+    constructor(node, edge, cx, cy) {
+		this.node = node;
+        this.edge = edge;
+        this.cx = cx;
+        this.cy = cy;
+	}
+
+    forward(svg) {
+        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.node.id).attr("cx", this.cx);
+        svg.select("#" + this.node.id).attr("cy", this.cy);
+        svg.select("#" + this.node.textId).attr("cx", this.cx);
+        svg.select("#" + this.node.textId).attr("cy", this.cy);
+        // svg.select("#")
+        // svg.select("#" + this.node.id).attr("visibility", "visible");
+        // svg.select("#" + this.node.textId).attr("visibility", "visible");
+	}
+}
+
+class UnhideEdges {
+    constructor(edge) {
+        this.edge = edge;
+	}
+
+    forward(svg) {
+        if (this.edge) {
+            // svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).attr("visibility", "visible");
+        }
 	}
 }
 
@@ -180,8 +255,8 @@ class Tree {
 }
 
 class Node {
-    constructor(ref, value, x, y, i, level, leftEdge, rightEdge) {
-        this.value = value;
+    constructor(ref, visibility, display, x, y, i, level, character, name, value, leftEdge, rightEdge) {
+        this.display = display;
         this.left = null;
         this.right = null;
         this.x = x;
@@ -189,6 +264,9 @@ class Node {
         this.level = level;
         this.lEdge = leftEdge;
         this.rEdge = rightEdge;
+        this.character = character;
+        this.name = name;
+        this.value = value;
         this.id =  "node" + i;
         this.textId = "label" + i;
 
@@ -198,10 +276,20 @@ class Node {
             this.textId,
             this.x + "%",
             this.y + "%",
-            this.value,
-            "visible",
+            this.display,
+            visibility,
             "white"
         );
+    }
+}
+
+class HuffmanNode
+{
+    constructor()
+    {
+        this.data = 0;
+        this.c = '';
+        this.left = this.right = null;
     }
 }
 
@@ -267,141 +355,251 @@ export default class binarysearchtree extends React.Component {
 
     add(){
         console.log("ADD CLICKED");
-        var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
-
-        if(i < MAX_NODE){
-            if(!this.state.root) {
-                this.state.root = new Node(this.ref, null, x, y, i);
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                console.log(this.state.root);
-                i++;
-            } else {
-                let node = this.state.root;
-                //y += 10;
-                level = 0
-
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if(val < node.value) {
-                        if(node.left != null) {
-                            node = node.left;
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, null, temp_x, temp_y, i, level===1);
-                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    } else {
-                        if(node.right != null) {
-                            node = node.right;
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, null, temp_x, temp_y, i, level===1);
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    }
-                    level++;
-                }
-            }
-        } else {
-            console.log("Max node reached please restart tree.");
-            //this.messages.push("<h1>Max node reached please restart tree.</h1>");
-            document.getElementById("message").innerHTML = "Max node reached please restart tree.";
-            return;
-        }
     }
 
     simulate() {
         console.log("SIMULATING");
-        //var svg = this.initialize();
-        var val = Math.floor((Math.random() * 13));
-        var val_left = Math.floor((Math.random() * 13) + 14);
-        var val_right = Math.floor((Math.random() * 13) + 28);
-        var val_left2 = Math.floor((Math.random() * 13) + 42);
-        var val_right2 = Math.floor((Math.random() * 13) + 56);
-        var val_left3 = Math.floor((Math.random() * 13) + 71);
-        var val_right3 = Math.floor((Math.random() * 13) + 85);
-
-        // var val = Math.floor((Math.random() * 15) + 31);
-        // var val_left = Math.floor((Math.random() * 15) + 16);
-        // var val_right = Math.floor((Math.random() * 15) + 61);
 
         var level = 0;
         var temp = "";
         var steps = []
         var messages = []
-        var arr = []
+        var lettersArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "a", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+        var arr = { letters:[], numbers:[], node:[]}
         var root = null;
         var k = 0;
+        var l = 0
+        let q = [];
+        // for usage of ranWords: https://www.npmjs.com/package/random-words
+        var ranWords = randomWords({exactly: 1, join: '', maxLength: 4});
+
+        console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
+
+        // adding each letter frequency to the map
+        for(var i = 0; i < ranWords.length; i++){
+            letterMap.set(ranWords.charAt(i), letterMap.get(ranWords.charAt(i)) + 1 || 1);
+        }
+
+        // sort Map by value, we want this to create our MinHeap. We are sorting ascending order (1, 2, 3)
+        const letterMapSorted = new Map([...letterMap.entries()].sort((a, b) => a[1] - b[1]));
+
+        console.log(letterMapSorted)
+
+        //converting hash map into array
+        arr.letters = Array.from(letterMapSorted.keys());
+        arr.numbers = Array.from(letterMapSorted.values());
+
+        MAX_NODE = (arr.letters.length * 2) - 1;
+        console.log(MAX_NODE)
+
+        // console.log(arr.letters)
+        // console.log(arr.numbers)
+
+        //root = new Node(this.ref, arr.letters[0] + " " + arr.numbers[0], x, y, 0);
+
+        //constructor(ref, visibility, display, x, y, i, level, character, name, value, leftEdge, rightEdge)
+
+        // for(var i = 0; i < arr.letters.length; i++){
+        //     arr.node[i] = new Node(this.ref,  "hidden", arr.numbers[i], 30, 30, i, level, arr.letters[i], arr.letters[i] + arr.numbers[i])
+        // }
+
+        // class Node {
+        //     constructor(ref, visibility, display, x, y, i, level, character, name, value, leftEdge, rightEdge) {
+        //         this.display = display;
+        //         this.left = null;
+        //         this.right = null;
+        //         this.x = x;
+        //         this.y = y;
+        //         this.level = level;
+        //         this.lEdge = leftEdge;
+        //         this.rEdge = rightEdge;
+        //         this.character = character;
+        //         this.name = name;
+        //         this.value = value;
+        //         this.id =  "node" + i;
+        //         this.textId = "label" + i;
+        
+        //         this.node = new LabeledNode(
+        //             ref,
+        //             this.id,
+        //             this.textId,
+        //             this.x + "%",
+        //             this.y + "%",
+        //             this.display,
+        //             visibility,
+        //             "white"
+        //         );
+        //     }
+        // }
+
+        for (let i = 0; i < arr.letters.length; i++) {
+            let hn = new Node(this.ref, "hidden", 0, x, y, i);
+   
+            hn.character = arr.letters[i];
+            hn.value = arr.numbers[i];
+            hn.display = arr.letters[i] + " " + arr.numbers[i];
+            hn.name = arr.letters[i] + arr.numbers[i];
+   
+            hn.left = null;
+            hn.right = null;
+   
+            // add functions adds
+            // the huffman node to the queue.
+            q.push(hn);
+        }
+
+        console.log(arr)
+        console.log(q.length)
+        console.log(q)
+
+        let f = q;
+
+        while ((q.length) > 1) {
+            var modx = k+k;
+            var tempx = k + 15;
+            var tempy = k + 15;
+            var tempmodx = 0;
+            var tempmody = 0;
+
+            // first min extract.
+            let left = q[0];
+            console.log(left)
+            q.shift();
+   
+            // second min extract.
+            let right = q[0];
+            console.log(right)
+            q.shift();
+            
+            // new node f which is equal
+            let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+
+            f.left = new Node(this.ref, "visible", left.display, x+modx-tempx+l, y-modx+tempy-l, i)
+            f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
+            console.log(f)
+
+            if(right.character == '-'){
+                f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
+                console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l, i)
+            }
+
+            // if(left.character == '-' || right.character == '-'){
+            //     let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+
+            //     f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
+            //     // console.log("f.left: x = " + (x+modx-tempx) + " y = " + (y-modx+tempy))
+            //     f.right = new Node(this.ref, "visible", left.display, x+modx+tempx, y-modx+tempy, i)
+            //     // console.log("f.right: x = " + (x+modx+tempx) + " y = " + (y-modx+tempy))
+
+            //     // console.log(f)
+            // }
+
+            // new node f which is equal
+            // let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+
+            // f.left = new Node(this.ref, "visible", left.display, x+modx-tempx, y-modx+tempy, i)
+            // f.right = new Node(this.ref, "visible", right.display, x+modx+tempx, y-modx+tempy, i)
+            // console.log(f)
+
+            // to the sum of the frequency of the two nodes
+            // assigning values to the f node.
+            f.value = left.value + right.value;
+            f.display = left.value + right.value;
+            f.character = '-';
+   
+            // // first extracted node as left child.
+            f.left = x;
+   
+            // // second extracted node as the right child.
+            f.right = y;
+   
+            // marking the f node as the root node.
+            root = f;
+
+            console.log(f)
+   
+            // add this node to the priority-queue.
+            q.push(f);
+            q.sort(function(a,b){return a.data-b.data;});
+            k += 10;
+            l += 5;
+        }
+
+        // while(k < MAX_NODE){
+        //     if(!root) {
+        //         root = new Node(this.ref,  "hidden", 0, x, y, k);
+        //         console.log(root)
+        //         this.setState({root: root})
+        //     } else {
+        //         let node = root;
+        //         // console.log(root)
+        //         level = 0
+
+        //         while(true) {
+        //             if(node.left == null){
+        //                 node.lEdge = new Edge(this.ref, "edge" + 1, node.x-3 + "%", node.y+1.5 + "%", 30 + "%", 20 + "%", "hidden");
+        //                 node.left = new Node(this.ref, "visible", arr.letters[k] + " " + arr.numbers[k], 30, 20, k, level===1, arr.letters[k], arr.letters[k] + arr.numbers[k], arr.numbers[k]);
+        //                 console.log("node.left.display:" + node.left.display)
+                        
+        //                 //steps.push(new HighlightNodeStep(node.right, null));
+        //                 //steps.push(new ChangeCoordinates(node, null, 50 + "%", 15 + "%"));
+        //                 console.log(node)
+        //                 k++;
+        //             }
+        //             if(node.right == null){
+        //                 node.rEdge = new Edge(this.ref, "edge" + 2, node.x+3 + "%", node.y+1.5 + "%", 70 + "%", 20 + "%", "hidden");
+        //                 node.right = new Node(this.ref, "visible", arr.letters[k] + " " + arr.numbers[k], 70, 20, k, level===1, arr.letters[k], arr.letters[k] + arr.numbers[k], arr.numbers[k]);
+        //                 console.log("node.right.display:" + node.right.display)
+        //                 k++;
+        //             }
+        //             if(node.left != null && node.right != null){
+        //                 node.value = parentSum(node.left.value, node.right.value)
+        //                 node.display = node.value;
+
+        //                 messages.push("<h1> CHANGING VALUE!!!! </h1>");
+        //                 steps.push(new changeValue(node, null, node.display, node.lEdge, node.rEdge))
+        //                 // steps.push(new UnhideEdges(node.lEdge))
+        //                 // steps.push(new UnhideEdges(node.rEdge))
+
+        //                 root = node;
+        //             }
+        //             break;
+        //         }
+        //         k++;
+
+        //     }
+        // }
+
+        // console.log(letterSet.size)
+
+
+        // for(var i = 0; i < letterSet.size; i++){
+        //     console.log("letter frequency '" + arr.letters[i] + " ': " + letterMapSorted.get(arr.letters[i]))
+        //     // console.log(getByValue(letterMapSorted, arr.letters[i]))
+        //     arr.numbers[i] = getByValue(letterMapSorted, arr.letters[i])
+        //     console.log(arr.numbers[i])
+        // }
+
+
+
+
+        // for(let key of letterSet){
+        //     console.log(key)
+        // }
 
         // root node
-        root = new Node(this.ref, val, x, y, 0);
-        this.setState({root: root})
-        let node = root;
+        // root = new Node(this.ref, val, x, y, 0);
+        // this.setState({root: root})
+        // let node = root;
 
-
-        // left node to root
-        node.lEdge = new Edge(this.ref, "edge" + 1, node.x-3 + "%", node.y+1.5 + "%", 30 + "%", 20 + "%", "visible");
-        node.left = new Node(this.ref, val_left, 30, 20, 1, level===1);
-
-        // right node to root
-        node.rEdge = new Edge(this.ref, "edge" + 2, node.x+3 + "%", node.y+1.5 + "%", 70 + "%", 20 + "%", "visible");
-        node.right = new Node(this.ref, val_right, 70, 20, 2, level===1);
-
-        // left node to left child of root
-        node.lEdge = new Edge(this.ref, "edge" + 3, node.left.x-2.5 + "%", node.left.y+3 + "%", 15 + "%", 40 + "%", "visible");
-        node.left.left = new Node(this.ref, val_left2, 15, 40, 3, level===1);
-
-        // right node to left child of root
-        node.rEdge = new Edge(this.ref, "edge" + 4, node.left.x+2.5 + "%", node.left.y+3 + "%", 45 + "%", 40 + "%", "visible");
-        node.left.right = new Node(this.ref, val_right2, 45, 40, 4, level===1);
-
-        // left node to right child of root
-        node.lEdge = new Edge(this.ref, "edge" + 5, node.right.x-2.5 + "%", node.right.y+3 + "%", 57 + "%", 40 + "%", "visible");
-        node.right.left = new Node(this.ref, val_left3, 57, 40, 5, level===1);
-
-        // right node to right child of root
-        node.rEdge = new Edge(this.ref, "edge" + 6, node.right.x+2.5 + "%", node.left.y+3 + "%", 85 + "%", 40 + "%", "visible");
-        node.right.right = new Node(this.ref, val_right3, 85, 40, 6, level===1);
-
-        console.log("node.left.value: " + node.left.value)
-        console.log("node.right.value: " + node.right.value)
-        console.log("node.left.left.value: " + node.left.left.value)
-        console.log("node.left.rigth.value: " + node.left.right.value)
+        
 
         steps.push(new EmptyStep())
         messages.push("Starting to work on the tree!");
 
-        console.log("node.left.value: " + node.left.value + " < node.left.left.value: " + node.left.left.value)
-
         steps.push(new EmptyStep())
         messages.push("Huffman Coding Tree insertion complete!");
-        console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});
     }

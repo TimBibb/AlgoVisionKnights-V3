@@ -1,32 +1,30 @@
-/* custom-tree.css */
-
-.node__root > circle {
-    fill: white;
-    color: white !important;
-  }
-g > text {
-    fill: white !important;
-}
-  
-  .node__branch > circle {
-    fill: white;
-  }
-  
-  .node__leaf > circle {
-    fill: black;
-    /* Let's also make the radius of leaf nodes larger */
-    r: 40;
-  }
-
-.label__title {
-    color: white;
+.dark-mode {
+	background-color: #112;
+	color: #d3d3d3;
 }
 
-.custom-link{
-    stroke: white !important;
+.center-screen {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
-.hidden-link{
-    visibility: hidden;
-    stroke: black !important;
+#message-pane {
+	height: 150px;
+	width: 100%;
+}
+
+#banner {
+	height: 50px;
+	width: 100%;
+}
+
+#sorted-division {
+	height: 100px;
+	padding-left: 50px;
+}
+
+#insertionValue {
+	border-radius: 10px;
 }

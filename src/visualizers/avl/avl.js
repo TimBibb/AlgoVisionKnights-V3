@@ -1,5 +1,5 @@
 import React from "react";
-import "./binarysearchtree.css";
+import "./avl.css";
 import * as d3 from "d3";
 import createDefaultTree from "../../foundation/tree/CreateDefaultTree";
 import Number from "../../foundation/Number";
@@ -51,9 +51,9 @@ class NewNodeStep {
 }
 
 class HighlightNodeStep {
-    constructor(node, edge) {
-		this.node = node;
-        this.edge = edge;
+  constructor(node, edge) {
+	  this.node = node;
+    this.edge = edge;
 	}
 
     forward(svg) {
@@ -114,58 +114,10 @@ class Tree {
     toObject() {
         return this.root;
     }
-    // addnew(ref, num) {
-    //     if(i < MAX_NODE){
-    //         if(!this.root) {
-    //             this.root = new Node(ref, num, x, y, i);
-    //             //this.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-    //             console.log(this.root);
-    //             i++;
-    //         } else {
-    //             let node = this.root;
-    //             //y += 10;
-
-    //             while(true) {
-    //                 //console.log(node.value);
-    //                 if(num < node.value) {
-    //                     if(node.left != null) {
-    //                         node = node.left;
-    //                     } else {
-    //                         temp_x = node.x - 15;
-    //                         temp_y = node.y + 10;
-    //                         node.left = new Node(ref, num, temp_x, temp_y, i);
-    //                         //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-    //                         let edge = new Edge(ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-    //                         i++;
-    //                         j++;
-    //                         return;
-    //                     }
-    //                 } else {
-    //                     if(node.right != null) {
-    //                         node = node.right;
-    //                     } else {
-    //                         temp_x = node.x + 15;
-    //                         temp_y = node.y + 10;
-    //                         node.right = new Node(ref, num, temp_x, temp_y, i);
-    //                         //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-    //                         let edge = new Edge(ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-    //                         i++;
-    //                         j++;
-    //                         return;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         console.log("Max node reached please restart tree.");
-    //         this.messages.push("<h1>Max node reached please restart tree.</h1>");
-    //         return;
-    //     }
-    // }
 }
 
 class Node {
-    constructor(ref, value, x, y, i, level, leftEdge, rightEdge) {
+    constructor(ref, value, x, y, i, parent, level, leftEdge, rightEdge) {
         this.value = value;
         this.left = null;
         this.right = null;
@@ -176,6 +128,9 @@ class Node {
         this.rEdge = rightEdge;
         this.id =  "node" + i;
         this.textId = "label" + i;
+        this.parent = parent;
+        this.height = 0;
+        this.balance = 0;
 
         this.node = new LabeledNode(
             ref,
@@ -190,7 +145,112 @@ class Node {
     }
 }
 
-export default class binarysearchtree extends React.Component {
+function height(node){
+    if(node == null)
+        return 0;
+
+    return node.height;
+}
+
+function max(a, b){
+    if(a > b)
+        return a;
+    return b;
+}
+
+function getHeight(node){
+    if(node == null)
+        return 0;
+    return height(node.left) - height(node.right);
+}
+
+function rightRotation(y){
+    let x = y.left;
+    let temp = x.right;
+    let temp_p1 = y.parent;
+
+    x.right = y;
+    y.left = temp;
+
+    x.parent = temp_p1;
+    y.parent =  x;
+    //console.log("Y: " + y + ", y.left: " + y.left);
+    if(y.left != null)
+        y.left.parent = y;
+
+    //switchNodes();
+    updateHeights(y);
+    updateHeights(x);
+
+    return x;
+}
+
+function leftRotation(x){
+    let y = x.right;
+    let temp = y.left;
+    let temp_p1 = x.parent;
+
+    y.left = x;
+    x.right = temp;
+
+    y.parent = temp_p1;
+    x.parent = y;
+    //console.log("X: " + x + ", x.right: " + x.right);
+    if(x.right != null)
+        x.right.parent = x;
+    
+
+    //switchNodes();
+    updateHeights(y);
+    updateHeights(x);
+
+    return y;
+}
+
+function updateHeights(node){
+  if(node != null){
+    updateHeights(node.left);
+    updateHeights(node.right);
+
+    //console.log("AQUIIII" + node.value + " " + node.height);
+    
+    if(node.left == null && node.right == null)
+      node.height = 0;
+    else
+      node.height = 1 + max(height(node.left), height(node.right));
+  }
+}
+
+function readjustCoordinates(node){
+    var modifier = 4;
+    if(node != null){
+        if(node.parent == null){
+            node.x = x;
+            node.y = y;
+            node.level = 0;
+        }
+        else{
+            if(node.value < node.parent.value){
+                node.level = node.parent.level + 1;
+                var temp_mod = (node.level*modifier) > 15 ? 15 : (node.level*modifier);
+                node.x = node.parent.x - 20 + temp_mod;
+                node.y = node.parent.y + 10;
+            }
+            else{
+                node.level = node.parent.level + 1;
+                var temp_mod = (node.level*modifier) > 15 ? 15 : (node.level*modifier);
+                node.x = node.parent.x + 20;
+                node.y = node.parent.y + 10;
+            }
+        }
+
+        readjustCoordinates(node.left);
+        readjustCoordinates(node.right);
+        
+    }
+}
+
+export default class avl extends React.Component {
     constructor(props) {
 		super(props);
 
@@ -359,7 +419,7 @@ export default class binarysearchtree extends React.Component {
             messages.push("The next value we will insert into the tree is " + val );
             console.log("level " + level);
             if(!root) {
-                root = new Node(this.ref, val, x, y, i);
+                root = new Node(this.ref, val, x, y, i, null);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -409,7 +469,7 @@ export default class binarysearchtree extends React.Component {
                             temp_y2 = node.y + 8;
 
                             node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.left = new Node(this.ref, val, temp_x, temp_y, i, node, level===1);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no left child.");
@@ -429,6 +489,7 @@ export default class binarysearchtree extends React.Component {
                             // }
                             i++;
                             j++;
+                            updateHeights(root);
                             break;
                         }
                     } else if (val > node.value) {
@@ -452,7 +513,7 @@ export default class binarysearchtree extends React.Component {
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
                             node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.right = new Node(this.ref, val, temp_x, temp_y, i, node, level===1);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no right child.");
@@ -471,6 +532,7 @@ export default class binarysearchtree extends React.Component {
                             // }
                             i++;
                             j++;
+                            updateHeights(root);
                             break;
                         }
                     } else {
@@ -485,6 +547,11 @@ export default class binarysearchtree extends React.Component {
                     level++;
                 }
             }
+
+            //console.log(root);
+            root = this.BalancingRecursion(root, val);
+            readjustCoordinates(root)
+            console.log(root);
         }
 
         steps.push(new EmptyStep())
@@ -492,6 +559,42 @@ export default class binarysearchtree extends React.Component {
         console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});
+    }
+
+    BalancingRecursion(node, val){
+        if(node == null) return;
+
+        this.BalancingRecursion(node.left);
+        this.BalancingRecursion(node.right);
+        
+        var balance = getHeight(node);
+        node.balance = balance;
+
+        //console.log("NODE " + node.value + ": " + balance);
+
+        if(balance > 1 && val < node.left.value){
+            console.log("RIGHT ROTATE");
+            node = rightRotation(node);
+        }
+
+        if(balance < -1 && val > node.right.value){
+            console.log("LEFT ROTATE");
+            node = leftRotation(node);
+        }
+
+        if(balance > 1 && val > node.left.value){
+            console.log("LEFT-RIGHT ROTATE");
+            node.left = leftRotation(node.left);
+            node = rightRotation(node);
+        }
+
+        if(balance < -1 && val < node.right.value){
+            console.log("RIGHT-LEFT ROTATE");
+            node.right = rightRotation(node.right);
+            node = leftRotation(node);  
+        }
+
+        return node;
     }
 
     turnOffRunning() {

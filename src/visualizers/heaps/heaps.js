@@ -791,7 +791,7 @@ export default class binarysearchtree extends React.Component {
                     </tr>
                     <tr>
                         <div style={{width: "500px"}}>
-                            <p>tim</p>
+                            <p>gian</p>
                         </div>
                     </tr>
                 </table>

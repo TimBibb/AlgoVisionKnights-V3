@@ -22,6 +22,10 @@ var temp_y = 0;
 var temp_x2 = 0;
 var temp_y2 = 0;
 var rpm = 0;
+var moveRightx = 0;
+var moveRighty = 0;
+var moveRightParentx = 0;
+var moveRightParenty = 0;
 // for usage of randomWords: https://www.npmjs.com/package/random-words
 var randomWords = require('random-words');
 
@@ -371,7 +375,7 @@ export default class binarysearchtree extends React.Component {
         var l = 0
         let q = [];
         // for usage of ranWords: https://www.npmjs.com/package/random-words
-        var ranWords = randomWords({exactly: 1, join: '', maxLength: 4});
+        var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -456,6 +460,7 @@ export default class binarysearchtree extends React.Component {
 
         while ((q.length) > 1) {
             var modx = k+k;
+            var mody = k+5;
             var tempx = k + 15;
             var tempy = k + 15;
             var tempmodx = 0;
@@ -470,18 +475,60 @@ export default class binarysearchtree extends React.Component {
             let right = q[0];
             console.log(right)
             q.shift();
-            
-            // new node f which is equal
-            let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
 
-            f.left = new Node(this.ref, "visible", left.display, x+modx-tempx+l, y-modx+tempy-l, i)
-            f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
-            console.log(f)
+            if(!root){
 
-            if(right.character == '-'){
+                // new node f which is equal
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+
+                f.left = new Node(this.ref, "visible", left.display, x+modx-tempx+l, y-modx+tempy-l, i)
+                f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
+
+                console.log("x+modx-tempx+l: " + (x+modx-tempx+l))
+                console.log("y-modx+tempy-l: " + (y-modx+tempy-l))
+
+                moveRightx = x+modx-tempx+l;
+                moveRighty = y-modx+tempy-l;
+                moveRightParentx = x+modx;
+                moveRightParenty = y-modx;
+
+                //console.log(f)
+            }
+            if(left.character == '-' && right.character != '-'){
+                // new node f which is equal
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+                
                 f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
-                console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
                 f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l, i)
+
+                f.left.display = left.display;
+                f.right.display = right.display;
+            }
+            if(right.character == '-' && left.character != '-'){
+                // new node f which is equal
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+                
+                f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
+                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l, i)
+
+                f.left.display = left.display;
+                f.right.display = right.display;
+            }
+            if(right.character == '-' && left.character == '-'){
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+                
+                f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
+                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                f.right = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
+            }
+            if(right.character != '-' && left.character != '-' && k >= 10){
+                let f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+65, moveRightParenty, i);
+
+                f.left = new Node(this.ref, "visible", left.display, moveRightx+60, moveRighty, i)
+                // console.log("f.left: x = " + (x-modx+tempx-l) + " y = " + (y+modx-tempy+l))
+                f.right = new Node(this.ref, "visible", right.display, moveRightx+100, moveRighty, i)
             }
 
             // if(left.character == '-' || right.character == '-'){
@@ -495,6 +542,7 @@ export default class binarysearchtree extends React.Component {
             //     // console.log(f)
             // }
 
+            // IN CASE SOMETHING BREAK UP, DELETE IT AND REUSE THIS PORTION. --->>>>
             // new node f which is equal
             // let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
 
@@ -723,7 +771,7 @@ export default class binarysearchtree extends React.Component {
                     </tr>
                     <tr>
                         <div style={{width: "500px"}}>
-                            <p>tim</p>
+                            <p>gian</p>
                         </div>
                     </tr>
                 </table>

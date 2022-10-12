@@ -67,7 +67,7 @@ class Visualizer extends React.Component {
 		} else if (this.props.type === 'js') {
 			const JSVisual =
 				require(`../../visualizers/${this.props.path}/${this.props.path}.js`).default;
-	
+
 			return <div className='Visualizer'><JSVisual lines={this.state.lines} handleLinesChange={this.handleLinesChange} code={this.state.code} handleCodeChange={this.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}/></div>;
 		} else {
 			return <div className='Visualizer'></div>

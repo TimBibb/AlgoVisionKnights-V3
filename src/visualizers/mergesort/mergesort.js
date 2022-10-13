@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
 import { useEffect } from "react";
+import { svg } from "d3";
 
 class EmptyStep {
 	forward(svg) {
@@ -16,6 +17,90 @@ class EmptyStep {
 
 	backward(svg) {
 
+	}
+}
+
+class SliceStep{
+	constructor(id1, id2){
+		this.id1 = id1;
+		this.id2 = id2;
+
+		//id1 is the left side of the array
+		//id2 is the complete array
+	}
+ 
+	changeLocation(svg){
+		let newArraySize = this.id1.length; 
+	
+		for(let i = 0; i < newArraySize; i++){ 
+			svg.select("#" + this.id2[i]).select("rect")
+				.attr("width", 50) 
+				.attr("height", 50); 
+		}
+	}
+
+}
+
+class ConvergeStep{
+	constructor(id1, id2){
+		this.id1 = id1;
+		this.id2 = id2;
+
+		//id1 is the left side of the array
+		//id2 is the complete array
+	}
+
+	converge(svg){
+		let newArraySize = this.id1.length;
+	
+		for(let i = 0; i < newArraySize; i++){
+			svg.select("#" + this.id2[i]).select("rect")
+				.attr("width", 100)
+				.attr("height", 100);
+		}
+	}
+}
+
+class MoveStep{
+	constructor(id){
+		this.id = id;
+	}
+
+	/*translate(){
+		return 
+	}
+
+	move(svg){
+		svg.selectAll("rect").enter().append("rect")
+		.attr("transform", translate)
+		.attr("width", 20)
+		.attr("height", 20)
+	}*/
+}
+
+class FirstColor{
+	constructor(id1, ids){
+		this.id1 = id1;
+		this.ids = ids;
+	}
+
+	forward(svg){
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+	}
+
+	fastForward(svg) {
+		this.forward(svg);
+	}
+
+	backward(svg) {
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+
+		svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		if (this.id1 !== this.id2) {
+			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		}
 	}
 }
 
@@ -157,10 +242,10 @@ class ColorPivotStep {
 	}
 
 	backward(svg) {
-		// var prevColor = svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor");
+		 var prevColor = svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor");
 
-		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", prevColor);
-		// svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", "gray");
+		 svg.select("#" + this.ids[this.id1]).select("rect").style("fill", prevColor);
+		 svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", "gray");
 	}
 }
 
@@ -200,7 +285,7 @@ class PartitionStep {
 	}
 }
 
-class UnpartitionStep {
+class UnpartitionStep{
 	constructor(id1, id2, ids, stepTime) {
 		this.id1 = id1;
         this.id2 = id2;
@@ -281,14 +366,14 @@ class SortedStep {
 	}
 
 	backward(svg) {
-        // svg.selectAll(".arrowpath").attr("visibility", "hidden");
-		// svg.selectAll(".insertTxt").attr("visibility", "hidden");
+         svg.selectAll(".arrowpath").attr("visibility", "hidden");
+		 svg.selectAll(".insertTxt").attr("visibility", "hidden");
 
-        // for (var i = 0; i < this.ids.length; i++) {
-		// 	var color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
+         for (var i = 0; i < this.ids.length; i++) {
+		 	var color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
 
-		// 	svg.select("#" + this.ids[i]).select("rect").style("fill", color);
-		// }
+		 	svg.select("#" + this.ids[i]).select("rect").style("fill", color);
+		 }
 	}
 }
 
@@ -416,43 +501,13 @@ class SwapStep {
 		this.fastSwap(svg);
 	}
 }
-
-function merge(left, right) {
-	let arr = []
-	// Break out of loop if any one of the array gets empty
-	while (left.length && right.length) {
-		// Pick the smaller among the smallest element of left and right sub arrays 
-		if (left[0] < right[0]) {
-			arr.push(left.shift())  
-		} else {
-			arr.push(right.shift()) 
-		}
-	}
-	
-	// Concatenating the leftover elements
-	// (in case we didn't go through the entire left or right array)
-	return [ ...arr, ...left, ...right ]
-}
-
-function sort(array) {
-	const half = array.length / 2
-	
-	// Base case or terminating case
-	if(array.length < 2){
-	  return array 
-	}
-	
-	const left = array.splice(0, half)
-	return merge(sort(left),sort(array))
-}
-
 export default class MergeSort extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			arr: [],
-			size: 10,
+			size: 12,
 			steps: [],
 			ids: [],
 			messages: [],
@@ -478,6 +533,72 @@ export default class MergeSort extends React.Component {
 		{
 			console.log(arr[i]);
 		}
+	}
+
+	sort(arr, ids, length, stepTime) {
+		let steps = [];
+		let messages = [];
+	
+		const half = arr.length / 2;
+		
+		console.log(arr.length);
+		console.log("Running Sort");
+
+		messages.push("<h1>Beginning Merge Sort!</h1>");
+		steps.push(new EmptyStep());
+		steps.push(new FirstColor(0, ids));
+		//console.log("Pushed First Color Step");
+	
+		// Base case or terminating case
+		if(arr.length < 2){
+			steps.push(new EmptyStep());
+			messages.push("<h1>Array Too Small. Merge Sort Cannot Continue.</h1>");
+			console.log("Terminated");
+			//console.log(arr);
+			return arr; 
+		}
+		
+		const left = arr.splice(0, half);
+		messages.push("<h1>Slicing Array</h1>");
+		console.log("Slicing " + left + " from " + arr);
+		steps.push(new SliceStep(left, arr));
+	
+		messages.push("<h1>Performing Merge Sort</h1>");
+
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+
+		return this.merge(this.sort(left),this.sort(arr));
+
+	}
+
+	merge(left, right) {
+		let arr = [];
+		let steps = [];
+		let messages = [];
+		// Break out of loop if any one of the array gets empty
+	
+		messages.push("<h1>Comparing Sizes of Left and Right Array</h1>");
+		while (left.length && right.length) {
+			// Pick the smaller among the smallest element of left and right sub arrays 
+			if (left[0] < right[0]) {
+				messages.push("<h1>Left Array is Smaller than Right</h1>");
+				arr.push(left.shift());
+			} else {
+				messages.push("<h1>Left Array is Larger or Equal to the Right</h1>");
+				arr.push(right.shift()); 
+			}
+		}
+		
+		this.setState({ steps: steps });
+		this.setState({ messages: messages });
+
+		// Concatenating the leftover elements
+		// (in case we didn't go through the entire left or right array)
+		steps.push(new MergeStep(left, right, arr));
+		messages.push("Merging the Arrays");
+		console.log(arr);
+		return [ ...arr, ...left, ...right ];
 	}
 
 	dataInit() {
@@ -763,7 +884,8 @@ export default class MergeSort extends React.Component {
 		// IDs array changed in initialize -> sort copy of array to get steps and messages
 		else if (this.state.ids.length > prevState.ids.length) {
 			console.log("We initialized. Time to sort.");
-			sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+			console.log("ran visualizer");
 		}
 		// Running changed
 		else if (this.state.running !== prevState.running)

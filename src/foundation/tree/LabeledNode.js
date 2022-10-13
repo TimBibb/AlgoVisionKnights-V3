@@ -6,7 +6,7 @@ class LabeledNode {
     this.circleId = circleId;
     this.textId = textId;
     this.circle = new UnlabeledNode(ref, circleId, cx, cy, visibility, level);
-    this.text = new Number(ref, textId, cx, cy, text, textColor, visibility, level);
+    this.text = new Number(ref, textId, cx, cy, text, textColor, visibility,);
   }
 }
 

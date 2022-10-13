@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 class Number {
-  constructor(ref, id, x, y, text, fill, visibility, fontSize = "4em", level) {
+  constructor(ref, id, x, y, text, fill, visibility, fontSize = "4em") {
     this.text = text;
     this.attr = {
       id: id,
@@ -12,13 +12,12 @@ class Number {
       "dominant-baseline": "middle",
       "font-size": fontSize,
       "font-weight": "bold",
-      level: level != null ? level : false
     };
     this.style = {
       fill: fill,
     };
     d3.select(ref.current)
-      .select("svg g")
+      .select("svg")
       .append("text")
       .attr("id", this.attr.id)
       .attr("x", this.attr.x)
@@ -28,7 +27,6 @@ class Number {
       .attr("dominant-baseline", this.attr["dominant-baseline"])
       .attr("font-size", this.attr["font-size"])
       .attr("font-weight", this.attr["font-weight"])
-      .classed("level1", this.attr.level)
       .style("fill", this.style.fill)
       .text(this.text);
   }

@@ -95,11 +95,13 @@ class UnHighlightPathStep {
             if (this.finalVal < node.value) {
                 edge = node.lEdge;
                 node = node.left;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                if(edge != null)
+                    svg.select("#" + edge.id).style("stroke", GRAY);
             } else  if (this.finalVal > node.value) {
                 edge = node.rEdge;
                 node = node.right;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                if(edge != null)
+                    svg.select("#" + edge.id).style("stroke", GRAY);
             } else {
                 return;
             }
@@ -716,7 +718,7 @@ export default class avl extends React.Component {
                     </tr>
                     <tr>
                         <div style={{width: "500px"}}>
-                            <p>tim</p>
+                            <p>Miguel</p>
                         </div>
                     </tr>
                 </table>

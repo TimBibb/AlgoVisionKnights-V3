@@ -212,7 +212,6 @@ export default class singlylinkedlist extends React.Component {
 	constructor(props) {
 		// Constructor for Visualization
 		super(props);
-
 		this.state = {
 			rendered: false,
 			running : false,
@@ -272,23 +271,6 @@ export default class singlylinkedlist extends React.Component {
 		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
 		
 		// Svg for our pseudocode
-		let pseudocodeSvg = d3.select("#pseudocodeDiv")
-			.append("svg")
-			.attr("width", 400)
-			.attr("height", 550)
-			.attr("id", "pseudoSvg");
-
-		//this.state.linesArr.push(new Line("func insert():", 0, pseudocodeSvg));
-		//this.state.linesArr.push(new Line("\u00A0\u00A0\u00A0\u00A0for 1...10:", 1, pseudocodeSvg));
-
-		let lineNum = 0;
-		// pseudocodeSvg.select("#line" + lineNum).attr("visibility", "hidden");
-
-		for (let line in this.pseudoSLL) {
-			console.log(line)
-			// this.state.linesArr.push(new Line(this.pseudoSLL[line], lineNum, pseudocodeSvg))
-			lineNum++;
-		}
 		
 
 
@@ -455,17 +437,6 @@ export default class singlylinkedlist extends React.Component {
 		}
 	}
 
-
-	printList() {
-		let curr = this.head;
-		let str = "";
-		while (curr) {
-			str += curr.element + " ";
-			curr = curr.next;
-		}
-		//console.log(str);
-	}
-
 	//Step forward button
 	forward() {
 		console.log("FORWARD CLICKED");
@@ -486,7 +457,7 @@ export default class singlylinkedlist extends React.Component {
 		console.log("BACKWARD CLICKED");
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
-		var stepId = this.state.stepId - 1;
+		let stepId = this.state.stepId - 1;
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
 		//console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];
@@ -538,7 +509,6 @@ export default class singlylinkedlist extends React.Component {
 		if (this.state.stepsArr.length === 0) return;
 		console.log("RESTART CLICKED");
 		d3.select(this.ref.current).select("svg").remove();
-		d3.select("#pseudoSvg").remove();
 		document.getElementById("message").innerHTML = "<h1>Welcome to Singly Linked List!</h1>";
 		this.setState({ rendered: false, running: false, 
 						stepsArr: [], messagesArr: [], 

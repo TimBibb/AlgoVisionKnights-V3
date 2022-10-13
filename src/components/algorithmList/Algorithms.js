@@ -182,13 +182,13 @@ const algorithms = {
 		{
 			name: 'Inorder',
 			path: 'inorder',
-			type: 'unity',
+			type: 'js',
 			description: <Inorder />,
 		},
 		{
 			name: 'Postorder',
 			path: 'postorder',
-			type: 'unity',
+			type: 'js',
 			description: <Postorder />,
 		},
 		{

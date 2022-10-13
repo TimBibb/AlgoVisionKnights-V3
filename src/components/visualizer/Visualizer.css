@@ -6,3 +6,8 @@
 	height: 100%;
 	width: 100%;
 }
+
+.parent-svg {
+	display: flex;
+	justify-content: space-around;
+}

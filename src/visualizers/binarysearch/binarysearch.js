@@ -4,6 +4,8 @@ import "../css/button.css";
 import "./binarysearch.css";
 import "../css/messages.css";
 import "../css/input.css";
+import Line from "../../foundation/pseudocode/Line";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 
 import { ConsoleView } from "react-device-detect";
@@ -130,8 +132,8 @@ export default class binarysearch extends React.Component {
 
 
     search(arr, target, ids, length, stepTime){
-        var steps = [];
-        var messages = [];
+        let steps = [];
+        let messages = [];
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
 	
@@ -410,7 +412,14 @@ export default class binarysearch extends React.Component {
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"binarysearch"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 			</div>
 		)
 	}

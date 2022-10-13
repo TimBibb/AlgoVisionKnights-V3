@@ -80,7 +80,8 @@ export const map = {
         tab + "if (head === null) head = node;",
         tab + "else {",
         tab + tab + "let current = head;",
-        tab + tab + "while (current.next) current = current.next;",
+        tab + tab + "while (current.next)",
+        tab + tab + tab + "current = current.next;",
         tab + tab + "current.next = node;",
         tab + "}",
         tab + "size++;",
@@ -89,8 +90,9 @@ export const map = {
         tab + "let current = head;",
         tab + "if (current.next === null) current = null;",
         tab + "else { ",
-        tab + tab + "while (current.next.next != null) current = current.next;",
-        tab + tab + "current.next = null;",
+        tab + tab + "while (current.next.next != null)", 
+        tab + tab + tab + "current = current.next;",
+        tab + "current.next = null;",
         tab + "}",
         "}"
     ]

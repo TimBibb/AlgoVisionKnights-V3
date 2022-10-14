@@ -7,6 +7,8 @@ import UserInput from "../../components/userInput/UserInput";
 import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
 import { ConsoleView } from "react-device-detect";
 import { Component } from "react";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 
 // Update file name
 
@@ -120,6 +122,7 @@ export default class LinearSearch extends React.Component {
 			steps: [], // Step queue that will be used for making changes to the visualizer
 			ids: [], // IDs of the group elements
 			messages: [], // Message queue for the messages that will appear at the top
+			pseudocodeArr: [],
 			running: false, // "Running" aka autoplay of going through the step and message queues
 							// via the Play button
 			stepId: 0, // ID of the current step
@@ -151,23 +154,31 @@ export default class LinearSearch extends React.Component {
 
         var steps = [];
         var messages = [];
+		var pseudocodeArr = [];
 
         messages.push("<h1>Beginning Linear Search!</h1>");
         steps.push(new EmptyStep());
 		steps.push(new FirstColor(0, ids));
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
+
 
         for(let i = 0; i < length; i++){
 			steps.push(new EmptyStep());
             messages.push("<h1>Searching Index [" + i + "] for Value " + this.state.target + ".</h1>");
+			pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
             if(arr[i] == this.state.target){
 				steps.push(new ColorFound(i, ids));
                 messages.push("<h1>Found Item at Index [" + i + "].</h1>");
 				messages.push("<h1>Linear Search Complete!<h1>");
+				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+				// pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
 				break;
             }
             else if(arr[i] != this.state.target){
 				steps.push(new ColorSwapStep(i, i+1, ids));
                 messages.push("<h1>" + arr[i] + " does NOT equal " + this.state.target + ".</h1>");
+				pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
             }
         }
 
@@ -175,6 +186,7 @@ export default class LinearSearch extends React.Component {
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
     }
 
 	
@@ -310,6 +322,12 @@ export default class LinearSearch extends React.Component {
 			ids.push("g" + i);
 		}
 
+		let pseudocodeSvg = d3.select("#pseudocodeDiv")
+			.append("svg")
+			.attr("width", 400)
+			.attr("height", 550)
+			.attr("id", "pseudoSvg");
+
 		// Triggers componentDidUpdate to run the main function for the steps and messages queues
 		this.setState({ids: ids});
 
@@ -364,6 +382,7 @@ export default class LinearSearch extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
@@ -433,7 +452,10 @@ export default class LinearSearch extends React.Component {
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Linear Search!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"linearsearch"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+				</div>
 			</div>
 		)
 	}

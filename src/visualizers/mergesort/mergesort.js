@@ -28,6 +28,10 @@ class SliceStep{
 		//id1 is the left side of the array
 		//id2 is the complete array
 	}
+
+	forward(svg) {
+		this.changeLocation(svg);
+	}
  
 	changeLocation(svg){
 		let newArraySize = this.id1.length; 
@@ -49,6 +53,10 @@ class ConvergeStep{
 		//id1 is the left side of the array
 		//id2 is the complete array
 	}
+	
+	forward(svg) {
+		this.converge(svg);
+	}
 
 	converge(svg){
 		let newArraySize = this.id1.length;
@@ -64,6 +72,10 @@ class ConvergeStep{
 class MoveStep{
 	constructor(id){
 		this.id = id;
+	}
+
+	forward(svg) {
+		
 	}
 
 	/*translate(){
@@ -172,6 +184,11 @@ class MergeStep {
 	}
 
 	forward(svg) {
+		// console.log(svg.select("#" + this.ids[this.id2]))
+		if (svg.select("#" + this.ids[this.id1]).select("rect")[0] == null ||
+			svg.select("#" + this.ids[this.id2]).select("rect")[0] == null) {
+			return
+		}
 		var color1 = svg.select("#" + this.ids[this.id1]).select("rect").style("fill");
 		var color2 = svg.select("#" + this.ids[this.id2]).select("rect").style("fill");
 		var prev1 = svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor");
@@ -531,74 +548,93 @@ export default class MergeSort extends React.Component {
 	printArray(arr, size) {
 		for (let i = 0; i < size; i++)
 		{
-			console.log(arr[i]);
+			// console.log(arr[i]);
 		}
 	}
 
-	sort(arr, ids, length, stepTime) {
+	sort(arr, ids) {
 		let steps = [];
 		let messages = [];
-	
+		
+		[steps, messages] = this.sortRecursive(arr, ids, steps, messages);
+
+		this.setState({steps: steps, messages: messages})
+	}
+
+	sortRecursive(arr, ids, steps, messages) {
 		const half = arr.length / 2;
 		
-		console.log(arr.length);
-		console.log("Running Sort");
+		// console.log(arr.length);
+		// console.log("Running Sort");
 
-		messages.push("<h1>Beginning Merge Sort!</h1>");
-		steps.push(new EmptyStep());
-		steps.push(new FirstColor(0, ids));
+		if (steps.length == 0) {
+			messages.push("<h1>Beginning Merge Sort!</h1>");
+			steps.push(new EmptyStep());
+	
+			messages.push("<h1>Beginning Merge Sort!</h1>");
+			steps.push(new FirstColor(0, ids));
+		}
+
 		//console.log("Pushed First Color Step");
 	
 		// Base case or terminating case
 		if(arr.length < 2){
 			steps.push(new EmptyStep());
 			messages.push("<h1>Array Too Small. Merge Sort Cannot Continue.</h1>");
-			console.log("Terminated");
+			// console.log("Terminated");
 			//console.log(arr);
 			return arr; 
 		}
 		
 		const left = arr.splice(0, half);
 		messages.push("<h1>Slicing Array</h1>");
-		console.log("Slicing " + left + " from " + arr);
+		// console.log("Slicing " + left + " from " + arr);
 		steps.push(new SliceStep(left, arr));
 	
 		messages.push("<h1>Performing Merge Sort</h1>");
+		steps.push(new EmptyStep())
 
-		this.setState({ steps: steps });
-		this.setState({ messages: messages });
+		// this.setState({ steps: steps });
+		// this.setState({ messages: messages });
 
-		return this.merge(this.sort(left),this.sort(arr));
+		console.log(steps);
 
+		this.merge(this.sortRecursive(left, ids, steps, messages),this.sortRecursive(arr, ids, steps, messages), steps, messages);
+		return [steps, messages]
 	}
 
-	merge(left, right) {
+	merge(left, right, steps, messages) {
 		let arr = [];
-		let steps = [];
-		let messages = [];
+		// let steps = [];
+		// let messages = [];
 		// Break out of loop if any one of the array gets empty
 	
 		messages.push("<h1>Comparing Sizes of Left and Right Array</h1>");
+		steps.push(new EmptyStep())
 		while (left.length && right.length) {
 			// Pick the smaller among the smallest element of left and right sub arrays 
 			if (left[0] < right[0]) {
 				messages.push("<h1>Left Array is Smaller than Right</h1>");
+				steps.push(new EmptyStep())
+
 				arr.push(left.shift());
 			} else {
 				messages.push("<h1>Left Array is Larger or Equal to the Right</h1>");
+				steps.push(new EmptyStep())
+
 				arr.push(right.shift()); 
 			}
 		}
 		
-		this.setState({ steps: steps });
-		this.setState({ messages: messages });
+		// this.setState({ steps: steps });
+		// this.setState({ messages: messages });
 
 		// Concatenating the leftover elements
 		// (in case we didn't go through the entire left or right array)
 		steps.push(new MergeStep(left, right, arr));
 		messages.push("Merging the Arrays");
-		console.log(arr);
-		return [ ...arr, ...left, ...right ];
+		// console.log(arr);
+		// return [ ...arr, ...left, ...right ];
 	}
 
 	dataInit() {
@@ -884,7 +920,7 @@ export default class MergeSort extends React.Component {
 		// IDs array changed in initialize -> sort copy of array to get steps and messages
 		else if (this.state.ids.length > prevState.ids.length) {
 			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+			this.sort([...this.state.arr], this.state.ids);
 			console.log("ran visualizer");
 		}
 		// Running changed

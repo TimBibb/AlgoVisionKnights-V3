@@ -120,6 +120,7 @@ export default class binarysearch extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.recursiveSearch = this.recursiveSearch.bind(this)
 	}
     search(arr, target, ids, length, stepTime){
 		let pseudocodeArr = [];
@@ -127,21 +128,25 @@ export default class binarysearch extends React.Component {
         let messages = [];
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
-		[steps,messages,pseudocodeArr] = this.recursiveSearch(arr,target, 0, arr.length - 1, steps, messages, pseudocodeArr)
-		if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
-		else console.log("Not Found");
+		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+		[steps, messages, pseudocodeArr] = this.recursiveSearch(arr, target, 0, arr.length - 1, ids, steps, messages, pseudocodeArr)
+		// if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
+		// else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
     }
-	recursiveSearch (arr, target, start, end) {
+
+	recursiveSearch (arr, target, start, end, ids, steps, messages, pseudocodeArr) {
 		if (start > end) {
 			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 			steps.push(new EmptyStep());
 			pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
+
+			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
+			steps.push(new EmptyStep());
 			pseudocodeArr.push(HighlightLineStep(3,this.props.lines));
-			return false;
+			return [steps, messages, pseudocodeArr];
 		}
 
 		let mid = Math.floor((start + end) / 2);
@@ -152,23 +157,28 @@ export default class binarysearch extends React.Component {
 		if(arr[mid] === target) {
 			messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
 			steps.push(new ColorFound(mid, ids));
-			return true;
+			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+			return [steps, messages, pseudocodeArr];
 		}
 
 		messages.push("<h1>" + target + " does NOT equal to " + arr[mid] + "</h1>");
 		steps.push(new EmptyStep());
-		
+		pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+
 		if (arr[mid] > target) {
 			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
 			//steps.push(new EmptyStep());
-			
 			steps.push(new OldColor(mid,ids));
-			return recursiveSearch(arr,  target, start, mid-1);
+			pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+
+			return this.recursiveSearch(arr,  target, start, mid-1, ids, steps, messages, pseudocodeArr);
 		}
 		else {
 			messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
 			steps.push(new OldColor(mid,ids));
-			return recursiveSearch(arr,  target, mid+1, end);
+			pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+
+			return this.recursiveSearch(arr,  target, mid+1, end, ids, steps, messages, pseudocodeArr);
 		}
 	
 	}

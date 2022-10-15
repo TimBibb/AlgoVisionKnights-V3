@@ -73,7 +73,7 @@ class Pseudocode extends React.Component {
         let pseudocodeSvg = d3.select("#pseudocodeDiv")
 			.append("svg")
 			.attr("width", 400)
-			.attr("height", 620)
+			.attr("height", 700)
 			.attr("id", "pseudoSvg");
 
         this.setState({svg: pseudocodeSvg})

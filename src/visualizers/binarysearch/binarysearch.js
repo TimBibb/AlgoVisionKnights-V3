@@ -128,7 +128,7 @@ export default class binarysearch extends React.Component {
         let messages = [];
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 		[steps, messages, pseudocodeArr] = this.recursiveSearch(arr, target, 0, arr.length - 1, ids, steps, messages, pseudocodeArr)
 		// if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
 		// else console.log("Not Found");
@@ -141,22 +141,26 @@ export default class binarysearch extends React.Component {
 		if (start > end) {
 			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(HighlightLineStep(1,this.props.lines));
 
 			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(HighlightLineStep(3,this.props.lines));
+			pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
 			return [steps, messages, pseudocodeArr];
 		}
 
 		let mid = Math.floor((start + end) / 2);
 		messages.push("<h1> Find midpoint from index " + start + " to " + end + "</h1>");
 		steps.push(new FirstColor(mid, ids));
-		pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
 		if(arr[mid] === target) {
 			messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
 			steps.push(new ColorFound(mid, ids));
+			pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+			
+			messages.push("<h1>Returning midpoint " + target + "</h1>");
+			steps.push(new EmptyStep());
 			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
 			return [steps, messages, pseudocodeArr];
 		}
@@ -169,15 +173,22 @@ export default class binarysearch extends React.Component {
 			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
 			//steps.push(new EmptyStep());
 			steps.push(new OldColor(mid,ids));
-			pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
+			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
+			//steps.push(new EmptyStep());
+			steps.push(new OldColor(mid,ids));
+			pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
 			return this.recursiveSearch(arr,  target, start, mid-1, ids, steps, messages, pseudocodeArr);
 		}
 		else {
 			messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
 			steps.push(new OldColor(mid,ids));
-			pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
 
+			messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
+			steps.push(new OldColor(mid,ids));
+			pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
 			return this.recursiveSearch(arr,  target, mid+1, end, ids, steps, messages, pseudocodeArr);
 		}
 	

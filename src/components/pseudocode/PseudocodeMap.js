@@ -2,18 +2,17 @@ const tab = "\u00A0\u00A0\u00A0\u00A0"
 
 export const map = {
     binarysearch: [
-        "binarySearch(arr, target) {",
-        tab + "let recursiveSearch = function(arr, target, start, end) {",
-        tab + tab + "if (start > end)",
-        tab + tab + tab + "return false",
-        tab + tab + "let mid = (start + end) / 2 );",
-        tab + tab + "if (arr[mid] === target)",
-        tab + tab + tab + "return true",
-        tab + tab + "if (arr[mid] > target)", 
-        tab + tab + tab + "return recursiveSearch(arr from start..mid-1);",
-        tab + tab + "else",
-        tab + tab + tab + "return recursiveSearch(arr from mid + 1..end);",
-        tab + "}"
+        "binarySearch(arr, target, start, end) {",
+        tab + "if (start > end)",
+        tab + tab + "return false",
+        tab + "let mid = (start + end) / 2 );",
+        tab + "if (arr[mid] === target)",
+        tab + tab + "return mid",
+        tab + "if (arr[mid] > target)", 
+        tab + tab + "return binarySearch(arr from start..mid-1);",
+        tab + "else",
+        tab + tab + "return binarySearch(arr from mid + 1..end);",
+        "}"
     ],
     linearsearch: [
         "linearSearch(arr, target) {",
@@ -79,7 +78,8 @@ export const map = {
     singlylinkedlist: [
         "insert(element) {",
         tab + "let node = new Node(element);",
-        tab + "if (head === null) head = node;",
+        tab + "if (head === null)",
+        tab + tab + "head = node;",
         tab + "else {",
         tab + tab + "let current = head;",
         tab + tab + "while (current.next)",
@@ -88,13 +88,15 @@ export const map = {
         tab + "}",
         tab + "size++;",
         "}",
+
         "removeTail() {",
         tab + "let current = head;",
-        tab + "if (current.next === null) current = null;",
+        tab + "if (current.next === null)",
+        tab + tab + "current = null;",
         tab + "else { ",
-        tab + tab + "while (current.next.next != null)", 
+        tab + tab + "while (current.next != null)", 
         tab + tab + tab + "current = current.next;",
-        tab + "current.next = null;",
+        tab + tab + "current.next = null;",
         tab + "}",
         "}"
     ]

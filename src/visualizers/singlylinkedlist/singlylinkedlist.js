@@ -6,6 +6,7 @@ import "../css/messages.css";
 import "../css/input.css";
 import Line from "../../foundation/pseudocode/Line";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class Node {
 	constructor(element, id, ref, x) {
@@ -442,7 +443,7 @@ export default class singlylinkedlist extends React.Component {
 		// this.state.pseudocodeArr[this.state.stepId].fastForward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({ stepId: this.state.stepId + 1 });
-		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
+		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
 	}
 
 	//Step backward button
@@ -455,7 +456,7 @@ export default class singlylinkedlist extends React.Component {
 		//console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({ stepId: stepId });
-		d3.timeout(this.turnOffRunning, this.state.waitTime);
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
 
 	//For the autoplay button
@@ -477,7 +478,7 @@ export default class singlylinkedlist extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
 		this.setState({stepId : this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		d3.timeout(this.run, this.props.waitTime);
 	}
 
 	play() {
@@ -595,6 +596,7 @@ export default class singlylinkedlist extends React.Component {
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
+					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen">
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>

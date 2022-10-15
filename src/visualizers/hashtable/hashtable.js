@@ -3,6 +3,8 @@ import * as d3 from "d3";
 import "./hashtable.css";
 import "../css/button.css";
 import "../css/messages.css";
+import { Form } from "react-bootstrap";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -642,7 +644,7 @@ export default class HashTable extends React.Component {
     for (const step of this.steps[this.stepId]) step.forward(svg);
 
     this.stepId = this.stepId + 1;
-    d3.timeout(this.run, this.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -751,30 +753,29 @@ export default class HashTable extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
-          <div id="insertion" class="center-screen">
-            <label>Value to insert:</label>
-            <input type="number" id="insertionValue"></input>
-            <button onClick={this.handleInsertion}>Insert</button>
-          </div>
-
-          <div id="deletion" class="center-screen">
-            <label>Value to delete:</label>
-            <input type="number" id="deletionValue"></input>
-            <button onClick={this.handleDeletion}>Delete</button>
-          </div>
-
-          <div id="search" class="center-screen">
-            <label>Value to search:</label>
-            <input type="number" id="searchValue"></input>
-            <button onClick={this.handleSearch}>Search</button>
-          </div>
-
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+        </div>
+        <div class="center-screen">
+          <div id="insertion" class="center-screen">
+            <Form.Control type="number" id="insertionValue"></Form.Control>
+            <button class="button" onClick={this.handleInsertion}>Insert</button>
+          </div>
+
+          <div id="deletion" class="center-screen">
+            <Form.Control type="number" id="deletionValue"></Form.Control>
+            <button class="button" onClick={this.handleDeletion}>Delete</button>
+          </div>
+
+          <div id="search" class="center-screen">
+            <Form.Control type="number" id="searchValue"></Form.Control>
+            <button class="button" onClick={this.handleSearch}>Search</button>
+          </div>
         </div>
         <div class="center-screen">
           <span id="message">

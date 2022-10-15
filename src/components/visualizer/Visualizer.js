@@ -35,10 +35,13 @@ class Visualizer extends React.Component {
 			lines: [],
 			code: [],
 			codeSteps: [],
+			waitTime : 2000,
+			waitTimeMultiplier: 1,
 		}
 		this.handleLinesChange = this.handleLinesChange.bind(this);
 		this.handleCodeChange = this.handleCodeChange.bind(this);
 		this.handleCodeStepsChange = this.handleCodeStepsChange.bind(this);
+		this.handleSpeedUpdate = this.handleSpeedUpdate.bind(this);
 	}
 
 	handleLinesChange(lines) {
@@ -51,6 +54,12 @@ class Visualizer extends React.Component {
 
 	handleCodeStepsChange(codeSteps) {
 		this.setState({codeSteps: codeSteps});
+	}
+
+	handleSpeedUpdate(event) {
+		let defaultWaitTime = 2000;
+		this.setState({waitTimeMultiplier: event.target.value})
+		this.setState({waitTime: defaultWaitTime*(1/event.target.value)})
 	}
 
 	render() {
@@ -68,7 +77,24 @@ class Visualizer extends React.Component {
 			const JSVisual =
 				require(`../../visualizers/${this.props.path}/${this.props.path}.js`).default;
 
-			return <div className='Visualizer'><JSVisual lines={this.state.lines} handleLinesChange={this.handleLinesChange} code={this.state.code} handleCodeChange={this.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}/></div>;
+			return (
+				<div className='Visualizer'>
+					<JSVisual
+						lines={this.state.lines}
+						handleLinesChange={this.handleLinesChange}
+						
+						code={this.state.code}
+						handleCodeChange={this.handleCodeChange}
+
+						codeSteps={this.state.codeSteps}
+						handleCodeStepsChange={this.handleCodeStepsChange}
+
+						waitTime={this.state.waitTime}
+						waitTimeMultiplier={this.state.waitTimeMultiplier}
+						handleSpeedUpdate={this.handleSpeedUpdate}
+					/>
+				</div>
+			)
 		} else {
 			return <div className='Visualizer'></div>
 		}

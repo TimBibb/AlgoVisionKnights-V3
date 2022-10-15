@@ -4,6 +4,7 @@ import "./kruskals.css";
 import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class EmptyStep {
   forward() {}
@@ -306,7 +307,7 @@ export default class Prims extends React.Component {
     console.log(this.state.steps[this.state.stepId]);
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
@@ -319,7 +320,7 @@ export default class Prims extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward();
     // this.state.steps[--stepId].backward();
     this.setState({stepId: stepId});
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -332,7 +333,7 @@ export default class Prims extends React.Component {
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     // this.state.steps[this.state.stepId].forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -356,7 +357,7 @@ export default class Prims extends React.Component {
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
       // this.state.steps[--stepId].backward();
-      d3.timeout(this.turnOffRunning, this.state.waitTime);
+      d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     this.setState({ running: false });
@@ -389,6 +390,7 @@ export default class Prims extends React.Component {
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
           <span id="message">

@@ -5,15 +5,20 @@
 }
 .button-location{
 	margin-left: 3%;
-	display: flex;
+	/* display: flex; */
 	float: left;
 }
 .checkbox-location{
 	margin-right: 5%;
 	margin-top: -1.5%;
-	display: flex;
+	/* display: flex; */
 	float: right;
 }
 .container{
-	width: 100%;
+	/* width: 100%; */
+	justify-content: space-between;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	margin-top: 2em;
 }

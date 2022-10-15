@@ -392,7 +392,7 @@ export default class Prims extends React.Component {
         </div>
         <div class="center-screen">
           <span id="message">
-            <h1>Welcome to Prim's!</h1>
+            <h1 id="message-pane">Welcome to Prim's!</h1>
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>

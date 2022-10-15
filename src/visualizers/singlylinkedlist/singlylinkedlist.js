@@ -311,6 +311,7 @@ export default class singlylinkedlist extends React.Component {
 
 		this.state.messagesArr.push("<h1>We are now done.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
 		
 		this.setState({ stepsArr: this.state.stepsArr }, () => {

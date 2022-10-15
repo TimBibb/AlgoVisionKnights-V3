@@ -28,6 +28,8 @@
 }
 
 #banner {
+	height: fit-content;
+	overflow-y: hidden !important;
 	overflow-x: scroll;
 	justify-content: center;
 	align-items: center;

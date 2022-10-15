@@ -274,13 +274,38 @@ class PartitionStep {
 		this.stepTime = stepTime;
 	}
 
+	/*for (int i = 0; i < left; i++) {
+		var barx = select("#"+i).select("rect").attr("x") - 20;
+		var textx = select("#"+i).select("text").attr("x") - 20;
+	
+		select("#"+i).select("rect").attr("x", barx);
+		select("#"+i).select("text").attr("x", text);
+	}
+	
+	for (int i = right; right < ids.length; i++) {
+		var barx = select("#"+i).select("rect").attr("x") + 20;
+		var textx = select("#"+i).select("text").attr("x") + 20;
+	
+		select("#"+i).select("rect").attr("x", barx);
+		select("#"+i).select("text").attr("x", text);
+	}*/
+
 	forward(svg) {
-        for (var i = this.id1; i <= this.id2; i++) {
-            var newybar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("y")) - 100;
-            var newytxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("y")) - 100;
-            svg.select("#" + this.ids[i]).select("rect").transition().duration(this.stepTime).attr("y", newybar);
-            svg.select("#" + this.ids[i]).select("text").transition().duration(this.stepTime).attr("y", newytxt);
+        for (var i = 0; i <= this.id1; i++) {
+            var newxbar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("x")) - 20;
+            var newxtxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("x")) - 20;
+
+            svg.select("#" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#" + this.ids[i]).select("text").attr("x", newxtxt);
         }
+
+		for(var i = this.id2; i < this.ids.length; i++){
+			var newxbar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("x")) + 20;
+            var newxtxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("x")) + 20;
+
+            svg.select("#" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#" + this.ids[i]).select("text").attr("x", newxtxt);
+		}
 	}
 
 	fastForward(svg) {
@@ -524,7 +549,7 @@ export default class MergeSort extends React.Component {
 
 		this.state = {
 			arr: [],
-			size: 12,
+			size: 10,
 			steps: [],
 			ids: [],
 			messages: [],
@@ -552,18 +577,33 @@ export default class MergeSort extends React.Component {
 		}
 	}
 
-	sort(arr, ids) {
+	//sliceStep - cuts the array in half at designated location (working)
+	//convergeStep - brings the cut arrays back together (not tested)
+	//moveStep - not implemented
+	//FirstColor - lights up the first element in the array (working)
+	//ColorLowStep - changes colors of selected elements (not tested)
+	//MergeStep - brings arrays back together (not tested)
+	//ColorPivotStep
+	//PartitionStep - split (not tested)
+	//UnpartitionStep - bring together (not tested)
+	//SortedStep
+	//SwapStep
+
+
+	sort(arr, ids, stepTime) {
 		let steps = [];
 		let messages = [];
 		
-		[steps, messages] = this.sortRecursive(arr, ids, steps, messages);
+		[steps, messages] = this.sortRecursive(arr, ids, steps, messages, stepTime);
 
 		this.setState({steps: steps, messages: messages})
 	}
 
-	sortRecursive(arr, ids, steps, messages) {
+	sortRecursive(arr, ids, steps, messages, stepTime) {
 		const half = arr.length / 2;
 		
+		console.log(ids);
+
 		// console.log(arr.length);
 		// console.log("Running Sort");
 
@@ -587,9 +627,12 @@ export default class MergeSort extends React.Component {
 		}
 		
 		const left = arr.splice(0, half);
+		console.log(left);
+		console.log(arr);
+
 		messages.push("<h1>Slicing Array</h1>");
 		// console.log("Slicing " + left + " from " + arr);
-		steps.push(new SliceStep(left, arr));
+		steps.push(new PartitionStep(left.length-1, left.length, ids, stepTime));
 	
 		messages.push("<h1>Performing Merge Sort</h1>");
 		steps.push(new EmptyStep())
@@ -808,6 +851,7 @@ export default class MergeSort extends React.Component {
 
 		for (let i = 0; i < this.state.size; i++)
 		{
+			//may need to remove g 
 			ids.push("g" + i);
 		}
 
@@ -920,7 +964,7 @@ export default class MergeSort extends React.Component {
 		// IDs array changed in initialize -> sort copy of array to get steps and messages
 		else if (this.state.ids.length > prevState.ids.length) {
 			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids);
+			this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
 			console.log("ran visualizer");
 		}
 		// Running changed

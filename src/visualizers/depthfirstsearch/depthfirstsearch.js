@@ -5,6 +5,7 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -329,7 +330,7 @@ export default class DepthFirstSearch extends React.Component {
     console.log(this.state.steps[this.state.stepId]);
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
   
   backward() {
@@ -343,7 +344,7 @@ export default class DepthFirstSearch extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward();
     // this.state.steps[--stepId].backward();
     this.setState({stepId: stepId});
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -355,7 +356,7 @@ export default class DepthFirstSearch extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
   
   play() {
@@ -379,7 +380,7 @@ export default class DepthFirstSearch extends React.Component {
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
       // this.state.steps[--stepId].backward();
-      d3.timeout(this.turnOffRunning, this.state.waitTime);
+      d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     this.setState({ running: false });
@@ -409,6 +410,7 @@ export default class DepthFirstSearch extends React.Component {
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen"><span id="message"><h1 id="message-pane">Welcome to Depth First Search (DFS)!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>

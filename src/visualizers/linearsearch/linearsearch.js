@@ -9,7 +9,7 @@ import { ConsoleView } from "react-device-detect";
 import { Component } from "react";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
-
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 // Update file name
 
 // When nothing in the visualizer changes but you want to push a new message
@@ -349,7 +349,7 @@ export default class LinearSearch extends React.Component {
 
 		this.setState({stepId: this.state.stepId + 1});
 
-		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
+		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
 	}
 
 	// Step backward button
@@ -365,7 +365,7 @@ export default class LinearSearch extends React.Component {
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Linear Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
-		d3.timeout(this.turnOffRunning, this.state.waitTime);
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
 
 	// For the play button
@@ -379,7 +379,7 @@ export default class LinearSearch extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		d3.timeout(this.run, this.props.waitTime);
 	}
 
 	play() {
@@ -444,6 +444,7 @@ export default class LinearSearch extends React.Component {
 		        	<button class="button" onClick={this.restart}>Restart</button>
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
+					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Linear Search!</h1></span></div>
 				<div class="parent-svg">

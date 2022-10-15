@@ -6,6 +6,7 @@ import UnlabeledNode from "../../foundation/graph/UnlabeledNode";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -558,7 +559,7 @@ export default class HeapSort extends React.Component {
     console.log(this.state.steps[this.state.stepId]);
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
@@ -572,7 +573,7 @@ export default class HeapSort extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward();
     // this.state.steps[--stepId].backward();
     this.setState({ stepId: stepId });
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -584,7 +585,7 @@ export default class HeapSort extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -608,7 +609,7 @@ export default class HeapSort extends React.Component {
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
       // this.state.steps[--stepId].backward();
-      d3.timeout(this.turnOffRunning, this.state.waitTime);
+      d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     this.setState({ running: false });
@@ -644,12 +645,13 @@ export default class HeapSort extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
           <span id="message"><h1>Welcome to Heap Sort!</h1></span>

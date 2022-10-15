@@ -28,7 +28,7 @@
 }
 
 #banner {
-	height: fit-content;
+	height: fit-content !important;
 	overflow-y: hidden !important;
 	overflow-x: scroll;
 	justify-content: center;

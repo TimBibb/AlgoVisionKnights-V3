@@ -11,7 +11,8 @@
 }
 
 #message-pane {
-	height: 150px;
+	/* height: 150px; */
+	margin: 3em auto 1em auto;
 	width: 100%;
 }
 

@@ -322,12 +322,6 @@ export default class LinearSearch extends React.Component {
 			ids.push("g" + i);
 		}
 
-		let pseudocodeSvg = d3.select("#pseudocodeDiv")
-			.append("svg")
-			.attr("width", 400)
-			.attr("height", 550)
-			.attr("id", "pseudoSvg");
-
 		// Triggers componentDidUpdate to run the main function for the steps and messages queues
 		this.setState({ids: ids});
 

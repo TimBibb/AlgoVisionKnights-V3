@@ -559,7 +559,7 @@ export default class BreadthFirstSearch extends React.Component {
         </div>
         <div class="center-screen">
           <span id="message">
-            <h1>Welcome to Breadth First Search!</h1>
+            <h1 id="message-pane">Welcome to Breadth First Search!</h1>
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>

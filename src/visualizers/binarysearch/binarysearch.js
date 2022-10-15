@@ -4,11 +4,8 @@ import "../css/button.css";
 import "./binarysearch.css";
 import "../css/messages.css";
 import "../css/input.css";
-
-
-import { ConsoleView } from "react-device-detect";
-import { Component } from "react";
-import UserInput  from "../../components/userInput/UserInput";
+import Line from "../../foundation/pseudocode/Line";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
@@ -95,9 +92,6 @@ class ColorFound{
 		}
 	}
 }
-
-
-
 export default class binarysearch extends React.Component {
 	constructor(props) {
 		super(props);
@@ -126,54 +120,68 @@ export default class binarysearch extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.recursiveSearch = this.recursiveSearch.bind(this)
 	}
-
-
     search(arr, target, ids, length, stepTime){
-        var steps = [];
-        var messages = [];
+		let pseudocodeArr = [];
+        let steps = [];
+        let messages = [];
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
-	
-		let recursiveSearch = function (arr, target, start, end) {
-			if (start > end) {
-				messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
-				steps.push(new EmptyStep());
-				return false;
-			}
-
-			let mid = Math.floor((start + end) / 2);
-			messages.push("<h1> Find midpoint from index " + start + " to " + end + "</h1>");
-			steps.push(new FirstColor(mid, ids));
-			
-			if(arr[mid] === target) {
-				messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
-				steps.push(new ColorFound(mid, ids));
-				return true;
-			}
-
-			messages.push("<h1>" + target + " does NOT equal to " + arr[mid] + "</h1>");
-			steps.push(new EmptyStep());
-			
-			if (arr[mid] > target) {
-				messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
-				//steps.push(new EmptyStep());
-				
-				steps.push(new OldColor(mid,ids));
-				return recursiveSearch(arr,  target, start, mid-1);
-			}
-			else {
-				messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
-				steps.push(new OldColor(mid,ids));
-				return recursiveSearch(arr,  target, mid+1, end);
-			}
-		
-		}
-		if (recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
-		else console.log("Not Found");
+		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+		[steps, messages, pseudocodeArr] = this.recursiveSearch(arr, target, 0, arr.length - 1, ids, steps, messages, pseudocodeArr)
+		// if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
+		// else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
     }
+
+	recursiveSearch (arr, target, start, end, ids, steps, messages, pseudocodeArr) {
+		if (start > end) {
+			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
+
+			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(HighlightLineStep(3,this.props.lines));
+			return [steps, messages, pseudocodeArr];
+		}
+
+		let mid = Math.floor((start + end) / 2);
+		messages.push("<h1> Find midpoint from index " + start + " to " + end + "</h1>");
+		steps.push(new FirstColor(mid, ids));
+		pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+
+		if(arr[mid] === target) {
+			messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
+			steps.push(new ColorFound(mid, ids));
+			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+			return [steps, messages, pseudocodeArr];
+		}
+
+		messages.push("<h1>" + target + " does NOT equal to " + arr[mid] + "</h1>");
+		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+
+		if (arr[mid] > target) {
+			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
+			//steps.push(new EmptyStep());
+			steps.push(new OldColor(mid,ids));
+			pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+
+			return this.recursiveSearch(arr,  target, start, mid-1, ids, steps, messages, pseudocodeArr);
+		}
+		else {
+			messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
+			steps.push(new OldColor(mid,ids));
+			pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+
+			return this.recursiveSearch(arr,  target, mid+1, end, ids, steps, messages, pseudocodeArr);
+		}
+	
+	}
 	
     // Initializes the data to be used in the visualizer
 	dataInit(size) {
@@ -332,6 +340,7 @@ export default class binarysearch extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
@@ -401,8 +410,8 @@ export default class binarysearch extends React.Component {
 		return (
 			<div>
 				<div class="center-screen" id="banner">	
-					<input type="number" id="value" class="inputValue"></input>
-					<button class="button" onClick={this.handleSearch}>Search</button>
+					{/* <input type="number" id="value" class="inputValue"></input>
+					<button class="button" onClick={this.handleSearch}>Search</button> */}
 					<button class="button" onClick={this.play}>Play</button> 
 		        	<button class="button" onClick={this.pause}>Pause</button>
 		        	<button class="button" onClick={this.restart}>Restart</button>
@@ -410,7 +419,14 @@ export default class binarysearch extends React.Component {
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"binarysearch"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 			</div>
 		)
 	}

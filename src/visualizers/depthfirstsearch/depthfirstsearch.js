@@ -410,7 +410,7 @@ export default class DepthFirstSearch extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 				</div>
-				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Depth First Search (DFS)!</h1></span></div>
+				<div class="center-screen"><span id="message"><h1 id="message-pane">Welcome to Depth First Search (DFS)!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
 			</div>
 		)

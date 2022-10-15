@@ -12,6 +12,8 @@
   transition-duration: 0.2s;
   cursor: pointer;
   border-radius: 15px;
+  white-space: nowrap;
+
 }
 
 .button:hover {

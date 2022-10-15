@@ -6,6 +6,28 @@ import "../css/button.css";
 import "../css/messages.css";
 import Tree from 'react-d3-tree';
 
+class HighlightNodeStep {
+	constructor(value) {
+		this.value = value;
+	}
+	forward(svg) {
+		svg.select("#" + this.ids[this.id1]).selectAll("rect, text, line, #arrow").attr("visibility", "visible");
+		svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
+	}
+	fastForward(svg) {
+		this.forward(svg);
+	}
+	backward(svg) {
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		if (this.id1 !== this.id2) {
+			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		}
+	}
+}
+
 export default class avl extends React.Component {
   constructor(props) {
     super(props);
@@ -100,6 +122,38 @@ export default class avl extends React.Component {
       return "custom-link"
     }
   }
+
+  // restart(){
+  //   console.log("RESTART CLICKED");
+  //   d3.select(this.ref.current).select("svg").remove();
+  //   document.getElementById("message").innerHTML = "<h1>Welcome to Binary Search Tree!</h1>";
+  //   i = 0;
+  //   j = 0;
+  //   this.setState({maxLevel: -1})
+  //   this.root = null;
+  //   this.initialize();
+  // }
+
+  // backward(){
+  //     console.log("BACKWARDS CLICKED");
+  // }
+
+  // forward(){
+  //     console.log("FORWARD CLICKED");
+  // }
+
+  // run(){
+  //     console.log("RUN CLICKED");
+
+  // }
+
+  // turnOffRunning(){
+  //     console.log("TURNOFF CLICKED");
+  // }
+
+  // componentDidMount() {
+  //     this.initialize();
+  // }
 
   render() {
     return (

@@ -7,7 +7,6 @@ import "../css/button.css";
 import "../css/messages.css";
 import LabeledNode from "../../foundation/tree/LabeledNode";
 import Edge from "../../foundation/tree/Edge";
-import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 
@@ -350,10 +349,10 @@ export default class binarysearchtree extends React.Component {
         node.rEdge = new Edge(this.ref, "edge" + 6, node.right.x+2.5 + "%", node.left.y+3 + "%", 85 + "%", 40 + "%", "visible");
         node.right.right = new Node(this.ref, val_right3, 85, 40, 6, level===1);
 
-        console.log("node.left.value: " + node.left.value)
-        console.log("node.right.value: " + node.right.value)
-        console.log("node.left.left.value: " + node.left.left.value)
-        console.log("node.left.rigth.value: " + node.left.right.value)
+        // console.log("node.left.value: " + node.left.value)
+        // console.log("node.right.value: " + node.right.value)
+        // console.log("node.left.left.value: " + node.left.left.value)
+        // console.log("node.left.rigth.value: " + node.left.right.value)
 
         steps.push(new EmptyStep())
         messages.push("Starting to work on the tree!");
@@ -362,25 +361,39 @@ export default class binarysearchtree extends React.Component {
 
         while(k < 5){
             if(node.left.left.value > node.left.value || node.left.right.value > node.left.value){
+
+                steps.push(new EmptyStep())
+                messages.push("On the left side, we can see that a triangle forms.");
+
                 if(node.left.left.value > node.left.right.value){
                     temp = node.left.value;
 
-                    steps.push(new EmptyStep());
+                    steps.push(new HighlightNodeStep(node.left.left, null));
                     messages.push( node.left.left.value + " is greater than " + node.left.right.value);
 
-                    steps.push(new HighlightNodeStep(node.left.left, null));
+                    steps.push(new HighlightNodeStep(node.left.right, null));
+                    messages.push( node.left.left.value + " is greater than " + node.left.right.value);
+
+                    steps.push(new UnHighlightNodeStep(node.left.right, null));
                     messages.push("");
 
-                    steps.push(new HighlightNodeStep(node.left.right, null));
-                    messages.push("");
+                    steps.push(new HighlightNodeStep(node.left, null));
+                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
+                    steps.push(new changeValue(node.left, null, node.left.left.value))
+                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
 
                     steps.push(new EmptyStep());
                     messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
-
-                    steps.push(new changeValue(node.left, null,node.left.left.value))
-                    node.left.value = node.left.left.value;
                     steps.push(new changeValue(node.left.left, null, temp))
+                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
+
+                    node.left.value = node.left.left.value;
                     node.left.left.value = temp;
+
+                    steps.push(new UnHighlightNodeStep(node.left.left, null));
+                    messages.push("");
+                    steps.push(new UnHighlightNodeStep(node.left, null));
+                    messages.push("");
                 }
                 else{
                     temp = node.left.value;
@@ -392,50 +405,61 @@ export default class binarysearchtree extends React.Component {
                     messages.push( node.left.right.value + " is greater than " + node.left.left.value);
 
                     steps.push(new HighlightNodeStep(node.left.left, null));
-                    messages.push("");
+                    messages.push( node.left.right.value + " is greater than " + node.left.left.value);
 
                     steps.push(new UnHighlightNodeStep(node.left.left, null));
                     messages.push("");
 
                     steps.push(new HighlightNodeStep(node.left, null));
-                    steps.push(new changeValue(node.left, null,node.left.right.value))
                     messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
-                    node.left.value = node.left.right.value;
+                    steps.push(new changeValue(node.left, null, node.left.right.value))
+                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
 
                     steps.push(new EmptyStep());
-                    steps.push(new changeValue(node.left.right, null, temp))
-                    steps.push(new UnHighlightNodeStep(node.left.right, null));
-                    steps.push(new UnHighlightNodeStep(node.left, null));
+                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
+                    steps.push(new changeValue(node.left.right, null, temp));
+                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
+                    
+                    node.left.value = node.left.right.value;
                     node.left.right.value = temp;
+
+                    steps.push(new UnHighlightNodeStep(node.left.right, null));
                     messages.push("");
-                    messages.push("");
+                    steps.push(new UnHighlightNodeStep(node.left, null));
                     messages.push("");
                 }
             }
             if(node.right.left.value > node.right.value || node.right.right.value > node.right.value){
                 
                 steps.push(new EmptyStep());
-                messages.push( "On the other end, we can see that another triangle forms.");
+                messages.push("On the right side, we can see that another triangle forms.");
 
                 if(node.right.left.value > node.right.right.value){
                     temp = node.right.value;
 
-                    steps.push(new EmptyStep());
-                    messages.push( node.right.left.value + " is greater than " + node.right.right.value);
-
                     steps.push(new HighlightNodeStep(node.right.left, null));
-                    messages.push("");
-
+                    messages.push(node.right.left.value + " is greater than " + node.right.right.value);
                     steps.push(new HighlightNodeStep(node.right.right, null));
+                    messages.push(node.right.left.value + " is greater than " + node.right.right.value);
+
+                    steps.push(new UnHighlightNodeStep(node.right.right, null));
                     messages.push("");
 
-                    steps.push(new EmptyStep());
+                    steps.push(new HighlightNodeStep(node.right, null));
+                    messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
+                    steps.push(new changeValue(node.right, null, node.right.left.value))
                     messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
 
-                    steps.push(new changeValue(node.right, null, node.right.left.value))
-                    node.right.value = node.right.left.value;
                     steps.push(new changeValue(node.right.left, null, temp))
+                    messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
+
+                    node.right.value = node.right.left.value;
                     node.right.left.value = temp;
+
+                    steps.push(new UnHighlightNodeStep(node.right.left, null));
+                    messages.push("");
+                    steps.push(new UnHighlightNodeStep(node.right, null));
+                    messages.push("");
                 }
                 else if(node.right.left.value < node.right.right.value){
                     temp = node.right.value;
@@ -445,50 +469,61 @@ export default class binarysearchtree extends React.Component {
 
                     steps.push(new HighlightNodeStep(node.right.right, null));
                     messages.push( node.right.right.value + " is greater than " + node.right.left.value);
-
                     steps.push(new HighlightNodeStep(node.right.left, null));
-                    messages.push("");
+                    messages.push( node.right.right.value + " is greater than " + node.right.left.value);
 
                     steps.push(new UnHighlightNodeStep(node.right.left, null));
                     messages.push("");
 
                     steps.push(new HighlightNodeStep(node.right, null));
-                    steps.push(new changeValue(node.right, null,node.right.right.value))
                     messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
-                    node.right.value = node.right.right.value;
+                    steps.push(new changeValue(node.right, null, node.right.right.value))
+                    messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
 
-                    steps.push(new EmptyStep());
                     steps.push(new changeValue(node.right.right, null, temp))
+                    messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
+
+                    node.right.value = node.right.right.value;
                     node.right.right.value = temp;
+
                     steps.push(new UnHighlightNodeStep(node.right.right, null));
+                    messages.push("");
                     steps.push(new UnHighlightNodeStep(node.right, null));
-                    messages.push("");
-                    messages.push("");
                     messages.push("");
                 }
             }
             if(node.left.value > root.value || node.right.value > root.value){
                 
                 steps.push(new EmptyStep());
-                messages.push("Now we got to the top triangle, where we have the main root with its childs");
+                messages.push("Now we go to the top triangle, where we have the main root with its childs");
 
                 if(node.left.value > node.right.value){
                     temp = root.value;
 
-                    steps.push(new EmptyStep());
+                    steps.push(new HighlightNodeStep(node.left, null));
                     messages.push( node.left.value + " is greater than " + node.right.value);
 
-                    steps.push(new HighlightNodeStep(node.left, null));
-                    messages.push("");
-
                     steps.push(new HighlightNodeStep(node.right, null));
+                    messages.push( node.left.value + " is greater than " + node.right.value);
+
+                    steps.push(new UnHighlightNodeStep(node.right, null));
                     messages.push("");
 
-                    steps.push(new EmptyStep());
+                    steps.push(new HighlightNodeStep(root, null));
+                    messages.push("So we swap " + node.left.value + " with the parent " + root.value);
+                    steps.push(new changeValue(root, null, node.left.value));
                     messages.push("So we swap " + node.left.value + " with the parent " + root.value);
 
-                    steps.push(new changeValue(root, null, node.left.value))
-                    steps.push(new changeValue(node.left, null, temp))
+                    steps.push(new changeValue(node.left, null, temp));
+                    messages.push("So we swap " + node.left.value + " with the parent " + root.value);
+
+                    root.value = node.left.value;
+                    node.left.value = temp;
+
+                    steps.push(new UnHighlightNodeStep(node.left, null));
+                    messages.push("");
+                    steps.push(new UnHighlightNodeStep(root, null));
+                    messages.push("");
                 }
                 else if(node.left.value < node.right.value){
                     temp = root.value;
@@ -500,23 +535,25 @@ export default class binarysearchtree extends React.Component {
                     messages.push( node.right.value + " is greater than " + node.left.value);
 
                     steps.push(new HighlightNodeStep(node.left, null));
-                    messages.push("");
+                    messages.push( node.right.value + " is greater than " + node.left.value);
 
                     steps.push(new UnHighlightNodeStep(node.left, null));
                     messages.push("");
 
                     steps.push(new HighlightNodeStep(root, null));
+                    messages.push("So we swap " + node.right.value + " with the parent " + root.value);
                     steps.push(new changeValue(root, null, node.right.value))
                     messages.push("So we swap " + node.right.value + " with the parent " + root.value);
-                    root.value = node.right.value;
-
-                    steps.push(new EmptyStep());
+                    
                     steps.push(new changeValue(node.right, null, temp))
-                    node.right.value = temp
+                    messages.push("So we swap " + node.right.value + " with the parent " + root.value);
+
+                    root.value = node.right.value;
+                    node.right.value = temp;
+
                     steps.push(new UnHighlightNodeStep(node.right, null));
+                    messages.push("");
                     steps.push(new UnHighlightNodeStep(root, null));
-                    messages.push("");
-                    messages.push("");
                     messages.push("");
                 }
             }

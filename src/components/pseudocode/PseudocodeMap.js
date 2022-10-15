@@ -4,14 +4,16 @@ export const map = {
     binarysearch: [
         "binarySearch(arr, target) {",
         tab + "let recursiveSearch = function(arr, target, start, end) {",
-        tab + tab + "if (start > end) return false",
+        tab + tab + "if (start > end)",
+        tab + tab + tab + "return false",
         tab + tab + "let mid = (start + end) / 2 );",
-        tab + tab + "if (arr[mid] === target) return true",
-        tab + tab + "if (arr[mid] > target) return recursiveSearch(arr, target, start, mid - 1);",
-        tab + tab + "else return recursiveSearch(arr, target, mid + 1, end);",
-        tab + "}",
-        tab + "if (recursiveSearch(arr, target, 0, arr.length - 1)) found;",
-        tab + "else not found;"
+        tab + tab + "if (arr[mid] === target)",
+        tab + tab + tab + "return true",
+        tab + tab + "if (arr[mid] > target)", 
+        tab + tab + tab + "return recursiveSearch(arr from start..mid-1);",
+        tab + tab + "else",
+        tab + tab + tab + "return recursiveSearch(arr from mid + 1..end);",
+        tab + "}"
     ],
     linearsearch: [
         "linearSearch(arr, target) {",

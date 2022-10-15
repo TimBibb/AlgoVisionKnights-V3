@@ -7,11 +7,6 @@ import "../css/input.css";
 import Line from "../../foundation/pseudocode/Line";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
-
-import { ConsoleView } from "react-device-detect";
-import { Component } from "react";
-import UserInput  from "../../components/userInput/UserInput";
-
 // When nothing in the visualizer changes but you want to push a new message
 // aka for alignment between messages and steps
 class EmptyStep {
@@ -97,9 +92,6 @@ class ColorFound{
 		}
 	}
 }
-
-
-
 export default class binarysearch extends React.Component {
 	constructor(props) {
 		super(props);
@@ -129,25 +121,27 @@ export default class binarysearch extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 	}
-
-
     search(arr, target, ids, length, stepTime){
+		let pseudocodeArr = [];
         let steps = [];
         let messages = [];
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
-	
+		pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 		let recursiveSearch = function (arr, target, start, end) {
 			if (start > end) {
 				messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 				steps.push(new EmptyStep());
+				pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
+				pseudocodeArr.push(HighlightLineStep(3,this.props.lines));
 				return false;
 			}
 
 			let mid = Math.floor((start + end) / 2);
 			messages.push("<h1> Find midpoint from index " + start + " to " + end + "</h1>");
 			steps.push(new FirstColor(mid, ids));
-			
+			//pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+
 			if(arr[mid] === target) {
 				messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
 				steps.push(new ColorFound(mid, ids));
@@ -175,6 +169,7 @@ export default class binarysearch extends React.Component {
 		else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
     }
 	
     // Initializes the data to be used in the visualizer
@@ -334,6 +329,7 @@ export default class binarysearch extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.state.waitTime);
@@ -403,8 +399,8 @@ export default class binarysearch extends React.Component {
 		return (
 			<div>
 				<div class="center-screen" id="banner">	
-					<input type="number" id="value" class="inputValue"></input>
-					<button class="button" onClick={this.handleSearch}>Search</button>
+					{/* <input type="number" id="value" class="inputValue"></input>
+					<button class="button" onClick={this.handleSearch}>Search</button> */}
 					<button class="button" onClick={this.play}>Play</button> 
 		        	<button class="button" onClick={this.pause}>Pause</button>
 		        	<button class="button" onClick={this.restart}>Restart</button>

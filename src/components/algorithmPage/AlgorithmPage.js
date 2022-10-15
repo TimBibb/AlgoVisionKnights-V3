@@ -1,11 +1,10 @@
 import './AlgorithmPage.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Checkbox, FormControlLabel, Typography } from "@material-ui/core";
 
 // Child Components
 import InformationPage from '../informationPage/InformationPage';
 import Visualizer from '../visualizer/Visualizer';
-
 
 function NavigateToDashboard(){
 	window.location.href = "/";
@@ -14,7 +13,13 @@ function NavigateToDashboard(){
 function AlgorithmPage({ path, type, algoPage }) {
 
 	const[show, setShow] = useState(false);
-	const [val, setVal] = useState(false);
+	const [val, setVal] = useState((localStorage.getItem(path) == "true") || false);
+
+	const [isChecked, setChecked] = useState((localStorage.getItem(path) == "true") || false);
+	const onCheckboxChange = (key: string, value: boolean) => {
+		localStorage.setItem(path, value.toString())
+		setChecked(value)
+	};
 
 	return (
 		<div className='AlgorithmPage'> 
@@ -29,12 +34,15 @@ function AlgorithmPage({ path, type, algoPage }) {
 					<FormControlLabel
 						control={
 							<Checkbox
+								value={isChecked}
 								checked={val}
-								onChange={(e) => setVal(e.target.checked)}
+								onChange={(value) => {
+									onCheckboxChange("userCheckbox", value.target.checked); 
+									setVal(value.target.checked)
+								}}
 								style={{
 								color: "#FFC904"
 								}}
-								value="Completed?"
 							/>
 						}
 						label={

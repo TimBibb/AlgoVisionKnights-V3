@@ -10,10 +10,10 @@
 	text-align: center;
 }
 
-.parent-svg {
+/* .parent-svg {
 	display: flex;
 	justify-content: space-around;
-}
+} */
 
 #message-pane {
 	height: 150px;

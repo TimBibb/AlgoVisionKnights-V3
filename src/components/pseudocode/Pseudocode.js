@@ -20,7 +20,7 @@ class HighlightLineStep {
 		// 	pseudocodeSvg.select("#line" + count).attr("visibility", "hidden");
 		// }
         if (d3.select("#pseudoSvg").empty()) return;
-
+        console.log("this.lines = " + this.lines)
 		for (var i = 0; i < this.lines.length; i++) {
 			d3.select("#pseudoSvg").select("#line" + i).attr("visibility", "hidden");
 		}

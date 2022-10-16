@@ -5,6 +5,7 @@ import Disk from "../../foundation/recursion/Disk";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class EmptyStep {
   forward(svg) {}
@@ -364,7 +365,7 @@ export default class Prims extends React.Component {
 
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
@@ -379,7 +380,7 @@ export default class Prims extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward(svg);
 
     this.setState({ stepId: stepId });
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -395,7 +396,7 @@ export default class Prims extends React.Component {
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
 
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -457,6 +458,7 @@ export default class Prims extends React.Component {
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
           <span id="message">

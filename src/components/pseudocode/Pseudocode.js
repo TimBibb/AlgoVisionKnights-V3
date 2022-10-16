@@ -21,7 +21,7 @@ class HighlightLineStep {
 		// }
         if (d3.select("#pseudoSvg").empty()) return;
         console.log("this.lines = " + this.lines)
-		for (var i = 0; i < this.lines.length; i++) {
+		for (let i = 0; i < this.lines.length; i++) {
 			d3.select("#pseudoSvg").select("#line" + i).attr("visibility", "hidden");
 		}
 		d3.select("#pseudoSvg").select("#line" + this.lineNum).attr("visibility", "visible");
@@ -69,16 +69,16 @@ class Pseudocode extends React.Component {
     // }
 
     componentDidMount() {
-        var code = this.getLines(this.algorithm)
+        let code = this.getLines(this.algorithm)
         let pseudocodeSvg = d3.select("#pseudocodeDiv")
 			.append("svg")
 			.attr("width", 400)
-			.attr("height", 550)
+			.attr("height", 620)
 			.attr("id", "pseudoSvg");
 
         this.setState({svg: pseudocodeSvg})
-        var lines = []
-        for (var line in code) {
+        let lines = []
+        for (let line in code) {
             lines.push(new Line(code[line], line, pseudocodeSvg));
             
             // this.props.setLines([...this.props.lines, new Line(code[line], line, pseudocodeSvg)])

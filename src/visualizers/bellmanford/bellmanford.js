@@ -4,6 +4,7 @@ import "./bellmanford.css";
 import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class EmptyStep {
   forward(svg) {}
@@ -302,7 +303,7 @@ export default class BellmanFord extends React.Component {
 
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
@@ -317,7 +318,7 @@ export default class BellmanFord extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward(svg);
 
     this.setState({ stepId: stepId });
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -333,7 +334,7 @@ export default class BellmanFord extends React.Component {
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
 
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -390,10 +391,11 @@ export default class BellmanFord extends React.Component {
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
           <span id="message">
-            <h1>Welcome to Bellman Ford!</h1>
+            <h1 id="message-pane">Welcome to Bellman Ford!</h1>
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>

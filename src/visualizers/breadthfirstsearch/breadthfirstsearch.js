@@ -5,6 +5,7 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 function randInRange(lo, hi) {
   return Math.floor(Math.random() * (hi - lo)) + lo;
@@ -468,7 +469,7 @@ export default class BreadthFirstSearch extends React.Component {
     console.log(this.state.steps[this.state.stepId]);
     this.setState({ stepId: this.state.stepId + 1 });
 
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
@@ -483,7 +484,7 @@ export default class BreadthFirstSearch extends React.Component {
     for (const step of this.state.steps[stepId]) step.backward(svg);
   
     this.setState({stepId: stepId});
-    d3.timeout(this.turnOffRunning, this.state.waitTime);
+    d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
@@ -498,7 +499,7 @@ export default class BreadthFirstSearch extends React.Component {
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
 
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.state.waitTime);
+    d3.timeout(this.run, this.props.waitTime);
   }
 
   play() {
@@ -523,7 +524,7 @@ export default class BreadthFirstSearch extends React.Component {
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward(svg);
       
-      d3.timeout(this.turnOffRunning, this.state.waitTime);
+      d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     this.setState({ running: false });
@@ -556,10 +557,11 @@ export default class BreadthFirstSearch extends React.Component {
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
           <span id="message">
-            <h1>Welcome to Breadth First Search!</h1>
+            <h1 id="message-pane">Welcome to Breadth First Search!</h1>
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>

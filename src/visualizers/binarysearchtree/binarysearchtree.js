@@ -40,7 +40,7 @@ class NewNodeStep {
     forward(svg) {
 		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
         svg.select("#" + this.node.id).attr("visibility", "visible");
-        svg.select("#" + this.node.node.textId).attr("visibility", "visible");
+        svg.select("#" + this.node.textId).attr("visibility", "visible");
         console.log(" EDGE EXISTS " + this.edge)
         if (this.edge) {
             svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
@@ -59,7 +59,7 @@ class HighlightNodeStep {
     forward(svg) {
 		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
         svg.select("#" + this.node.id).attr("visibility", "visible");
-        svg.select("#" + this.node.node.textId).attr("visibility", "visible");
+        svg.select("#" + this.node.textId).attr("visibility", "visible");
         if (this.edge) {
             svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
             svg.select("#" + this.edge.id).attr("visibility", "visible");
@@ -165,13 +165,12 @@ class Tree {
 }
 
 class Node {
-    constructor(ref, value, x, y, i, level, leftEdge, rightEdge) {
+    constructor(ref, value, x, y, i, leftEdge, rightEdge) {
         this.value = value;
         this.left = null;
         this.right = null;
         this.x = x;
         this.y = y;
-        this.level = level;
         this.lEdge = leftEdge;
         this.rEdge = rightEdge;
         this.id =  "node" + i;
@@ -202,7 +201,6 @@ export default class binarysearchtree extends React.Component {
             running: false,
             stepId: 0,
             messages: [],
-            maxLevel: 0,
             running: false,
             root: null
         };
@@ -301,7 +299,7 @@ export default class binarysearchtree extends React.Component {
                             temp_y = node.y + 10;
                             temp_x2 = node.x - 17 + tempMod;
                             temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.left = new Node(this.ref, val, temp_x, temp_y, i);
                             node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
@@ -321,7 +319,7 @@ export default class binarysearchtree extends React.Component {
                             temp_y = node.y + 10;
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.right = new Node(this.ref, val, temp_x, temp_y, i);
                             node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             // if (level > this.state.maxLevel) {
@@ -409,7 +407,7 @@ export default class binarysearchtree extends React.Component {
                             temp_y2 = node.y + 8;
 
                             node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.left = new Node(this.ref, val, temp_x, temp_y, i);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no left child.");
@@ -452,7 +450,7 @@ export default class binarysearchtree extends React.Component {
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
                             node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+                            node.right = new Node(this.ref, val, temp_x, temp_y, i);
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no right child.");
@@ -566,7 +564,7 @@ export default class binarysearchtree extends React.Component {
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "Welcome to Binary Search!";
 
-		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
+		this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null});
         i = 0;
         j = 0;
 

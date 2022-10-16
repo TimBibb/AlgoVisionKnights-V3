@@ -5,7 +5,7 @@ import createDefaultTree from "../../foundation/tree/CreateDefaultTree";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
-import LabeledNode from "../../foundation/tree/LabeledNode";
+import LabeledNode from "../../foundation/avl/LabeledNode";
 import Edge from "../../foundation/tree/Edge";
 import { MessageSharp } from "@material-ui/icons";
 import { tree } from "d3";

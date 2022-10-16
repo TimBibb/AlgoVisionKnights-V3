@@ -14,3 +14,9 @@
 		padding: 17px 0px 0px 0px;
 	}
 }
+
+.progress-header {
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 24pt !important;
+}

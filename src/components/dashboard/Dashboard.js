@@ -27,7 +27,8 @@ function Dashboard({ categories, inCategory }) {
 
 	return (
 		<div style={{alignItems: "center"}}>
-			<ProgressBar animated variant="warning" now={completedAlgorithms} label={`${completedAlgorithms}%`} style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
+			<h3 className='progress-header'>Completion Progress</h3>
+			<ProgressBar animated variant="warning" now={completedAlgorithms} label={`${completedAlgorithms}%`} style={{width: "80%", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			<div className='Dashboard'>
 				<br/><br/>
 				{categories.map((category) => (

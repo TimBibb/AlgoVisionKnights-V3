@@ -376,6 +376,7 @@ export default class binarysearchtree extends React.Component {
         let q = [];
         // for usage of ranWords: https://www.npmjs.com/package/random-words
         var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
+        // var ranWords = "stone", issues with "never"
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -396,46 +397,6 @@ export default class binarysearchtree extends React.Component {
         MAX_NODE = (arr.letters.length * 2) - 1;
         console.log(MAX_NODE)
 
-        // console.log(arr.letters)
-        // console.log(arr.numbers)
-
-        //root = new Node(this.ref, arr.letters[0] + " " + arr.numbers[0], x, y, 0);
-
-        //constructor(ref, visibility, display, x, y, i, level, character, name, value, leftEdge, rightEdge)
-
-        // for(var i = 0; i < arr.letters.length; i++){
-        //     arr.node[i] = new Node(this.ref,  "hidden", arr.numbers[i], 30, 30, i, level, arr.letters[i], arr.letters[i] + arr.numbers[i])
-        // }
-
-        // class Node {
-        //     constructor(ref, visibility, display, x, y, i, level, character, name, value, leftEdge, rightEdge) {
-        //         this.display = display;
-        //         this.left = null;
-        //         this.right = null;
-        //         this.x = x;
-        //         this.y = y;
-        //         this.level = level;
-        //         this.lEdge = leftEdge;
-        //         this.rEdge = rightEdge;
-        //         this.character = character;
-        //         this.name = name;
-        //         this.value = value;
-        //         this.id =  "node" + i;
-        //         this.textId = "label" + i;
-        
-        //         this.node = new LabeledNode(
-        //             ref,
-        //             this.id,
-        //             this.textId,
-        //             this.x + "%",
-        //             this.y + "%",
-        //             this.display,
-        //             visibility,
-        //             "white"
-        //         );
-        //     }
-        // }
-
         for (let i = 0; i < arr.letters.length; i++) {
             let hn = new Node(this.ref, "hidden", 0, x, y, i);
    
@@ -455,6 +416,8 @@ export default class binarysearchtree extends React.Component {
         console.log(arr)
         console.log(q.length)
         console.log(q)
+
+        var n = 0, m = 0, w = 0, p = 0, h = 0;
 
         let f = q;
 
@@ -479,7 +442,7 @@ export default class binarysearchtree extends React.Component {
             if(!root){
 
                 // new node f which is equal
-                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
 
                 f.left = new Node(this.ref, "visible", left.display, x+modx-tempx+l, y-modx+tempy-l, i)
                 f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
@@ -490,13 +453,34 @@ export default class binarysearchtree extends React.Component {
                 moveRightx = x+modx-tempx+l;
                 moveRighty = y-modx+tempy-l;
                 moveRightParentx = x+modx;
-                moveRightParenty = y-modx;
+                moveRightParenty = y-modx-10;
 
+                n++;
+                console.log("!root: " + n);
                 //console.log(f)
+
+                f.value = left.value + right.value;
+                f.display = left.value + right.value;
+                f.character = '-';
+    
+                // // first extracted node as left child.
+                f.left = x;
+    
+                // // second extracted node as the right child.
+                f.right = y;
+    
+                // marking the f node as the root node.
+                root = f;
+
+                // console.log(f)
+    
+                // add this node to the priority-queue.
+                q.push(f);
+                q.sort(function(a,b){return a.data-b.data;});
             }
             if(left.character == '-' && right.character != '-'){
                 // new node f which is equal
-                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
                 
                 f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
                 //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
@@ -504,31 +488,167 @@ export default class binarysearchtree extends React.Component {
 
                 f.left.display = left.display;
                 f.right.display = right.display;
+
+                m++;
+                console.log("left.character == '-' && right.character != '-': " + m);
+
+                f.value = left.value + right.value;
+                f.display = left.value + right.value;
+                f.character = '-';
+    
+                // // first extracted node as left child.
+                f.left = x;
+    
+                // // second extracted node as the right child.
+                f.right = y;
+    
+                // marking the f node as the root node.
+                root = f;
+
+                // console.log(f)
+    
+                // add this node to the priority-queue.
+                q.push(f);
+                q.sort(function(a,b){return a.data-b.data;});
             }
             if(right.character == '-' && left.character != '-'){
+                console.log(k)
+                if(k < 20){
                 // new node f which is equal
-                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
-                
-                f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
-                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
-                f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l, i)
+                    let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-20, i);
+                    
+                    f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l-10, i)
+                    //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                    f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l-10, i)
 
-                f.left.display = left.display;
-                f.right.display = right.display;
+                    f.left.display = left.display;
+                    f.right.display = right.display;
+
+                    w++;
+                    console.log((x+modx-tempx+l))
+                    console.log((y-modx+tempy-l))
+                    console.log("right.character == '-' && left.character != '-': " + w);
+                    console.log(k)
+                }
+                if(k >= 20){
+                    let f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+48, moveRightParenty-30, i);
+                    
+                    f.left = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
+                    //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                    f.right = new Node(this.ref, "visible", left.display, moveRightParentx+30, moveRightParenty, i)
+
+                }
+
+                f.value = left.value + right.value;
+                f.display = left.value + right.value;
+                f.character = '-';
+    
+                // // first extracted node as left child.
+                f.left = x;
+    
+                // // second extracted node as the right child.
+                f.right = y;
+    
+                // marking the f node as the root node.
+                root = f;
+
+                // console.log(f)
+    
+                // add this node to the priority-queue.
+                q.push(f);
+                q.sort(function(a,b){return a.data-b.data;});
             }
             if(right.character == '-' && left.character == '-'){
-                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx, i);
-                
-                f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
-                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
-                f.right = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
+
+                if(k <= 20){
+
+                    let f = new Node(this.ref, "visible", left.value + right.value, x+modx-7, y-modx-10, i);
+                    
+                    f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
+                    //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                    f.right = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
+
+                    p++;
+                    console.log("right.character == '-' && left.character == '-': " + p);
+
+                    f.value = left.value + right.value;
+                    f.display = left.value + right.value;
+                    f.character = '-';
+        
+                    // // first extracted node as left child.
+                    f.left = x;
+        
+                    // // second extracted node as the right child.
+                    f.right = y;
+        
+                    // marking the f node as the root node.
+                    root = f;
+
+                    // console.log(f)
+        
+                    // add this node to the priority-queue.
+                    q.push(f);
+                    q.sort(function(a,b){return a.data-b.data;});
+                }
+                else if(k > 20){
+                    let f = new Node(this.ref, "visible", left.value + right.value, x+modx-35, y-modx-10, i);
+                    
+                    f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
+                    //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                    f.right = new Node(this.ref, "visible", right.display, moveRightParentx+48, moveRightParenty-30, i)
+
+                    p++;
+                    console.log("right.character == '-' && left.character == '-': " + p);
+
+                    f.value = left.value + right.value;
+                    f.display = left.value + right.value;
+                    f.character = '-';
+        
+                    // // first extracted node as left child.
+                    f.left = x;
+        
+                    // // second extracted node as the right child.
+                    f.right = y;
+        
+                    // marking the f node as the root node.
+                    root = f;
+
+                    // console.log(f)
+        
+                    // add this node to the priority-queue.
+                    q.push(f);
+                    q.sort(function(a,b){return a.data-b.data;});
+                }
             }
             if(right.character != '-' && left.character != '-' && k >= 10){
+                
                 let f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+65, moveRightParenty, i);
 
                 f.left = new Node(this.ref, "visible", left.display, moveRightx+60, moveRighty, i)
                 // console.log("f.left: x = " + (x-modx+tempx-l) + " y = " + (y+modx-tempy+l))
                 f.right = new Node(this.ref, "visible", right.display, moveRightx+100, moveRighty, i)
+                
+                h++;
+                console.log("right.character != '-' && left.character != '-' && k >= 10: " + h);
+
+                f.value = left.value + right.value;
+                f.display = left.value + right.value;
+                f.character = '-';
+    
+                // // first extracted node as left child.
+                f.left = x;
+    
+                // // second extracted node as the right child.
+                f.right = y;
+    
+                // marking the f node as the root node.
+                root = f;
+
+                // console.log(f)
+    
+                // add this node to the priority-queue.
+                q.push(f);
+                q.sort(function(a,b){return a.data-b.data;});
             }
 
             // if(left.character == '-' || right.character == '-'){
@@ -552,24 +672,27 @@ export default class binarysearchtree extends React.Component {
 
             // to the sum of the frequency of the two nodes
             // assigning values to the f node.
-            f.value = left.value + right.value;
-            f.display = left.value + right.value;
-            f.character = '-';
-   
-            // // first extracted node as left child.
-            f.left = x;
-   
-            // // second extracted node as the right child.
-            f.right = y;
-   
-            // marking the f node as the root node.
-            root = f;
 
-            console.log(f)
-   
-            // add this node to the priority-queue.
-            q.push(f);
-            q.sort(function(a,b){return a.data-b.data;});
+            // f.value = left.value + right.value;
+            // f.display = left.value + right.value;
+            // f.character = '-';
+
+            // // // first extracted node as left child.
+            // f.left = x;
+
+            // // // second extracted node as the right child.
+            // f.right = y;
+
+            // // marking the f node as the root node.
+            // root = f;
+
+            // // console.log(f)
+
+            // // add this node to the priority-queue.
+            // q.push(f);
+            // q.sort(function(a,b){return a.data-b.data;});
+            
+
             k += 10;
             l += 5;
         }

@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
 	forward(svg) {
@@ -366,56 +367,69 @@ export default class BubbleSort extends React.Component {
 
 	sort(arr, ids, size, stepTime)
 	{
-		var steps = [];
-		var messages = [];
-        var i, j;
+		let steps = [];
+		let messages = [];
+		let pseudocodeArr = [];
+        let i, j;
 
 		messages.push("<h1>Beginning Bubble Sort!</h1>");
 		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+
 
         for (i = 0; i < size; i++) {
             messages.push("<h1>Select the leftmost element.</h1>");
 		    steps.push(new BubbleSwapStep(0, 0, ids));
+			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 
             for(j = 0; j < size - i - 1; j++){
                 messages.push("<h1>Attempt to Bubble Up.</h1>");
 		        steps.push(new QSwapStep(j+1, ids));
-                
+                pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
                 if (arr[j] > arr[j+1]) {
 					messages.push("<h1>" + arr[j] + " > " + arr[j+1] + "</h1>");
 		            steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
                     messages.push("<h1>Bubble Up!</h1>");
 		            steps.push(new SwapStep(j, j+1, ids, stepTime));
                     [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
 
                     messages.push("<h1>Bubble Up!</h1>");
 		            steps.push(new UncolorStep(j, ids));
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
                 }
                 else {
 					messages.push("<h1>" + arr[j] + " < " + arr[j + 1] + "</h1>");
 		            steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
                     messages.push("<h1>No change.</h1>");
 		            steps.push(new UncolorStep(j+1, ids));
+					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
                     messages.push("<h1>Increment our Bubble pointer.</h1>");
                     steps.push(new BubbleSwapStep(j, j+1, ids, stepTime));
+					pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
                 }
             }
 
 			messages.push("<h1>Reached the end of the unsorted array.</h1>");
 			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
             messages.push("<h1>" + arr[j] + " sorted.</h1>");
 		    steps.push(new SortedStep(j, ids));
-
+			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
             messages.push("<h1>" + arr[j] + " is now it its sorted position.</h1>");
 		    steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
             if (i !== size - 1) {
                 messages.push("<h1>Reset our Bubble pointer.</h1>");
 		        steps.push(new EmptyStep());
+				pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
             }
         } 
 
@@ -427,13 +441,14 @@ export default class BubbleSort extends React.Component {
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
 
 		console.log(steps);
 		console.log(messages);
 	}
 
 	dataInit(size) {
-		var arr = [];
+		let arr = [];
 
 		// fills arr with random numbers [15, 70]
 		for (let i = 0; i < size; i++)
@@ -453,12 +468,12 @@ export default class BubbleSort extends React.Component {
 			.domain([0, d3.max(arr)])
 			.range([0, height]);
 
-		var svg = d3.select(ref)
+		let svg = d3.select(ref)
 			.append("svg")
 				.attr("width", (size * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
-		var bars = svg.selectAll(".bar")
+		let bars = svg.selectAll(".bar")
 					.data(arr)
 					.enter().append("g")
 					.attr("class", "bar")
@@ -587,7 +602,7 @@ export default class BubbleSort extends React.Component {
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
 
-		var stepId = this.state.stepId - 1;
+		let stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Bubble Sort!</h1>" : this.state.messages[stepId - 1];
@@ -602,6 +617,7 @@ export default class BubbleSort extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
@@ -667,7 +683,14 @@ export default class BubbleSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Bubble Sort!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"bubblesort"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 
 				{/* <div class="button-location">
 					<button class="button" onClick={this.NavigateToDashboard}>Dashboard</button>

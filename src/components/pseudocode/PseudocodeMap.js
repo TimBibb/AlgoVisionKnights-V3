@@ -15,6 +15,17 @@ export const map = {
         tab + tab + tab + "return recursiveSearch(arr from mid + 1..end);",
         tab + "}"
     ],
+    bubblesort: [
+        "function bubbleSort( arr, n) {",
+        tab + "var i, j;",
+        tab + "for (i = 0; i < n-1; i++) {",
+        tab + tab + tab + "for (j = 0; j < n-i-1; j++) {",
+        tab + tab + tab + tab + "if (arr[j] > arr[j+1])",
+        tab + tab + tab + tab + tab + "swap(arr,j,j+1);",
+        tab + tab + tab + "}", 
+        tab + "}",
+        "}"
+    ],
     linearsearch: [
         "linearSearch(arr, target) {",
         tab + "for (let i = 0; i < arr.length; i++) {",

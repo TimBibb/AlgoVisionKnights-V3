@@ -131,8 +131,6 @@ export default class binarysearch extends React.Component {
         steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
 		[steps, messages, pseudocodeArr] = this.recursiveSearch(arr, target, 0, arr.length - 1, ids, steps, messages, pseudocodeArr)
-		// if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
-		// else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
@@ -168,7 +166,6 @@ export default class binarysearch extends React.Component {
 
 		if (arr[mid] > target) {
 			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
-			//steps.push(new EmptyStep());
 			steps.push(new OldColor(mid,ids));
 			pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
@@ -186,7 +183,7 @@ export default class binarysearch extends React.Component {
 	
     // Initializes the data to be used in the visualizer
 	dataInit(size) {
-		var arr = [];
+		let arr = [];
 		// fills arr with random numbers [15, 70]
 		for (let i = 0; i < size; i++) arr[i] = Math.floor(Math.random() * 100);
 		arr.sort(function (current,next) { return current - next});
@@ -207,12 +204,12 @@ export default class binarysearch extends React.Component {
 			.domain([0, d3.max(arr)])
 			.range([0, height]);
 
-		var svg = d3.select(ref)
+		let svg = d3.select(ref)
 			.append("svg")
 				.attr("width", (size * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
-		var bars = svg.selectAll(".bar")
+		let bars = svg.selectAll(".bar")
 					.data(arr)
 					.enter().append("g")
 					.attr("class", "bar")
@@ -325,7 +322,7 @@ export default class binarysearch extends React.Component {
 		console.log("BACKWARD CLICKED");
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
-		var stepId = this.state.stepId - 1;
+		let stepId = this.state.stepId - 1;
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];

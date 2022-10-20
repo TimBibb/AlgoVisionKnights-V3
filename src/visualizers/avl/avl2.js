@@ -108,6 +108,19 @@ class UnHighlightPathStep {
         }
     }
 }
+// class UnHighlightPathStep {
+//     constructor(node, edge) {
+//         this.node = node;
+//         this.edge = edge;
+//     }
+
+//     forward(svg) {
+//         svg.select("#" + this.node.id).attr("stroke", GRAY);
+//         if (this.edge) {
+//             svg.select("#" + this.edge.id).style("stroke", GRAY);
+//         }
+//     }
+// }
 
 class Tree {
     constructor() {
@@ -274,7 +287,7 @@ export default class avl extends React.Component {
 
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
-        this.add = this.add.bind(this);
+        //this.add = this.add.bind(this);
 		this.restart = this.restart.bind(this);
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
@@ -335,76 +348,76 @@ export default class avl extends React.Component {
     //     // this.adjustDistances(root.right, level+1, "right");
     // }
 
-    add(){
-        console.log("ADD CLICKED");
-        var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
+    // add(){
+    //     console.log("ADD CLICKED");
+    //     var val = Math.floor(Math.random() * 100);
+    //     var level = 0;
+    //     var modifier = 4;
 
-        if(i < MAX_NODE){
-            if(!this.state.root) {
-                this.state.root = new Node(this.ref, val, x, y, i);
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                console.log(this.state.root);
-                i++;
-            } else {
-                let node = this.state.root;
-                //y += 10;
-                level = 0
+    //     if(i < MAX_NODE){
+    //         if(!this.state.root) {
+    //             this.state.root = new Node(this.ref, val, x, y, i);
+    //             //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
+    //             console.log(this.state.root);
+    //             i++;
+    //         } else {
+    //             let node = this.state.root;
+    //             //y += 10;
+    //             level = 0
 
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if(val < node.value) {
-                        if(node.left != null) {
-                            node = node.left;
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
-                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    } else {
-                        if(node.right != null) {
-                            node = node.right;
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    }
-                    level++;
-                }
-            }
-        } else {
-            console.log("Max node reached please restart tree.");
-            //this.messages.push("<h1>Max node reached please restart tree.</h1>");
-            document.getElementById("message").innerHTML = "Max node reached please restart tree.";
-            return;
-        }
-    }
+    //             while(true) {
+    //                 var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
+    //                 //console.log(node.value);
+    //                 if(val < node.value) {
+    //                     if(node.left != null) {
+    //                         node = node.left;
+    //                     } else {
+    //                         temp_x = node.x - 20 + tempMod;
+    //                         temp_y = node.y + 10;
+    //                         temp_x2 = node.x - 17 + tempMod;
+    //                         temp_y2 = node.y + 8;
+    //                         node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+    //                         node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+    //                         //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
+    //                         // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
+    //                         // if (level > this.state.maxLevel) {
+    //                         //     this.setState({maxLevel: level});
+    //                         //     this.adjustDistances(this.state.root, level);
+    //                         // }
+    //                         i++;
+    //                         j++;
+    //                         return;
+    //                     }
+    //                 } else {
+    //                     if(node.right != null) {
+    //                         node = node.right;
+    //                     } else {
+    //                         temp_x = node.x + 20 - tempMod;
+    //                         temp_y = node.y + 10;
+    //                         temp_x2 = node.x + 17 - tempMod;
+    //                         temp_y2 = node.y + 8;
+    //                         node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
+    //                         node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+    //                         //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
+    //                         // if (level > this.state.maxLevel) {
+    //                         //     this.setState({maxLevel: level});
+    //                         //     this.adjustDistances(this.state.root, level);
+    //                         // }
+    //                         i++;
+    //                         j++;
+    //                         return;
+    //                     }
+    //                 }
+    //                 level++;
+    //             }
+    //         }
+    //     } else {
+    //         console.log("Max node reached please restart tree.");
+    //         //this.messages.push("<h1>Max node reached please restart tree.</h1>");
+    //         document.getElementById("message").innerHTML = "Max node reached please restart tree.";
+    //         return;
+    //     }
+    // }
 
     simulate() {
         console.log("SIMULATING");
@@ -706,12 +719,12 @@ export default class avl extends React.Component {
                     <button class="button" onClick={this.play}>Play</button>
                     <button class="button" onClick={this.playPreorder}>Preorder</button>
                     {/* <button class="button" onClick={this.pause}>Pause</button> */}
-                    <button class="button" onClick={this.add}>Add</button>
+                    {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
                     {/* <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button> */}
                 </div>
-                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search Tree!</h1></span></div>
+                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to AVL!</h1></span></div>
                 <table>
                     <tr>
                         <div ref={this.ref} class=""></div>

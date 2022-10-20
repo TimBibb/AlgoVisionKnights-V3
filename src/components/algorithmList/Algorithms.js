@@ -104,6 +104,12 @@ const algorithms = {
 			description: <HashTable />,
 		},
 		{
+			name: 'Hash Table Quadratic Probing',
+			path: 'hashtablequadratic',
+			type: 'js',
+			description: <HashTable />,
+		},
+		{
 			name: 'Tries',
 			path: 'tries'
 		},

@@ -104,6 +104,12 @@ const algorithms = {
 			description: <HashTable />,
 		},
 		{
+			name: 'Hash Table Quadratic Probing',
+			path: 'hashtablequadratic',
+			type: 'js',
+			description: <HashTable />,
+		},
+		{
 			name: 'Tries',
 			path: 'tries'
 		},
@@ -178,19 +184,19 @@ const algorithms = {
 		{
 			name: 'Preorder',
 			path: 'preorder',
-			type: 'unity',
+			type: 'js',
 			description: <Preorder />,
 		},
 		{
 			name: 'Inorder',
 			path: 'inorder',
-			type: 'unity',
+			type: 'js',
 			description: <Inorder />,
 		},
 		{
 			name: 'Postorder',
 			path: 'postorder',
-			type: 'unity',
+			type: 'js',
 			description: <Postorder />,
 		},
 		{

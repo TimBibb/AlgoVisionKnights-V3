@@ -2,7 +2,7 @@
 	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-start;
+	justify-content: center;
 	align-content: baseline;
 	overflow: overlay;
 	padding: 17px 0px 0px 30px;

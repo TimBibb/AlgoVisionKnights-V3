@@ -60,12 +60,12 @@ const algorithms = {
 			type: 'js',
 			description: <QuickSort />,
 		},
-		{
-			name: 'Merge Sort',
-			path: 'mergesort',
-			type: 'js',
-			description: <MergeSort />,
-		},
+		// {
+		// 	name: 'Merge Sort',
+		// 	path: 'mergesort',
+		// 	type: 'js',
+		// 	description: <MergeSort />,
+		// },
 		{
 			name: 'Heap Sort',
 			path: 'heapsort',
@@ -109,18 +109,18 @@ const algorithms = {
 			type: 'js',
 			description: <HashTable />,
 		},
-		{
-			name: 'Tries',
-			path: 'tries'
-		},
-		{
-			name: 'Queues',
-			path: 'queues'
-		},
-		{
-			name: 'Stacks',
-			path: 'stacks'
-		},
+		// {
+		// 	name: 'Tries',
+		// 	path: 'tries'
+		// },
+		// {
+		// 	name: 'Queues',
+		// 	path: 'queues'
+		// },
+		// {
+		// 	name: 'Stacks',
+		// 	path: 'stacks'
+		// },
 	],
 	graphs: [
 		// { name: 'Overview', description: <Graphs /> },
@@ -154,21 +154,21 @@ const algorithms = {
 			type: 'js',
 			description: <Prims />,
 		},
-		{
-			name: "Kruskal's",
-			path: 'kruskals',
-			type: 'js',
-			description: <Dijkstras />,
-		},
+		// {
+		// 	name: "Kruskal's",
+		// 	path: 'kruskals',
+		// 	type: 'js',
+		// 	description: <Dijkstras />,
+		// },
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },
-		{ 
-			name: 'AVL', 
-			path: 'avl', 
-			type: 'js', 
-			description: <AVL /> 
-		},
+		// { 
+		// 	name: 'AVL', 
+		// 	path: 'avl', 
+		// 	type: 'js', 
+		// 	description: <AVL /> 
+		// },
 		// {
 		// 	name: 'Binary Search Tree',
 		// 	path: 'binarysearchtre',
@@ -261,10 +261,10 @@ const algorithms = {
 			type: 'js',
 			description: <TowersofHanoi />
 		},
-		{
-			name: 'Floodfill',
-			path: 'floodfill'
-		},
+		// {
+		// 	name: 'Floodfill',
+		// 	path: 'floodfill'
+		// },
 	],
 };
 

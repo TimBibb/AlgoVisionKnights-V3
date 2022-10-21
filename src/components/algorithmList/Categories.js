@@ -46,11 +46,11 @@ const groups = [
 	// 	title: 'Divide and Conquer',
 	// 	description: 'Yet to be filled.',
 	// },
-	{
-		path: 'dynamicprogramming',
-		title: 'Dynamic Programming',
-		description: 'Dynamic Programming is mainly an optimization over plain recursion. The idea is to simply store the results of subproblems, so that we do not have to re-compute them when needed later. This simple optimization reduces time complexities from exponential to polynomial.',
-	},
+	// {
+	// 	path: 'dynamicprogramming',
+	// 	title: 'Dynamic Programming',
+	// 	description: 'Dynamic Programming is mainly an optimization over plain recursion. The idea is to simply store the results of subproblems, so that we do not have to re-compute them when needed later. This simple optimization reduces time complexities from exponential to polynomial.',
+	// },
 	{
 		path: 'recursion',
 		title: 'Recursion',

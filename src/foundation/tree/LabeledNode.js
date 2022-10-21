@@ -1,5 +1,5 @@
 import UnlabeledNode from "./UnlabeledNode";
-import Number from "../Number";
+import Number from "./Number";
 
 class LabeledNode {
   constructor(ref, circleId, textId, cx, cy, text, visibility, textColor, level) {

@@ -157,6 +157,7 @@ export default class LinearSearch extends React.Component {
 		var pseudocodeArr = [];
 
         messages.push("<h1>Beginning Linear Search!</h1>");
+		messages.push("<h1>Beginning Linear Search!</h1>");
         steps.push(new EmptyStep());
 		steps.push(new FirstColor(0, ids));
 		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
@@ -167,18 +168,20 @@ export default class LinearSearch extends React.Component {
 			steps.push(new EmptyStep());
             messages.push("<h1>Searching Index [" + i + "] for Value " + this.state.target + ".</h1>");
 			pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
-            if(arr[i] == this.state.target){
+            if(arr[i] === this.state.target){
 				steps.push(new ColorFound(i, ids));
                 messages.push("<h1>Found Item at Index [" + i + "].</h1>");
-				messages.push("<h1>Linear Search Complete!<h1>");
 				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
-				// pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+
+				steps.push(new EmptyStep());
+				messages.push("<h1>Linear Search Complete!<h1>");
+				pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 				break;
             }
             else if(arr[i] != this.state.target){
 				steps.push(new ColorSwapStep(i, i+1, ids));
                 messages.push("<h1>" + arr[i] + " does NOT equal " + this.state.target + ".</h1>");
-				pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
             }
         }
 

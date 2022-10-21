@@ -131,8 +131,6 @@ export default class binarysearch extends React.Component {
         steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
 		[steps, messages, pseudocodeArr] = this.recursiveSearch(arr, target, 0, arr.length - 1, ids, steps, messages, pseudocodeArr)
-		// if (this.recursiveSearch(arr, target, 0, arr.length - 1)) console.log("Found");
-		// else console.log("Not Found");
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
@@ -155,29 +153,52 @@ export default class binarysearch extends React.Component {
 		steps.push(new FirstColor(mid, ids));
 		pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
+		messages.push("<h1>Check to see if we found the target</h1>");
+		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
 		if(arr[mid] === target) {
 			messages.push("<h1>Target " + target + " found at index [" + mid + "]</h1>");
-			steps.push(new ColorFound(mid, ids));
+			steps.push(new EmptyStep());
 			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
+			messages.push("<h1>Binary Search is complete!</h1>");
+			steps.push(new ColorFound(mid, ids));
+			pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 			return [steps, messages, pseudocodeArr];
 		}
 
 		messages.push("<h1>" + target + " does NOT equal to " + arr[mid] + "</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
+		messages.push("<h1>Now to see if we will check the lesser or greater half</h1>");
+		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+
+		messages.push("<h1>Is " + arr[mid] + " > " + target + "?</h1>");
+		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
 
 		if (arr[mid] > target) {
-			messages.push("<h1> If midpoint value " + arr[mid] + " is GREATER than " + target + ". Get next midpoint on the LEFT side of current midpoint</h1>");
-			//steps.push(new EmptyStep());
+			messages.push("<h1> Yes " + arr[mid] + " is GREATER than " + target + "</h1>");
 			steps.push(new OldColor(mid,ids));
-			pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+
+			messages.push("<h1>Get next midpoint on the LEFT side of current midpoint</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
 
 			return this.recursiveSearch(arr,  target, start, mid-1, ids, steps, messages, pseudocodeArr);
 		}
 		else {
-			messages.push("<h1> If midpoint value " + arr[mid] + " is LESSER than " + target + ". Get next midpoint on the RIGHT side of current midpoint</h1>");
+			messages.push("<h1> No, " + arr[mid] + " is LESS than " + target + "</h1>");
 			steps.push(new OldColor(mid,ids));
-			pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
+
+			messages.push("<h1>So now we will check the RIGHT side of the current midpoint</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
 
 			return this.recursiveSearch(arr,  target, mid+1, end, ids, steps, messages, pseudocodeArr);
 		}
@@ -186,7 +207,7 @@ export default class binarysearch extends React.Component {
 	
     // Initializes the data to be used in the visualizer
 	dataInit(size) {
-		var arr = [];
+		let arr = [];
 		// fills arr with random numbers [15, 70]
 		for (let i = 0; i < size; i++) arr[i] = Math.floor(Math.random() * 100);
 		arr.sort(function (current,next) { return current - next});
@@ -207,12 +228,12 @@ export default class binarysearch extends React.Component {
 			.domain([0, d3.max(arr)])
 			.range([0, height]);
 
-		var svg = d3.select(ref)
+		let svg = d3.select(ref)
 			.append("svg")
 				.attr("width", (size * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
-		var bars = svg.selectAll(".bar")
+		let bars = svg.selectAll(".bar")
 					.data(arr)
 					.enter().append("g")
 					.attr("class", "bar")
@@ -325,7 +346,7 @@ export default class binarysearch extends React.Component {
 		console.log("BACKWARD CLICKED");
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
-		var stepId = this.state.stepId - 1;
+		let stepId = this.state.stepId - 1;
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];

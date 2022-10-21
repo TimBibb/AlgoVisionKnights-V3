@@ -1,8 +1,6 @@
 import React from "react";
-import "./binarysearchtree.css";
+import "./postorder.css";
 import * as d3 from "d3";
-import createDefaultTree from "../../foundation/tree/CreateDefaultTree";
-import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
 import LabeledNode from "../../foundation/tree/LabeledNode";
@@ -31,25 +29,6 @@ class EmptyStep {
     backward() {}
 }
 
-class NewNodeStep {
-    constructor(node, edge) {
-        this.node = node;
-        this.edge = edge;
-    }
-
-    forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.node.id).attr("visibility", "visible");
-        svg.select("#" + this.node.textId).attr("visibility", "visible");
-        console.log(" EDGE EXISTS " + this.edge)
-        if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
-            svg.select("#" + this.edge.id).attr("visibility", "visible");
-        }
-		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
-	}
-}
-
 class HighlightNodeStep {
     constructor(node, edge) {
 		this.node = node;
@@ -57,9 +36,11 @@ class HighlightNodeStep {
 	}
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.node.id).attr("visibility", "visible");
-        svg.select("#" + this.node.textId).attr("visibility", "visible");
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("visibility", "visible");
+            svg.select("#" + this.node.node.textId).attr("visibility", "visible");
+        } 
         if (this.edge) {
             svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
             svg.select("#" + this.edge.id).attr("visibility", "visible");
@@ -68,15 +49,21 @@ class HighlightNodeStep {
 }
 
 class UnHighlightNodeStep {
-    constructor(node, edge) {
+    constructor(node, edge1, edge2) {
 		this.node = node;
-        this.edge = edge;
+        this.edge1 = edge1;
+        this.edge2 = edge2;
 	}
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", GRAY);
-        if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", GRAY);
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", GRAY);
+        }
+        if (this.edge1) {
+            svg.select("#" + this.edge1.id).style("stroke", GRAY);
+        }
+        if (this.edge2) {
+            svg.select("#" + this.edge2.id).style("stroke", GRAY);
         }
 	}
 }
@@ -165,12 +152,13 @@ class Tree {
 }
 
 class Node {
-    constructor(ref, value, x, y, i, leftEdge, rightEdge) {
+    constructor(ref, value, x, y, i, level, leftEdge, rightEdge) {
         this.value = value;
         this.left = null;
         this.right = null;
         this.x = x;
         this.y = y;
+        this.level = level;
         this.lEdge = leftEdge;
         this.rEdge = rightEdge;
         this.id =  "node" + i;
@@ -183,7 +171,7 @@ class Node {
             this.x + "%",
             this.y + "%",
             this.value,
-            "hidden",
+            "visible",
             "white"
         );
     }
@@ -201,6 +189,7 @@ export default class binarysearchtree extends React.Component {
             running: false,
             stepId: 0,
             messages: [],
+            maxLevel: 0,
             running: false,
             root: null
         };
@@ -210,14 +199,14 @@ export default class binarysearchtree extends React.Component {
 
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
-        this.add = this.add.bind(this);
 		this.restart = this.restart.bind(this);
 		this.backward = this.backward.bind(this);
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
         this.handleZoom = this.handleZoom.bind(this);
-        this.simluate = this.simulate.bind(this);
+        this.buildtree = this.buildTree.bind(this);
+        this.playpostorder = this.playpostorder.bind(this);
 	}
 
     handleZoom(e) {
@@ -248,101 +237,7 @@ export default class binarysearchtree extends React.Component {
         console.log("PAUSE CLICKED");
     }
 
-    // adjustDistances(root, level, side) {
-    //     if (root == null) {
-    //         return;
-    //     }
-
-    //     d3.selectAll(".level1").attr("x", "5%");
-    //     console.log("flsfs")
-
-    //     if (side === "left") {
-    //         // // root.node.attr("cx", function(d) {return d.x + -5})
-    //         // d3.select("#" + root.id).attr("cx", (root.x-5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x-5) + "%");
-    //     } else if (side === "right") {
-    //         // d3.select("#" + root.id).attr("cx", (root.x+5) + "%");
-    //         // d3.select("#" + root.textId).attr("x", (root.x+5) + "%");
-    //     } else {
-
-    //     }
-    //     // console.log(root.value)
-    //     // this.adjustDistances(root.left, level+1, "left");
-    //     // this.adjustDistances(root.right, level+1, "right");
-    // }
-
-    add(){
-        console.log("ADD CLICKED");
-        var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
-
-        if(i < MAX_NODE){
-            if(!this.state.root) {
-                this.state.root = new Node(this.ref, val, x, y, i);
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                console.log(this.state.root);
-                i++;
-            } else {
-                let node = this.state.root;
-                //y += 10;
-                level = 0
-
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if(val < node.value) {
-                        if(node.left != null) {
-                            node = node.left;
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i);
-                            node.lEdge =  new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    } else {
-                        if(node.right != null) {
-                            node = node.right;
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i);
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(this.state.root, level);
-                            // }
-                            i++;
-                            j++;
-                            return;
-                        }
-                    }
-                    level++;
-                }
-            }
-        } else {
-            console.log("Max node reached please restart tree.");
-            //this.messages.push("<h1>Max node reached please restart tree.</h1>");
-            document.getElementById("message").innerHTML = "Max node reached please restart tree.";
-            return;
-        }
-    }
-
-    simulate() {
+    buildTree() {
         console.log("SIMULATING");
         var val = Math.floor(Math.random() * 100);
         var level = 0;
@@ -353,19 +248,10 @@ export default class binarysearchtree extends React.Component {
 
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
-            steps.push(new EmptyStep());
-            messages.push("The next value we will insert into the tree is " + val );
-            console.log("level " + level);
             if(!root) {
                 root = new Node(this.ref, val, x, y, i);
+                console.log(root);
                 this.setState({root: root})
-                //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                steps.push(new NewNodeStep(root, null));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                
-                // steps.push(new UnHighlightNodeStep(this.state.root, null));
-                steps.push(new UnHighlightPathStep(root, val));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
                 i++;
             } else {
                 let node = root;
@@ -376,27 +262,12 @@ export default class binarysearchtree extends React.Component {
                 while(true) {
                     var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
                     //console.log(node.value);
-                    if (firstStep) {
-                        steps.push(new HighlightNodeStep(node, null));
-                        messages.push("The next value we will insert into the tree is " + val );
-                        firstStep = false;
-                    } else {
-                        steps.push(new HighlightNodeStep(node, null));
-                        messages.push("");
-                    }
 
                     if(val < node.value) {
-                        steps.push(new EmptyStep());
-                        messages.push( val + " is less than " + node.value );
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        // messages.push(val + " is less than " + node.value);
 
                         if(node.left != null) {
                             var edge = node.lEdge;
                             node = node.left;
-                            steps.push(new HighlightNodeStep(node, edge));
-                            messages.push("Let's traverse to the left edge of the node.");
 
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the left edge of the node.");
@@ -406,42 +277,17 @@ export default class binarysearchtree extends React.Component {
                             temp_x2 = node.x - 17 + tempMod;
                             temp_y2 = node.y + 8;
 
-                            node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i);
+                            node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
+                            node.left = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
-                            steps.push(new EmptyStep());
-                            messages.push( node.value + " has no left child.");
-
-                            steps.push(new NewNodeStep(node.left, node.lEdge));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-                            // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
-                            steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(root, level);
-                            // }
                             i++;
                             j++;
                             break;
                         }
                     } else if (val > node.value) {
-                        steps.push(new EmptyStep());
-                        messages.push( val + " is greater than " + node.value );
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        // messages.push(val + " is greater than " + node.value);
-
                         if(node.right != null) {
                             var edge = node.rEdge
                             node = node.right;
-                            steps.push(new HighlightNodeStep(node, edge));
-                            messages.push("Let's traverse to the right edge of the node.");
-
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the right edge of the node.");
                         } else {
@@ -449,35 +295,15 @@ export default class binarysearchtree extends React.Component {
                             temp_y = node.y + 10;
                             temp_x2 = node.x + 17 - tempMod;
                             temp_y2 = node.y + 8;
-                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i);
 
-                            steps.push(new EmptyStep());
-                            messages.push( node.value + " has no right child.");
+                            node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
+                            node.right = new Node(this.ref, val, temp_x, temp_y, i, level===1);
 
-                            steps.push(new NewNodeStep(node.right, node.rEdge));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-                            // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
-                            steps.push(new UnHighlightPathStep(root, val));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(root, level);
-                            // }
                             i++;
                             j++;
                             break;
                         }
                     } else {
-                        steps.push(new EmptyStep());
-                        messages.push(val + " is equal to " + node.value);
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        steps.push(new UnHighlightPathStep(root, val));
-                        messages.push("There cannot be duplicate values in a BST, so we will move on.");
                         break;
                     }
                     level++;
@@ -485,11 +311,46 @@ export default class binarysearchtree extends React.Component {
             }
         }
 
-        steps.push(new EmptyStep())
-        messages.push("Binary Search Tree insertion complete!");
-        console.log(this.state.root);
-        this.setState({steps: steps});
-        this.setState({messages: messages});
+        return root;
+    }
+
+    postorder(root) {
+        var steps = []
+        var messages = []
+        var list = [];
+        console.log("postordering");
+        console.log(root);
+        [steps, messages, list] = this.postorderRecursive(root, steps, messages, list);
+        messages.push("Finished postorder! our final list is ", list)
+        this.setState({steps: steps, messages: messages})
+    }
+
+    postorderRecursive(root, steps, messages, list) {
+        var node = root;
+        // messages.push("funco pop")
+        if (node == null) return;
+        
+        // # Push right and left children of the popped node
+        // # to stack
+        if (node.left != null) {
+            messages.push(list.toString());
+            steps.push(new HighlightNodeStep(node.left, node.lEdge));
+            this.postorderRecursive(node.left, steps, messages, list);
+        }
+        if (node.right != null) {
+            messages.push(list.toString());
+            steps.push(new HighlightNodeStep(node.right, node.rEdge));
+            this.postorderRecursive(node.right, steps, messages, list);
+        }
+        console.log(node.value)
+        list.push(node.value)
+        messages.push(list.toString());
+        steps.push(new HighlightNodeStep(node, null));
+
+
+        messages.push(list.toString());
+        steps.push(new UnHighlightNodeStep(node, node.lEdge, node.rEdge));
+        return [steps, messages, list];
     }
 
     turnOffRunning() {
@@ -539,8 +400,8 @@ export default class binarysearchtree extends React.Component {
 		d3.timeout(this.run, this.state.waitTime);
     }
 
-    playPreorder() {
-        console.log("PLAY PREORDER CLICKED");
+    playpostorder() {
+        console.log("PLAY postorder CLICKED");
 		if (this.state.running) return;
 		this.setState({running: true});
     }
@@ -549,8 +410,6 @@ export default class binarysearchtree extends React.Component {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
 		this.setState({running: true});
-        // this.simulate();
-		// this.run();
 	}
 
     pause() {
@@ -564,7 +423,7 @@ export default class binarysearchtree extends React.Component {
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "Welcome to Binary Search!";
 
-		this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null});
+		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
         i = 0;
         j = 0;
 
@@ -572,7 +431,8 @@ export default class binarysearchtree extends React.Component {
 
     componentDidMount() {
         this.initialize();   
-        this.simulate();
+        var root = this.buildTree();
+        this.postorder(root);
     }
 
     // Calls functions depending on the change in state
@@ -582,7 +442,8 @@ export default class binarysearchtree extends React.Component {
         if (this.state.root !== prevState.root && this.state.root === null) {
 			console.log("Steps changed");
 			var svg = this.initialize();
-            this.simulate();
+            var root = this.buildTree();
+            this.postorder(root);
 			svg.attr("visibility", "visible");
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
@@ -597,7 +458,7 @@ export default class binarysearchtree extends React.Component {
             <div>
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
-                    <button class="button" onClick={this.playPreorder}>Preorder</button>
+                    <button class="button" onClick={this.playpostorder}>postorder</button>
                     {/* <button class="button" onClick={this.pause}>Pause</button> */}
                     <button class="button" onClick={this.add}>Add</button>
                     <button class="button" onClick={this.restart}>Restart</button>

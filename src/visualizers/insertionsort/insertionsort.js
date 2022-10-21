@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
 	forward(svg) {
@@ -474,20 +475,25 @@ export default class InsertionSort extends React.Component {
 		var steps = [];
 		var messages = [];
         var i, j;
+		let pseudocodeArr = [];
 
 		messages.push("<h1>Beginning Insertion Sort!</h1>");
 		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
         messages.push("<h1>Index 0 is a one element array, and is therefore sorted.</h1>");
 		steps.push(new SortedStep(0, 0, ids));
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
         
         for(i = 1; i < size; i++)
         {
             messages.push("<h1>Selecting our next insertion index.</h1>");
 		    steps.push(new InsertSwapStep(i, ids));
+			pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
             messages.push("<h1>Pull elements out of our " + (i+1) + " index array and sort them (left to right).</h1>");
 		    steps.push(new PartitionStep(0, i, ids));
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
             
             for(j = i-1; j >= 0; j--)
             {
@@ -495,32 +501,46 @@ export default class InsertionSort extends React.Component {
                 {
                     messages.push("<h1>" + arr[j] + " > " + arr[j+1] + "</h1>");
                     steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
+					var str = "<h1>Scooch " + arr[j] + " to the right.</h1>";
 					messages.push("<h1>Scooch " + arr[j] + " to the right.</h1>");
                     steps.push(new SwapStep(j+1, j, ids, stepTime));
                     [arr[j+1], arr[j]] = [arr[j], arr[j+1]];
+					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+
+					messages.push(str);
+                    steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
                 }
                 else
                 {
 					messages.push("<h1>" + arr[j] + " < " + arr[j+1] + "</h1>");
 					steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
                     messages.push("<h1>Insert is in its sorted spot.</h1>");
 		            steps.push(new PartSortedStep(0, j + 1, ids));
-
+					pseudocodeArr.push(new HighlightLineStep(9,this.props.lines));
                     break;
                 }
             }
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new SortedStep(j + 1, i, ids));
+			pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
 
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new UnpartitionStep(0, i, ids));
+			pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
         }
 
 		messages.push("<h1>Finished Insertion Sort!</h1>");
 		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(11,this.props.lines));
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
 
 		console.log(steps);
 		console.log(messages);
@@ -681,6 +701,7 @@ export default class InsertionSort extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
@@ -748,7 +769,14 @@ export default class InsertionSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Insertion Sort!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"insertionsort"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 			</div>
 		)
 	}

@@ -25,6 +25,7 @@
 	padding-left: 50px;
 }
 
-#insertionValue {
-	border-radius: 10px;
+.container-tree {
+	height: 100%;
+	width: 100%;
 }

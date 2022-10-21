@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
 	forward(svg) {
@@ -380,73 +381,86 @@ export default class SelectionSort extends React.Component {
 		var i, j;
 		var steps = [];
 		var messages = [];
+		let pseudocodeArr = [];
 
 		messages.push("<h1>Beginning Selection Sort!</h1>");
 		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		for (i = 0; i < size-1; i++)
 		{
 			steps.push(new SmallestSwapStep(i, i, ids));
 			smallest = i;
-
 			messages.push("<h1>" + arr[smallest] + " is the current smallest.</h1>");
+			pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
 			for (j = i+1; j < size; j++)
 			{
 				steps.push(new ColorSwapStep(j, j, ids));
 				messages.push("<h1>Move Search forward and check the next element.</h1>");
-
+				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 				if(arr[j] < arr[smallest])
 				{
 					steps.push(new EmptyStep());
 					messages.push("<h1>" + arr[j] + " < " + arr[smallest] + "</h1>");
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
 
 					steps.push(new SmallestSwapStep(smallest, j, ids));
 					messages.push("<h1>" + arr[j] + " is the new smallest element.</h1>");
+					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
 					smallest = j;
-					messages.push("<h1>" + arr[smallest] + " is the new smallest element.</h1>");
-					steps.push(new EmptyStep());
+					// messages.push("<h1>" + arr[smallest] + " is the new smallest element.</h1>");
+					// steps.push(new EmptyStep());
+					// pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 				}
 				else
 				{
-					messages.push("<h1>" + arr[j] + " > " + arr[smallest] + "</h1>");
+					messages.push("<h1>" + arr[j] + " >= " + arr[smallest] + "</h1>");
 					steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
 					messages.push("<h1>Keep our current smallest.</h1>");
 					steps.push(new UncolorStep(j, ids));
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
 				}
 
 			}
 
 			messages.push("<h1>Reached the end of the array.</h1>");
 			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
 			messages.push("<h1>" + arr[smallest] + " is the smallest element.</h1>");
 			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 			
 			steps.push(new SwapStep(smallest, i, ids, stepTime));
 			[arr[smallest], arr[i]] = [arr[i], arr[smallest]];
-						
 			messages.push("<h1>Swap our smallest element into index " + i + ".</h1>");
-
-			// steps.push(new UncolorSmallestStep(smallest, ids));
-			// messages.push("<h1>Index " + i + " has been sorted.</h1>");
+			pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
 
 			steps.push(new SortedStep(i, ids));
 			messages.push("<h1>Index " + i + " has been sorted.</h1>");
+			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 		}
 
 		steps.push(new SmallestSwapStep(i, i, ids));
 		messages.push("<h1>There is only one index left so it is sorted.</h1>");
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		steps.push(new SortedStep(i, ids));
 		messages.push("<h1>There is only one index left so it is sorted.</h1>");
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		messages.push("<h1>Finished Selection Sort!</h1>");
 		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});
+		this.props.handleCodeStepsChange(pseudocodeArr);
+
 
 		console.log(steps);
 		console.log(messages);
@@ -623,6 +637,7 @@ export default class SelectionSort extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
@@ -690,7 +705,14 @@ export default class SelectionSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Selection Sort!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"selectionsort"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 			</div>
 		)
 	}

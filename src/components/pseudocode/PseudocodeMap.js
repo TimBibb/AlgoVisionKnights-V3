@@ -16,7 +16,7 @@ export const map = {
         tab + "}"
     ],
     bubblesort: [
-        "function bubbleSort( arr, n) {",
+        "bubbleSort( arr, n) {",
         tab + "var i, j;",
         tab + "for (i = 0; i < n-1; i++) {",
         tab + tab + tab + "for (j = 0; j < n-i-1; j++) {",
@@ -34,7 +34,7 @@ export const map = {
         "}"
     ],
     mergesort: [
-        "function merge(left, right) {",
+        "merge(left, right) {",
         tab + "let arr = []",
         tab + "while (left.length && right.length) {",
         tab + tab + "if (left[0] < right[0]) arr.push(left.shift());", 
@@ -43,7 +43,7 @@ export const map = {
         tab + "return [...arr, ...left, ...right]",
         "}",
         
-        "function sort(array) {",
+        "sort(array) {",
         tab + "const half = array.length / 2",
         tab + "if (array.length < 2) return array;", 
         tab + "const left = array.splice(0, half);",
@@ -87,6 +87,20 @@ export const map = {
         tab + "inOrder(node.right);",
         "}"
     ],
+    insertionsort: [
+        "insertionSort(arr, n) {",
+        tab + "let i, key, j;", 
+        tab + "for (i = 1; i < n; i++) {", 
+        tab + tab + "key = arr[i];", 
+        tab + tab + "j = i - 1;", 
+        tab + tab + "while (j >= 0 && arr[j] > key) {", 
+        tab + tab + tab + "arr[j + 1] = arr[j];", 
+        tab + tab + tab + "j = j - 1;", 
+        tab + tab + "}", 
+        tab + tab + "arr[j + 1] = key;", 
+        tab + "}", 
+        "}" 
+    ],
     singlylinkedlist: [
         "insert(element) {",
         tab + "let node = new Node(element);",
@@ -108,5 +122,18 @@ export const map = {
         tab + "current.next = null;",
         tab + "}",
         "}"
+    ],
+    selectionsort: [
+       "selectionSort(arr,  n) {",
+       tab + "let i, j, min_idx;",
+       tab + "for (i = 0; i < n-1; i++) {",
+       tab + tab + "min_idx = i;",
+       tab + tab + "for (j = i + 1; j < n; j++) {",
+       tab + tab + tab + "if (arr[j] < arr[min_idx])",
+       tab + tab + tab + tab + "min_idx = j;",
+       tab + tab + tab + "swap(arr,min_idx, i);",
+       tab + tab + "}",
+       tab + "}",
+       "}"
     ]
 }

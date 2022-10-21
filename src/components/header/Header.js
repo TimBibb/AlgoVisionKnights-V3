@@ -257,7 +257,7 @@ function Header({
 					</div>
 					
 					<div className='RightMenus'>
-						<div style={{marginRight: '5px'}}>
+						{/* <div style={{marginRight: '5px'}}>
 							<h3>ColorBlind Mode</h3>
 						</div>
 						<div style={{marginRight: '50px'}} className='RightMenus'>
@@ -266,7 +266,7 @@ function Header({
 								onColor="#FFC904"
 								handleToggle={() => setValue(!value)}
 							/>
-						</div>
+						</div> */}
 
 						<a href="https://www.cs.ucf.edu/" target="_blank" rel="noreferrer">
 							<img src={UCF} alt="UCF Logo" hr height={45} width={65}></img>

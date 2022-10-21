@@ -447,7 +447,7 @@ export function SinglyLinkedList() {
 					</table>
 				</div>
 			</MathJax.Provider>
-			<img src={singlylinkedlistgif} alt='graphs' rel='noreferrer' />
+			<img src={singlylinkedlistgif} alt='graphs' rel='noreferrer' style={{ width: "45%", height: "45%", alignSelf: 'center' }} />
 		</div>
 	);
 }
@@ -931,21 +931,21 @@ export function Heaps() {
 					<table>
 						<tr>
 							<th>Operation</th>
-							<th>Worst Case</th>
-							<th>Average Case</th>
 							<th>Best Case</th>
+							<th>Average Case</th>
+							<th>Worst Case</th>
 						</tr>
 						<tr>
 							<td>Insertion</td>
-							<td>{log}</td>
-							<td>{log}</td>
 							<td>{constant}</td>
+							<td>{log}</td>
+							<td>{log}</td>
 						</tr>
 						<tr>
 							<td>Deletion</td>
-							<td>{log}</td>
-							<td>{log}</td>
 							<td>{constant}</td>
+							<td>{log}</td>
+							<td>{log}</td>
 						</tr>
 						<tr>
 							<td>Get Max Value</td>

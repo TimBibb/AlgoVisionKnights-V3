@@ -29,7 +29,8 @@ export const map = {
     linearsearch: [
         "linearSearch(arr, target) {",
         tab + "for (let i = 0; i < arr.length; i++) {",
-        tab + tab + "if (arr[i] === target) return true",
+        tab + tab + "if (arr[i] === target)",
+        tab + tab + tab + "return true",
         tab + "}",
         "}"
     ],
@@ -135,5 +136,27 @@ export const map = {
        tab + tab + "}",
        tab + "}",
        "}"
+    ],
+    
+    quicksort: [
+        "quickSort(arr, low, high) {",
+        tab + "if (low < high) {", 
+        tab + tab + "let pi = partition(arr, low, high);",
+        tab + tab + "quickSort(arr, low, pi - 1);",
+        tab + tab + "quickSort(arr, pi + 1, high);",
+        tab + "}",
+        '}',
+        "partition(arr, low, high) {",
+            tab + "let pivot = arr[high];",
+            tab + "let i = (low - 1);",
+            tab + "for (let j = low; j <= high - 1; j++) {",
+            tab + tab + "if (arr[j] < pivot) {",
+            tab + tab + tab + "i++;",
+            tab + tab + tab + "swap(arr, i, j);",
+            tab + tab + "}",
+            tab + "}",
+            tab + "swap(arr, i + 1, high);",
+            tab + "return (i + 1);",
+        "}"
     ]
 }

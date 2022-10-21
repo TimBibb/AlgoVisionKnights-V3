@@ -5,7 +5,7 @@ import React from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Divider } from '@material-ui/core';
 function InformationPage({ path }) {
-	const source = require(`../../assets/${path}.md`).default;
+	const source = require(`../../assets/${path}.md`);
 
 	// Markdown Renderer test
 	const [markdown, setMarkdown] = React.useState('');
@@ -19,9 +19,8 @@ function InformationPage({ path }) {
 
 	return (
 		<div className='InformationPage'>
-			<h3>more information below</h3>
-			<hr></hr>
-			<br/><br/><br/>
+			<h3>More Information Below</h3>
+			<hr />
 			<MarkdownPreview source={markdown} style={{ color: 'white' }} />
 		</div>
 	);

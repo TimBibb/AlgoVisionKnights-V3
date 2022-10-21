@@ -410,14 +410,16 @@ export default class SelectionSort extends React.Component {
 					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
 					smallest = j;
-					messages.push("<h1>" + arr[smallest] + " is the new smallest element.</h1>");
-					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+					// messages.push("<h1>" + arr[smallest] + " is the new smallest element.</h1>");
+					// steps.push(new EmptyStep());
+					// pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 				}
 				else
 				{
-					messages.push("<h1>" + arr[j] + " > " + arr[smallest] + "</h1>");
-					steps.push(new EmptyStep());pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					messages.push("<h1>" + arr[j] + " >= " + arr[smallest] + "</h1>");
+					steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
 					messages.push("<h1>Keep our current smallest.</h1>");
 					steps.push(new UncolorStep(j, ids));
 					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
@@ -435,13 +437,12 @@ export default class SelectionSort extends React.Component {
 			
 			steps.push(new SwapStep(smallest, i, ids, stepTime));
 			[arr[smallest], arr[i]] = [arr[i], arr[smallest]];
-						
 			messages.push("<h1>Swap our smallest element into index " + i + ".</h1>");
-			pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
 
 			steps.push(new SortedStep(i, ids));
 			messages.push("<h1>Index " + i + " has been sorted.</h1>");
-			pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 		}
 
 		steps.push(new SmallestSwapStep(i, i, ids));

@@ -502,16 +502,23 @@ export default class InsertionSort extends React.Component {
                     messages.push("<h1>" + arr[j] + " > " + arr[j+1] + "</h1>");
                     steps.push(new EmptyStep());
 					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
+					var str = "<h1>Scooch " + arr[j] + " to the right.</h1>";
 					messages.push("<h1>Scooch " + arr[j] + " to the right.</h1>");
                     steps.push(new SwapStep(j+1, j, ids, stepTime));
                     [arr[j+1], arr[j]] = [arr[j], arr[j+1]];
 					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+
+					messages.push(str);
+                    steps.push(new EmptyStep());
+					pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
                 }
                 else
                 {
 					messages.push("<h1>" + arr[j] + " < " + arr[j+1] + "</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
                     messages.push("<h1>Insert is in its sorted spot.</h1>");
 		            steps.push(new PartSortedStep(0, j + 1, ids));
 					pseudocodeArr.push(new HighlightLineStep(9,this.props.lines));

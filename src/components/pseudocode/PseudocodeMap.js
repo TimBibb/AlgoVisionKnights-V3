@@ -7,7 +7,7 @@ export const map = {
         tab + tab + "if (start > end)",
         tab + tab + tab + "return false",
         tab + tab + "let mid = (start + end) / 2 );",
-        tab + tab + "if (arr[mid] === target)",
+        tab + tab + "if (arr[mid] is equal to target)",
         tab + tab + tab + "return true",
         tab + tab + "if (arr[mid] > target)", 
         tab + tab + tab + "return recursiveSearch(arr from start..mid-1);",
@@ -29,7 +29,7 @@ export const map = {
     linearsearch: [
         "linearSearch(arr, target) {",
         tab + "for (let i = 0; i < arr.length; i++) {",
-        tab + tab + "if (arr[i] === target)",
+        tab + tab + "if (arr[i] is equal to target)",
         tab + tab + tab + "return true",
         tab + "}",
         "}"
@@ -37,7 +37,7 @@ export const map = {
     mergesort: [
         "merge(left, right) {",
         tab + "let arr = []",
-        tab + "while (left.length && right.length) {",
+        tab + "while (left.length and right.length) {",
         tab + tab + "if (left[0] < right[0]) arr.push(left.shift());", 
         tab + tab + "else arr.push(right.shift())", 
         tab + "}",
@@ -53,7 +53,7 @@ export const map = {
     ],
     bstinsertion: [
         "add(root, element) {",
-        tab + "if (root == null) {",
+        tab + "if (root is equal to null) {",
         tab + tab + "root = new Node(element);",
         tab + tab + "return root;",
         tab + "}",
@@ -66,7 +66,7 @@ export const map = {
     bststructure: [],
     postorder: [
         "postOrder(node) {",
-        tab + "if (node == null) return;",
+        tab + "if (node is equal to null) return;",
         tab + "postOrder(node.left);",
         tab + "postOrder(node.right);",
         tab + "print node.key;",
@@ -74,7 +74,7 @@ export const map = {
     ],
     preorder: [
         "preOrder(node) {",
-        tab + "if (node == null) return;",
+        tab + "if (node is equal to null) return;",
         tab + "print node.key;",
         tab + "preOrder(node.left);",
         tab + "preOrder(node.right);",
@@ -82,7 +82,7 @@ export const map = {
     ],
     inorder: [
         "inOrder(node) {",
-        tab + "if (node == null) return;",
+        tab + "if (node is equal to null) return;",
         tab + "inOrder(node.left);",
         tab + "print node.key;",
         tab + "inOrder(node.right);",
@@ -94,7 +94,7 @@ export const map = {
         tab + "for (i = 1; i < n; i++) {", 
         tab + tab + "key = arr[i];", 
         tab + tab + "j = i - 1;", 
-        tab + tab + "while (j >= 0 && arr[j] > key) {", 
+        tab + tab + "while (j >= 0 and arr[j] > key) {", 
         tab + tab + tab + "arr[j + 1] = arr[j];", 
         tab + tab + tab + "j = j - 1;", 
         tab + tab + "}", 
@@ -105,7 +105,7 @@ export const map = {
     singlylinkedlist: [
         "insert(element) {",
         tab + "let node = new Node(element);",
-        tab + "if (head === null) head = node;",
+        tab + "if (head is equal to null) head = node;",
         tab + "else {",
         tab + tab + "let current = head;",
         tab + tab + "while (current.next)",
@@ -116,7 +116,7 @@ export const map = {
         "}",
         "removeTail() {",
         tab + "let current = head;",
-        tab + "if (current.next === null) current = null;",
+        tab + "if (current.next is equal to null) current = null;",
         tab + "else { ",
         tab + tab + "while (current.next.next != null)", 
         tab + tab + tab + "current = current.next;",
@@ -132,8 +132,8 @@ export const map = {
        tab + tab + "for (j = i + 1; j < n; j++) {",
        tab + tab + tab + "if (arr[j] < arr[min_idx])",
        tab + tab + tab + tab + "min_idx = j;",
-       tab + tab + tab + "swap(arr,min_idx, i);",
        tab + tab + "}",
+       tab + tab + "swap(arr,min_idx, i);",
        tab + "}",
        "}"
     ],

@@ -403,11 +403,11 @@ export default class BubbleSort extends React.Component {
                 else {
 					messages.push("<h1>" + arr[j] + " < " + arr[j + 1] + "</h1>");
 		            steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
                     messages.push("<h1>No change.</h1>");
 		            steps.push(new UncolorStep(j+1, ids));
-					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
                     messages.push("<h1>Increment our Bubble pointer.</h1>");
                     steps.push(new BubbleSwapStep(j, j+1, ids, stepTime));

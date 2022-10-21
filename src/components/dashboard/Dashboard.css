@@ -18,5 +18,6 @@
 .progress-header {
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 24pt !important;
+	text-align: center;
+	color: #FFC904;
 }

@@ -11,12 +11,14 @@ import algorithms from '../algorithmList/Algorithms';
 function Dashboard({ categories, inCategory }) {
 	console.log('Dashboard');
 
+	var completedAlgorithmsPercent = 0;
 	var completedAlgorithms = 0;
 
 	Object.keys(algorithms).map((key) =>
 		algorithms[key].map((algorithm) => {
 			if(localStorage.getItem(algorithm.path) && localStorage.getItem(algorithm.path) == "true"){
-				completedAlgorithms+= 3;
+				completedAlgorithmsPercent+= 3;
+				completedAlgorithms += 1;
 			}
 				
 		}))
@@ -28,7 +30,8 @@ function Dashboard({ categories, inCategory }) {
 	return (
 		<div style={{alignItems: "center"}}>
 			<h3 className='progress-header'>Completion Progress</h3>
-			<ProgressBar animated variant="warning" now={completedAlgorithms} label={`${completedAlgorithms}%`} style={{width: "80%", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
+			<h4 className='progress-header'>{completedAlgorithms}/31</h4>
+			<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			<div className='Dashboard'>
 				<br/><br/>
 				{categories.map((category) => (

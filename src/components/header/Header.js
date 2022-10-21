@@ -23,6 +23,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import { BiSearch } from "react-icons/bi";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // Device detection modules. Use for Desktop downloadable
@@ -199,10 +200,19 @@ function Header({
 						{viewWidth > 650 || search ? (
 							<div id='search-input' className={classes.search}>
 								{viewWidth > 650 ? (
-									<SearchIcon
-										id='input-icon'
-										className={classes.inputIcon}
-									/>
+									<BiSearch
+									style={{paddingLeft: '10px',
+										height: '100%',
+										position: 'absolute',
+										zIndex: 1,
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center'}}
+									size={35}/>
+									// <SearchIcon
+									// 	id='input-icon'
+									// 	className={classes.inputIcon}
+									// />
 								) : (
 									<IconButton
 										id='input-icon'

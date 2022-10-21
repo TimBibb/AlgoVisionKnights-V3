@@ -53,9 +53,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 					/>
 				</div>
 			</div>
-			{show && <InformationPage path={path} />}
-			<br/><br/>
-			
+			{show ? <InformationPage path={path} /> : <br></br>}
 
 			{/* {algoPage === 'visualizer' ? (
 				<Visualizer path={path} type={type}/>

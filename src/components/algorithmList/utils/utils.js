@@ -25,6 +25,9 @@ import inordergif from './images/inordergif.gif';
 import postordergif from './images/postordergif.gif';
 import towersofhanoi from './images/towersofhanoi.png';
 import fibonaccipng from './images/fibonacci.png';
+import heapsort from './images/heapsort.gif';
+import maxheap from './images/maxheap.gif';
+import huffmancodingtree from './images/huffmancodingtree.gif';
 
 const constant = <MathJax.Node formula={`O(1)`} />;
 const log = <MathJax.Node formula={`O(log \\ n)`} />;
@@ -309,6 +312,7 @@ export function HeapSort() {
 					</table>
 				</div>
 			</MathJax.Provider>
+			<img src={heapsort} alt='graphs' rel='noreferrer' />
 		</div>
 	);
 }
@@ -926,31 +930,33 @@ export function Heaps() {
 					<p className='SubHeader'>Time Complexity:</p>
 					<table>
 						<tr>
-							<th>Cases</th>
-							<th>Runtime</th>
+							<th>Operation</th>
+							<th>Worst Case</th>
+							<th>Average Case</th>
+							<th>Best Case</th>
 						</tr>
 						<tr>
-							<td>Worst Case</td>
-							<td>{linear}</td>
+							<td>Insertion</td>
+							<td>{log}</td>
+							<td>{log}</td>
+							<td>{constant}</td>
 						</tr>
-					</table>
-				</div>
-				<div>
-					<p className='SubHeader'>Space Complexity:</p>
-					<table>
 						<tr>
-							<th>Cases</th>
-							<th>Space</th>
+							<td>Deletion</td>
+							<td>{log}</td>
+							<td>{log}</td>
+							<td>{constant}</td>
 						</tr>
-
 						<tr>
-							<td>Worst Case</td>
-							<td>{linear}</td>
+							<td>Get Max Value</td>
+							<td>{constant}</td>
+							<td>{constant}</td>
+							<td>{constant}</td>
 						</tr>
 					</table>
 				</div>
 			</MathJax.Provider>
-			
+			<img src={maxheap} alt='graphs' rel='noreferrer' />
 		</div>
 	);
 }
@@ -968,7 +974,11 @@ export function HuffmanCodingTree() {
 						</tr>
 						<tr>
 							<td>Worst Case</td>
-							<td>{linear}</td>
+							<td>{nlogn}</td>
+						</tr>
+						<tr>
+							<td>Best Case</td>
+							<td>{nlogn}</td>
 						</tr>
 					</table>
 				</div>
@@ -982,12 +992,16 @@ export function HuffmanCodingTree() {
 
 						<tr>
 							<td>Worst Case</td>
-							<td>{linear}</td>
+							<td>{nlogn}</td>
+						</tr>
+						<tr>
+							<td>Best Case</td>
+							<td>{nlogn}</td>
 						</tr>
 					</table>
 				</div>
 			</MathJax.Provider>
-			
+			<img src={huffmancodingtree} alt='graphs' rel='noreferrer' />
 		</div>
 	);
 }

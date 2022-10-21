@@ -376,7 +376,9 @@ export default class binarysearchtree extends React.Component {
         let q = [];
         // for usage of ranWords: https://www.npmjs.com/package/random-words
         var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
-        // var ranWords = "stone", issues with "never"
+
+        steps.push(new EmptyStep())
+        messages.push("Starting to work on the tree!");
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -441,19 +443,21 @@ export default class binarysearchtree extends React.Component {
 
             if(!root){
 
-                // new node f which is equal
-                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
-
-                f.left = new Node(this.ref, "visible", left.display, x+modx-tempx+l, y-modx+tempy-l, i)
-                f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
-
-                console.log("x+modx-tempx+l: " + (x+modx-tempx+l))
-                console.log("y-modx+tempy-l: " + (y-modx+tempy-l))
-
                 moveRightx = x+modx-tempx+l;
                 moveRighty = y-modx+tempy-l;
                 moveRightParentx = x+modx;
                 moveRightParenty = y-modx-10;
+
+                // new node f which is equal
+                let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
+
+                f.lEdge = new Edge(this.ref, "edge" + i, moveRightx + "%", moveRighty + "%", f.x + "%", f.y + "%", "visible");
+                f.left = new Node(this.ref, "visible", left.display, moveRightx, moveRighty, i)
+
+                f.rEdge = new Edge(this.ref, "edge" + i, x+modx+tempx-l + "%", y-modx+tempy-l + "%", f.x + "%", f.y + "%", "visible");
+                f.right = new Node(this.ref, "visible", right.display, x+modx+tempx-l, y-modx+tempy-l, i)
+
+                f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i)
 
                 n++;
                 console.log("!root: " + n);
@@ -478,16 +482,18 @@ export default class binarysearchtree extends React.Component {
                 q.push(f);
                 q.sort(function(a,b){return a.data-b.data;});
             }
+            // This case doesn't exist because of the nature of the priority queue, it is here to follow the rhythm ;)
             if(left.character == '-' && right.character != '-'){
                 // new node f which is equal
                 let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
                 
-                f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l, i)
-                //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
-                f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l, i)
+                f.lEdge = new Edge(this.ref, "edge" + i, x+modx-tempx+l + "%", y-modx+tempy-l-10 + "%", f.x + "%", f.y + "%", "visible");
+                f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l-10, i)
+                
+                f.rEdge = new Edge(this.ref, "edge" + i, x+modx+tempx-l + "%", y-modx+tempy-l-10 + "%", f.x + "%", f.y + "%", "visible");
+                f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l-10, i)
 
-                f.left.display = left.display;
-                f.right.display = right.display;
+                f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-10, i);
 
                 m++;
                 console.log("left.character == '-' && right.character != '-': " + m);
@@ -517,12 +523,16 @@ export default class binarysearchtree extends React.Component {
                 // new node f which is equal
                     let f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-20, i);
                     
+                    f.lEdge = new Edge(this.ref, "edge" + i, x+modx-tempx+l + "%", y-modx+tempy-l-10 + "%", f.x + "%", f.y + "%", "visible");
                     f.left = new Node(this.ref, "visible", right.display, x+modx-tempx+l, y-modx+tempy-l-10, i)
                     //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+                    f.rEdge = new Edge(this.ref, "edge" + i, x+modx+tempx-l + "%", y-modx+tempy-l-10 + "%", f.x + "%", f.y + "%", "visible");
                     f.right = new Node(this.ref, "visible", left.display, x+modx+tempx-l, y-modx+tempy-l-10, i)
 
-                    f.left.display = left.display;
-                    f.right.display = right.display;
+                    f = new Node(this.ref, "visible", left.value + right.value, x+modx, y-modx-20, i)
+
+                    // f.left.display = left.display;
+                    // f.right.display = right.display;
 
                     w++;
                     console.log((x+modx-tempx+l))
@@ -533,9 +543,14 @@ export default class binarysearchtree extends React.Component {
                 if(k >= 20){
                     let f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+48, moveRightParenty-30, i);
                     
+                    f.lEdge = new Edge(this.ref, "edge" + i, moveRightParentx+67 + "%", moveRightParenty + "%", f.x + "%", f.y + "%", "visible");
                     f.left = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
                     //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+
+                    f.rEdge = new Edge(this.ref, "edge" + i, moveRightParentx+30 + "%", moveRightParenty + "%", f.x + "%", f.y + "%", "visible");
                     f.right = new Node(this.ref, "visible", left.display, moveRightParentx+30, moveRightParenty, i)
+
+                    f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+48, moveRightParenty-30, i)
 
                 }
 
@@ -564,9 +579,14 @@ export default class binarysearchtree extends React.Component {
 
                     let f = new Node(this.ref, "visible", left.value + right.value, x+modx-7, y-modx-10, i);
                     
+                    f.lEdge = new Edge(this.ref, "edge" + i, moveRightParentx + "%", moveRightParenty + "%", f.x + "%", f.y + "%", "visible");
                     f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
                     //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+
+                    f.rEdge = new Edge(this.ref, "edge" + i, moveRightParentx+65 + "%", moveRightParenty + "%", f.x + "%", f.y + "%", "visible");
                     f.right = new Node(this.ref, "visible", right.display, moveRightParentx+65, moveRightParenty, i)
+
+                    f = new Node(this.ref, "visible", left.value + right.value, x+modx-7, y-modx-10, i);
 
                     p++;
                     console.log("right.character == '-' && left.character == '-': " + p);
@@ -593,9 +613,13 @@ export default class binarysearchtree extends React.Component {
                 else if(k > 20){
                     let f = new Node(this.ref, "visible", left.value + right.value, x+modx-35, y-modx-10, i);
                     
+                    f.lEdge = new Edge(this.ref, "edge" + i, moveRightParentx-1.5 + "%", moveRightParenty + "%", f.x + "%", f.y + "%", "visible");
                     f.left = new Node(this.ref, "visible", left.display, moveRightParentx, moveRightParenty, i)
-                    //console.log("f.left: x = " + (x+modx-tempx+l) + " y = " + (y-modx+tempy-l))
+
+                    f.rEdge = new Edge(this.ref, "edge" + i, moveRightParentx+48 + "%", moveRightParenty-30 + "%", f.x + "%", f.y + "%", "visible");
                     f.right = new Node(this.ref, "visible", right.display, moveRightParentx+48, moveRightParenty-30, i)
+
+                    f = new Node(this.ref, "visible", left.value + right.value, x+modx-35, y-modx-10, i)
 
                     p++;
                     console.log("right.character == '-' && left.character == '-': " + p);
@@ -624,8 +648,11 @@ export default class binarysearchtree extends React.Component {
                 
                 let f = new Node(this.ref, "visible", left.value + right.value, moveRightParentx+65, moveRightParenty, i);
 
+                f.lEdge = new Edge(this.ref, "edge" + i, moveRightx+60 + "%", moveRighty + "%", f.x + "%", f.y + "%", "visible");
                 f.left = new Node(this.ref, "visible", left.display, moveRightx+60, moveRighty, i)
                 // console.log("f.left: x = " + (x-modx+tempx-l) + " y = " + (y+modx-tempy+l))
+                
+                f.rEdge = new Edge(this.ref, "edge" + i, moveRightx+100 + "%", moveRighty + "%", f.x + "%", f.y + "%", "visible");
                 f.right = new Node(this.ref, "visible", right.display, moveRightx+100, moveRighty, i)
                 
                 h++;
@@ -697,77 +724,10 @@ export default class binarysearchtree extends React.Component {
             l += 5;
         }
 
-        // while(k < MAX_NODE){
-        //     if(!root) {
-        //         root = new Node(this.ref,  "hidden", 0, x, y, k);
-        //         console.log(root)
-        //         this.setState({root: root})
-        //     } else {
-        //         let node = root;
-        //         // console.log(root)
-        //         level = 0
-
-        //         while(true) {
-        //             if(node.left == null){
-        //                 node.lEdge = new Edge(this.ref, "edge" + 1, node.x-3 + "%", node.y+1.5 + "%", 30 + "%", 20 + "%", "hidden");
-        //                 node.left = new Node(this.ref, "visible", arr.letters[k] + " " + arr.numbers[k], 30, 20, k, level===1, arr.letters[k], arr.letters[k] + arr.numbers[k], arr.numbers[k]);
-        //                 console.log("node.left.display:" + node.left.display)
-                        
-        //                 //steps.push(new HighlightNodeStep(node.right, null));
-        //                 //steps.push(new ChangeCoordinates(node, null, 50 + "%", 15 + "%"));
-        //                 console.log(node)
-        //                 k++;
-        //             }
-        //             if(node.right == null){
-        //                 node.rEdge = new Edge(this.ref, "edge" + 2, node.x+3 + "%", node.y+1.5 + "%", 70 + "%", 20 + "%", "hidden");
-        //                 node.right = new Node(this.ref, "visible", arr.letters[k] + " " + arr.numbers[k], 70, 20, k, level===1, arr.letters[k], arr.letters[k] + arr.numbers[k], arr.numbers[k]);
-        //                 console.log("node.right.display:" + node.right.display)
-        //                 k++;
-        //             }
-        //             if(node.left != null && node.right != null){
-        //                 node.value = parentSum(node.left.value, node.right.value)
-        //                 node.display = node.value;
-
-        //                 messages.push("<h1> CHANGING VALUE!!!! </h1>");
-        //                 steps.push(new changeValue(node, null, node.display, node.lEdge, node.rEdge))
-        //                 // steps.push(new UnhideEdges(node.lEdge))
-        //                 // steps.push(new UnhideEdges(node.rEdge))
-
-        //                 root = node;
-        //             }
-        //             break;
-        //         }
-        //         k++;
-
-        //     }
-        // }
-
-        // console.log(letterSet.size)
-
-
-        // for(var i = 0; i < letterSet.size; i++){
-        //     console.log("letter frequency '" + arr.letters[i] + " ': " + letterMapSorted.get(arr.letters[i]))
-        //     // console.log(getByValue(letterMapSorted, arr.letters[i]))
-        //     arr.numbers[i] = getByValue(letterMapSorted, arr.letters[i])
-        //     console.log(arr.numbers[i])
-        // }
-
-
-
-
-        // for(let key of letterSet){
-        //     console.log(key)
-        // }
-
-        // root node
-        // root = new Node(this.ref, val, x, y, 0);
-        // this.setState({root: root})
-        // let node = root;
-
-        
-
-        steps.push(new EmptyStep())
-        messages.push("Starting to work on the tree!");
+        for(var i = 0; i < ranWords.length; i++){
+            letterMap.delete(ranWords.charAt(i), letterMap.get(ranWords.charAt(i)));
+            letterMapSorted.delete(ranWords.charAt(i), letterMapSorted.get(ranWords.charAt(i)));
+        }
 
         steps.push(new EmptyStep())
         messages.push("Huffman Coding Tree insertion complete!");

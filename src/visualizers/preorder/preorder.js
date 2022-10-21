@@ -8,6 +8,7 @@ import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 var x = 50;
 var mid = 0;
@@ -29,7 +30,7 @@ class EmptyStep {
     backward() {}
 }
 
-class HighlightNodeStep {
+class CreateAndHighlightNodeStep {
     constructor(node, edge) {
 		this.node = node;
         this.edge = edge;
@@ -46,6 +47,30 @@ class HighlightNodeStep {
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
+
+    backward(svg) {
+        UnHighlightNodeStep.forward(svg)
+    }
+}
+
+class HighlightNodeStep {
+    constructor(node, edge) {
+		this.node = node;
+        this.edge = edge;
+	}
+
+    forward(svg) {
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        } 
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+        }
+	}
+
+    backward(svg) {
+        new UnHighlightNodeStep(this.node, this.edge).forward(svg)
+    }
 }
 
 class UnHighlightNodeStep {
@@ -64,6 +89,18 @@ class UnHighlightNodeStep {
         }
         if (this.edge2) {
             svg.select("#" + this.edge2.id).style("stroke", GRAY);
+        }
+	}
+
+    backward(svg) {
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        }
+        if (this.edge1) {
+            svg.select("#" + this.edge1.id).style("stroke", UCF_GOLD);
+        }
+        if (this.edge2) {
+            svg.select("#" + this.edge2.id).style("stroke", UCF_GOLD);
         }
 	}
 }
@@ -366,7 +403,17 @@ export default class binarysearchtree extends React.Component {
     // }
 
     backward(){
-        console.log("BACKWARDS CLICKED");
+        console.log("BACKWARD CLICKED");
+		if (this.state.running) return;
+		if (this.state.stepId - 1 < 0) return;
+
+		var stepId = this.state.stepId - 1;
+
+		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg g"));
+		console.log(this.state.steps[stepId]);
+		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Preorder Sort!</h1>" : "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+		this.setState({stepId: stepId});
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     forward(){		
@@ -382,7 +429,7 @@ export default class binarysearchtree extends React.Component {
 
 		this.setState({stepId: this.state.stepId + 1});
 
-		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
+		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
     }
 
     run(){
@@ -394,7 +441,7 @@ export default class binarysearchtree extends React.Component {
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		d3.timeout(this.run, this.props.waitTime);
     }
 
     playPreorder() {
@@ -418,7 +465,7 @@ export default class binarysearchtree extends React.Component {
 		console.log("RESTART CLICKED");
 
 		d3.select(this.ref.current).select("svg").remove();
-        document.getElementById("message").innerHTML = "Welcome to Binary Search!";
+        document.getElementById("message").innerHTML = "Welcome to Preorder Traversal!";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
         i = 0;
@@ -455,14 +502,15 @@ export default class binarysearchtree extends React.Component {
             <div>
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
-                    <button class="button" onClick={this.playPreorder}>Preorder</button>
-                    {/* <button class="button" onClick={this.pause}>Pause</button> */}
-                    <button class="button" onClick={this.add}>Add</button>
+                    {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
+                    <button class="button" onClick={this.pause}>Pause</button>
+                    {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
-                    {/* <button class="button" onClick={this.backward}>Step Backward</button> 
-                    <button class="button" onClick={this.forward}>Step Forward</button> */}
+                    <button class="button" onClick={this.backward}>Step Backward</button> 
+                    <button class="button" onClick={this.forward}>Step Forward</button>
+                    <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
-                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search Tree!</h1></span></div>
+                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Preorder Traversal!</h1></span></div>
                 <table>
                     <tr>
                         <div ref={this.ref} class=""></div>

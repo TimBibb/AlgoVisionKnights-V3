@@ -10,6 +10,7 @@ import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 var x = 50;
 var mid = 0;
@@ -524,7 +525,7 @@ export default class binarysearchtree extends React.Component {
 
 		this.setState({stepId: this.state.stepId + 1});
 
-		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
+		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
     }
 
     run(){
@@ -536,7 +537,7 @@ export default class binarysearchtree extends React.Component {
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		d3.timeout(this.run, this.props.waitTime);
     }
 
     playPreorder() {
@@ -603,6 +604,7 @@ export default class binarysearchtree extends React.Component {
                     <button class="button" onClick={this.restart}>Restart</button>
                     {/* <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button> */}
+                    <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search Tree!</h1></span></div>
                 <table>

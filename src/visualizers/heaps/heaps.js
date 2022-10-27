@@ -232,7 +232,7 @@ class Node {
     }
 }
 
-export default class binarysearchtree extends React.Component {
+export default class heaps extends React.Component {
     constructor(props) {
 		super(props);
 

@@ -30,7 +30,8 @@ import {
 	Queens,
 	// Recursion
 	TowersofHanoi,
-	FibonacciSequence
+	FibonacciSequence,
+	Floodfill
 } from './utils/utils';
 
 const algorithms = {
@@ -261,10 +262,12 @@ const algorithms = {
 			type: 'js',
 			description: <TowersofHanoi />
 		},
-		// {
-		// 	name: 'Floodfill',
-		// 	path: 'floodfill'
-		// },
+		{
+			name: 'Floodfill',
+			path: 'floodfill',
+			type: 'js',
+			description: <Floodfill />
+		},
 	],
 };
 

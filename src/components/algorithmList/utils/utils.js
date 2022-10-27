@@ -9,6 +9,7 @@ import selectiongif from './images/selectiongif.gif';
 import insertiongif from './images/insertiongif.gif';
 import quicksortgif from './images/quicksortgif.gif';
 import mergergif from './images/mergegif.gif';
+import heapsort from './images/heapsort.gif';
 import binarysearchgif from './images/binarysearchgif.gif';
 import singlylinkedlistgif from './images/singlylinkedlistgif.gif';
 import hashtable from './images/hashtable.png';
@@ -23,11 +24,11 @@ import binarysearchtreegif from './images/binarysearchtreegif.gif';
 import preordergif from './images/preordergif.gif';
 import inordergif from './images/inordergif.gif';
 import postordergif from './images/postordergif.gif';
-import towersofhanoi from './images/towersofhanoi.png';
-import fibonaccipng from './images/fibonacci.png';
-import heapsort from './images/heapsort.gif';
 import maxheap from './images/maxheap.gif';
 import huffmancodingtree from './images/huffmancodingtree.gif';
+import towersofhanoi from './images/towersofhanoi.png';
+import fibonaccipng from './images/fibonacci.png';
+import floodfill from './images/floodfill.gif';
 
 const constant = <MathJax.Node formula={`O(1)`} />;
 const log = <MathJax.Node formula={`O(log \\ n)`} />;
@@ -1065,6 +1066,23 @@ export function TowersofHanoi() {
 				</p>
 			</div>
 			<img src={towersofhanoi} alt='towersofhanoi' rel='noreferrer' />
+		</div>
+	);
+}
+
+export function Floodfill() {
+	return (
+		<div className='Floodfill'>
+			<div>
+				<p>
+					<strong>Problem Statement:</strong> Given a 2D screen, with the location of a pixel in the screen and a color, replace the color of the given pixel and all the adjacent same colored pixels with the given new color.
+				</p><br/>
+				<p>
+					The idea is simple, we first replace the color of the current pixel, then use recursion to color the 4 surrounding points.
+				</p>
+				
+			</div>
+			<img src={floodfill} alt='floodfill' rel='noreferrer' />
 		</div>
 	);
 }

@@ -64,6 +64,48 @@ export const map = {
         "}"
     ],
     bststructure: [],
+    heapsort: [
+        "function sort(arr) {",
+        tab + "var N = arr.length;",
+        // Build heap (rearrange array)
+        tab + "for (var i = Math.floor(N / 2) - 1; i >= 0; i--)",
+        tab + tab + "heapify(arr, N, i);",
+        // One by one extract an element from heap
+        tab + "for (var i = N - 1; i > 0; i--) {",
+            // Move current root to end
+        tab + tab + "var temp = arr[0];",
+        tab + tab + "arr[0] = arr[i];",
+        tab + tab + "arr[i] = temp;",
+            // call max heapify on the reduced heap
+        tab + tab + "heapify(arr, i, 0);",
+        tab + "}",
+        "}",
+ 
+        // To heapify a subtree rooted with node i which is
+        // an index in arr[]. n is size of heap
+        "function heapify(arr, N, i) {",
+        tab + "var largest = i;", // Initialize largest as root
+        tab + "var l = 2 * i + 1;", // left = 2*i + 1
+        tab + "var r = 2 * i + 2;", // right = 2*i + 2
+ 
+        // If left child is larger than root
+        tab + "if (l < N && arr[l] > arr[largest])",
+        tab + tab + "largest = l;",
+ 
+        // If right child is larger than largest so far
+        tab + "if (r < N && arr[r] > arr[largest])",
+        tab + tab + "largest = r;",
+ 
+        // If largest is not root
+        tab + "if (largest != i) {",
+        tab + tab + "var swap = arr[i];",
+        tab + tab + "arr[i] = arr[largest];",
+        tab + tab + "arr[largest] = swap;",
+            // Recursively heapify the affected sub-tree
+        tab + tab + "heapify(arr, N, largest);",
+        tab + "}",
+        "}"
+    ],
     postorder: [
         "postOrder(node) {",
         tab + "if (node is equal to null) return;",

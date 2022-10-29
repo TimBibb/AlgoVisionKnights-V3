@@ -3,6 +3,7 @@ import "./bubblesort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
@@ -340,7 +341,8 @@ export default class BubbleSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: 2000
+			waitTime: 2000,
+			inputMode: false
 		};
 
 		this.ref = React.createRef();
@@ -352,6 +354,7 @@ export default class BubbleSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 	}
 
 	NavigateToDashboard(){
@@ -647,6 +650,11 @@ export default class BubbleSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+		// If inputMode is on! reinitialize with the correct arr
+		// if (this.state.inputMode) {
+		// 	console.log("HELLO!")
+		// 	this.initialize(this.state.arr,this.state.arr.length, this.ref.current)
+		// }
 		// Component mounted and unsorted array created -> Initialize visualizer
 		if (this.state.arr.length > prevState.arr.length) {
 			console.log("Unsorted");
@@ -661,7 +669,7 @@ export default class BubbleSort extends React.Component {
 		// Part of restart -> Reinitialize with original array
         else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
 			console.log("Steps changed");
-			var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
+			let svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
 			svg.attr("visibility", "visible");
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
@@ -669,6 +677,37 @@ export default class BubbleSort extends React.Component {
 			this.run();
 			console.log("We ran");
 		}
+	}
+
+	handleInsert() {
+		if (this.state.running) {
+			return;
+		}
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
+		}
+		// Check each content if it is a number
+		for (let value of arr) 
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		//this.setState({running: true, inputMode: true, arr:arr});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
 	}
 
 	render() {
@@ -682,6 +721,10 @@ export default class BubbleSort extends React.Component {
 					<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
+				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Bubble Sort!</h1></span></div>
 				<div class="parent-svg">
 					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
@@ -691,7 +734,6 @@ export default class BubbleSort extends React.Component {
 								handleCodeStepsChange={this.handleCodeStepsChange}>
 					</Pseudocode>
 				</div>
-
 				{/* <div class="button-location">
 					<button class="button" onClick={this.NavigateToDashboard}>Dashboard</button>
 					<button class="button2" >More Information</button>

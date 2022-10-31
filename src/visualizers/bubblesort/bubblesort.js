@@ -446,8 +446,8 @@ export default class BubbleSort extends React.Component {
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
 
-		console.log(steps);
-		console.log(messages);
+		//console.log(steps);
+		//console.log(messages);
 	}
 
 	dataInit(size) {
@@ -473,7 +473,8 @@ export default class BubbleSort extends React.Component {
 
 		let svg = d3.select(ref)
 			.append("svg")
-				.attr("width", (size * (barWidth + barOffset)) + 100)
+				// size -> 10
+				.attr("width", (10 * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
 		let bars = svg.selectAll(".bar")
@@ -651,10 +652,21 @@ export default class BubbleSort extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		// If inputMode is on! reinitialize with the correct arr
-		// if (this.state.inputMode) {
-		// 	console.log("HELLO!")
-		// 	this.initialize(this.state.arr,this.state.arr.length, this.ref.current)
-		// }
+		// *
+		if (this.state.inputMode) {
+			console.log("HELLO!")
+			// Restart to clear original array for new inputted array
+			this.restart();
+			// Reinitialize with user input array
+			this.initialize(this.state.arr,this.state.arr.length, this.ref.current)
+			// Make visual visible after reinitializing
+			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+			this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+			this.play();
+			this.setState({inputMode: false});
+		}
+		// *
+
 		// Component mounted and unsorted array created -> Initialize visualizer
 		if (this.state.arr.length > prevState.arr.length) {
 			console.log("Unsorted");
@@ -669,6 +681,7 @@ export default class BubbleSort extends React.Component {
 		// Part of restart -> Reinitialize with original array
         else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
 			console.log("Steps changed");
+			this.dataInit();
 			let svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
 			svg.attr("visibility", "visible");
 		}
@@ -679,6 +692,7 @@ export default class BubbleSort extends React.Component {
 		}
 	}
 
+	// *
 	handleInsert() {
 		if (this.state.running) {
 			return;
@@ -699,7 +713,9 @@ export default class BubbleSort extends React.Component {
 			}
 		// Must input pass all the requirements..
 		// Set state for running, inputmode, and array
-		//this.setState({running: true, inputMode: true, arr:arr});
+		this.setState({inputMode: true, arr:arr});
+		
+		
 	}
 
 	isNum(value) {
@@ -709,6 +725,7 @@ export default class BubbleSort extends React.Component {
 		x = parseFloat(value);
 		return (x | 0) === x;
 	}
+	// *
 
 	render() {
 		return (

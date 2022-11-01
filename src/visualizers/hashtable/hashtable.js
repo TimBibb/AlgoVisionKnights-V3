@@ -5,6 +5,8 @@ import "../css/button.css";
 import "../css/messages.css";
 import { Form } from "react-bootstrap";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -608,7 +610,7 @@ export default class HashTable extends React.Component {
     document.getElementById("message").innerHTML = this.messages[this.stepId];
 
     for (const step of this.steps[this.stepId]) step.fastForward(svg);
-
+    this.props.codeSteps[this.state.stepId].forward();
     this.stepId = this.stepId + 1;
 
     this.running = false;
@@ -642,7 +644,7 @@ export default class HashTable extends React.Component {
 
     document.getElementById("message").innerHTML = this.messages[this.stepId];
     for (const step of this.steps[this.stepId]) step.forward(svg);
-
+    this.props.codeSteps[this.state.stepId].forward();
     this.stepId = this.stepId + 1;
     d3.timeout(this.run, this.props.waitTime);
   }
@@ -783,6 +785,10 @@ export default class HashTable extends React.Component {
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"hashtable"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+        </div>
       </div>
     );
   }

@@ -3,6 +3,8 @@ import * as d3 from "d3";
 import "./hashtablequadratic.css";
 import "../css/button.css";
 import "../css/messages.css";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -782,6 +784,10 @@ export default class HashTable extends React.Component {
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"hashtablequadratic"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+        </div>
       </div>
     );
   }

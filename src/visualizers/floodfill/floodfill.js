@@ -4,6 +4,7 @@ import "./floodfill.css";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
 
 
 class EmptyStep {
@@ -28,7 +29,7 @@ class VisibilityStep {
 }
 
 class TileStep{
-    constructor( rowID,colID,color){
+    constructor( rowID, colID, color){
     this.rowID = rowID;
     this.colID = colID;
     this.color = color;
@@ -37,7 +38,7 @@ class TileStep{
 
     forward(){ 
     
-    d3.select("#code"+ this.rowID + this.colID).attr("fill",this.color);
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", this.color);
   
   }
 
@@ -46,9 +47,14 @@ class TileStep{
   }
 }
 
+class Tile{
+    constructor(tileID, color){
+        this.tileID = tileID;
+        this.color = color;
+    }
+}
 
-
-export default class Queens extends React.Component {
+export default class Floodfill extends React.Component {
 
   constructor(props) {
     super(props);
@@ -80,14 +86,14 @@ export default class Queens extends React.Component {
 
   initialize() {
 
-    let n = 4;
+    let n = 11;
 
-    const queen = {
-      name: "Black Queen",    
+    const megaTile = {
+      name: "Mega Tile",    
       code: "\u265B",
     };
 
-    const size = 100, matrix = size * n;
+    const size = 25, matrix = size * n;
 
     console.log(matrix);
 
@@ -100,150 +106,140 @@ export default class Queens extends React.Component {
     for(var i = 0; i < n; i++) {
       for(var j = 0; j < n; j++) {
         const tile = svg.append("rect")
-          .attr("x", i * size)
-          .attr("y", j * size)
-          .attr("width", size + "px")
-          .attr("height",size + "px");
+        .attr("id", i+j)
+        .attr("x", i * size)
+        .attr("y", j * size)
+        .attr("width", size + "px")
+        .attr("height", size + "px");
 
-        if ((i+j)%2===0) {
-          tile.attr("fill", "#EF3F88");
+        if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
+            tile.attr("fill", GRAYBLACK);
+        }
+        else if(j==0 || j==Math.floor(n/2) || j==(n-1)){
+            tile.attr("fill", GRAYBLACK)
         }
         else {
-          tile.attr("fill", "#FFCE36");
+            tile.attr("fill", UCF_GOLD);
         }
 
-        const piece = svg.append("text")
-          .style("font-size", size*(4/5)+"px")
-          .attr("text-anchor","middle")
-          .attr("x", i * size)
-          .attr("y", j * size)
-          .attr("dx", size / 2)
-          .attr("dy", size * 4/5);
+        tile.attr("id", "code" + j + i)
+        .classed('team1', true)
+        .text(megaTile.code)
+
+        // const piece = svg.append("text")
+        //   .style("font-size", size*(4/5)+"px")
+        //   .attr("text-anchor","middle")
+        //   .attr("x", i * size)
+        //   .attr("y", j * size)
+        //   .attr("dx", size / 2)
+        //   .attr("dy", size * 4/5);
 
 
-        piece.attr("id", "code" + j + i)
-          .classed('team1', true)
-          .text(queen.code)
-          .attr("visibility", "hidden");
+        // piece.attr("id", "code" + j + i)
+        //   .classed('team1', true)
+        //   .text(queen.code)
+        //   .attr("visibility", "hidden");
+        
       }
     }
+
     this.setState({n : n});
   }
 
-  nqueens(board, col, row, n) {
+  floodfill(board, col, row, n) {
     var steps = [];
     var messages = [];
+    // var arr = { ID:[], color:[]}
+    col = Math.floor(Math.random() * 10);
+    row = Math.floor(Math.random() * 10);
 
     steps.push(new EmptyStep());
-    messages.push("<h1>Beginning nQueens!</h1>");
+    messages.push("<h1>Beginning Floodfill!</h1>");
 
-    function solveNQ(board, col) {
-      if(col >= n) {
-        steps.push(new EmptyStep());
-        messages.push("<h1>nQueens solution found!</h1>");
+    console.log("board: " + board + " col: " + col + " row: " + row + " n: " + n);
+
+    floodFillUtil(board, col, row, n);
+
+    // i = col, j = row
+    function floodFillUtil(board, i, j, n){
+        // Base cases
+        if(i==0 || i==Math.floor(n/2) || i==(n-1) )
+            return;
+        if(j==0 || j==Math.floor(n/2) || j==(n-1))
+            return;
+
+        steps.push(new TileStep(row, i, "white"));
+        messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+
+        floodFillUtil(board, i + 1, j, n);
+        //floodFillUtil(board, i - 1, j, n);
+        floodFillUtil(board, i, j + 1, n);
+        // floodFillUtil(board, i, j - 1, n);
+
+        return [steps, messages, board];
+    }
+
+    // Prints the colored Tile
+    // for(var i = 1; i < n; i++){
+    //     steps.push(new TileStep(row, i, "white"));
+    //     messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+    // }
+
+      // A recursive function to replace
+      // previous color 'prevC' at '(x, y)'
+      // and all surrounding pixels of (x, y)
+      // with new color 'newC' and
+    //   function floodFillUtil(board, i, j, prevC, newC)
+    //   {
         
-        return true;
-      }
 
-      for(var i = 0; i < n; i++) {
-        steps.push(new VisibilityStep(i, col, "visible"));
-        messages.push("<h1>Queen: Row " + (i+1) + " Column "+ (col+1) + ".</h1>");
+    //     // Base cases
+    //     if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
+    //         return;
+    //     }
+    //     if(j==0 || j==Math.floor(n/2) || j==(n-1)){
+    //         return;
+    //     }
+        
 
-        if(queenSafe(board,i,col,n)) {
-          board[i][col] = 1;
+    //     // if (x < 0 || x >= M || y < 0 || y >= N) return;
+    //     // if (screen[x][y] != prevC) return;
+ 
+    //     // Replace the color at (x, y)
+    //     steps.push(new TileStep(row, i, "white"));
+    //     messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+        
+    //     console.log("CMONNNN")
+ 
+    //     // Recur for north, east, south and west
+    //     floodFillUtil(board, i + 1, j, prevC, newC);
+    //     floodFillUtil(board, i - 1, j, prevC, newC);
+    //     floodFillUtil(board, i, j + 1, prevC, newC);
+    //     floodFillUtil(board, i, j - 1, prevC, newC);
 
-          if(solveNQ(board, col+1, n)===true) {
-            return true;
-          }
-
-          board[i][col] = 0;
-        }
-
-        if (i + 1 !== n) {
-          steps.push(new VisibilityStep(i, col, "hidden"));
-          messages.push("<h1>Moving to next available space.</h1>");
-        }
-        else {
-          steps.push(new VisibilityStep(i, col, "hidden"));
-          messages.push("<h1>Backtracking...</h1>");
-        }
-      }
-
-      return false;
-    }
-
-    function queenSafe(board, row, col, n){
-      var flag = true;
-      var i , j;
-      for( i= 0; i<col;i++) {
-        if(board[row][i]===1) {
-          steps.push(new TileStep(row,i,"white"));
-          messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-          steps.push(new TileStep(row,i,"black"));
-          messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-
-          flag = false;
-          //return false;
-        }
-      }
-
-      for( i = row, j = col; i>=0 &&j>=0; i--,j--) {
-        if(board[i][j]===1) {
-          steps.push(new TileStep(i,j,"white"));
-          messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          steps.push(new TileStep(i,j,"black"));
-          messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          
-          flag = false;
-          //return false;
-        }
-      }
-
-      for( i = row, j = col; j>=0 && i < n; i++,j--){
-        if(board[i][j]===1){
-          steps.push(new TileStep(i,j,"white"));
-          messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          steps.push(new TileStep(i,j,"black"));
-          messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          
-          flag = false;
-          //return false;
-        }
-      }
-
-      if(flag===false) return flag;
-
-      steps.push(new EmptyStep());
-      messages.push("<h1>No queens are in range.</h1>");
-
-      return flag;
-    }
-
-    function NQ() {
-      const board = new Array(n);
-      var i;
-
-      for( i = 0; i < n;i++) {
-        board[i] = new Array(n);
-      }
-
-      for(i = 0;i<n;i++) {
-        for(var j = 0;j<n;j++) {
-          board[i][j] = 0;
-        }
-      }
-
-      console.log(board);
-
-      if(solveNQ(board, 0)===false) {
-        console.log("");
-        return false;
-      }
-
-        return true;
-    }
-
-    NQ();
+    //     return [board];
+    //   }
+ 
+    //   It mainly finds the previous color
+    //   on (x, y) and calls floodFillUtil()
+    //   function floodFill(board, x, y, newC) {
+    //     var prevC = board[x][y];
+    //     if (prevC == newC) return;
+    //     floodFillUtil(board, x, y, prevC, newC);
+    //   }
+ 
+    //   Driver code
+    //   var screen = [];
+    //   var x = 4,
+    //     y = 4,
+    //     newC = 3;
+    //   floodFill(board, i, j, n);
+ 
+    //   console.log("Updated screen after" + "call to floodFill: <br>");
+    //   for (var i = 0; i < n; i++) {
+    //     for (var j = 0; j < n; j++) console.log(board[i][j] + " ");
+    //     console.log("<br>");
+    //   }
 
     this.setState({steps: steps, messages: messages});
   }
@@ -300,6 +296,7 @@ export default class Queens extends React.Component {
 
     this.setState({running: true});
     this.run();
+    // this.floodfill(this.state.board, this.state.col,this.state.row,this.state.n);
   }
 
   pause() {
@@ -314,7 +311,7 @@ export default class Queens extends React.Component {
 
     var stepId = this.state.stepId;
 
-    document.getElementById("message").innerHTML = "<h1>Welcome to nQueens!</h1>";
+    document.getElementById("message").innerHTML = "<h1>Welcome to Floodfill!</h1>";
 
     while (stepId - 1 >= 0) {
       this.state.steps[--stepId].backward();
@@ -332,7 +329,7 @@ export default class Queens extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.n !== prevState.n) {
       console.log("SIZE CHANGED");
-      this.nqueens(this.state.board, this.state.col,this.state.row,this.state.n);
+      this.floodfill(this.state.board, this.state.col, this.state.row, this.state.n);
     }
 
     else if (this.state.running !== prevState.running) {
@@ -352,7 +349,7 @@ export default class Queens extends React.Component {
           <button class="button" onClick={this.forward}>Step Forward</button>
           <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
-        <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to nQueens!</h1></span></div>
+        <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Floodfill!</h1></span></div>
         <div ref={this.ref} class="center-screen"></div>
       </div>
     );

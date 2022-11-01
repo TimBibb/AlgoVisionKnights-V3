@@ -52,7 +52,7 @@ class SortedStep {
         var height = 700;
 		var sorty = 50;
 		var sortx = parseInt(svg.select("#" + this.ids[this.id1]).select("rect").attr("x"));
-
+		console.log('IDS ARRAY '+ this.ids)
 		if (this.id1 === 0) {
 			svg.select("#divisor").attr("visibility", "hidden");
 			svg.select("#sortTxt").attr("visibility", "hidden");
@@ -464,6 +464,7 @@ export default class BubbleSort extends React.Component {
 		const barWidth = 70;
 		const barOffset = 30;
 		const height = 450;
+		console.log("ARRAY SIZE: " + size)
 
 		let yScale = d3.scaleLinear()
 			.domain([0, d3.max(arr)])
@@ -575,6 +576,8 @@ export default class BubbleSort extends React.Component {
 			ids.push("g" + i);
 		}
 
+		console.log('IDS SIZE: ' + ids)
+
 		this.setState({ids: ids});
 
 		svg.attr("visibility", "hidden");
@@ -653,44 +656,61 @@ export default class BubbleSort extends React.Component {
 		// *
 		if (this.state.inputMode) {
 			console.log("HELLO!")
-			// Clear existing svg
-			d3.select(this.ref.current).select("svg").remove();
-			// Reinitialize with user input array
-			this.initialize(this.state.arr,this.state.arr.length, this.ref.current)
-			// Make visual visible after reinitializing
-			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-			this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
-			this.play();
-			this.setState({inputMode: false});
-			// User input mode only works with size of 10
-			// the step array encounters a null
-		
-		}
-		// *
+			// Component mounted and unsorted array created -> Initialize visualizer
+			console.log("FIRST ARR" + JSON.stringify(this.state.arr))
+			console.log("second ARR" + JSON.stringify(prevState.arr))
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("Unsorted");
+				// this.printArray(this.state.arr, this.state.size);
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("YO")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("Steps changed");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("We ran");
+				this.setState({inputMode: false});
 
-		// Component mounted and unsorted array created -> Initialize visualizer
-		if (this.state.arr.length > prevState.arr.length ) {
-			console.log("Unsorted");
-			//this.printArray(this.state.arr, this.state.size);
-			this.initialize(this.state.arr, this.state.size, this.ref.current);
+			}
+		} else {
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("Unsorted");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("YO")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("Steps changed");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("We ran");
+			}
 		}
-		// Visualizer initialized -> Sort copy of array and get steps
-		else if (this.state.ids.length > prevState.ids.length) {
-			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-			console.log("YO")
-			this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
-		}
-		// Part of restart -> Reinitialize with original array
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("Steps changed");
-			let svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
-			svg.attr("visibility", "visible");
-		}
-		else if (this.state.running !== prevState.running && this.state.running === true)
-		{
-			this.run();
-			console.log("We ran");
-		}
+		
 	}
 
 	// *
@@ -718,7 +738,8 @@ export default class BubbleSort extends React.Component {
 		}
 		// Must input pass all the requirements..
 		// Set state for running, inputmode, and array
-		this.setState({inputMode: true, arr:arr});
+		console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
 	isNum(value) {

@@ -10,6 +10,7 @@ import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 35;
 var mid = 0;

@@ -9,6 +9,7 @@ import LabeledNode from "../../foundation/tree/LabeledNode";
 import Edge from "../../foundation/tree/Edge";
 import { create, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 50;
 var mid = 0;
@@ -832,6 +833,10 @@ export default class binarysearchtree extends React.Component {
                         </div>
                     </tr>
                 </table>
+                <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"heaps"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

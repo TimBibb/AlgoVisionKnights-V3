@@ -335,6 +335,8 @@ export default class binarysearch extends React.Component {
 										// button so as not to ruin the visualizer
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
+		
+		this.props.codeSteps[this.state.stepId].forward();
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});

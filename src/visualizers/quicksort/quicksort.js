@@ -452,23 +452,22 @@ export default class QuickSort extends React.Component {
 		}
 	}
 
-	quickSort(low, high, arr, size, ids, steps, messages, stepTime, pseudocodeArr)
+	quickSort(low, high, arr, size, ids, steps, messages, stepTime)
     {
-        let split;
+        var split;
         if (low < high)
         {
 			messages.push("<h1>Recursively calling QuickSort from index " + low + " through " + high + ".</h1>");
             steps.push(new PartitionStep(low, high, ids, stepTime));
-            pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+             
 
-            [split, pseudocodeArr] = this.partition(low, high, arr, ids, steps, messages, stepTime, pseudocodeArr);
+            split = this.partition(low, high, arr, ids, steps, messages, stepTime);
 
 			messages.push("<h1>Returned from calling QuickSort from index " + low + " through " + high + ".</h1>");
-			steps.push(new UnpartitionStep(low, high, ids, stepTime));     
-			pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));       
+			steps.push(new UnpartitionStep(low, high, ids, stepTime));            
              
-            pseudocodeArr = this.quickSort(low, split - 1, arr, split - low, ids, steps, messages, stepTime, pseudocodeArr);
-            pseudocodeArr = this.quickSort(split + 1, high, arr, high - split + 1, ids, steps, messages, stepTime, pseudocodeArr);
+            this.quickSort(low, split - 1, arr, split - low, ids, steps, messages, stepTime);
+            this.quickSort(split + 1, high, arr, high - split + 1, ids, steps, messages, stepTime);
         }
         else
         {
@@ -481,53 +480,44 @@ export default class QuickSort extends React.Component {
                 
 				messages.push("<h1>Recursively calling QuickSort on index " + low + ".</h1>");
 				steps.push(new PartitionStep(low, low, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
 				messages.push("<h1>Index " + low + " is a single element partition. It is already in its sorted position.</h1>");
 				steps.push(new SortedStep(low, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
                  
 				messages.push("<h1>Index " + low + " is a single element partition. It is already in its sorted position.</h1>");
 				steps.push(new UnpartitionStep(low, low, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
             }    
             else if (low <= high)
             {
 				messages.push("<h1>Recursively calling QuickSort on index " + high + ".</h1>");
 				steps.push(new PartitionStep(high, high, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
 				messages.push("<h1>Index " + high + " is a single element partition. It is already in its sorted position.</h1>");
 				steps.push(new SortedStep(high, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
 				messages.push("<h1>Index " + high + " is a single element partition. It is already in its sorted position.</h1>");
 				steps.push(new UnpartitionStep(high, high, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+
             }
         }
-		return pseudocodeArr;
     }
 
-    partition(low, high, arr, ids, steps, messages, stepTime, pseudocodeArr)
+    partition(low, high, arr, ids, steps, messages, stepTime)
     {
-        let pivot = low++; 
-        let pHigh = high;
+        var pivot = low++; 
+        var pHigh = high;
 
         
         // Set/color the pointers
         messages.push("<h1>Index " + low + " is the Low pointer.</h1>");
 		steps.push(new ColorLowStep(low, low, ids));
-		pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
 
         messages.push("<h1>Index " + high + " is the High pointer.</h1>");
 		steps.push(new ColorHighStep(high, high, ids));
-		pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
 
         messages.push("<h1>Index " + pivot + " is the pivot.</h1>");
 		steps.push(new ColorPivotStep(pivot, ids));
-		pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
 
         while (low <= high)
         {
@@ -537,8 +527,9 @@ export default class QuickSort extends React.Component {
                 {
                     messages.push("<h1>Low is not greater than the Pivot AND has reached the end of the array.</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
+
                     low++;
+                     
                     break;
 
                 }
@@ -546,28 +537,24 @@ export default class QuickSort extends React.Component {
                 {
 					messages.push("<h1>Low is not greater than the Pivot, move Low to the right.</h1>");
 					steps.push(new ColorLowStep(low, ++low, ids));
-					pseudocodeArr.push(new HighlightLineStep(12,this.props.lines));
                 }
             }
 
             if (low <= high && arr[low] > arr[pivot])
             {
 				messages.push("<h1>Low is greater than the Pivot, switch to High Pointer.</h1>");
-				steps.push(new EmptyStep());              
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));   
+				steps.push(new EmptyStep());                 
             }
 
             while (high >= low && arr[high] > arr[pivot]){
 				messages.push("<h1>High is not less than the Pivot, move High to the left.</h1>");
-				steps.push(new ColorHighStep(high, --high, ids));
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));                 
+				steps.push(new ColorHighStep(high, --high, ids));                 
             }
 
             if (high >= low && arr[high] <= arr[pivot])
             {
                 messages.push("<h1>High is less than the Pivot. Swap Low and High!</h1>");
 				steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));
             }
 
             if (low < high)
@@ -576,19 +563,15 @@ export default class QuickSort extends React.Component {
 
 				messages.push("<h1>High is less than the Pivot. Swap Low and High!</h1>");
 				steps.push(new SwapStep(low, high, ids, stepTime));
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));
 
                 messages.push("<h1>After swapping positions, move both pointers.</h1>");
 				steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));
 
 				messages.push("<h1>After swapping positions, move both pointers.</h1>");
 				steps.push(new ColorLowStep(low, ++low, ids));
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));
 
 				messages.push("<h1>After swapping positions, move both pointers.</h1>");
-				steps.push(new ColorHighStep(high, --high, ids));    
-				pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));         
+				steps.push(new ColorHighStep(high, --high, ids));             
             }
         }
 		
@@ -597,37 +580,31 @@ export default class QuickSort extends React.Component {
 
 		messages.push("<h1>High and Low pointers have crossed. Swap High and Pivot!</h1>");
 		steps.push(new SwapStep(pivot, high, ids, stepTime));
-		pseudocodeArr.push(new HighlightLineStep(16,this.props.lines));
         
 		messages.push("<h1>Pivot is now in its sorted spot.</h1>");
 		steps.push(new SortedStep(high, ids, stepTime));
-		pseudocodeArr.push(new HighlightLineStep(17,this.props.lines));
          
-        return [high,pseudocodeArr];
+        return high;
     }
 
     sort(arr, ids, size, stepTime)
 	{
-		let steps = [];
-		let messages = [];
-		let pseudocodeArr = [];
+		var steps = [];
+		var messages = [];
 
 		messages.push("<h1>Beginning Quick Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
-        pseudocodeArr = this.quickSort(0, size - 1, arr, size, ids, steps, messages, stepTime, pseudocodeArr);
+        this.quickSort(0, size - 1, arr, size, ids, steps, messages, stepTime);
 
 		console.log("Sorted");
 		this.printArray(arr, size);
 
 		messages.push("<h1>Finished Quick Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});
-		this.props.handleCodeStepsChange(pseudocodeArr);
 
 		console.log(steps);
 		console.log(messages);

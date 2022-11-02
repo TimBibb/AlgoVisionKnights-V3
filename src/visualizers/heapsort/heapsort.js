@@ -7,7 +7,6 @@ import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
-import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -193,7 +192,6 @@ export default class HeapSort extends React.Component {
       waitTime: 5000,
       running: false,
       stepId: 0,
-      
     };
 
     this.ref = React.createRef();
@@ -658,14 +656,7 @@ export default class HeapSort extends React.Component {
         <div class="center-screen">
           <span id="message"><h1>Welcome to Heap Sort!</h1></span>
         </div>
-        <div class="parent-svg">
-					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
-					<Pseudocode algorithm={"heapsort"} lines={this.props.lines} 
-								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
-								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
-								handleCodeStepsChange={this.handleCodeStepsChange}>
-					</Pseudocode>
-				</div>
+        <div ref={this.ref} class="center-screen"></div>
       </div>
     );
   }

@@ -6,6 +6,7 @@ import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
+
 class EmptyStep {
   forward() {}
   backward() {}
@@ -47,7 +48,7 @@ class NodeColorChangeStep {
   }
 }
 
-export default class Prims extends React.Component {
+export default class Kruskals extends React.Component {
   constructor(props) {
     super(props);
 
@@ -81,7 +82,7 @@ export default class Prims extends React.Component {
     this.setState({ graph: graph });
   }
 
-  prims(graph, stepTime) {
+  kruskals(graph, stepTime) {
     console.log(graph);
     var messages = [];
     var currentMessage = "";
@@ -112,46 +113,54 @@ export default class Prims extends React.Component {
     flushBuffer();
 
     addStep(new EmptyStep());
-    createMessage("Select an arbitrary node to start building the MST.");
+    createMessage("Select all the edges of the graph and insert them in a priority queue.");
     flushBuffer();
 
     var pq = [];
     var nodeVisited = Array.from({ length: graph.numberOfNodes }, () => false);
     var edgeSelected = Array.from({ length: graph.numberOfEdges }, () => false);
-    nodeVisited[0] = true;
-    addStep(
-      new NodeColorChangeStep(
-        this.ref.current,
-        graph.nodeInfo[0].circle.attr.id,
-        graph.nodeInfo[0].text.attr.id,
-        "gray",
-        "white"
-      )
-    );
-    createMessage("We will start with node 0 to build the MST from.");
-    flushBuffer();
+    //nodeVisited[0] = true;
+    // addStep(
+    //   new NodeColorChangeStep(
+    //     this.ref.current,
+    //     graph.nodeInfo[0].circle.attr.id,
+    //     graph.nodeInfo[0].text.attr.id,
+    //     "gray",
+    //     "white"
+    //   )
+    // );
+    // createMessage("We will start with node 0 to build the MST from.");
+    // flushBuffer();
 
-    addStep(new EmptyStep());
-    createMessage("Insert all unvisited edges that are incident to node 0 into the queue.");
-    flushBuffer();
+    // addStep(new EmptyStep());
+    // createMessage("Insert all unvisited edges that are incident to node 0 into the queue.");
+    // flushBuffer();
 
-    for (const edge of graph.adjacencyList[0]) {
+    // for (const edge of graph.adjacencyList[0]) {
+    //   let [node1, node2, _weight, edgeId] = edge;
+
+    //   addStep(
+    //     new EdgeColorChangeStep(
+    //       this.ref.current,
+    //       graph.edgeInfo[edgeId].line.attr.id,
+    //       graph.edgeInfo[edgeId].text.attr.id,
+    //       "gray",
+    //       "#FFCE36"
+    //     )
+    //   );
+    //   createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
+    //   flushBuffer();
+
+    //   pq.push(edgeId);
+    // }
+
+    for (const edge of graph.edges){
       let [node1, node2, _weight, edgeId] = edge;
-
-      addStep(
-        new EdgeColorChangeStep(
-          this.ref.current,
-          graph.edgeInfo[edgeId].line.attr.id,
-          graph.edgeInfo[edgeId].text.attr.id,
-          "gray",
-          "#FFCE36"
-        )
-      );
-      createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
-      flushBuffer();
-
       pq.push(edgeId);
     }
+
+    // pq.sort();
+    console.log(pq);
 
     for (let i = 0; pq.length > 0 && i < 50; i++) {
       addStep(new EmptyStep());
@@ -159,6 +168,7 @@ export default class Prims extends React.Component {
       flushBuffer();
 
       pq.sort(comparator);
+
       let currentId = pq[0];
       let [node1, node2, _weight, edgeId] = graph.edges[currentId];
       [pq[0], pq[pq.length - 1]] = [pq[pq.length - 1], pq[0]];
@@ -203,66 +213,198 @@ export default class Prims extends React.Component {
         continue;
       }
 
-      var unvisitedNode = nodeVisited[node1] ? node2 : node1;
-      nodeVisited[unvisitedNode] = true;
-      edgeSelected[edgeId] = true;
+      if(nodeVisited[node1] == false && nodeVisited[node2] == false){
+        nodeVisited[node1] = true;
+        nodeVisited[node2] = true;
+        edgeSelected[edgeId] = true;
 
-      addStep(new EmptyStep());
-      createMessage(
-        "Node " +
-          unvisitedNode +
-        " has not been added to the MST.");
-      flushBuffer();
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node1 +
+          " has not been added to the MST.");
+        flushBuffer();
 
-      addStep(
-        new EdgeColorChangeStep(
-          this.ref.current,
-          graph.edgeInfo[currentId].line.attr.id,
-          graph.edgeInfo[currentId].text.attr.id,
-          "white",
-          "#1ACA1E"
-        )
-      );
-      addStep(
-        new NodeColorChangeStep(
-          this.ref.current,
-          graph.nodeInfo[unvisitedNode].circle.attr.id,
-          graph.nodeInfo[unvisitedNode].text.attr.id,
-          "gray",
-          "white"
-        )
-      );
-      createMessage(
-        "Include this edge and node " +
-          unvisitedNode +
-          " in the MST."
-      );
-      flushBuffer();
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node1].circle.attr.id,
+            graph.nodeInfo[node1].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
 
-      addStep(new EmptyStep());
-      createMessage(
-        "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
-      );
-      flushBuffer();
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node2 +
+          " has not been added to the MST.");
+        flushBuffer();
 
-      for (const edge of graph.adjacencyList[unvisitedNode]) {
-        let [from, to, _weight, edgeId] = edge;
-        if (nodeVisited[to]) {
-          continue;
-        }
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node2].circle.attr.id,
+            graph.nodeInfo[node2].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
+
         addStep(
           new EdgeColorChangeStep(
             this.ref.current,
-            graph.edgeInfo[edgeId].line.attr.id,
-            graph.edgeInfo[edgeId].text.attr.id,
-            "gray",
-            "#FFCE36"
+            graph.edgeInfo[currentId].line.attr.id,
+            graph.edgeInfo[currentId].text.attr.id,
+            "white",
+            "#1ACA1E"
           )
         );
-        createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
+
+        createMessage(
+          "Include this edge, node " +
+            node1 + " and node " + node2 +
+            " in the MST."
+        );
         flushBuffer();
-        pq.push(edgeId);
       }
+      else if(nodeVisited[node1] == false && nodeVisited[node2] == true){
+        nodeVisited[node1] = true;
+        edgeSelected[edgeId] = true;
+
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node1 +
+          " has not been added to the MST.");
+        flushBuffer();
+
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node1].circle.attr.id,
+            graph.nodeInfo[node1].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
+
+        addStep(
+          new EdgeColorChangeStep(
+            this.ref.current,
+            graph.edgeInfo[currentId].line.attr.id,
+            graph.edgeInfo[currentId].text.attr.id,
+            "white",
+            "#1ACA1E"
+          )
+        );
+
+        createMessage(
+          "Include this edge and node " +
+            node1 +
+            " in the MST."
+        );
+        flushBuffer();
+      }
+      else if(nodeVisited[node1] == true && nodeVisited[node2] == false){
+        nodeVisited[node2] = true;
+        edgeSelected[edgeId] = true;
+
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node2 +
+          " has not been added to the MST.");
+        flushBuffer();
+
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node2].circle.attr.id,
+            graph.nodeInfo[node2].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
+
+        addStep(
+          new EdgeColorChangeStep(
+            this.ref.current,
+            graph.edgeInfo[currentId].line.attr.id,
+            graph.edgeInfo[currentId].text.attr.id,
+            "white",
+            "#1ACA1E"
+          )
+        );
+
+        createMessage(
+          "Include this edge and node " +
+            node2 +
+            " in the MST."
+        );
+        flushBuffer();
+      }
+      // var unvisitedNode = nodeVisited[node1] ? node2 : node1;
+      // nodeVisited[unvisitedNode] = true;
+      // edgeSelected[edgeId] = true;
+
+      // addStep(new EmptyStep());
+      // createMessage(
+      //   "Node " +
+      //     unvisitedNode +
+      //   " has not been added to the MST.");
+      // flushBuffer();
+
+      // addStep(
+      //   new EdgeColorChangeStep(
+      //     this.ref.current,
+      //     graph.edgeInfo[currentId].line.attr.id,
+      //     graph.edgeInfo[currentId].text.attr.id,
+      //     "white",
+      //     "#1ACA1E"
+      //   )
+      // );
+      // addStep(
+      //   new NodeColorChangeStep(
+      //     this.ref.current,
+      //     graph.nodeInfo[unvisitedNode].circle.attr.id,
+      //     graph.nodeInfo[unvisitedNode].text.attr.id,
+      //     "gray",
+      //     "white"
+      //   )
+      // );
+      // createMessage(
+      //   "Include this edge and node " +
+      //     unvisitedNode +
+      //     " in the MST."
+      // );
+      // flushBuffer();
+
+      // addStep(new EmptyStep());
+      // createMessage(
+      //   "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
+      // );
+      // flushBuffer();
+
+      // for (const edge of graph.adjacencyList[unvisitedNode]) {
+      //   let [from, to, _weight, edgeId] = edge;
+      //   if (nodeVisited[to]) {
+      //     continue;
+      //   }
+      //   addStep(
+      //     new EdgeColorChangeStep(
+      //       this.ref.current,
+      //       graph.edgeInfo[edgeId].line.attr.id,
+      //       graph.edgeInfo[edgeId].text.attr.id,
+      //       "gray",
+      //       "#FFCE36"
+      //     )
+      //   );
+      //   createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
+      //   flushBuffer();
+      //   pq.push(edgeId);
+      // }
     }
 
     addStep(new EmptyStep());
@@ -283,7 +425,7 @@ export default class Prims extends React.Component {
     flushBuffer();
 
     addStep(new EmptyStep());
-    createMessage("Finished Prim's!");
+    createMessage("Finished Kruskal's!");
     flushBuffer();
 
     console.log(steps);
@@ -316,7 +458,7 @@ export default class Prims extends React.Component {
     if (this.state.stepId - 1 < 0) return;
 
     var stepId = this.state.stepId - 1;
-    document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Prim's!</h1>" : this.state.messages[stepId - 1];
+    document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Kruskal's!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward();
     // this.state.steps[--stepId].backward();
     this.setState({stepId: stepId});
@@ -353,7 +495,7 @@ export default class Prims extends React.Component {
     if (this.state.stepId - 1 < 0) return;
 
     var stepId = this.state.stepId;
-    document.getElementById("message").innerHTML = "<h1>Welcome to Prim's!</h1>";
+    document.getElementById("message").innerHTML = "<h1>Welcome to Kruskal's!</h1>";
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
       // this.state.steps[--stepId].backward();
@@ -373,7 +515,7 @@ export default class Prims extends React.Component {
       console.log("SIZE CHANGED");
       this.initialize();
     } else if (this.state.graph !== prevState.graph) {
-      this.prims(this.state.graph);
+      this.kruskals(this.state.graph);
       console.log("Sorted");
     } else if (this.state.running !== prevState.running) {
       this.run();

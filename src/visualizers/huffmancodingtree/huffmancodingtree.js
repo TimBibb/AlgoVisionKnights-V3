@@ -835,6 +835,10 @@ export default class binarysearchtree extends React.Component {
 		}
 	}
 
+    refreshPage() {
+        window.location.reload(false);
+    }
+
     render() {
         return (
             <div>
@@ -843,7 +847,8 @@ export default class binarysearchtree extends React.Component {
                     {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
                     {/* <button class="button" onClick={this.pause}>Pause</button> */}
                     <button class="button" onClick={this.add}>Add</button>
-                    <button class="button" onClick={this.restart}>Restart</button>
+                    {/* <button class="button" onClick={this.restart}>Restart</button> */}
+                    <button class="button" onClick={this.refreshPage}>Restart</button>
                     {/* <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button> */}
                 </div>

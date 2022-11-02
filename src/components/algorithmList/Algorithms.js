@@ -155,12 +155,12 @@ const algorithms = {
 			type: 'js',
 			description: <Prims />,
 		},
-		// {
-		// 	name: "Kruskal's",
-		// 	path: 'kruskals',
-		// 	type: 'js',
-		// 	description: <Dijkstras />,
-		// },
+		{
+			name: "Kruskal's",
+			path: 'kruskals',
+			type: 'js',
+			description: <Dijkstras />,
+		},
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },

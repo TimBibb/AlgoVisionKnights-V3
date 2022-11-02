@@ -3,6 +3,7 @@ import "./quicksort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
@@ -431,7 +432,8 @@ export default class QuickSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: (9 * 2000) / 8
+			waitTime: (9 * 2000) / 8,
+			inputMode: false
 		};
 
 		this.ref = React.createRef();
@@ -443,6 +445,8 @@ export default class QuickSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
+
 	}
 
 	printArray(arr, size) {
@@ -648,7 +652,7 @@ export default class QuickSort extends React.Component {
 		this.setState({arr: arr});
 	}
 
-	initialize() {
+	initialize(arr,size,ref) {
 		const barWidth = 70;
 		const barOffset = 30;
 		const height = 500;
@@ -659,7 +663,7 @@ export default class QuickSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (this.state.size * (barWidth + barOffset)) + 100)
+				.attr("width", (10 * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
 		var bars = svg.selectAll(".bar")
@@ -803,9 +807,9 @@ export default class QuickSort extends React.Component {
 			.style("fill", "white")
 			.attr("visibility", "hidden");
 
-		var ids = [];
+		let ids = [];
 
-		for (let i = 0; i < this.state.size; i++)
+		for (let i = 0; i < size; i++)
 		{
 			ids.push("g" + i);
 		}
@@ -910,33 +914,94 @@ export default class QuickSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-			var svg = d3.select(this.ref.current).select("svg");
-
-		// Data array changed in dataInit -> Make visual
-		if (this.state.arr.length > prevState.arr.length) {
-			svg = this.initialize();
-			svg.attr("visibility", "visible");
-		}
-		// IDs array changed in initialize -> sort copy of array to get steps and messages
-		else if (this.state.ids.length > prevState.ids.length) {
-			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
-		}
-		// Running changed
-		else if (this.state.running !== prevState.running)
-		{
-			this.run(svg);
-			console.log("We ran");
-		}
-		// For reset
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("We're restarting");
-			svg = this.initialize();
-			console.log("Made it out");
-			svg.attr("visibility", "visible");
-			console.log("All good");
+		if (this.state.inputMode) {
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("Unsorted");
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("YO")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("Steps changed");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("We ran");
+				this.setState({inputMode: false});
+			}
+		} else {
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("Unsorted");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("YO")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("Steps changed");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("We ran");
+			}
 		}
 	}
+	
+	handleInsert() {
+		if (this.state.running || this.state.inputMode) {
+			return;
+		}
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
+		}
+		// Check each content if it is a number
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
+		}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
+	}
+	// *
 
 	render() {
 		return (
@@ -948,6 +1013,10 @@ export default class QuickSort extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Quick Sort!</h1></span></div>
 				<div class="parent-svg">

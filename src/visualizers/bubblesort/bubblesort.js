@@ -339,8 +339,7 @@ export default class BubbleSort extends React.Component {
 			stepId: 0,
 			stepTime: 300,
 			waitTime: 2000,
-			inputMode: false,
-			flag: false
+			inputMode: false
 		};
 
 		this.ref = React.createRef();

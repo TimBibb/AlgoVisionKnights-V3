@@ -1001,7 +1001,7 @@ export default class QuickSort extends React.Component {
 		x = parseFloat(value);
 		return (x | 0) === x;
 	}
-	// *
+	
 
 	render() {
 		return (

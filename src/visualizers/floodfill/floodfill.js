@@ -87,6 +87,7 @@ export default class Floodfill extends React.Component {
   initialize() {
 
     let n = 11;
+    let board = Array.from(Array(n), () => new Array(n))
 
     const megaTile = {
       name: "Mega Tile",    
@@ -114,12 +115,15 @@ export default class Floodfill extends React.Component {
 
         if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
             tile.attr("fill", GRAYBLACK);
+            board[i][j] = 'BLACKGRAY';
         }
         else if(j==0 || j==Math.floor(n/2) || j==(n-1)){
             tile.attr("fill", GRAYBLACK)
+            board[i][j] = 'BLACKGRAY';
         }
         else {
             tile.attr("fill", UCF_GOLD);
+            board[i][j] = 'UCFGOLD';
         }
 
         tile.attr("id", "code" + j + i)
@@ -143,7 +147,7 @@ export default class Floodfill extends React.Component {
       }
     }
 
-    this.setState({n : n});
+    this.setState({n : n, board: board});
   }
 
   floodfill(board, col, row, n) {
@@ -153,30 +157,38 @@ export default class Floodfill extends React.Component {
     col = Math.floor(Math.random() * 10);
     row = Math.floor(Math.random() * 10);
 
+    while(board[col][row] == 'BLACKGRAY'){
+      col = Math.floor(Math.random() * 10);
+      row = Math.floor(Math.random() * 10);
+    }
+
     steps.push(new EmptyStep());
     messages.push("<h1>Beginning Floodfill!</h1>");
 
-    console.log("board: " + board + " col: " + col + " row: " + row + " n: " + n);
+    // console.log("board: " + board + " col: " + col + " row: " + row + " n: " + n);
 
     floodFillUtil(board, col, row, n);
 
     // i = col, j = row
     function floodFillUtil(board, i, j, n){
         // Base cases
-        if(i==0 || i==Math.floor(n/2) || i==(n-1) )
-            return;
-        if(j==0 || j==Math.floor(n/2) || j==(n-1))
-            return;
+        if (i < 0 || i > n || j < 0 || j > n) return [steps, messages, board];
+        if (board[i][j] != "UCFGOLD") return [steps, messages, board];
 
-        steps.push(new TileStep(row, i, "white"));
-        messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+        console.log(i + " " + j)
 
-        floodFillUtil(board, i + 1, j, n);
-        //floodFillUtil(board, i - 1, j, n);
-        floodFillUtil(board, i, j + 1, n);
-        // floodFillUtil(board, i, j - 1, n);
+        steps.push(new TileStep(i, j, "white"));
+        messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
+
+        board[i][j] = "white";
+
+        [steps, messages, board] = floodFillUtil(board, i - 1, j, n);
+        [steps, messages, board] = floodFillUtil(board, i + 1, j, n);
+        [steps, messages, board] = floodFillUtil(board, i, j + 1, n);
+        [steps, messages, board] = floodFillUtil(board, i, j - 1, n);
 
         return [steps, messages, board];
+        
     }
 
     // Prints the colored Tile

@@ -16,6 +16,14 @@
     padding-left: 10px;
 }
 
+.searchInput {
+    border-radius: 15px;
+    font-size: 20px;
+    width: 85px;
+    height: 55px;
+    padding-left: 10px;
+}
+
 /* Use to hide spinhox in input */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

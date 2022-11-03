@@ -3,10 +3,7 @@ import "./linearsearch.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
-import UserInput from "../../components/userInput/UserInput";
-import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
-import { ConsoleView } from "react-device-detect";
-import { Component } from "react";
+import "../css/input.css";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
@@ -128,7 +125,9 @@ export default class LinearSearch extends React.Component {
 			stepId: 0, // ID of the current step
 			stepTime: 300, // Milliseconds for transition durations aka duration of each animation
 			waitTime: 2000, // Milliseconds between each step
-            target: -1
+            target: -1,
+			inputMode: false,
+			inputFlag: false
 		};
 
 		// Bindings
@@ -142,19 +141,22 @@ export default class LinearSearch extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 	}
 
     printArray(arr, size){
         for(let i = 0; i < size; i++){
-            console.log(arr[i]);
+            //console.log(arr[i]);
         }
     }
 
-    sort(arr, ids, length, stepTime){
+    sort(isteps, imsg,arr, ids, length, stepTime){
+		console.log(this.state.target);
+		console.log(this.state.inputMode);
 
-        var steps = [];
-        var messages = [];
-		var pseudocodeArr = [];
+		let steps = ((this.state.inputMode) ? isteps : []);
+        let messages = ((this.state.inputMode) ? imsg : []);
+		let pseudocodeArr = [];
 
         messages.push("<h1>Beginning Linear Search!</h1>");
 		messages.push("<h1>Beginning Linear Search!</h1>");
@@ -168,7 +170,8 @@ export default class LinearSearch extends React.Component {
 			steps.push(new EmptyStep());
             messages.push("<h1>Searching Index [" + i + "] for Value " + this.state.target + ".</h1>");
 			pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
-            if(arr[i] === this.state.target){
+            console.log(typeof(arr[i]) + " = " + typeof(this.state.target));
+			if(arr[i] === this.state.target){
 				steps.push(new ColorFound(i, ids));
                 messages.push("<h1>Found Item at Index [" + i + "].</h1>");
 				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
@@ -178,15 +181,13 @@ export default class LinearSearch extends React.Component {
 				pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 				break;
             }
-            else if(arr[i] != this.state.target){
+            else if(arr[i] !== this.state.target){
 				steps.push(new ColorSwapStep(i, i+1, ids));
                 messages.push("<h1>" + arr[i] + " does NOT equal " + this.state.target + ".</h1>");
 				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
             }
         }
-
-        // messages.push("<h1>Requested Item Not Found");
-
+		
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
@@ -246,7 +247,7 @@ export default class LinearSearch extends React.Component {
 
 		bars.append("text")
 				.text((d) => {
-					console.log("BAR " + d);
+					//console.log("BAR " + d);
 					return d;
 				})
 				.attr("y", (height + 100) - 15)
@@ -388,6 +389,7 @@ export default class LinearSearch extends React.Component {
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
+		console.log("HI!")
 		this.setState({running: true});
 		this.run();
 	}
@@ -399,10 +401,8 @@ export default class LinearSearch extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "<h1>Welcome to Linear Search!</h1>";
-
 		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
@@ -413,29 +413,54 @@ export default class LinearSearch extends React.Component {
 
 	// Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
-		// Component mounted and unsorted array created -> Initialize visualizer
-		if (this.state.arr.length > prevState.arr.length) {
-			console.log("Unsorted");
-			this.printArray(this.state.arr, this.state.size);
-			this.initialize(this.state.arr, this.state.size, this.ref.current);
+			if (this.state.inputMode) {
+				console.log("0");
+				let inputSteps = [];
+				let inputMessages = [];
+				this.sort(inputSteps, inputMessages, [...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+				this.setState({inputMode:false, running:true});
+			}
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.size, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				this.sort([],[],[...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+				console.log("2");
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				console.log(this.state.steps.length)
+				console.log(this.state.messages.length)
+
+			}
+	}
+
+	handleInsert() {
+		if (this.state.running || this.state.inputMode) {
+			return;
 		}
-		// Visualizer initialized -> Sort copy of array and get steps
-		else if (this.state.ids.length > prevState.ids.length) {
-			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
-			console.log("ran visualizer");
-		}
-		// Part of restart -> Reinitialize with original array
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("Steps changed");
-			var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
-			svg.attr("visibility", "visible");
-		}
-		else if (this.state.running !== prevState.running && this.state.running === true)
-		{
-			this.run();
-			console.log("We ran");
-		}
+		let input = parseInt(document.getElementById("insertVal").value);
+		//console.log(input);
+		// Array is split by commas
+		// Checks if size is too small or big 1 < size < 11
+		if (input < -999 || input > 999) {
+			document.getElementById("message").innerHTML = "<h1>Target size must be between -999 and 999</h1>";
+			return;
+		}	
+		this.setState({inputMode: true, running: false, inputFlag: true, target: input});
 	}
 
 	render() {
@@ -448,6 +473,10 @@ export default class LinearSearch extends React.Component {
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="searchInput"type="number" id="insertVal" placeholder="Target"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Search</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Linear Search!</h1></span></div>
 				<div class="parent-svg">

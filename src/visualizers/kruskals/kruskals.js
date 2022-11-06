@@ -5,8 +5,47 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Create } from "@material-ui/icons";
 
+class CreatingConn {
+  constructor(nodes){
 
+    this.parent = {};
+
+    nodes.forEach(e => (this.parent[e] = e));
+  }
+
+  Connect(node1, node2){
+    let rootA = this.Check(node1);
+    let rootB = this.Check(node2);
+
+    if(rootA == rootB)
+      return;
+
+    if(rootA < rootB){
+      if(this.parent[node2] != node2)
+        this.Connect(this.parent[node2], node1);
+      
+      this.parent[node2] = this.parent[node1];
+    } else {
+      if(this.parent[node1] != node1)
+        this.Connect(this.parent[node1], node2);
+
+      this.parent[node1] = this.parent[node2];
+    }
+  }
+
+  Check(node){
+    while(this.parent[node] != node){
+      node = this.parent[node];
+    }
+    return node;
+  }
+
+  United(node1, node2){
+    return this.Check(node1) == this.Check(node2);
+  }
+}
 class EmptyStep {
   forward() {}
   backward() {}
@@ -83,6 +122,7 @@ export default class Kruskals extends React.Component {
   }
 
   kruskals(graph, stepTime) {
+    var i = 0;
     console.log(graph);
     var messages = [];
     var currentMessage = "";
@@ -119,6 +159,9 @@ export default class Kruskals extends React.Component {
     var pq = [];
     var nodeVisited = Array.from({ length: graph.numberOfNodes }, () => false);
     var edgeSelected = Array.from({ length: graph.numberOfEdges }, () => false);
+    var nodes = Array.from({length: graph.numberOfNodes}, () => i++);
+
+    let NodesConnected = new CreatingConn(nodes);
     //nodeVisited[0] = true;
     // addStep(
     //   new NodeColorChangeStep(
@@ -179,7 +222,7 @@ export default class Kruskals extends React.Component {
           this.ref.current,
           graph.edgeInfo[currentId].line.attr.id,
           graph.edgeInfo[currentId].text.attr.id,
-          "#FFCE36",
+          "grey",
           "white"
         )
       );
@@ -188,35 +231,71 @@ export default class Kruskals extends React.Component {
       );
       flushBuffer();
 
-      if (nodeVisited[node1] && nodeVisited[node2]) {
-        addStep(new EmptyStep());
-        createMessage(
-          "Both nodes " +
-            node1 +
-            " and " +
-            node2 +
-            " have already been added to the MST.");
-        flushBuffer();
+      //console.log(nodes);
 
-        addStep(
-          new EdgeColorChangeStep(
-            this.ref.current,
-            graph.edgeInfo[currentId].line.attr.id,
-            graph.edgeInfo[currentId].text.attr.id,
-            "white",
-            "#444444"
-          )
-        );
-        createMessage("Ignore this edge.");
-        flushBuffer();
-        // these nodes are already connected, ignore the edge
-        continue;
+      if (nodeVisited[node1] && nodeVisited[node2]) {
+        if(!NodesConnected.United(node1, node2)){
+          NodesConnected.Connect(node1, node2);
+          edgeSelected[edgeId] = true;
+
+          addStep(new EmptyStep());
+          createMessage(
+            "Both nodes " +
+              node1 +
+              " and " +
+              node2 +
+              " have already been added to the MST.");
+          flushBuffer();
+
+          addStep(
+            new EdgeColorChangeStep(
+              this.ref.current,
+              graph.edgeInfo[currentId].line.attr.id,
+              graph.edgeInfo[currentId].text.attr.id,
+              "white",
+              "#1ACA1E"
+            )
+          );
+
+          createMessage(
+            "Include this edge and node " +
+              node2 +
+              " in the MST."
+          );
+          flushBuffer();
+
+        } 
+        else {
+          addStep(new EmptyStep());
+          createMessage(
+            "Both nodes " +
+              node1 +
+              " and " +
+              node2 +
+              " have already been added to the MST.");
+          flushBuffer();
+
+          addStep(
+            new EdgeColorChangeStep(
+              this.ref.current,
+              graph.edgeInfo[currentId].line.attr.id,
+              graph.edgeInfo[currentId].text.attr.id,
+              "white",
+              "#444444"
+            )
+          );
+          createMessage("Ignore this edge.");
+          flushBuffer();
+          // these nodes are already connected, ignore the edge
+          continue;
+        }
       }
 
       if(nodeVisited[node1] == false && nodeVisited[node2] == false){
         nodeVisited[node1] = true;
         nodeVisited[node2] = true;
         edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
 
         addStep(new EmptyStep());
         createMessage(
@@ -272,6 +351,7 @@ export default class Kruskals extends React.Component {
       else if(nodeVisited[node1] == false && nodeVisited[node2] == true){
         nodeVisited[node1] = true;
         edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
 
         addStep(new EmptyStep());
         createMessage(
@@ -310,6 +390,7 @@ export default class Kruskals extends React.Component {
       else if(nodeVisited[node1] == true && nodeVisited[node2] == false){
         nodeVisited[node2] = true;
         edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
 
         addStep(new EmptyStep());
         createMessage(

@@ -659,21 +659,21 @@ export default class BubbleSort extends React.Component {
 			console.log("FIRST ARR" + JSON.stringify(this.state.arr))
 			console.log("second ARR" + JSON.stringify(prevState.arr))
 			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
-				console.log("Unsorted");
+				console.log("1");
 				// this.printArray(this.state.arr, this.state.size);
 				d3.select(this.ref.current).select("svg").remove();
 				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
 			}
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-				console.log("YO")
+				console.log("2")
 				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 				this.play();
 				this.setState({inputMode: false});
 			}
 			// Part of restart -> Reinitialize with original array
 			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-				console.log("Steps changed");
+				console.log("3");
 				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
 				svg.attr("visibility", "visible");
 			}
@@ -687,19 +687,19 @@ export default class BubbleSort extends React.Component {
 		} else {
 			// Component mounted and unsorted array created -> Initialize visualizer
 			if (this.state.arr.length > prevState.arr.length) {
-				console.log("Unsorted");
+				console.log("1a");
 				//this.printArray(this.state.arr, this.state.size);
 				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
 			}
 			// Visualizer initialized -> Sort copy of array and get steps
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-				console.log("YO")
+				console.log("2a")
 				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 			}
 			// Part of restart -> Reinitialize with original array
 			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-				console.log("Steps changed");
+				console.log("3a");
 				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
 				svg.attr("visibility", "visible");
 			}

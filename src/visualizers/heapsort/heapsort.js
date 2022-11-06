@@ -650,7 +650,7 @@ export default class HeapSort extends React.Component {
           d3.select(this.ref.current).select("svg").attr("visibility", "visible");
           console.log("2");
           this.sort(this.state.arr,
-                        this.state.arr.length,
+                        this.state.arr.length - 1,
                         this.state.steps,
                         this.state.heapLines,
                         this.state.heapCircs,
@@ -712,10 +712,10 @@ export default class HeapSort extends React.Component {
 		let arr = input.split(',');
     console.log(arr[5]);
 		// Checks if size is too small or big 1 < size < 11
-		// if (arr.length !== 10) {
-		// 	document.getElementById("message").innerHTML = "<h1>Array size must be 10</h1>";
-		// 	return;
-		// }
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10</h1>";
+			return;
+		}
 		// Check each content if it is a number
    console.log(arr);
 

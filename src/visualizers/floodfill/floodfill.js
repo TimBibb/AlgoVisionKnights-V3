@@ -29,9 +29,9 @@ class VisibilityStep {
 }
 
 class TileStep{
-    constructor( rowID, colID, color){
-    this.rowID = rowID;
+    constructor( colID, rowID, color){
     this.colID = colID;
+    this.rowID = rowID;
     this.color = color;
   
   }
@@ -71,7 +71,7 @@ export default class Floodfill extends React.Component {
       running: false,
       stepId: 0,
       stepTime: 300,
-      waitTime: (9 * 2000) / 8
+      waitTime: 1500
     };
 
     this.ref = React.createRef();
@@ -87,7 +87,19 @@ export default class Floodfill extends React.Component {
   initialize() {
 
     let n = 11;
+    let ranNum = [];
+    let ranNum2 = []
     let board = Array.from(Array(n), () => new Array(n))
+
+    for(var i = 0; i < 12; i++){
+      ranNum[i] = Math.floor(Math.random() * 9 + 1);
+    }
+
+    for(var j = 0; j < 12; j++){
+      ranNum2[j] = Math.floor(Math.random() * 9 + 1);
+    }
+
+    console.log(ranNum)
 
     const megaTile = {
       name: "Mega Tile",    
@@ -113,13 +125,25 @@ export default class Floodfill extends React.Component {
         .attr("width", size + "px")
         .attr("height", size + "px");
 
-        if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
-            tile.attr("fill", GRAYBLACK);
-            board[i][j] = 'BLACKGRAY';
+        // if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
+        //     tile.attr("fill", GRAYBLACK);
+        //     board[i][j] = 'BLACKGRAY';
+        // }
+        if(i==0 || i==(n-1)){
+          tile.attr("fill", GRAYBLACK);
+          board[i][j] = 'BLACKGRAY';
         }
-        else if(j==0 || j==Math.floor(n/2) || j==(n-1)){
-            tile.attr("fill", GRAYBLACK)
-            board[i][j] = 'BLACKGRAY';
+        else if(ranNum[j] == i || ranNum[i] == j){
+          tile.attr("fill", GRAYBLACK);
+          board[i][j] = 'BLACKGRAY';
+        }
+        // else if(j==0 || i==Math.floor(n/2) || j==(n-1)){
+        //     tile.attr("fill", GRAYBLACK)
+        //     board[i][j] = 'BLACKGRAY';
+        // }
+        else if(j==0 || j==(n-1)){
+          tile.attr("fill", GRAYBLACK)
+          board[i][j] = 'BLACKGRAY';
         }
         else {
             tile.attr("fill", UCF_GOLD);
@@ -162,8 +186,15 @@ export default class Floodfill extends React.Component {
       row = Math.floor(Math.random() * 10);
     }
 
+    console.log(board)
     steps.push(new EmptyStep());
     messages.push("<h1>Beginning Floodfill!</h1>");
+
+    steps.push(new EmptyStep());
+    messages.push("<h1>We have a board of " + n + "x" + n + "</h1>");
+
+    steps.push(new EmptyStep());
+    messages.push("<h1>We first select a random tile: (" + (col)+ " , "+ (row) + ")</h1>");
 
     // console.log("board: " + board + " col: " + col + " row: " + row + " n: " + n);
 
@@ -175,10 +206,9 @@ export default class Floodfill extends React.Component {
         if (i < 0 || i > n || j < 0 || j > n) return [steps, messages, board];
         if (board[i][j] != "UCFGOLD") return [steps, messages, board];
 
-        console.log(i + " " + j)
-
+        //console.log(i + " " + j)
         steps.push(new TileStep(i, j, "white"));
-        messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
+        messages.push("<h1>MegaTile at (" + i + " , "+ j +") is in range.</h1>");
 
         board[i][j] = "white";
 
@@ -350,13 +380,18 @@ export default class Floodfill extends React.Component {
     }
   }
 
+  refreshPage() {
+    window.location.reload(false);
+  }
+
   render() {
     return (
       <div>
         <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
-          <button class="button" onClick={this.restart}>Restart</button>
+          {/* <button class="button" onClick={this.restart}>Restart</button> */}
+          <button class="button" onClick={this.refreshPage}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
           <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>

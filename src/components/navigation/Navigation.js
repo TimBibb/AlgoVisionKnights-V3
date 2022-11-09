@@ -102,16 +102,14 @@ function Navigation({
 					</Link>
 					{categories.map((category, i) => {
 						return (
-							<Link className='Link' to={category.path}>
-								<NavGroup
-									title={category.title}
-									algorithms={algorithms[category.path]}
-									key={category.title}
-									panel={category.title}
-									expanded={expanded}
-									handleChange={handleChange}
-								/>
-							</Link>
+							<NavGroup
+								title={category.title}
+								algorithms={algorithms[category.path]}
+								key={category.title}
+								panel={category.title}
+								expanded={expanded}
+								handleChange={handleChange}
+							/>
 						);
 					})}
 				</List>

@@ -1,0 +1,107 @@
+#algorithm {
+	/* margin: 0px 26px 20px 0px; */
+	padding: 0;
+	text-transform: none;
+	text-align: unset;
+	border-radius: 15px;
+}
+
+span.MuiButton-label {
+	height: 100%;
+}
+
+#card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	max-width: 1000px;
+	min-height: 300px;
+	background-color: #181818;
+	border-radius: 15px;
+    margin: auto;
+}
+
+#card-content {
+	display: flex;
+	flex-direction: column;
+	width: 90%;
+	/* height: 100%; */
+	padding: 13px 0px 0px 0px;
+	margin: 0px;
+}
+
+.CardHeader {
+	display: inherit;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	align-items: flex-start;
+}
+
+.CardBody {
+	margin: 10px 0px 0px 0px;
+	position: relative;
+	padding: 0px 0px 20px 0px;
+}
+
+#favorite-icon {
+	padding: 0;
+}
+
+#card-title {
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+#card-info {
+	font-size: 1em !important;
+	color: #ffffff;
+    /* overflow-x: scroll;; */
+}
+
+@media (max-width: 639px) {
+	#algorithm {
+		margin: 0px 0px 20px 0px;
+	}
+}
+
+@media (max-width: 358px) {
+	#algorithm {
+		width: 280px !important;
+	}
+}
+
+.btn {
+    display: inline-block !important;
+    color: #FFC904 !important;
+    text-align: center;
+    /* padding: 14px !important; */
+    text-decoration: none !important;
+    text-transform: capitalize !important;
+    margin: 0.5em !important;
+}
+
+.selected {
+    display: inline-block !important;
+    color: #FFC904 !important;
+    text-align: center;
+    /* padding: 14px !important; */
+    text-decoration: none !important;
+    text-transform: capitalize !important;
+    /* border: 1px solid #FFC904 !important; */
+    background-color: #5f4a0097 !important;
+    margin: 0.5em !important;
+}
+
+.proceed {
+    display: inline-block !important;
+    color: #000000 !important;
+    text-align: center;
+    /* padding: 14px !important; */
+    text-decoration: none !important;
+    text-transform: capitalize !important;
+    /* border: 1px solid #FFC904 !important; */
+    background-color: #FFC904 !important;
+    margin: 0.5em !important;
+}

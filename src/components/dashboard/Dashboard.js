@@ -38,15 +38,18 @@ function Dashboard({ categories, inCategory }) {
 
 	return (
 		<div style={{alignItems: "center"}}>
-			<h3 className='progress-header'>Completion Progress</h3>
-			<h4 className='progress-header'>{completedAlgorithms}/31</h4>
-			<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
-
-			<div style={{alignItems: 'center'}}>
-				{Object.keys(algorithms).map((key) =>
-					<SelectionCard categoryName={algorithms[key][0].category} category={algorithms[key]}/>
-				)}
-
+			<div>
+				<Typography id="dashboard-title">Algorithm Vision Knights</Typography>
+				<h4 className='progress-header'>Completion Progress</h4>
+				<h5 className='progress-header'>{completedAlgorithms}/31</h5>
+				<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
+			</div>
+			<div class="" style={{alignItems: 'center', backgroundColor:"#5f4b0060"}}>
+				<div class="bg">
+					{Object.keys(algorithms).map((key) =>
+						<SelectionCard categoryName={algorithms[key][0].category} category={algorithms[key]}/>
+					)}
+				</div>
 				{/* {Object.keys(algorithms).map((key) => {
 					<div className='category'>
 						{algorithms[key].map((algorithm) => {
@@ -56,6 +59,7 @@ function Dashboard({ categories, inCategory }) {
 					
 				})} */}
 			</div>
+
 		</div>
 	);
 }

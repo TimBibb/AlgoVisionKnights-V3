@@ -125,15 +125,17 @@ export function SelectionSort() {
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{constant}</td>
 						</tr>
+						</tbody>
+						
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -149,12 +151,13 @@ export function InsertionSort() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Comparisons</td>
 							<td>{linear}</td>
@@ -167,20 +170,22 @@ export function InsertionSort() {
 							<td>{n2}</td>
 							<td>{n2}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -196,10 +201,11 @@ export function QuickSort() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -212,20 +218,22 @@ export function QuickSort() {
 							<td>Worst Case</td>
 							<td>{n2}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -241,10 +249,11 @@ export function MergeSort() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -257,20 +266,22 @@ export function MergeSort() {
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -286,10 +297,11 @@ export function HeapSort() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -302,20 +314,22 @@ export function HeapSort() {
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -482,11 +496,12 @@ export function HashTable() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Search</td>
 							<td>{constant}</td>
@@ -502,6 +517,7 @@ export function HashTable() {
 							<td>{constant}</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -916,28 +932,31 @@ export function Inorder() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -953,28 +972,31 @@ export function Postorder() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -990,12 +1012,13 @@ export function Heaps() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Insertion</td>
 							<td>{constant}</td>
@@ -1014,6 +1037,7 @@ export function Heaps() {
 							<td>{constant}</td>
 							<td>{constant}</td>
 						</tr>
+						</tbody>
 					</Table>
 				</div>
 			</MathJax.Provider>
@@ -1029,10 +1053,11 @@ export function HuffmanCodingTree() {
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
@@ -1041,16 +1066,18 @@ export function HuffmanCodingTree() {
 							<td>Best Case</td>
 							<td>{nlogn}</td>
 						</tr>
+						</tbody>
+						
 					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
 					<Table>
-						<tr>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
@@ -1059,6 +1086,9 @@ export function HuffmanCodingTree() {
 							<td>Best Case</td>
 							<td>{nlogn}</td>
 						</tr>
+						</tbody>
+
+						
 					</Table>
 				</div>
 			</MathJax.Provider>

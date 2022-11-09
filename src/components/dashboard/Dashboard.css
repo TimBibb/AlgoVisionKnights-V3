@@ -38,3 +38,10 @@
 	margin: 2em;
 	box-shadow: inset;
 }
+
+#dashboard-title {
+	font-size: 48pt;
+	font-weight: 700;
+	color: #FFC904;
+	text-align: center;
+}

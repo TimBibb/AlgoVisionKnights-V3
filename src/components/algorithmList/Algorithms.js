@@ -42,36 +42,42 @@ const algorithms = {
 			path: 'bubblesort',
 			type: 'js',
 			description: <BubbleSort />,
+			category: 'Sorting'
 		},
 		{
 			name: 'Selection Sort',
 			path: 'selectionsort',
 			type: 'js',
 			description: <SelectionSort />,
+			category: 'Sorting'
 		},
 		{
 			name: 'Insertion Sort',
 			path: 'insertionsort',
 			type: 'js',
 			description: <InsertionSort />,
+			category: 'Sorting'
 		},
 		{
 			name: 'Quick Sort',
 			path: 'quicksort',
 			type: 'js',
 			description: <QuickSort />,
+			category: 'Sorting'
 		},
 		// {
 		// 	name: 'Merge Sort',
 		// 	path: 'mergesort',
 		// 	type: 'js',
 		// 	description: <MergeSort />,
+		// category: 'Sorting'
 		// },
 		{
 			name: 'Heap Sort',
 			path: 'heapsort',
 			type: 'js',
 			description: <HeapSort />,
+			category: 'Sorting'
 		},
 	],
 	searching: [
@@ -81,12 +87,14 @@ const algorithms = {
 			path: 'linearsearch',
 			type: 'js',
 			description: <LinearSearch />,
+			category: 'Searching'
 		},
 		{
 			name: 'Binary Search',
 			path: 'binarysearch',
 			type: 'js',
 			description: <BinarySearch />,
+			category: 'Searching'
 		},
 	],
 	datastructures: [
@@ -97,18 +105,21 @@ const algorithms = {
 			path: 'singlylinkedlist',
 			type: 'js',
 			description: <SinglyLinkedList />,
+			category: 'Data Structures'
 		},
 		{
 			name: 'Hash Table',
 			path: 'hashtable',
 			type: 'js',
 			description: <HashTable />,
+			category: 'Data Structures'
 		},
 		{
 			name: 'Hash Table Quadratic Probing',
 			path: 'hashtablequadratic',
 			type: 'js',
 			description: <HashTable />,
+			category: 'Data Structures'
 		},
 		// {
 		// 	name: 'Tries',
@@ -130,37 +141,43 @@ const algorithms = {
 			path: 'dijkstras',
 			type: 'js',
 			description: <Dijkstras />,
+			category: 'Graphs'
 		},
 		{
 			name: 'Bellman Ford',
 			path: 'bellmanford',
 			type: 'js',
 			description: <BellmanFord />,
+			category: 'Graphs'
 		},
 		{
 			name: 'Breadth First Search',
 			path: 'breadthfirstsearch',
 			type: 'js',
 			description: <BreadthFirstSearch />,
+			category: 'Graphs'
 		},
 		{
 			name: 'Depth First Search',
 			path: 'depthfirstsearch',
 			type: 'js',
 			description: <DepthFirstSearch />,
+			category: 'Graphs'
 		},
 		{
 			name: "Prim's",
 			path: 'prims',
 			type: 'js',
 			description: <Prims />,
+			category: 'Graphs'
 		},
-		{
-			name: "Kruskal's",
-			path: 'kruskals',
-			type: 'js',
-			description: <Dijkstras />,
-		},
+		// {
+		// 	name: "Kruskal's",
+		// 	path: 'kruskals',
+		// 	type: 'js',
+		// 	description: <Dijkstras />,
+		// category: 'Graphs'
+		// },
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },
@@ -169,48 +186,56 @@ const algorithms = {
 		// 	path: 'avl', 
 		// 	type: 'js', 
 		// 	description: <AVL /> 
+		// category: 'Trees'
 		// },
 		// {
 		// 	name: 'Binary Search Tree',
 		// 	path: 'binarysearchtre',
 		// 	type: 'unity',
 		// 	description: <BinarySearchTree />,
+		// category: 'Trees'
 		// },
 		{
 			name: 'Binary Search Tree',
 			path: 'binarysearchtree',
 			type: 'js',
 			description: <BinarySearchTree />,
+			category: 'Trees'
 		},
 		{
 			name: 'Preorder',
 			path: 'preorder',
 			type: 'js',
 			description: <Preorder />,
+			category: 'Trees'
 		},
 		{
 			name: 'Inorder',
 			path: 'inorder',
 			type: 'js',
 			description: <Inorder />,
+			category: 'Trees'
 		},
 		{
 			name: 'Postorder',
 			path: 'postorder',
 			type: 'js',
 			description: <Postorder />,
+			category: 'Trees'
 		},
 		{
 			name: 'Heaps',
 			path: 'heaps',
 			type: 'js',
-			description: <Heaps />
+			description: <Heaps />,
+			category: 'Trees'
 		},
 		{
 			name: 'Huffman Coding Tree',
 			path: 'huffmancodingtree',
 			type: 'js',
-			description: <HuffmanCodingTree />
+			description: <HuffmanCodingTree />,
+			category: 'Trees'
 		},
 	],
 	// probabilisticdatastructures: [
@@ -224,6 +249,7 @@ const algorithms = {
 			path: 'nqueens',
 			type: 'js',
 			description: <Queens />,
+			category: 'Backtracking'
 		},
 	],
 	// linkedlist: [
@@ -238,15 +264,18 @@ const algorithms = {
 	dynamicprogramming: [
 		{ 
 			name: 'Sequence Alignment', 
-			path: 'sequencealignment' 
+			path: 'sequencealignment',
+			category: 'Dynamic Programming'
 		},
 		{
 			name: 'Knapsack',
-			path: 'knapsack'
+			path: 'knapsack',
+			category: 'Dynamic Programming'
 		},
 		{
 			name: 'Longest Common Subsequence',
-			path: 'lcs'
+			path: 'lcs',
+			category: 'Dynamic Programming'
 		},
 	],
 	recursion: [
@@ -254,20 +283,21 @@ const algorithms = {
 			name: 'Fibonacci Sequence',
 			path: 'fibonaccisequence',
 			type: 'js',
-			description: <FibonacciSequence />
+			description: <FibonacciSequence />,
+			category: 'Recursion'
 		},
 		{
 			name: 'Towers of Hanoi', 
 			path: 'towersofhanoi', 
 			type: 'js',
-			description: <TowersofHanoi />
+			description: <TowersofHanoi />,
+			category: 'Recursion'
 		},
-		{
-			name: 'Floodfill',
-			path: 'floodfill',
-			type: 'js',
-			description: <Floodfill />
-		},
+		// {
+		// 	name: 'Floodfill',
+		// 	path: 'floodfill',
+		// category: 'Recursion'
+		// },
 	],
 };
 

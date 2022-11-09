@@ -1,5 +1,6 @@
 import './utils.css';
 import MathJax from 'react-mathjax';
+import { Table } from 'react-bootstrap';
 
 // Images and gifs
 import graphs from './images/graphs.png';
@@ -47,40 +48,43 @@ export function BubbleSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
-						<tr>
-							<td>Comparisons</td>
-							<td>{linear}</td>
-							<td>{n2}</td>
-							<td>{n2}</td>
-						</tr>
-						<tr>
-							<td>Swaps</td>
-							<td>{constant}</td>
-							<td>{n2}</td>
-							<td>{n2}</td>
-						</tr>
-					</table>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Comparisons</td>
+								<td>{linear}</td>
+								<td>{n2}</td>
+								<td>{n2}</td>
+							</tr>
+							<tr>
+								<td>Swaps</td>
+								<td>{constant}</td>
+								<td>{n2}</td>
+								<td>{n2}</td>
+							</tr>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
-						<tr>
-							<td>Worst Case</td>
-							<td>{linear}</td>
-						</tr>
-					</table>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Worst Case</td>
+								<td>{linear}</td>
+							</tr>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 
@@ -95,13 +99,14 @@ export function SelectionSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Comparisons</td>
 							<td>{n2}</td>
@@ -114,21 +119,25 @@ export function SelectionSort() {
 							<td>{linear}</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{constant}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={selectiongif} alt='graphs' rel='noreferrer' />
@@ -142,13 +151,14 @@ export function InsertionSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Comparisons</td>
 							<td>{linear}</td>
@@ -161,21 +171,23 @@ export function InsertionSort() {
 							<td>{n2}</td>
 							<td>{n2}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={insertiongif} alt='graphs' rel='noreferrer' />
@@ -189,11 +201,12 @@ export function QuickSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -206,21 +219,23 @@ export function QuickSort() {
 							<td>Worst Case</td>
 							<td>{n2}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={quicksortgif} alt='graphs' rel='noreferrer' />
@@ -234,11 +249,12 @@ export function MergeSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -251,21 +267,23 @@ export function MergeSort() {
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={mergergif} alt='graphs' rel='noreferrer' />
@@ -279,11 +297,12 @@ export function HeapSort() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{nlogn}</td>
@@ -296,21 +315,23 @@ export function HeapSort() {
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={heapsort} alt='graphs' rel='noreferrer' />
@@ -329,11 +350,12 @@ export function LinearSearch() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{constant}</td>
@@ -346,21 +368,26 @@ export function LinearSearch() {
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{constant}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={linearsearchgif} alt='graphs' rel='noreferrer' />
@@ -374,11 +401,12 @@ export function BinarySearch() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{constant}</td>
@@ -391,21 +419,27 @@ export function BinarySearch() {
 							<td>Worst Case</td>
 							<td>{log}</td>
 						</tr>
-					</table>
+
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{constant}</td>
 						</tr>
-					</table>
+						</tbody>
+
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={binarysearchgif} alt='graphs' rel='noreferrer' />
@@ -424,12 +458,13 @@ export function SinglyLinkedList() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Search</td>
 							<td>{constant}</td>
@@ -445,7 +480,9 @@ export function SinglyLinkedList() {
 							<td>{constant}</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={singlylinkedlistgif} alt='graphs' rel='noreferrer' style={{ width: "45%", height: "45%", alignSelf: 'center' }} />
@@ -459,12 +496,13 @@ export function HashTable() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Search</td>
 							<td>{constant}</td>
@@ -480,7 +518,8 @@ export function HashTable() {
 							<td>{constant}</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={hashtable} alt='hashtable' rel='noreferrer' />
@@ -509,30 +548,35 @@ export function Dijkstras() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{dijkstratime}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{dijkstraspace}</td>
 						</tr>
-					</table>
+						</tbody>
+
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={dijkstrasgif} alt='graphs' rel='noreferrer' />
@@ -550,11 +594,12 @@ export function BellmanFord() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Best Case</td>
 							<td>{bellmantimebest}</td>
@@ -563,21 +608,26 @@ export function BellmanFord() {
 							<td>Worst Case</td>
 							<td>{bellmantimeworst}</td>
 						</tr>
-					</table>
+
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{bellmanspace}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={bellmanford} alt='graphs' rel='noreferrer' />
@@ -599,11 +649,12 @@ export function BreadthFirstSearch() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Implementation</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Adjacency List</td>
 							<td>{bfstimelist}</td>
@@ -612,21 +663,26 @@ export function BreadthFirstSearch() {
 							<td>Adjacency Matrix</td>
 							<td>{bfstimematrix}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{bfsspace}</td>
 						</tr>
-					</table>
+						</tbody>
+
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={breadthfirstsearchgif} alt='graphs' rel='noreferrer' />
@@ -643,30 +699,34 @@ export function DepthFirstSearch() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{dfstime}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{dfsspace}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={depthfirstsearchgif} alt='graphs' rel='noreferrer' />
@@ -684,11 +744,12 @@ export function Prims() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Implementation</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Adjacency Matrix</td>
 							<td>{matrix}</td>
@@ -701,7 +762,8 @@ export function Prims() {
 							<td>Fibonacci Heap and Adjacency List</td>
 							<td>{fibonacci}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={primsgif} alt='graphs' rel='noreferrer' />
@@ -720,12 +782,13 @@ export function AVL() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Search</td>
 							<td>{log}</td>
@@ -741,21 +804,25 @@ export function AVL() {
 							<td>{log}</td>
 							<td>{log}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={avlgif} alt='graphs' rel='noreferrer' />
@@ -769,12 +836,13 @@ export function BinarySearchTree() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Search</td>
 							<td>{log}</td>
@@ -790,21 +858,24 @@ export function BinarySearchTree() {
 							<td>{log}</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={binarysearchtreegif} alt='graphs' rel='noreferrer' />
@@ -818,30 +889,36 @@ export function Preorder() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={preordergif} alt='graphs' rel='noreferrer' />
@@ -855,30 +932,33 @@ export function Inorder() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={inordergif} alt='graphs' rel='noreferrer' />
@@ -892,30 +972,33 @@ export function Postorder() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{linear}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={postordergif} alt='graphs' rel='noreferrer' />
@@ -929,13 +1012,14 @@ export function Heaps() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Operation</th>
 							<th>Best Case</th>
 							<th>Average Case</th>
 							<th>Worst Case</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Insertion</td>
 							<td>{constant}</td>
@@ -954,7 +1038,8 @@ export function Heaps() {
 							<td>{constant}</td>
 							<td>{constant}</td>
 						</tr>
-					</table>
+						</tbody>
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={maxheap} alt='graphs' rel='noreferrer' />
@@ -968,11 +1053,12 @@ export function HuffmanCodingTree() {
 			<MathJax.Provider>
 				<div>
 					<p className='SubHeader'>Time Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Runtime</th>
-						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
@@ -981,16 +1067,18 @@ export function HuffmanCodingTree() {
 							<td>Best Case</td>
 							<td>{nlogn}</td>
 						</tr>
-					</table>
+						</tbody>
+						
+					</Table>
 				</div>
 				<div>
 					<p className='SubHeader'>Space Complexity:</p>
-					<table>
-						<tr>
+					<Table>
+						<thead>
 							<th>Cases</th>
 							<th>Space</th>
-						</tr>
-
+						</thead>
+						<tbody>
 						<tr>
 							<td>Worst Case</td>
 							<td>{nlogn}</td>
@@ -999,7 +1087,10 @@ export function HuffmanCodingTree() {
 							<td>Best Case</td>
 							<td>{nlogn}</td>
 						</tr>
-					</table>
+						</tbody>
+
+						
+					</Table>
 				</div>
 			</MathJax.Provider>
 			<img src={huffmancodingtree} alt='graphs' rel='noreferrer' />

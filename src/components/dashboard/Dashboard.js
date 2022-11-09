@@ -5,8 +5,17 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Col, Row } from 'react-bootstrap';
-
+import Tilt from 'react-tilt';
 import algorithms from '../algorithmList/Algorithms';
+import {
+	Card,
+	CardContent,
+	// IconButton,
+	Typography,
+	Button,
+} from '@material-ui/core';
+import SelectionCard from './SelectionCard'
+
 
 function Dashboard({ categories, inCategory }) {
 	console.log('Dashboard');
@@ -29,25 +38,28 @@ function Dashboard({ categories, inCategory }) {
 
 	return (
 		<div style={{alignItems: "center"}}>
-			<h3 className='progress-header'>Completion Progress</h3>
-			<h4 className='progress-header'>{completedAlgorithms}/31</h4>
-			<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
-			<div className='Dashboard'>
-				<br/><br/>
-				{categories.map((category) => (
-					<Link className='Link' to={category.path}>
-						<Algorithm
-							title={category.title}
-							description={category.description}
-							key={category.title}
-							width={320}
-							height={265}
-							inCategory={inCategory}
-						/>
-					</Link>
-				))}
-
+			<div>
+				<Typography id="dashboard-title">Algorithm Vision Knights</Typography>
+				<h4 className='progress-header'>Completion Progress</h4>
+				<h5 className='progress-header'>{completedAlgorithms}/31</h5>
+				<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			</div>
+			<div class="" style={{alignItems: 'center', backgroundColor:"#5f4b0060"}}>
+				<div class="bg">
+					{Object.keys(algorithms).map((key) =>
+						<SelectionCard categoryName={algorithms[key][0].category} category={algorithms[key]}/>
+					)}
+				</div>
+				{/* {Object.keys(algorithms).map((key) => {
+					<div className='category'>
+						{algorithms[key].map((algorithm) => {
+							<a href="#">{algorithm}</a>
+						})}
+					</div>
+					
+				})} */}
+			</div>
+
 		</div>
 	);
 }

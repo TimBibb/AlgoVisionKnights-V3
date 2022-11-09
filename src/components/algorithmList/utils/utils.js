@@ -30,6 +30,7 @@ import huffmancodingtree from './images/huffmancodingtree.gif';
 import towersofhanoi from './images/towersofhanoi.png';
 import fibonaccipng from './images/fibonacci.png';
 import floodfill from './images/floodfill.gif';
+import kruskal from './images/kruskals.gif';
 
 const constant = <MathJax.Node formula={`O(1)`} />;
 const log = <MathJax.Node formula={`O(log \\ n)`} />;
@@ -767,6 +768,48 @@ export function Prims() {
 				</div>
 			</MathJax.Provider>
 			<img src={primsgif} alt='graphs' rel='noreferrer' />
+		</div>
+	);
+}
+
+const union = <MathJax.Node formula={`O(E \\ (log \\ (E) \\ + \\ E^2))`} />;
+const subset = <MathJax.Node formula={`O(V)`} />;
+const find = <MathJax.Node formula={`O(E^2)`} />;
+const complexity = <MathJax.Node formula={`O(E \\ log \\ (E))`} />;
+
+export function Kruskals() {
+	return (
+		<div className='Kruskals'>
+			<MathJax.Provider>
+				<div>
+					<p className='SubHeader'>Time Complexity:</p>
+					<Table>
+						<thead>
+							<th>Implementation</th>
+							<th>Worst Case</th>
+						</thead>
+						<tbody>
+						<tr>
+							<td>Union</td>
+							<td>{union}</td>
+						</tr>
+						<tr>
+							<td>Find</td>
+							<td>{find}</td>
+						</tr>
+						<tr>
+							<td>Make Subset</td>
+							<td>{subset}</td>
+						</tr>
+						<tr>
+							<td>Runtime</td>
+							<td>{complexity}</td>
+						</tr>
+						</tbody>
+					</Table>
+				</div>
+			</MathJax.Provider>
+			<img src={kruskal} alt='graphs' rel='noreferrer' />
 		</div>
 	);
 }

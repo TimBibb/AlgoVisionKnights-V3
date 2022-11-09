@@ -4,9 +4,9 @@ A hash table maps keys to values. Hash Tables use hash functions to create an in
 
 # How does it work?
 
-The hash table functions the same in each different way, it grabs the value that wants to be input it in the table and passes it through a hash function in which returns the index in which the value will be in the hash table. The same does for deletion and searching. However, hash tables are not perfect so two different values can have the same index, this is considered a collition. In here we will explain you the Open Adressing Linear Probing method.
+The hash table functions the same in each different way, it grabs the value that wants to be input it in the table and passes it through a hash function in which returns the index in which the value will be in the hash table. The same does for deletion and searching. However, hash tables are not perfect so two different values can have the same index, this is considered a collition. In here we will explain you the Chaining method.
 
-This method basically as the name shows it searches for the next available space in the table linearly and then inputs the value into that open space in the table. It does this method as well when deleting and searching for the value in the table.
+This method as its name suggest it chains together the values, in the same spot, in better terms, it creates, in the index in which the values are having a collision, a linked list so the value is still in the same index as expected from the hash function.
 
 # Runtimes
 

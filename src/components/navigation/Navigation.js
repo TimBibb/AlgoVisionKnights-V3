@@ -12,6 +12,7 @@ import {
 	ListItem,
 	ListItemText,
 	Typography,
+	Button
 } from '@material-ui/core/';
 import clsx from 'clsx';
 
@@ -82,7 +83,9 @@ function Navigation({
 							  }),
 				}}>
 				<div id='toolbar-container' className={classes.toolbar}>
-					<Typography id='nav-title'>AVK</Typography>
+					<Link className='Link' to='/'>
+						<Button onClick={handleChange('Dashboard')} ><Typography id='nav-title'>AVK</Typography></Button>
+					</Link>
 				</div>
 				<List>
 					

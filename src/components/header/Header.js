@@ -152,6 +152,16 @@ function Header({
 										}
 									/>
 
+									<Route
+										exact={true}
+										path='/settings'
+										element={
+											<Typography id='header-title'>
+												Settings
+											</Typography>
+										}
+									/>
+
 									{categories.map((category) => (
 										<Route
 											exact={true}

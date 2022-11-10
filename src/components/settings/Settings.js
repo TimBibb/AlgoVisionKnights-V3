@@ -105,21 +105,21 @@ class Settings extends React.Component {
 
     onChangeSecondaryColor = (secondaryColor) => {
         this.setState({ 
-          secondaryColor: secondaryColor.hex
+          secondaryColor: secondaryColor.rgb
         })
         localStorage.setItem('secondaryColor', secondaryColor.hex)
     };
 
     onChangeBackgroundColor = (backgroundColor) => {
         this.setState({ 
-            backgroundColor: backgroundColor.hex
+            backgroundColor: backgroundColor.rgb
         })
         localStorage.setItem('backgroundColor', backgroundColor.hex)
     };
 
     onChangeAccentColor = (accentColor) => {
         this.setState({ 
-            accentColor: accentColor.hex
+            accentColor: accentColor.rgb
         })
         localStorage.setItem('accentColor', accentColor.hex)
     };

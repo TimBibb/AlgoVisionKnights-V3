@@ -1,5 +1,4 @@
 .Dashboard {
-	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -20,4 +19,29 @@
 	margin-right: auto;
 	text-align: center;
 	color: #FFC904;
+}
+
+.list {
+	overflow: auto;
+	white-space: nowrap;
+  }
+  
+.list a {
+	display: inline-block;
+	color: #FFC904;
+	text-align: center;
+	padding: 14px;
+	text-decoration: none;
+}
+
+.category {
+	margin: 2em;
+	box-shadow: inset;
+}
+
+#dashboard-title {
+	font-size: 48pt;
+	font-weight: 700;
+	color: #FFC904;
+	text-align: center;
 }

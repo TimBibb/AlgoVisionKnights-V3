@@ -109,7 +109,9 @@ export default class binarysearch extends React.Component {
 			stepId: 0, // ID of the current step
 			stepTime: 4000, // Milliseconds for transition durations aka duration of each animation
 			waitTime: 2000, // Milliseconds between each step
-			target: -1
+			target: -1,
+			inputMode: false,
+			inputFlag: false
 		};
 
 		// Bindings
@@ -122,11 +124,13 @@ export default class binarysearch extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 		this.recursiveSearch = this.recursiveSearch.bind(this)
+		this.handleInsert = this.handleInsert.bind(this);
 	}
-    search(arr, target, ids, length, stepTime){
+    search(isteps, imsg, arr, target, ids, length, stepTime){
 		let pseudocodeArr = [];
-        let steps = [];
-        let messages = [];
+        let steps = ((this.state.inputMode) ? isteps : []);
+        let messages = ((this.state.inputMode) ? imsg : []);
+
         messages.push("<h1>Beginning Binary Search! Target: " + target + "</h1>");
         steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
@@ -140,11 +144,11 @@ export default class binarysearch extends React.Component {
 		if (start > end) {
 			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 
 			messages.push("<h1>There are no more indexes to traverse, target " + target + " is not in the array</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(HighlightLineStep(3,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 			return [steps, messages, pseudocodeArr];
 		}
 
@@ -335,6 +339,8 @@ export default class binarysearch extends React.Component {
 										// button so as not to ruin the visualizer
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
+		
+		this.props.codeSteps[this.state.stepId].forward();
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
@@ -403,6 +409,13 @@ export default class binarysearch extends React.Component {
 
 	//Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
+		if (this.state.inputMode) {
+			console.log("0");
+			let inputSteps = [];
+			let inputMessages = [];
+			this.search(inputSteps, inputMessages,[...this.state.arr], this.state.target, this.state.ids, this.state.size, this.state.stepTime);
+			this.setState({inputMode:false, running:true});
+		}
 		// Component mounted and unsorted array created -> Initialize visualizer
 		if (this.state.arr.length > prevState.arr.length) {
 			console.log("Not searched");
@@ -412,7 +425,7 @@ export default class binarysearch extends React.Component {
 		else if (this.state.ids.length > prevState.ids.length) {
 			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 			// 30 -> will implement user input
-			this.search([...this.state.arr], this.state.arr[Math.floor(Math.random() * this.state.arr.length)], this.state.ids, this.state.size, this.state.stepTime);
+			this.search([],[],[...this.state.arr], this.state.arr[Math.floor(Math.random() * this.state.arr.length)], this.state.ids, this.state.size, this.state.stepTime);
 			console.log("ran visualizer");
 		}
 		// Part of restart -> Reinitialize with original array
@@ -426,20 +439,37 @@ export default class binarysearch extends React.Component {
 			this.run();
 			console.log("We ran");
 		}
+	}	
+	handleInsert() {
+		if (this.state.running || this.state.inputMode) {
+			return;
+		}
+		let input = parseInt(document.getElementById("insertVal").value);
+		//console.log(input);
+		// Array is split by commas
+		// Checks if size is too small or big 1 < size < 11
+		if (input < -999 || input > 999) {
+			document.getElementById("message").innerHTML = "<h1>Target size must be between -999 and 999</h1>";
+			return;
+		}	
+		this.setState({inputMode: true, running: false, inputFlag: true, target: input});
 	}
+
 
 	render() {
 		return (
 			<div>
 				<div class="center-screen" id="banner">	
-					{/* <input type="number" id="value" class="inputValue"></input>
-					<button class="button" onClick={this.handleSearch}>Search</button> */}
 					<button class="button" onClick={this.play}>Play</button> 
 		        	<button class="button" onClick={this.pause}>Pause</button>
 		        	<button class="button" onClick={this.restart}>Restart</button>
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="searchInput"type="number" id="insertVal" placeholder="Target"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Search</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search!</h1></span></div>
 				<div class="parent-svg">

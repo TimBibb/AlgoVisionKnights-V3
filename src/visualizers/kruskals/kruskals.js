@@ -5,6 +5,7 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward() {}

@@ -6,6 +6,7 @@ import UnlabeledNode from "../../foundation/graph/UnlabeledNode";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
@@ -193,7 +194,8 @@ export default class HeapSort extends React.Component {
       waitTime: 5000,
       running: false,
       stepId: 0,
-      
+      inputMode: false,
+      flag: false
     };
 
     this.ref = React.createRef();
@@ -205,6 +207,7 @@ export default class HeapSort extends React.Component {
     this.forward = this.forward.bind(this);
     this.turnOffRunning = this.turnOffRunning.bind(this);
     this.run = this.run.bind(this);
+    this.handleInsert = this.handleInsert.bind(this);
   }
 
   initialize() {
@@ -213,12 +216,15 @@ export default class HeapSort extends React.Component {
     // d3.select(this.ref.current).append("svg").attr("width", width + "px").attr("height", "1000px");
     d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
 
-    var size = this.state.size;
-    var arr = Array.from({ length: size + 1 }, () => randInRange(1, 100));
-    var numIds = Array.from({ length: size + 1 }, (_, i) => "num" + i);
-    var lineIds = Array.from({ length: size + 1 }, (_, i) => "line" + i);
-    var circIds = Array.from({ length: size + 1 }, (_, i) => "circ" + i);
-    var circNumIds = Array.from({ length: size + 1 }, (_, i) => "circNum" + i);
+    let size = ((this.state.inputMode) ? this.state.arr.length : this.state.size);
+    
+    let arr =  this.state.arr;
+    console.log(arr)
+    // length = 11
+    let numIds = Array.from({ length: size + 1 }, (_, i) => "num" + i);
+    let lineIds = Array.from({ length: size + 1 }, (_, i) => "line" + i);
+    let circIds = Array.from({ length: size + 1 }, (_, i) => "circ" + i);
+    let circNumIds = Array.from({ length: size + 1 }, (_, i) => "circNum" + i);
 
     // find all (x, y) centers for the circles (units are percent)
     var cxs = [null, 50];
@@ -242,15 +248,16 @@ export default class HeapSort extends React.Component {
       left--;
     }
 
-    console.log(cxs);
-    console.log(cys);
+    //console.log(cxs);
+    //console.log(cys);
 
     let vals = [null];
     // create the array
+    // needs arr[v-1] because it wont create object for index 0 
     for (let v = 1; v <= size; v++) {
       var x = 1.0 / size;
       x = (x * (v - 1) + x / 2.0) * 100.0;
-
+      //((this.state.inputMode) ? arr[v-1] :
       vals.push(new Number(this.ref, numIds[v], x + "%", "5%", arr[v], "gray", "visible"));
     }
 
@@ -274,18 +281,18 @@ export default class HeapSort extends React.Component {
     let heapCircs = [null];
     for (let v = 1; v <= size; v++) {
       heapCircs.push(new UnlabeledNode(this.ref, circIds[v], cxs[v] + "%", cys[v] + "%", "hidden"));
-      // heapCircs.push(new HeapCircle(this.ref, circIds[v], cxs[v] + "%", cys[v] + "%", "hidden"));
+
     }
 
     let heapVals = [null];
     for (let v = 1; v <= size; v++) {
       heapVals.push(
-        new Number(this.ref, circNumIds[v], cxs[v] + "%", cys[v] + "%", arr[v], "white", "hidden")
+      //((this.state.inputMode) ? arr[v-1] :
+      new Number(this.ref, circNumIds[v], cxs[v] + "%", cys[v] + "%", arr[v], "white", "hidden")
       );
     }
-
+    console.log(arr)
     this.setState({
-      arr: arr,
       heapCircs: heapCircs,
       heapLines: heapLines,
       heapVals: heapVals,
@@ -303,6 +310,7 @@ export default class HeapSort extends React.Component {
   }
 
   sort(arr, size, steps, heapLines, heapCircs, heapVals, vals, stepTime) {
+    console.log(arr);
     var messages = [];
     messages.push("<h1>Begin by building a heap from the bottom up.</h1>");
     steps.push([new EmptyStep()]);
@@ -363,10 +371,11 @@ export default class HeapSort extends React.Component {
       );
       flushBuffer();
     }
-
-    for (let i = size / 2; i >= 1; i--) {
+    for (let i = Math.floor(size / 2); i >= 1; i--) {
       currentMessage = "<h1>Insert " + arr[i] + ".</h1>";
+      
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[i].attr.id));
+     
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[i].attr.id));
       addStep(
         new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, "gray", "#FFCE36")
@@ -539,7 +548,6 @@ export default class HeapSort extends React.Component {
     flushBuffer();
 
     this.setState({
-      arr: arr,
       size: size,
       steps: steps,
       messages: messages,
@@ -619,30 +627,123 @@ export default class HeapSort extends React.Component {
   }
 
   componentDidMount() {
-    this.initialize();
+    this.dataInit(this.state.size);
   }
+  dataInit(size) {
+		let arr =  Array.from({ length: size + 1 }, () => randInRange(1, 100));
+    console.log(arr);
+		this.setState({arr: arr, inputMode: false});
+	}
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.size !== prevState.size) {
-      console.log("SIZE CHANGED");
-      this.initialize();
-    } else if (this.state.arr.length > prevState.arr.length) {
-      this.sort(
-        this.state.arr,
-        this.state.size,
-        this.state.steps,
-        this.state.heapLines,
-        this.state.heapCircs,
-        this.state.heapVals,
-        this.state.vals,
-        this.state.stepTime
-      );
-      console.log("Sorted");
-    } else if (this.state.running !== prevState.running) {
-      this.run();
-      console.log("We ran");
+    if (this.state.inputMode) {
+      /* console.log("Current:" + this.state.steps.length);
+      console.log("Previous:" + prevState.steps.length);
+      console.log("Current:" + JSON.stringify(this.state.arr));
+      console.log("Previous:" + JSON.stringify(prevState.arr)); */
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+          console.log("1");
+          d3.select(this.ref.current).select("svg").remove();
+          this.initialize();
+			}
+			else if (this.state.heapCircs.length > prevState.heapCircs.length) {
+          d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+          console.log("2");
+          this.sort(this.state.arr,
+                        this.state.arr.length - 1,
+                        this.state.steps,
+                        this.state.heapLines,
+                        this.state.heapCircs,
+                        this.state.heapVals,
+                        this.state.vals,
+                        this.state.stepTime
+                    );
+          console.log("Hello!")
+          this.play();
+          this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				let svg = this.initialize();
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				this.setState({inputMode: false});
+			}
+		}
+    else {
+        //console.log(this.state.arr.length)
+        //console.log(prevState.arr.length)
+        if (this.state.arr.length > prevState.arr.length) {
+          console.log("1a");
+          this.initialize();
+        } else if (this.state.heapCircs.length > prevState.heapCircs.length) {
+          d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+          this.sort(
+            this.state.arr,
+            this.state.size,
+            this.state.steps,
+            this.state.heapLines,
+            this.state.heapCircs,
+            this.state.heapVals,
+            this.state.vals,
+            this.state.stepTime
+          );
+          console.log("2a");
+          
+        } else if (this.state.running !== prevState.running) {
+          this.run();
+          console.log("3a");
+        }
     }
   }
+
+  handleInsert() {
+		if (this.state.running || this.state.inputMode) {
+			return;
+		}
+		let input = document.getElementById("insertVal").value;
+    console.log(input);
+		// Array is split by commas
+		let arr = input.split(',');
+    console.log(arr[5]);
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10</h1>";
+			return;
+		}
+		// Check each content if it is a number
+   console.log(arr);
+
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
+		}
+   
+    arr.splice(0, 0, 0);
+    
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		this.setState({inputMode: true, flag: true, arr:arr, running: false, steps: [], messages: [], stepId: 0,
+                  heapCircs: [], heapLines: [], heapVals: [], vals: []});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
+	}
 
   render() {
     return (
@@ -655,6 +756,10 @@ export default class HeapSort extends React.Component {
           <button class="button" onClick={this.forward}>Step Forward</button>
           <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
+        <div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
+				</div>
         <div class="center-screen">
           <span id="message"><h1>Welcome to Heap Sort!</h1></span>
         </div>

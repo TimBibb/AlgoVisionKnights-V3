@@ -11,6 +11,7 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 50;
 var mid = 0;
@@ -351,11 +352,13 @@ export default class binarysearchtree extends React.Component {
         var steps = []
         var messages = []
         var root = null;
+        var pseudocodeArr = [];
 
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
             messages.push("The next value we will insert into the tree is " + val );
+            
             console.log("level " + level);
             if(!root) {
                 root = new Node(this.ref, val, x, y, i);
@@ -520,7 +523,8 @@ export default class binarysearchtree extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		
 		// Uses the step's fastForward function and displays associated message
-		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
+		//this.props.codeSteps[this.state.stepId].forward();
+        this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 
 		this.setState({stepId: this.state.stepId + 1});
@@ -534,6 +538,7 @@ export default class binarysearchtree extends React.Component {
 			this.setState({running: false});
 			return;
 		}
+        //this.props.codeSteps[this.state.stepId].forward();
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
@@ -617,6 +622,10 @@ export default class binarysearchtree extends React.Component {
                         </div>
                     </tr>
                 </table>
+                <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"bstinsertion"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

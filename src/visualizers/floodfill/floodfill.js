@@ -221,67 +221,14 @@ export default class Floodfill extends React.Component {
         
     }
 
-    // Prints the colored Tile
-    // for(var i = 1; i < n; i++){
-    //     steps.push(new TileStep(row, i, "white"));
-    //     messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-    // }
+    messages.push("<h1>All our tiles have been filled with the new color</h1>");
+		steps.push(new EmptyStep());
 
-      // A recursive function to replace
-      // previous color 'prevC' at '(x, y)'
-      // and all surrounding pixels of (x, y)
-      // with new color 'newC' and
-    //   function floodFillUtil(board, i, j, prevC, newC)
-    //   {
-        
+    messages.push("<h1>All our tiles have been filled with the new color</h1>");
+		steps.push(new EmptyStep());
 
-    //     // Base cases
-    //     if(i==0 || i==Math.floor(n/2) || i==(n-1) ){
-    //         return;
-    //     }
-    //     if(j==0 || j==Math.floor(n/2) || j==(n-1)){
-    //         return;
-    //     }
-        
-
-    //     // if (x < 0 || x >= M || y < 0 || y >= N) return;
-    //     // if (screen[x][y] != prevC) return;
- 
-    //     // Replace the color at (x, y)
-    //     steps.push(new TileStep(row, i, "white"));
-    //     messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-        
-    //     console.log("CMONNNN")
- 
-    //     // Recur for north, east, south and west
-    //     floodFillUtil(board, i + 1, j, prevC, newC);
-    //     floodFillUtil(board, i - 1, j, prevC, newC);
-    //     floodFillUtil(board, i, j + 1, prevC, newC);
-    //     floodFillUtil(board, i, j - 1, prevC, newC);
-
-    //     return [board];
-    //   }
- 
-    //   It mainly finds the previous color
-    //   on (x, y) and calls floodFillUtil()
-    //   function floodFill(board, x, y, newC) {
-    //     var prevC = board[x][y];
-    //     if (prevC == newC) return;
-    //     floodFillUtil(board, x, y, prevC, newC);
-    //   }
- 
-    //   Driver code
-    //   var screen = [];
-    //   var x = 4,
-    //     y = 4,
-    //     newC = 3;
-    //   floodFill(board, i, j, n);
- 
-    //   console.log("Updated screen after" + "call to floodFill: <br>");
-    //   for (var i = 0; i < n; i++) {
-    //     for (var j = 0; j < n; j++) console.log(board[i][j] + " ");
-    //     console.log("<br>");
-    //   }
+    messages.push("<h1>Finished Floodfill!</h1>");
+		steps.push(new EmptyStep());
 
     this.setState({steps: steps, messages: messages});
   }

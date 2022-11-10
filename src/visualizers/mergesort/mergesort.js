@@ -3,8 +3,7 @@ import "./mergesort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
-import { useEffect } from "react";
-import { schemeSet1, svg } from "d3";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class EmptyStep {
@@ -363,8 +362,6 @@ class PartitionStep {
 	// }
 }
 
-
-
 class UnpartitionStep{
 	constructor(id1, id2, ids, stepTime) {
 		this.id1 = id1;
@@ -622,7 +619,9 @@ export default class MergeSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: (9 * 2000) / 8
+			waitTime: (9 * 2000) / 8,
+			inputMode: false,
+			restartFlag: false
 		};
 
 		this.ref = React.createRef();
@@ -634,6 +633,7 @@ export default class MergeSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 	}
 
 	printArray(arr, size) {
@@ -660,7 +660,7 @@ export default class MergeSort extends React.Component {
 		let steps = [];
 		let messages = [];
 		let test = [];
-		console.log("step time: " + stepTime);
+		//console.log("step time: " + stepTime);
 		[steps, messages, test] = this.sortRecursive(arr, [...ids], ids, steps, messages, stepTime);
 
 		this.setState({steps: steps, messages: messages})
@@ -770,7 +770,7 @@ export default class MergeSort extends React.Component {
 			arr[i] = 15 + Math.floor(Math.random() * 56);
 		}
 
-		console.log("Unsorted");
+		console.log("data init");
 		this.printArray(arr, this.state.size);
 
 		this.setState({arr: arr});
@@ -787,7 +787,7 @@ export default class MergeSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (this.state.size * (barWidth + barOffset)) + 100)
+				.attr("width", (10 * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
 		var bars = svg.selectAll(".bar")
@@ -930,7 +930,7 @@ export default class MergeSort extends React.Component {
 
 		var ids = [];
 
-		for (let i = 0; i < this.state.size; i++)
+		for (let i = 0; i < this.state.arr.length; i++)
 		{
 			//may need to remove g 
 			ids.push(i);
@@ -1006,7 +1006,7 @@ export default class MergeSort extends React.Component {
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
-		this.setState({running: true});
+		this.setState({running: true, restartFlag: false});
 		this.run(d3.select(this.ref.current).select("svg"));
 	}
 
@@ -1017,17 +1017,11 @@ export default class MergeSort extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
 		var svg = d3.select(this.ref.current).select("svg");
-		console.log(svg);
-
         svg.remove();
-		console.log("Removed og");
-
         document.getElementById("message").innerHTML = "<h1>Welcome to Merge Sort!</h1>";
-
-		console.log("Reset state");
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
+	
 	}
 
 	componentDidMount() {
@@ -1035,33 +1029,96 @@ export default class MergeSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-			var svg = d3.select(this.ref.current).select("svg");
+		var svg = d3.select(this.ref.current).select("svg");
+		if (this.state.inputMode) {
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("1");
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize();
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2")
+				this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				let svg = this.initialize();
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				this.setState({inputMode: false});
+			}
+		} else {
+			// Data array changed in dataInit -> Make visual
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1a")
+				svg = this.initialize();
+				svg.attr("visibility", "visible");
+			}
+			// IDs array changed in initialize -> sort copy of array to get steps and messages
+			else if (this.state.ids.length > prevState.ids.length) {
+				console.log("2a");
+				this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
+				//console.log("ran visualizer");
+			}
+			// For reset
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3a");
+				svg = this.initialize();
+				//console.log("Made it out");
+				svg.attr("visibility", "visible");
+				//console.log("All good");
+			}
+			// Running changed
+			else if (this.state.running !== prevState.running)
+			{
+				this.run(svg);
+				console.log("4a");
+			}
+		}
+	}
 
-		// Data array changed in dataInit -> Make visual
-		if (this.state.arr.length > prevState.arr.length) {
-			svg = this.initialize();
-			svg.attr("visibility", "visible");
+	handleInsert() {
+		if (this.state.running || this.state.inputMode || this.state.restartFlag) {
+			return;
 		}
-		// IDs array changed in initialize -> sort copy of array to get steps and messages
-		else if (this.state.ids.length > prevState.ids.length) {
-			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
-			console.log("ran visualizer");
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
 		}
-		// Running changed
-		else if (this.state.running !== prevState.running)
-		{
-			this.run(svg);
-			console.log("We ran");
+		// Check each content if it is a number
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
 		}
-		// For reset
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("We're restarting");
-			svg = this.initialize();
-			console.log("Made it out");
-			svg.attr("visibility", "visible");
-			console.log("All good");
-		}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		//console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
 	}
 
 	render() {
@@ -1074,6 +1131,10 @@ export default class MergeSort extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Merge Sort!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>

@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 import Navigation from './components/navigation/Navigation';
 import AlgorithmPage from './components/algorithmPage/AlgorithmPage';
 import Category from './components/category/Category';
+import Settings from './components/settings/Settings';
 
 // Algorithm Objects
 import categories from './components/algorithmList/Categories';
@@ -80,6 +81,15 @@ function App() {
 									algorithms={algorithms}
 									inCategory={false}
 								/>
+							}
+						/>
+
+						{/* Settings page. Where you will see the Color Picker for now */}
+						<Route
+							exact={true}
+							path='/settings'
+							element={
+								<Settings/>
 							}
 						/>
 

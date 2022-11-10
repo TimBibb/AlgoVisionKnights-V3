@@ -26,10 +26,9 @@ function Dashboard({ categories, inCategory }) {
 	Object.keys(algorithms).map((key) =>
 		algorithms[key].map((algorithm) => {
 			if(localStorage.getItem(algorithm.path) && localStorage.getItem(algorithm.path) == "true"){
-				completedAlgorithmsPercent+= 3;
+				completedAlgorithmsPercent+= 4;
 				completedAlgorithms += 1;
 			}
-				
 		}))
 
 	// categories.map((category) => {
@@ -41,10 +40,10 @@ function Dashboard({ categories, inCategory }) {
 			<div>
 				<Typography id="dashboard-title">Algorithm Vision Knights</Typography>
 				<h4 className='progress-header'>Completion Progress</h4>
-				<h5 className='progress-header'>{completedAlgorithms}/31</h5>
+				<h5 className='progress-header'>{completedAlgorithms}/29</h5>
 				<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			</div>
-			<div class="" style={{alignItems: 'center', backgroundColor:"#5f4b0060"}}>
+			<div class="" style={{alignItems: 'center'}}>
 				<div class="bg">
 					{Object.keys(algorithms).map((key) =>
 						<SelectionCard categoryName={algorithms[key][0].category} category={algorithms[key]}/>

@@ -2,11 +2,11 @@
 
 A linked list is a linear collection of data that is not represented contiguously in memory like an array. Each node in a linked list has a piece of data and a “next” pointer that points to the next node in the list. This allows linked lists to shrink and grow without the need for creating a new array and copying all of the values, like a traditional array.
 
-### Variants
+## Variants
 
-Doubly-Linked List: Along with a reference to the next node, each node has a reference to the previous node. This structure lets the linked list travel in both directions. This structure is useful when you expect to have to travel freely along the list.
+- Doubly-Linked List: Along with a reference to the next node, each node has a reference to the previous node. This structure lets the linked list travel in both directions. This structure is useful when you expect to have to travel freely along the list.
 
-Circular-Linked List: The first and last nodes in the linked list connect to each other. This structure is useful when you don't need a specific starting point.
+- Circular-Linked List: The first and last nodes in the linked list connect to each other. This structure is useful when you don't need a specific starting point.
 
 Along with referencing the head, you can also have a linked list reference to the last node, called the tail.
 

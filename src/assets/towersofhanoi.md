@@ -2,7 +2,7 @@
 
 The Tower of Hanoi is a puzzle of trying to move all disks from the starting tower to the final tower. However, all the disks are a different size and disks cannot be placed on top of disks that are smaller than itself. There are 3 total towers, the 0<sup>th</sup> tower has all the disks, with the largest at the bottom and getting smaller from there. There can be any amount of disks on the starting tower and can always be done with 3 towers. 
 
-### Quick rules
+## Quick rules
 * Only one disk can be moved at one time
 * Only the top disk of each tower can be moved at once
 * A disk cannot be on top of a disk smaller than itself

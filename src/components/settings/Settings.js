@@ -5,41 +5,65 @@ import {Typography} from '@material-ui/core';
 import './Settings.css';
 import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
 
-
 function NavigateToDashboard(){
 	window.location.href = "/";
 }
 
+function defaultColors(){
+    // default primaryColor
+    localStorage.setItem('primaryColor', '#FFFFFF')
+    localStorage.setItem('primaryColorR', '255')
+    localStorage.setItem('primaryColorG', '255')
+    localStorage.setItem('primaryColorB', '255')
+    // default secondaryColor
+    localStorage.setItem('secondaryColor', '#404243')
+    localStorage.setItem('secondaryColorR', '64')
+    localStorage.setItem('secondaryColorG', '66')
+    localStorage.setItem('secondaryColorB', '67')
+    // default backgroundColor
+    localStorage.setItem('backgroundColor', '#000000')
+    localStorage.setItem('backgroundColorR', '0')
+    localStorage.setItem('backgroundColorG', '0')
+    localStorage.setItem('backgroundColorB', '0')
+    // default accentColor
+    localStorage.setItem('accentColor', '#FFC904')
+    localStorage.setItem('accentColorR', '255')
+    localStorage.setItem('accentColorG', '201')
+    localStorage.setItem('accentColorB', '4')
+
+    window.location.reload(false);
+}
+
 class Settings extends React.Component {
     
-    primaryColor = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : "#FFFFFF"
-    secondaryColor = localStorage.getItem('secondaryColor') ? localStorage.getItem('secondaryColor') : GRAYBLACK
-    backgroundColor = localStorage.getItem('backgroundColor') ? localStorage.getItem('backgroundColor') : "#000000"
-    accentColor = localStorage.getItem('accentColor') ? localStorage.getItem('accentColor') : UCF_GOLD
+    // primaryColor = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : "#FFFFFF"
+    // secondaryColor = localStorage.getItem('secondaryColor') ? localStorage.getItem('secondaryColor') : GRAYBLACK
+    // backgroundColor = localStorage.getItem('backgroundColor') ? localStorage.getItem('backgroundColor') : "#000000"
+    // accentColor = localStorage.getItem('accentColor') ? localStorage.getItem('accentColor') : UCF_GOLD
 
     state = {
         primaryColor: {
-            r: '255',
-            g: '255',
-            b: '255',
+            r: localStorage.getItem('primaryColorR'),
+            g: localStorage.getItem('primaryColorG'),
+            b: localStorage.getItem('primaryColorB'),
             a: '1',
         },
         secondaryColor: {
-            r: '64',
-            g: '66',
-            b: '67',
+            r: localStorage.getItem('secondaryColorR'),
+            g: localStorage.getItem('secondaryColorG'),
+            b: localStorage.getItem('secondaryColorB'),
             a: '1',
         },
         backgroundColor: {
-            r: '0',
-            g: '0',
-            b: '0',
+            r: localStorage.getItem('backgroundColorR'),
+            g: localStorage.getItem('backgroundColorG'),
+            b: localStorage.getItem('backgroundColorB'),
             a: '1',
         },
         accentColor: {
-            r: '255',
-            g: '201',
-            b: '4',
+            r: localStorage.getItem('accentColorR'),
+            g: localStorage.getItem('accentColorG'),
+            b: localStorage.getItem('accentColorB'),
             a: '1',
         },
       showPicker: false,
@@ -100,7 +124,12 @@ class Settings extends React.Component {
         this.setState({ 
             primaryColor: primaryColor.rgb
         })
+        console.log(primaryColor.rgb)
+        console.log(this.state.primaryColor.r)
         localStorage.setItem('primaryColor', primaryColor.hex)
+        localStorage.setItem('primaryColorR', this.state.primaryColor.r)
+        localStorage.setItem('primaryColorG', this.state.primaryColor.g)
+        localStorage.setItem('primaryColorB', this.state.primaryColor.b)
     };
 
     onChangeSecondaryColor = (secondaryColor) => {
@@ -108,6 +137,9 @@ class Settings extends React.Component {
           secondaryColor: secondaryColor.rgb
         })
         localStorage.setItem('secondaryColor', secondaryColor.hex)
+        localStorage.setItem('secondaryColorR', this.state.secondaryColor.r)
+        localStorage.setItem('secondaryColorG', this.state.secondaryColor.g)
+        localStorage.setItem('secondaryColorB', this.state.secondaryColor.b)
     };
 
     onChangeBackgroundColor = (backgroundColor) => {
@@ -115,6 +147,9 @@ class Settings extends React.Component {
             backgroundColor: backgroundColor.rgb
         })
         localStorage.setItem('backgroundColor', backgroundColor.hex)
+        localStorage.setItem('backgroundColorR', this.state.backgroundColor.r)
+        localStorage.setItem('backgroundColorG', this.state.backgroundColor.g)
+        localStorage.setItem('backgroundColorB', this.state.backgroundColor.b)
     };
 
     onChangeAccentColor = (accentColor) => {
@@ -122,6 +157,9 @@ class Settings extends React.Component {
             accentColor: accentColor.rgb
         })
         localStorage.setItem('accentColor', accentColor.hex)
+        localStorage.setItem('accentColorR', this.state.accentColor.r)
+        localStorage.setItem('accentColorG', this.state.accentColor.g)
+        localStorage.setItem('accentColorB', this.state.accentColor.b)
     };
 
     render() {
@@ -198,52 +236,55 @@ class Settings extends React.Component {
       });
  
       return (
-        <div className='container'>
-            {/* Primary Color */}
-            <Typography id="settings-title"> Primary Color: </Typography>
-            <div style={ styles.swatch } onClick={ this.onClick }>
-            <div style={ styles.primaryColor } />
-            </div>
-            { this.state.showPicker ? <div style={ styles.popover }>
-            <div style={ styles.cover } onClick={ this.onClose }/>
-            <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
-            </div> : null }
+        <div>
+            <div className='container'>
+                {/* Primary Color */}
+                <Typography id="settings-title"> Primary Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClick }>
+                <div style={ styles.primaryColor } />
+                </div>
+                { this.state.showPicker ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onClose }/>
+                <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
+                </div> : null }
 
-            {/* Secondary Color */}
-            <Typography id="settings-title"> Secondary Color: </Typography>
-            <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
-            <div style={ styles.secondaryColor } />
-            </div>
-            { this.state.showPickerSecondaryColor ? <div style={ styles.popover }>
-            <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
-            <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
-            </div> : null }
+                {/* Secondary Color */}
+                <Typography id="settings-title"> Secondary Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
+                <div style={ styles.secondaryColor } />
+                </div>
+                { this.state.showPickerSecondaryColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
+                <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
+                </div> : null }
 
-            {/* Background Color */}
-            <Typography id="settings-title"> Background Color: </Typography>
-            <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
-            <div style={ styles.backgroundColor } />
-            </div>
-            { this.state.showPickerBackgroundColor ? <div style={ styles.popover }>
-            <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
-            <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
-            </div> : null }
+                {/* Background Color */}
+                <Typography id="settings-title"> Background Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
+                <div style={ styles.backgroundColor } />
+                </div>
+                { this.state.showPickerBackgroundColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
+                <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
+                </div> : null }
 
-            {/* Accent Color */}
-            <Typography id="settings-title"> Accent Color: </Typography>
-            <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
-            <div style={ styles.accentColor } />
-            </div>
-            { this.state.showPickerAccentColor ? <div style={ styles.popover }>
-            <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
-            <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
-            </div> : null }
-        
-            {/* <div className="button-location">
-                <button class="button" onClick={NavigateToDashboard}>Dashboard</button>
-                <button class="button2" >Default Colors</button>
-			</div> */}
+                {/* Accent Color */}
+                <Typography id="settings-title"> Accent Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
+                <div style={ styles.accentColor } />
+                </div>
+                { this.state.showPickerAccentColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
+                <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
+                </div> : null }
 
+            </div>
+            <div className='container'>
+                <div className="button-location">
+                    <button class="button" onClick={NavigateToDashboard}>Dashboard</button>
+                    <button class="button2" onClick={defaultColors}>Default Colors</button>
+                </div>
+            </div>
         </div>
       )
     }

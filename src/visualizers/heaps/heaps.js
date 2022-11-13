@@ -28,6 +28,7 @@ function randInRange(lo, hi) {
 
 class EmptyStep {
     forward() {}
+    fastForward(){}
     backward() {}
 }
 
@@ -55,6 +56,7 @@ class changeValue {
         this.node = node;
         this.edge = edge;
         this.newVal = newVal;
+        this.oldVal = this.node.value;
     }
 
     forward(svg) {
@@ -62,6 +64,15 @@ class changeValue {
         this.node.value = this.newVal;
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
+
+    backward(svg){
+        svg.select("#" + this.node.textId).text(this.oldVal);
+        this.node.value = this.oldVal;
+    }
 }
 
 function sort(arr)
@@ -155,6 +166,20 @@ class HighlightNodeStep {
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
+
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", GRAY);
+        svg.select("#" + this.node.id).attr("visibility", "visible");
+        svg.select("#" + this.node.node.textId).attr("visibility", "visible");
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).attr("visibility", "visible");
+        }
+    }
 }
 
 class UnHighlightNodeStep {
@@ -169,6 +194,17 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge.id).style("stroke", GRAY);
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
+
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+        }
+    }
 }
 
 class UnHighlightPathStep {
@@ -726,6 +762,17 @@ export default class binarysearchtree extends React.Component {
 
     backward(){
         console.log("BACKWARDS CLICKED");
+        if(this.state.running) return;
+        if(this.state.stepId === this.state.steps.length) return;
+
+        let stepId = this.state.stepId - 1;
+
+        this.state.steps[this.state.stepId].backward(d3.select(this.ref.current).select("svg"));
+        document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+
+		this.setState({stepId: stepId});
+
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
 
     forward(){		
@@ -815,11 +862,11 @@ export default class binarysearchtree extends React.Component {
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
                     {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
-                    {/* <button class="button" onClick={this.pause}>Pause</button> */}
-                    <button class="button" onClick={this.add}>Add</button>
+                    <button class="button" onClick={this.pause}>Pause</button>
+                    {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
-                    {/* <button class="button" onClick={this.backward}>Step Backward</button> 
-                    <button class="button" onClick={this.forward}>Step Forward</button> */}
+                    <button class="button" onClick={this.backward}>Step Backward</button> 
+                    <button class="button" onClick={this.forward}>Step Forward</button>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Heaps!</h1></span></div>
                 <table>

@@ -9,6 +9,7 @@ import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
 
 class EmptyStep {
   forward() {}
+  fastForward(){}
   backward() {}
 }
 
@@ -43,7 +44,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === "white") ? "black" : "white");
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === "white") ? UCF_GOLD : "white");
   }
 }
 

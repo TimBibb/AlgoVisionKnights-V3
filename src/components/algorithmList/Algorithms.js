@@ -66,13 +66,12 @@ const algorithms = {
 			description: <QuickSort />,
 			category: 'Sorting'
 		},
-		// {
-		// 	name: 'Merge Sort',
-		// 	path: 'mergesort',
-		// 	type: 'js',
-		// 	description: <MergeSort />,
-		// category: 'Sorting'
-		// },
+		{
+			name: 'Merge Sort',
+			path: 'mergesort',
+			type: 'js',
+			description: <MergeSort />,
+		},
 		{
 			name: 'Heap Sort',
 			path: 'heapsort',

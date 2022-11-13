@@ -218,7 +218,7 @@ export default class HeapSort extends React.Component {
     let size = ((this.state.inputMode) ? this.state.arr.length : this.state.size);
     
     let arr =  this.state.arr;
-    console.log(arr)
+    //console.log(arr)
     // length = 11
     let numIds = Array.from({ length: size + 1 }, (_, i) => "num" + i);
     let lineIds = Array.from({ length: size + 1 }, (_, i) => "line" + i);
@@ -290,7 +290,7 @@ export default class HeapSort extends React.Component {
       new Number(this.ref, circNumIds[v], cxs[v] + "%", cys[v] + "%", arr[v], "white", "hidden")
       );
     }
-    console.log(arr)
+    //console.log(arr)
     this.setState({
       heapCircs: heapCircs,
       heapLines: heapLines,
@@ -309,7 +309,6 @@ export default class HeapSort extends React.Component {
   }
 
   sort(arr, size, steps, heapLines, heapCircs, heapVals, vals, stepTime) {
-    console.log(arr);
     var messages = [];
     messages.push("<h1>Begin by building a heap from the bottom up.</h1>");
     steps.push([new EmptyStep()]);
@@ -565,7 +564,7 @@ export default class HeapSort extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.fastForward();
     // this.state.steps[this.state.stepId].forward();
-    console.log(this.state.steps[this.state.stepId]);
+    //console.log(this.state.steps[this.state.stepId]);
     this.setState({ stepId: this.state.stepId + 1 });
 
     d3.timeout(this.turnOffRunning, this.props.waitTime);
@@ -610,19 +609,19 @@ export default class HeapSort extends React.Component {
   }
 
   restart() {
+    console.log("SIZE:" + this.state.steps.length);
     console.log("RESTART CLICKED");
     if (this.state.stepId - 1 < 0) return;
 
-    var stepId = this.state.stepId;
+    let stepId = this.state.stepId;
     document.getElementById("message").innerHTML = "<h1>Welcome to Heap Sort!</h1>";
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
-      // this.state.steps[--stepId].backward();
       d3.timeout(this.turnOffRunning, this.props.waitTime);
     }
-
-    this.setState({ running: false });
+    this.setState({ running: false});
     this.setState({ stepId: 0 });
+    
   }
 
   componentDidMount() {
@@ -630,16 +629,11 @@ export default class HeapSort extends React.Component {
   }
   dataInit(size) {
 		let arr =  Array.from({ length: size + 1 }, () => randInRange(1, 100));
-    console.log(arr);
 		this.setState({arr: arr, inputMode: false});
 	}
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.inputMode) {
-      /* console.log("Current:" + this.state.steps.length);
-      console.log("Previous:" + prevState.steps.length);
-      console.log("Current:" + JSON.stringify(this.state.arr));
-      console.log("Previous:" + JSON.stringify(prevState.arr)); */
 			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
           console.log("1");
           d3.select(this.ref.current).select("svg").remove();
@@ -657,15 +651,9 @@ export default class HeapSort extends React.Component {
                         this.state.vals,
                         this.state.stepTime
                     );
-          console.log("Hello!")
+          //console.log("Hello!")
           this.play();
           this.setState({inputMode: false});
-			}
-			// Part of restart -> Reinitialize with original array
-			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-				console.log("3");
-				let svg = this.initialize();
-				svg.attr("visibility", "visible");
 			}
 			else if (this.state.running !== prevState.running && this.state.running === true)
 			{
@@ -675,8 +663,6 @@ export default class HeapSort extends React.Component {
 			}
 		}
     else {
-        //console.log(this.state.arr.length)
-        //console.log(prevState.arr.length)
         if (this.state.arr.length > prevState.arr.length) {
           console.log("1a");
           this.initialize();
@@ -693,7 +679,7 @@ export default class HeapSort extends React.Component {
             this.state.stepTime
           );
           console.log("2a");
-          
+        
         } else if (this.state.running !== prevState.running) {
           this.run();
           console.log("3a");
@@ -706,17 +692,11 @@ export default class HeapSort extends React.Component {
 			return;
 		}
 		let input = document.getElementById("insertVal").value;
-    console.log(input);
-		// Array is split by commas
 		let arr = input.split(',');
-    console.log(arr[5]);
-		// Checks if size is too small or big 1 < size < 11
 		if (arr.length < 2 || arr.length > 10) {
 			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10</h1>";
 			return;
 		}
-		// Check each content if it is a number
-   console.log(arr);
 
 		let i = 0;
 		for (let value of arr) {
@@ -724,7 +704,6 @@ export default class HeapSort extends React.Component {
 				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
 				return;
 			}
-			// Parse value from string to Number
 			arr[i++] = parseInt(value);
 		}
    

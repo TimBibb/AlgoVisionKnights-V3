@@ -431,7 +431,9 @@ export default class QuickSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: (9 * 2000) / 8
+			waitTime: (9 * 2000) / 8,
+			inputMode: false,
+			restartFlag: false
 		};
 
 		this.ref = React.createRef();
@@ -448,7 +450,7 @@ export default class QuickSort extends React.Component {
 	printArray(arr, size) {
 		for (let i = 0; i < size; i++)
 		{
-			console.log(arr[i]);
+			//console.log(arr[i]);
 		}
 	}
 
@@ -629,8 +631,8 @@ export default class QuickSort extends React.Component {
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
 
-		console.log(steps);
-		console.log(messages);
+		//console.log(steps);
+		//console.log(messages);
 	}
 
 	dataInit() {
@@ -883,7 +885,7 @@ export default class QuickSort extends React.Component {
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
-		this.setState({running: true});
+		this.setState({running: true, restartFlag: false});
 		this.run(d3.select(this.ref.current).select("svg"));
 	}
 
@@ -896,15 +898,15 @@ export default class QuickSort extends React.Component {
 		console.log("RESTART CLICKED");
 
 		var svg = d3.select(this.ref.current).select("svg");
-		console.log(svg);
+		//console.log(svg);
 
         svg.remove();
-		console.log("Removed og");
+		//console.log("Removed og");
 
         document.getElementById("message").innerHTML = "<h1>Welcome to Quick Sort!</h1>";
 
-		console.log("Reset state");
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
+		//console.log("Reset state");
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
 	}
 
 	componentDidMount() {
@@ -912,7 +914,85 @@ export default class QuickSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-			var svg = d3.select(this.ref.current).select("svg");
+		if (this.state.inputMode) {
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("1");
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				this.setState({inputMode: false});
+			}
+		} else {
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1a");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2a")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3a");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4a");
+			}
+		}
+	}
+	
+	handleInsert() {
+		if (this.state.running || this.state.inputMode || this.state.restartFlag) {
+			return;
+		}
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
+		}
+		// Check each content if it is a number
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
+		}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		//console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
+	}
 
 		// Data array changed in dataInit -> Make visual
 		if (this.state.arr.length > prevState.arr.length) {

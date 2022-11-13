@@ -3,8 +3,8 @@ import "./mergesort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
-import { useEffect } from "react";
-import { schemeSet1, svg } from "d3";
+import "../css/input.css";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 class EmptyStep {
 	forward(svg) {
@@ -43,30 +43,6 @@ class SliceStep{
 		}
 	}
 
-}
-
-class ConvergeStep{
-	constructor(id1, id2){
-		this.id1 = id1;
-		this.id2 = id2;
-
-		//id1 is the left side of the array
-		//id2 is the complete array
-	}
-	
-	forward(svg) {
-		this.converge(svg);
-	}
-
-	converge(svg){
-		let newArraySize = this.id1.length;
-	
-		for(let i = 0; i < newArraySize; i++){
-			svg.select("#" + this.id2[i]).select("rect")
-				.attr("width", 100)
-				.attr("height", 100);
-		}
-	}
 }
 
 class MoveStep{
@@ -267,66 +243,123 @@ class ColorPivotStep {
 		 svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", "gray");
 	}
 }
-
-class PartitionStep {
-	constructor(id1, id2, ids, stepTime) {
-		this.id1 = id1;
-        this.id2 = id2;
-		this.ids = ids;
+class RaiseStep {
+	constructor(partitionIds, stepTime) {
+		this.partitionIds = partitionIds;
 		this.stepTime = stepTime;
 	}
 
-	/*for (int i = 0; i < left; i++) {
-		var barx = select("#"+i).select("rect").attr("x") - 20;
-		var textx = select("#"+i).select("text").attr("x") - 20;
-	
-		select("#"+i).select("rect").attr("x", barx);
-		select("#"+i).select("text").attr("x", text);
+	forward(svg) {
+        for (var i = 0; i < this.partitionIds.length; i++) {
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) - 100;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) - 100;
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
+        }
+	}
+}
+
+class ConvergeStep{
+	constructor(id, startId, offset, stepTime){
+		this.id = id;
+		this.startId = startId;
+		this.offset = offset;
+		this.stepTime = stepTime;
 	}
 	
-	for (int i = right; right < ids.length; i++) {
-		var barx = select("#"+i).select("rect").attr("x") + 20;
-		var textx = select("#"+i).select("text").attr("x") + 20;
-	
-		select("#"+i).select("rect").attr("x", barx);
-		select("#"+i).select("text").attr("x", text);
-	}*/
+	forward(svg) {
+		var newxbar = parseInt(svg.select("#g" + this.startId).select("rect").attr("x")) + this.offset
+		var newxtxt = parseInt(svg.select("#g" + this.startId).select("text").attr("x")) + this.offset
+
+		var newybar = parseInt(svg.select("#g" + this.id).select("rect").attr("y")) + 110;
+		var newytxt = parseInt(svg.select("#g" + this.id).select("text").attr("y")) + 110;
+		console.log("steptime: " + this.stepTime)
+		svg.select("#g" + this.id)
+			.select("rect")
+				.transition()
+				.duration(this.stepTime)
+				.attr("x", newxbar)
+				.attr("y", newybar)
+
+		svg.select("#g" + this.id)
+			.select("text")
+				.transition()
+				.duration(this.stepTime)
+				.attr("x", newxtxt)
+				.attr("y", newytxt)
+
+		// svg.select("#g" + this.id)
+		// 	.select("rect")
+		// 		.transition()
+		// 		.duration(this.stepTime)
+		// 		.attr("y", newybar);
+
+		// svg.select("#g" + this.id)
+		// 	.select("text")
+		// 		.transition()
+		// 		.duration(this.stepTime)
+		// 		.attr("y", newytxt);
+	}
+}
+
+class PartitionStep {
+	// 0 indexed, non inclusive ending
+	constructor(start, mid, end, partitionIds, stepTime) {
+		this.start = start;
+		this.mid = mid;
+        this.end = end;
+		this.partitionIds = partitionIds;
+		this.stepTime = stepTime;
+	}
 
 	forward(svg) {
-        for (var i = 0; i <= this.id1; i++) {
-            var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) - 20;
-            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) - 20;
+        for (var i = this.start; i < this.mid; i++) {
+            var newxbar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("x")) - 20;
+            var newxtxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("x")) - 20;
 
-            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
-            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) - 10;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) - 10;
+
+            svg.select("#g" + this.partitionIds[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
         }
 
-		for(var i = this.id2; i < this.ids.length; i++){
-			var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) + 20;
-            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) + 20;
+		for(var i = this.mid; i < this.end; i++){
+			var newxbar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("x")) + 20;
+            var newxtxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("x")) + 20;
 
-            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
-            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) - 10;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) - 10;
+
+            svg.select("#g" + this.partitionIds[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
 		}
 	}
 
-	fastForward(svg) {
-        for (var i = this.id1; i <= this.id2; i++) {
-            var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) - 100;
-            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) - 100;
-            svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
-            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
-        }
-	}
+	// fastForward(svg) {
+    //     for (var i = this.id1; i <= this.id2; i++) {
+    //         var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) - 100;
+    //         var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) - 100;
+    //         svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+    //         svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
+    //     }
+	// }
 
-	backward(svg) {
-        for (var i = this.id1; i <= this.id2; i++) {
-            var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) + 100;
-            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) + 100;
-            svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
-            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
-        }
-	}
+	// backward(svg) {
+    //     for (var i = this.id1; i <= this.id2; i++) {
+    //         var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) + 100;
+    //         var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) + 100;
+    //         svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+    //         svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
+    //     }
+	// }
 }
 
 class UnpartitionStep{
@@ -338,17 +371,45 @@ class UnpartitionStep{
 	}
 
     forward(svg) {
-        if (this.id2 !== this.ids.length - 1) {
-            svg.select("#divisor").attr("visibility", "visible");
-            svg.select("#sortTxt").attr("visibility", "visible");
+        // if (this.id2 !== this.ids.length - 1) {
+        //     svg.select("#divisor").attr("visibility", "visible");
+        //     svg.select("#sortTxt").attr("visibility", "visible");
+        // }
+
+        // for (var i = this.id1; i <= this.id2; i++) {
+        //     // var newybar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("y")) + 100;
+        //     // var newytxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("y")) + 100;
+        //     // svg.select("#" + this.ids[i]).select("rect").transition().duration(this.stepTime).attr("y", newybar);
+        //     // svg.select("#" + this.ids[i]).select("text").transition().duration(this.stepTime).attr("y", newytxt);
+        // }
+
+		for (var i = 0; i <= this.id1; i++) {
+            var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) + 20;
+            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) + 20;
+
+			var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) + 10;
+            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) + 10;
+
+            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
         }
 
-        for (var i = this.id1; i <= this.id2; i++) {
-            var newybar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("y")) + 100;
-            var newytxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("y")) + 100;
-            svg.select("#" + this.ids[i]).select("rect").transition().duration(this.stepTime).attr("y", newybar);
-            svg.select("#" + this.ids[i]).select("text").transition().duration(this.stepTime).attr("y", newytxt);
-        }
+		for(var i = this.id2; i < this.ids.length; i++){
+			var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) - 20;
+            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) - 20;
+
+			var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) + 10;
+            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) + 10;
+
+            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
+		}
 	}
 
 	fastForward(svg) {
@@ -558,7 +619,9 @@ export default class MergeSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: (9 * 2000) / 8
+			waitTime: (9 * 2000) / 8,
+			inputMode: false,
+			restartFlag: false
 		};
 
 		this.ref = React.createRef();
@@ -570,6 +633,7 @@ export default class MergeSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 	}
 
 	printArray(arr, size) {
@@ -596,92 +660,105 @@ export default class MergeSort extends React.Component {
 		let steps = [];
 		let messages = [];
 		let test = [];
-
+		//console.log("step time: " + stepTime);
 		[steps, messages, test] = this.sortRecursive(arr, [...ids], ids, steps, messages, stepTime);
 
 		this.setState({steps: steps, messages: messages})
 	}
 
+	// ARR SHOULD NEVER CHANGE
+	// MOVE AROUND IDS
 	sortRecursive(arr, partition, ids, steps, messages, stepTime) {
-		const half = partition.length / 2;
-		
-		// console.log(ids);
+		// Midpoint 
+		const midpoint = Math.ceil(partition.length / 2);
 
-		// console.log(arr.length);
-		// console.log("Running Sort");
+		// console.log("ids:  " + ids);
+		// console.log("vals: " + arr);
 
+		// initial messages and steps
 		if (steps.length == 0) {
 			messages.push("<h1>Beginning Merge Sort!</h1>");
 			steps.push(new EmptyStep());
-	
-			messages.push("<h1>Beginning Merge Sort!</h1>");
-			steps.push(new FirstColor(0, ids));
 		}
-
-		//console.log("Pushed First Color Step");
 	
 		// Base case or terminating case
 		if(partition.length < 2){
-			steps.push(new EmptyStep());
 			messages.push("<h1>Array Too Small. Merge Sort Cannot Continue.</h1>");
-			// console.log("Terminated");
-			//console.log(arr);
-			// uhhh
+			steps.push(new EmptyStep());
+
 			return [steps, messages, partition]; 
 		}
-		
-		const left = partition.splice(0, half);
-		// console.log(left);
-		// console.log(arr);
 
 		messages.push("<h1>Slicing Array</h1>");
-		// console.log("Slicing " + left + " from " + arr);
-		steps.push(new PartitionStep(left.length-1, left.length, ids, stepTime));
-	
-		messages.push("<h1>Performing Merge Sort</h1>");
+		steps.push(new PartitionStep(0, midpoint, partition.length, partition, stepTime));
+		
+		const left = partition.slice(0, midpoint);
+		const right = partition.slice(midpoint, partition.length)
+
+		// console.log("right: " + right)
+		// messages.push("<h1>Swapping values</h1>");
+		// steps.push(new SortedStep(0, 3, ids, stepTime))
+		const lMerge = this.sortRecursive(arr, left, ids, steps, messages, stepTime);
+		const rMerge = this.sortRecursive(arr, right, ids, steps, messages, stepTime);
+
+		messages.push("<h1>Merging</h1>");
 		steps.push(new EmptyStep())
-
-		// this.setState({ steps: steps });
-		// this.setState({ messages: messages });
-
-		// console.log(steps);
-
-		this.merge(this.sortRecursive(arr, left, ids, steps, messages), this.sortRecursive(arr, partition, ids, steps, messages), steps, messages, arr);
-		return [steps, messages, partition]
+	
+		const mergedIdArray = this.merge(lMerge, rMerge, steps, messages, arr, stepTime);
+		return [steps, messages, mergedIdArray]
 	}
 
-	merge(l, r, steps, messages, vals) {
-		let arr = [];
-		// let steps = [];
-		// let messages = [];
+	merge(l, r, steps, messages, vals, stepTime) {
 		// Break out of loop if any one of the array gets empty
-		const [s, m, left] = l
-		const [s1, m1, right] = r
-		messages.push("<h1>Comparing Sizes of Left and Right Array</h1>");
-		steps.push(new EmptyStep())
+		var [s, m, left] = l
+		var [s1, m1, right] = r
+		var result = [];
+
+		var startId = left[0]
+		var offset = 0;
+
+		// New step to raise all of them
+		messages.push("<h1>Comparing values in Left and Right Sub-Arrays</h1>");
+		steps.push(new RaiseStep([...left, ...right], stepTime))
+
 		while (left.length > 0 && right.length > 0) {
 			// Pick the smaller among the smallest element of left and right sub arrays 
 			if (vals[left[0]] < vals[right[0]]) {
-				messages.push("<h1>Left Array is Smaller than Right</h1>");
-				steps.push(new EmptyStep())
+				messages.push("<h1>"+ vals[left[0]]+ " value is Smaller than "+ vals[right[0]]+"</h1>");
+				steps.push(new ConvergeStep(left[0], startId, offset, stepTime))
 
-				arr.push(left.shift());
+				result.push(left.shift());
+				offset += 100;
 			} else {
-				messages.push("<h1>Left Array is Larger or Equal to the Right</h1>");
-				steps.push(new EmptyStep())
+				messages.push("<h1>"+ vals[right[0]]+ " value is Smaller than "+ vals[left[0]]+"</h1>");
+				steps.push(new ConvergeStep(right[0], startId, offset, stepTime))
 
-				arr.push(right.shift()); 
+				result.push(right.shift());
+				offset += 100;
 			}
+			startId = result[0]
 		}
-		
-		// this.setState({ steps: steps });
-		// this.setState({ messages: messages });
 
-		// Concatenating the leftover elements
-		// (in case we didn't go through the entire left or right array)
-		steps.push(new MergeStep(left, right, arr));
-		messages.push("Merging the Arrays");
-		// return [ ...arr, ...left, ...right ];
+		// Steps to add to end of small array
+		while (left.length > 0) {
+			const id = left.shift()
+			messages.push("<h1>Adding the rest of the left array to the result</h1>");
+			steps.push(new ConvergeStep(id, startId, offset, stepTime))
+
+			result.push(id);
+			offset += 100;
+		}
+
+		while (right.length > 0) {
+			const id = right.shift()
+			messages.push("<h1>Adding the rest of the right array to the result</h1>");
+			steps.push(new ConvergeStep(id, startId, offset, stepTime))
+
+			result.push(id);
+			offset += 100;
+		}
+
+		return result;
 	}
 
 	dataInit() {
@@ -693,7 +770,7 @@ export default class MergeSort extends React.Component {
 			arr[i] = 15 + Math.floor(Math.random() * 56);
 		}
 
-		console.log("Unsorted");
+		console.log("data init");
 		this.printArray(arr, this.state.size);
 
 		this.setState({arr: arr});
@@ -710,7 +787,7 @@ export default class MergeSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (this.state.size * (barWidth + barOffset)) + 100)
+				.attr("width", (10 * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
 		var bars = svg.selectAll(".bar")
@@ -853,7 +930,7 @@ export default class MergeSort extends React.Component {
 
 		var ids = [];
 
-		for (let i = 0; i < this.state.size; i++)
+		for (let i = 0; i < this.state.arr.length; i++)
 		{
 			//may need to remove g 
 			ids.push(i);
@@ -875,12 +952,12 @@ export default class MergeSort extends React.Component {
 		if (this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) return;
 		
-		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
 		// console.log(this.state.steps[this.state.stepId]);
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 
-		d3.timeout(this.turnOffRunning, this.state.waitTime);
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
 
 	backward() {
@@ -911,7 +988,7 @@ export default class MergeSort extends React.Component {
 
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Merge Sort!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
-		d3.timeout(this.turnOffRunning, this.state.waitTime);
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
 
 	run() {
@@ -923,13 +1000,13 @@ export default class MergeSort extends React.Component {
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		d3.timeout(this.run, this.props.waitTime);
 	}
 
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
-		this.setState({running: true});
+		this.setState({running: true, restartFlag: false});
 		this.run(d3.select(this.ref.current).select("svg"));
 	}
 
@@ -940,17 +1017,11 @@ export default class MergeSort extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
 		var svg = d3.select(this.ref.current).select("svg");
-		console.log(svg);
-
         svg.remove();
-		console.log("Removed og");
-
         document.getElementById("message").innerHTML = "<h1>Welcome to Merge Sort!</h1>";
-
-		console.log("Reset state");
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
+	
 	}
 
 	componentDidMount() {
@@ -958,33 +1029,96 @@ export default class MergeSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-			var svg = d3.select(this.ref.current).select("svg");
+		var svg = d3.select(this.ref.current).select("svg");
+		if (this.state.inputMode) {
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("1");
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize();
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2")
+				this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				let svg = this.initialize();
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				this.setState({inputMode: false});
+			}
+		} else {
+			// Data array changed in dataInit -> Make visual
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1a")
+				svg = this.initialize();
+				svg.attr("visibility", "visible");
+			}
+			// IDs array changed in initialize -> sort copy of array to get steps and messages
+			else if (this.state.ids.length > prevState.ids.length) {
+				console.log("2a");
+				this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
+				//console.log("ran visualizer");
+			}
+			// For reset
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3a");
+				svg = this.initialize();
+				//console.log("Made it out");
+				svg.attr("visibility", "visible");
+				//console.log("All good");
+			}
+			// Running changed
+			else if (this.state.running !== prevState.running)
+			{
+				this.run(svg);
+				console.log("4a");
+			}
+		}
+	}
 
-		// Data array changed in dataInit -> Make visual
-		if (this.state.arr.length > prevState.arr.length) {
-			svg = this.initialize();
-			svg.attr("visibility", "visible");
+	handleInsert() {
+		if (this.state.running || this.state.inputMode || this.state.restartFlag) {
+			return;
 		}
-		// IDs array changed in initialize -> sort copy of array to get steps and messages
-		else if (this.state.ids.length > prevState.ids.length) {
-			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.stepTime);
-			console.log("ran visualizer");
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
 		}
-		// Running changed
-		else if (this.state.running !== prevState.running)
-		{
-			this.run(svg);
-			console.log("We ran");
+		// Check each content if it is a number
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
 		}
-		// For reset
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("We're restarting");
-			svg = this.initialize();
-			console.log("Made it out");
-			svg.attr("visibility", "visible");
-			console.log("All good");
-		}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		//console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
 	}
 
 	render() {
@@ -996,6 +1130,11 @@ export default class MergeSort extends React.Component {
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
+					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Merge Sort!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>

@@ -53,3 +53,13 @@
   border: 2.5px solid #e0b20b;
   color: black;
 }
+
+#removeBut {
+	color: red;
+}
+#insertBut {
+	color: green;
+}
+#searchBut {
+	color: rgb(251, 255, 10);
+}

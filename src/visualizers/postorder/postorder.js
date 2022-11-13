@@ -27,6 +27,7 @@ function randInRange(lo, hi) {
   
 class EmptyStep {
     forward() {}
+    fastForward(){}
     backward() {}
 }
 
@@ -68,8 +69,17 @@ class HighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
-        new UnHighlightNodeStep(this.node, this.edge).forward(svg)
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", GRAY);
+        } 
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+        }
     }
 }
 
@@ -91,6 +101,10 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge2.id).style("stroke", GRAY);
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 
     backward(svg) {
         if (this.node) {
@@ -428,7 +442,7 @@ export default class binarysearchtree extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		
 		// Uses the step's fastForward function and displays associated message
-		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
+		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 
 		this.setState({stepId: this.state.stepId + 1});

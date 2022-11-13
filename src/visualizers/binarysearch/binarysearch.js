@@ -336,6 +336,7 @@ export default class binarysearch extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		// Uses the step's fastForward function and displays associated message
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
@@ -348,6 +349,7 @@ export default class binarysearch extends React.Component {
 		if (this.state.stepId - 1 < 0) return;
 		let stepId = this.state.stepId - 1;
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});

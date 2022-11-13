@@ -27,6 +27,7 @@ function randInRange(lo, hi) {
   
 class EmptyStep {
     forward() {}
+    fastForward() {}
     backward() {}
 }
 
@@ -48,6 +49,10 @@ class CreateAndHighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
         UnHighlightNodeStep.forward(svg)
     }
@@ -68,8 +73,17 @@ class HighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
-        new UnHighlightNodeStep(this.node, this.edge).forward(svg)
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", GRAY);
+        } 
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+        }
     }
 }
 
@@ -91,6 +105,10 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge2.id).style("stroke", GRAY);
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 
     backward(svg) {
         if (this.node) {
@@ -128,6 +146,10 @@ class UnHighlightPathStep {
                 return;
             }
         }
+    }
+
+    fastForward(svg){
+        this.forward(svg);
     }
 }
 

@@ -25,6 +25,11 @@ function defaultColors(){
     localStorage.setItem('backgroundColorR', '0')
     localStorage.setItem('backgroundColorG', '0')
     localStorage.setItem('backgroundColorB', '0')
+    // default cardColor
+    localStorage.setItem('cardColor', '#181818')
+    localStorage.setItem('cardColorR', '24')
+    localStorage.setItem('cardColorG', '24')
+    localStorage.setItem('cardColorB', '24')
     // default accentColor
     localStorage.setItem('accentColor', '#FFC904')
     localStorage.setItem('accentColorR', '255')
@@ -60,6 +65,12 @@ class Settings extends React.Component {
             b: localStorage.getItem('backgroundColorB'),
             a: '1',
         },
+        cardColor: {
+            r: localStorage.getItem('cardColorR'),
+            g: localStorage.getItem('cardColorG'),
+            b: localStorage.getItem('cardColorB'),
+            a: '1',
+        },
         accentColor: {
             r: localStorage.getItem('accentColorR'),
             g: localStorage.getItem('accentColorG'),
@@ -69,6 +80,7 @@ class Settings extends React.Component {
       showPicker: false,
       showPickerSecondaryColor: false,
       showPickerBackgroundColor: false,
+      showPickerCardColor: false,
       showPickerAccentColor: false,
     };
  
@@ -80,7 +92,7 @@ class Settings extends React.Component {
  
     onClose = () => {
       this.setState({ 
-        showPicker: false 
+        showPicker: false
       })
     };
 
@@ -104,7 +116,19 @@ class Settings extends React.Component {
  
     onCloseBackgroundColor = () => {
       this.setState({ 
-        showPickerBackgroundColor: false 
+        showPickerBackgroundColor: false
+      })
+    };
+
+    onClickCardColor = () => {
+        this.setState({
+            showPickerCardColor: !this.state.showPickerCardColor 
+        })
+    };
+ 
+    onCloseCardColor = () => {
+      this.setState({ 
+        showPickerCardColor: false 
       })
     };
 
@@ -124,8 +148,6 @@ class Settings extends React.Component {
         this.setState({ 
             primaryColor: primaryColor.rgb
         })
-        console.log(primaryColor.rgb)
-        console.log(this.state.primaryColor.r)
         localStorage.setItem('primaryColor', primaryColor.hex)
         localStorage.setItem('primaryColorR', this.state.primaryColor.r)
         localStorage.setItem('primaryColorG', this.state.primaryColor.g)
@@ -150,6 +172,16 @@ class Settings extends React.Component {
         localStorage.setItem('backgroundColorR', this.state.backgroundColor.r)
         localStorage.setItem('backgroundColorG', this.state.backgroundColor.g)
         localStorage.setItem('backgroundColorB', this.state.backgroundColor.b)
+    };
+    
+    onChangeCardColor = (cardColor) => {
+        this.setState({ 
+            cardColor: cardColor.rgb
+        })
+        localStorage.setItem('cardColor', cardColor.hex)
+        localStorage.setItem('cardColorR', this.state.cardColor.r)
+        localStorage.setItem('cardColorG', this.state.cardColor.g)
+        localStorage.setItem('cardColorB', this.state.cardColor.b)
     };
 
     onChangeAccentColor = (accentColor) => {
@@ -183,6 +215,12 @@ class Settings extends React.Component {
             height: '30px',
             borderRadius: '3px',
             background: `rgba(${ this.state.backgroundColor.r }, ${ this.state.backgroundColor.g }, ${ this.state.backgroundColor.b }, ${ this.state.backgroundColor.a })`,
+          },
+          cardColor: {
+            width: '80px',
+            height: '30px',
+            borderRadius: '3px',
+            background: `rgba(${ this.state.cardColor.r }, ${ this.state.cardColor.g }, ${ this.state.cardColor.b }, ${ this.state.cardColor.a })`,
           },
           accentColor: {
             width: '80px',
@@ -266,6 +304,16 @@ class Settings extends React.Component {
                 { this.state.showPickerBackgroundColor ? <div style={ styles.popover }>
                 <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
                 <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
+                </div> : null }
+
+                {/* Card Color */}
+                <Typography id="settings-title"> Card Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickCardColor }>
+                <div style={ styles.cardColor } />
+                </div>
+                { this.state.showPickerCardColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseCardColor }/>
+                <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
                 </div> : null }
 
                 {/* Accent Color */}

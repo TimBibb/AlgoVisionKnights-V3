@@ -71,6 +71,19 @@ function App() {
 		if(!localStorage.getItem('backgroundColorB')){
 			localStorage.setItem('backgroundColorB', '0')
 		}
+		// Storing cardColor in localStorage
+		if(!localStorage.getItem('cardColor')){
+			localStorage.setItem('cardColor', '#181818')
+		}
+		if(!localStorage.getItem('cardColorR')){
+			localStorage.setItem('cardColorR', '24')
+		}
+		if(!localStorage.getItem('cardColorG')){
+			localStorage.setItem('cardColorG', '24')
+		}
+		if(!localStorage.getItem('cardColorB')){
+			localStorage.setItem('cardColorB', '24')
+		}
 		// Storing accentColor in localStorage
 		if(!localStorage.getItem('accentColor')){
 			localStorage.setItem('accentColor', '#FFC904')
@@ -100,7 +113,7 @@ function App() {
 	});
 
 	return (
-		<div className='App'>
+		<div className='App' style={{backgroundColor: localStorage.getItem('backgroundColor')}}>
 			<HashRouter>
 				<Navigation
 					open={open}

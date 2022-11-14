@@ -6,6 +6,8 @@ import UndirectedEdge from "../../foundation/graph/UndirectedEdge";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward() {}
@@ -391,6 +393,8 @@ export default class FibonacciSequence extends React.Component {
   fibonaccisequence(graph, stack) {
     console.log(graph);
 
+    var pseudocodeArr = [];
+
     var messages = [];
     var currentMessage = "";
     function createMessage(msg) {
@@ -413,88 +417,104 @@ export default class FibonacciSequence extends React.Component {
     addStep(new EmptyStep());
     createMessage("For example, we will find the 4th Fibonacci number.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 0, 0, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 0, 0, "gray", "white"));
     createMessage("We begin by calling fib(4).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Since 4 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).")
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 0, 0, "white", "gray"));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 0, "hidden", "visible"));
     addStep(new EdgeColorChangeStep(this.ref.current, 0, "gray", "white"));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeColorChangeStep(this.ref.current, 0, "white", "gray"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 1, 1, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 1, 1, "gray", "white"));
     createMessage("fib(n-1) = fib(3)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Since 3 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 1, 1, "white", "gray"));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 1, "hidden", "visible"));
     addStep(new EdgeColorChangeStep(this.ref.current, 1, "gray", "white"));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeColorChangeStep(this.ref.current, 1, "white", "gray"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 2, 2, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 2, 2, "gray", "white"));
     createMessage("fib(n-1) = fib(2)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Since 2 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 2, 2, "white", "gray"));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 2, "hidden", "visible"));
     addStep(new EdgeColorChangeStep(this.ref.current, 2, "gray", "white"));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 3, 3, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 3, 3, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 2, "white", "gray"));
     createMessage("fib(n-1) = fib(1)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 3, 3, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 12, 12, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "gray", "white"));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 3, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "white", "gray"));
     addStep(new EdgeColorChangeStep(this.ref.current, 3, "gray", "white"));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 4, 4, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 4, 4, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 3, "white", "gray"));
     createMessage("fib(n-2) = fib(0)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 4, 4, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 13, 13, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 13, 13, "gray", "white"));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "gray", "white"));
     createMessage("Using the values of fib(1) and fib(0), we can calculate fib(2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 2, 2, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 11, 11, "hidden", "visible"));
@@ -503,29 +523,34 @@ export default class FibonacciSequence extends React.Component {
     addStep(new NodeColorChangeStep(this.ref.current, 13, 13, "white", "gray"));
     createMessage("1 + 0 = 1");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 4, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "white", "gray"));
     addStep(new EdgeColorChangeStep(this.ref.current, 4, "gray", "white"));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 5, 5, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 5, 5, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 4, "white", "gray"));
     createMessage("fib(n-2) = fib(1)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 5, 5, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 14, 14, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 14, 14, "gray", "white"));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "gray", "white"));
     createMessage("Using the values of fib(2) and fib(1), we can calculate fib(3).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 1, 1, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 10, 10, "hidden", "visible"));
@@ -534,63 +559,74 @@ export default class FibonacciSequence extends React.Component {
     addStep(new NodeColorChangeStep(this.ref.current, 14, 14, "white", "gray"));
     createMessage("1 + 1 = 2");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 5, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "white", "gray"));
     addStep(new EdgeColorChangeStep(this.ref.current, 5, "gray", "white"));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 6, 6, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 6, 6, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 5, "white", "gray"));
     createMessage("fib(n-2) = fib(2)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Since 2 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 6, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 6, 6, "white", "gray"));
     addStep(new EdgeColorChangeStep(this.ref.current, 6, "gray", "white"));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 7, 7, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 7, 7, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 6, "white", "gray"));
     createMessage("fib(n-1) = fib(1)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 7, 7, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 16, 16, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "gray", "white"));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 7, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "white", "gray"));
     addStep(new EdgeColorChangeStep(this.ref.current, 7, "gray", "white"));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 8, 8, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 8, 8, "gray", "white"));
     addStep(new EdgeColorChangeStep(this.ref.current, 7, "white", "gray"));
     createMessage("fib(n-2) = fib(0)");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 8, 8, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 17, 17, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 17, 17, "gray", "white"));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "gray", "white"));
     createMessage("Using the values of fib(1) and fib(0), we can calculate fib(2).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 6, 6, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 15, 15, "hidden", "visible"));
@@ -599,11 +635,13 @@ export default class FibonacciSequence extends React.Component {
     addStep(new NodeColorChangeStep(this.ref.current, 17, 17, "white", "gray"));
     createMessage("1 + 0 = 1");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "gray", "white"));
     createMessage("Using the values of fib(3) and fib(2), we can calculate fib(4).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 0, 0, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 9, 9, "hidden", "visible"));
@@ -612,17 +650,21 @@ export default class FibonacciSequence extends React.Component {
     addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "white", "gray"));
     createMessage("2 + 1 = 3");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 9, 9, "white", "gray"));
     createMessage("The Fibonacci function has completed, returning fib(4) = 3.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Finished Fibonacci Sequence!");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
     this.setState({steps: steps, messages: messages});
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -633,6 +675,8 @@ export default class FibonacciSequence extends React.Component {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
@@ -662,6 +706,9 @@ export default class FibonacciSequence extends React.Component {
       this.setState({ running: false });
       return;
     }
+
+    this.props.codeSteps[this.state.stepId].forward();
+
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
@@ -721,6 +768,10 @@ export default class FibonacciSequence extends React.Component {
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Fibonacci Sequence!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"fibonacci"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+        </div>
 			</div>
 		)
 	}

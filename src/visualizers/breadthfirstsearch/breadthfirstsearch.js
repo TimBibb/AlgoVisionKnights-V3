@@ -182,6 +182,8 @@ export default class BreadthFirstSearch extends React.Component {
 
     breadthfirstsearch(graph,queue) {
 
+        var pseudocodeArr = [];
+
         var nodeQueue = [];
         var nodeStack = [];
         var nodeLevel = Array(6).fill(0);
@@ -215,7 +217,7 @@ export default class BreadthFirstSearch extends React.Component {
         addStep(new EmptyStep());
         createMessage("Beginning Breadth First Search!");
         flushBuffer();
-
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
 
     var temp = randInRange(0, graph.numberOfNodes);
@@ -451,6 +453,7 @@ export default class BreadthFirstSearch extends React.Component {
       flushBuffer();
 
       this.setState({ steps: steps, messages: messages });
+      this.props.handleCodeStepsChange(pseudocodeArr);
 
     }
 
@@ -464,6 +467,8 @@ export default class BreadthFirstSearch extends React.Component {
     if (this.state.stepId === this.state.steps.length) return;
 
     let svg = d3.select(this.ref.current).select("svg");
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
@@ -496,6 +501,8 @@ export default class BreadthFirstSearch extends React.Component {
       return;
     }
     let svg = d3.select(this.ref.current).select("svg");
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);

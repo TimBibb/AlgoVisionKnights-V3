@@ -15,14 +15,14 @@ export const map = {
         tab + tab + tab + "return recursiveSearch(arr from mid + 1..end);",
         tab + "}"
     ],
-    bubblesort: [ //done
+    bubblesort: [ //changed for loop indentations
         "bubbleSort( arr, n) {",
         tab + "var i, j;",
         tab + "for (i = 0; i < n-1; i++) {",
-        tab + tab + tab + "for (j = 0; j < n-i-1; j++) {",
-        tab + tab + tab + tab + "if (arr[j] > arr[j+1])",
-        tab + tab + tab + tab + tab + "swap(arr,j,j+1);",
-        tab + tab + tab + "}", 
+        tab + tab + "for (j = 0; j < n-i-1; j++) {",
+        tab + tab + tab + "if (arr[j] > arr[j+1])",
+        tab + tab + tab + tab + "swap(arr,j,j+1);",
+        tab + tab + "}", 
         tab + "}",
         "}"
     ],
@@ -66,7 +66,31 @@ export const map = {
         tab + "return root;",
         "}"
     ],
-    bststructure: [],
+    bststructure: [
+        "binarySearchTree(){",
+        tab + "while(i < MAX_NODE){",
+        tab + tab + "declare random value",
+        tab + tab + "if(!root)",
+        tab + tab + tab + "root = value;",
+        tab + tab + "else {",
+        tab + tab + tab + "let node = root",
+        tab + tab + tab + "while(true) {",
+        tab + tab + tab + tab + "if(firstStep)",
+        tab + tab + tab + tab + tab + "next value to insert = val",
+        tab + tab + tab + tab + "if(val < node.value){",
+        tab + tab + tab + tab + tab + "if(node.left != null) traverse left",
+        tab + tab + tab + tab + tab + "else insert val into left node",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else if(val > node.value) {",
+        tab + tab + tab + tab + tab + "if(node.right != null) traverse right",
+        tab + tab + tab + tab + tab + "else insert val into right node",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else move forward, no duplicates",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + "}",
+        "}"
+    ],
     heapsort: [
         "function sort(arr) {",
         tab + "var N = arr.length;",
@@ -125,16 +149,16 @@ export const map = {
         tab + "preOrder(node.right);",
         "}"
     ],
-    inorder: [ //done
-        "inOrder(node) {", //0
-        tab + "if (node is equal to null)", //1
-        tab + tab + "return", //2
-        tab + "inOrder(node.left);", //3
-        tab + "print node.key;", //4
-        tab + "inOrder(node.right);", //5
-        "}" //6
+    inorder: [ 
+        "inOrder(node) {", 
+        tab + "if (node is equal to null)", 
+        tab + tab + "return", 
+        tab + "inOrder(node.left);", 
+        tab + "print node.key;", 
+        tab + "inOrder(node.right);", 
+        "}" 
     ],
-    insertionsort: [
+    insertionsort: [ //removed closing bracket highlights
         "insertionSort(arr, n) {",
         tab + "let i, key, j;", 
         tab + "for (i = 1; i < n; i++) {", 
@@ -170,7 +194,7 @@ export const map = {
         tab + "}",
         "}"
     ],
-    selectionsort: [
+    selectionsort: [ //added spacing in swap function call
        "selectionSort(arr,  n) {",
        tab + "let i, j, min_idx;",
        tab + "for (i = 0; i < n-1; i++) {",
@@ -179,7 +203,7 @@ export const map = {
        tab + tab + tab + "if (arr[j] < arr[min_idx])",
        tab + tab + tab + tab + "min_idx = j;",
        tab + tab + "}",
-       tab + tab + "swap(arr,min_idx, i);",
+       tab + tab + "swap(arr, min_idx, i);",
        tab + "}",
        "}"
     ],
@@ -223,19 +247,83 @@ export const map = {
         tab + tab + "else ",
         tab + tab + tab + " occupied - move to next location",
         tab + "}",
+        "}",
+        "deletion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Value already deleted",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value! Marked deleted",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "}",
+        "search(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Ignore value",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value!",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
         "}"
     ],
 
     hashtablequadratic: [
-
+        "insertion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index] && firstDeleted == -1)",
+        tab + tab + tab + "First deleted found",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Do not reinsert value",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "Place x at this location",
+        tab + "}",
+        "deletion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Value already deleted",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value! Marked deleted",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "search(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Ignore value",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value!",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "}"
     ],
 
-    dijkstras: [
-        "dijkstras(graph, first)",
-        tab + "while(length && number != numberOfNodes) ",
+    dijkstras: [ //done
+        "dijkstras(graph, first) {",
+        "minQueue = [(first, 0)]",
+        "visitedNum = 0",
+        "while(minQueue.length != 0 && visitedNum != numOfNodes){ ",
+        tab + "if(head[0] != first)",
+        tab + tab + "head[0] is the unvisited neighbor",
+        tab + "head[0] is the current head",
+        tab + "for(i = 0; i < adjaceny of head[0]; i++){",
+        tab + tab + "temp = head[0][i][1]",
+        tab + tab + "weight = head[0][i][2]",
+        tab + tab + "edge = head[0][i][3]",
+        tab + tab + "if(graph.distances[temp] == -1){",
+        tab + tab + tab + "parent is now head[0]",
+        tab + tab + "else if(graph.distances[head[0]] + weight < graph.distances[temp])",
+        tab + tab + tab + "parent is now head[0]",
+        tab + tab + "else",
+        tab + tab + tab + "same distance, no parent change",
+        tab + "finished with new head[0] node",
+        "}"
     ],
 
-    bellmanford: [
+    bellmanford: [ //done
         "bellmanford(graph) {",
         tab + "for(iterations = 0; iterations < numberOfNodes - 1; iterations++) {",
         tab + tab + "for(edge = 0; edge < numberOfEdges; edge++) {",
@@ -263,19 +351,55 @@ export const map = {
         "}"
     ],
 
-    //to edit
-    prims: [
-        "prims(graph, vertex, vertices){ ",
-        tab + "temp = 0;",
-        tab + "vertex = { 1 };",
-        tab + "while (vertex != vertices) {",
-        tab + tab + "let (vertex, vertices)",
-        tab + tab + "temp = temp vertex {(vertex, vertices)}",
-        tab + tab + "vertex = vertex vertex {(vertices)}",
+    depthfirst: [ //done
+        "depthFirstSearch(graph, stack){",
+        tab + "nodeStack = []",
+        tab + "edgeStack = []",
+        tab + "let head = randInRange(0, 6)",
+        tab + "current location is node[head]",
+        tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
+        tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
+        tab + "}",
+        tab + "while(nodeStack.length != 0){",
+        tab + tab + "s = nodeStack.pop()",
+        tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + "travel to new node, mark prev as visited",
+        tab + tab + "else",
+        tab + tab + tab + "node already visited",
+        tab + tab + tab + "travel back to parent node",
+        tab + tab + tab + "add ajacent unvisited to stack",
+        tab + tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
+        tab + tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
+        tab + tab + "}",
+        tab + "}",
         "}"
     ],
 
     //to edit
+    prims: [
+        "prims(graph, vertex, vertices){ ",
+        tab + "for (edge of graph.adjacencyList[0]){ ",
+        tab + tab + "let [node1, node2, weight, edgeID] = edge;",
+        tab + tab + "queue.push(edgeID);",
+        tab + "}",
+        tab + "for (i = 0; tempArray.length > 0 && i < 50; i++) {",
+        tab + tab + "calculate lowest weighted edge",
+        tab + tab + "if (nodeVisited[node1] && nodeVisited[node2])",
+        tab + tab + tab + "ignore edge - already added",
+        tab + tab + "for (edge of graph.adjacencyList[nodeUnvisited]) {",
+        tab + tab + tab + "queue.push(edgeID);",
+        tab + tab + "}",
+        tab + "}",
+        tab + "holdEdges",
+        tab + "for (i = 0; i < graph.numberofEdges; i++) {",
+        tab + tab + "if(edgeSelected[i]) holdEdges = graph.edges[i][0] + graph.edges[i][1];",
+        tab + "all edges found!",
+        "}",
+        ""
+    ],
+
     heaps: [
         //heapify
         "heapify(arr, x){",
@@ -284,6 +408,52 @@ export const map = {
         tab + tab + "swap arr[0] and arr[i]",
         tab + tab + "move down the array by 1",
         tab + tab + "decrease i by 1",
+        "}"
+    ],
+
+    nqueens: [
+        "nqueens(board, col, row, n){",
+        tab + "solveNQueens(board, col){",
+        tab + tab + "if(col >= n)",
+        tab + tab + tab + "nQueens solution found!",
+        tab + tab + "for(i = 0; i < n; i++){",
+        tab + tab + tab + "if(i + 1 != n)",
+        tab + tab + tab + tab + "move to next available space",
+        tab + tab + tab + "else",
+        tab + tab + tab + tab + "backtrack",
+        tab + tab + "}",
+        tab + "}",
+        tab + "queenSafe(board, row, col, n){",
+        tab + tab + "for(i = 0; i < col; i++){",
+        tab + tab + tab + "if(board[row][i] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "for(i = row, j = col; i >= 0 && j >= 0; i--, j--)",
+        tab + tab + tab + "if(board[i][j] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "for(i = row, j = col; i < n && j >= 0; i++, j--)",
+        tab + tab + tab + "if(board[i][j] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "no queens in range",
+        tab + "}",
+        "}"
+    ],
+
+    fibonacci: [ //done
+        "fib(n){",
+        tab + "if(n <= 1) return n",
+        tab + "return fib(n-1) + fib(n-2)",
+        "}"
+    ],
+
+    hanoi: [
+        "hanoi(n, from, to, aux){",
+        tab + "if(n == 0) return",
+        tab + "if(n > 1) Move n-1 disks to Aux",
+        tab + "hanoi(n - 1, from, aux, to)",
+        tab + "hanoi(n - 1, aux, to, from)",
         "}"
     ]
 }

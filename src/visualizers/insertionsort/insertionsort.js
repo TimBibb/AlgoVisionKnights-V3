@@ -120,7 +120,7 @@ class PartSortedStep {
 				.style("font-family", "Merriweather")
 				.attr("font-weight", "bold")
 				.style("font-size", "32px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 		}
 		else if (this.id1 === this.ids.length - 1) {
             svg.select("#divisor").attr("visibility", "hidden");
@@ -145,13 +145,13 @@ class PartSortedStep {
 		}
 
 		for (var i = this.id1 + 1; i < this.id2; i++) {
-			svg.select("#" + this.ids[i]).select("rect").style("fill", "grey");
+			svg.select("#" + this.ids[i]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 		}
 
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('accentColor'));
 
 		if (this.id1 === 0) {
-			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "grey");
+			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 		}
 	}
 }
@@ -188,7 +188,7 @@ class SortedStep {
 				.style("font-family", "Merriweather")
 				.attr("font-weight", "bold")
 				.style("font-size", "32px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 		}
 		else if (this.id1 === this.ids.length - 1) {
             svg.select("#divisor").attr("visibility", "hidden");
@@ -246,14 +246,14 @@ class SortedStep {
         if (this.id2 !== 0) {
             svg.select("#arrowpath" + this.id1).attr("visibility", "visible");
 		    svg.select("#insertTxt" + this.id1).attr("visibility", "visible");
-			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
         }
 
 		for (var i = this.id1 + 1; i <= this.id2; i++)
-		    	svg.select("#" + this.ids[i]).select("rect").style("fill", "grey");
+		    	svg.select("#" + this.ids[i]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		if (this.id2 === 0) {
-			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "grey");
+			svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 		}
 	}
 }
@@ -274,10 +274,10 @@ class InsertSwapStep {
 		svg.select("#insertTxt" + this.id1).attr("visibility", "visible");
         
         for (var i = 0; i < this.id1; i++) {
-            svg.select("#" + this.ids[i]).select("rect").style("fill", "gray");
+            svg.select("#" + this.ids[i]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
         }
 
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 	fastForward(svg) {
 		this.forward(svg);
@@ -293,7 +293,7 @@ class InsertSwapStep {
             svg.select("#" + this.ids[i]).select("rect").style("fill", "#1ACA1E");
         }
 
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 	}
 }
 
@@ -591,7 +591,7 @@ export default class InsertionSort extends React.Component {
 				.attr("y", (d) => {
 					return (height + 75) - yScale(d);
 				})
-				.style("fill", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
@@ -604,7 +604,7 @@ export default class InsertionSort extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("defs")
 			.append("marker")
@@ -617,7 +617,7 @@ export default class InsertionSort extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("path")
 			.attr("d", (_, i) => {
@@ -626,7 +626,7 @@ export default class InsertionSort extends React.Component {
 			.attr("stroke-width", 1)
 			.attr("stroke", "white")
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -646,7 +646,7 @@ export default class InsertionSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		var ids = [];

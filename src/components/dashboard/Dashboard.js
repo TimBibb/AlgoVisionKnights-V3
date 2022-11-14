@@ -44,7 +44,7 @@ function Dashboard({ categories, inCategory }) {
 				<h5 className='progress-header'>{completedAlgorithms}/31</h5>
 				<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			</div>
-			<div class="" style={{alignItems: 'center', backgroundColor:"#5f4b0060"}}>
+			<div class="" style={{alignItems: 'center', backgroundColor: localStorage.getItem('backgroundColor')}}>
 				<div class="bg">
 					{Object.keys(algorithms).map((key) =>
 						<SelectionCard categoryName={algorithms[key][0].category} category={algorithms[key]}/>

@@ -3,6 +3,7 @@ import "./quicksort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
@@ -445,6 +446,8 @@ export default class QuickSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
+
 	}
 
 	printArray(arr, size) {
@@ -650,7 +653,7 @@ export default class QuickSort extends React.Component {
 		this.setState({arr: arr});
 	}
 
-	initialize() {
+	initialize(arr,size,ref) {
 		const barWidth = 70;
 		const barOffset = 30;
 		const height = 500;
@@ -661,7 +664,7 @@ export default class QuickSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (this.state.size * (barWidth + barOffset)) + 100)
+				.attr("width", (10 * (barWidth + barOffset)) + 100)
 				.attr("height", height + 250);
 
 		var bars = svg.selectAll(".bar")
@@ -805,9 +808,9 @@ export default class QuickSort extends React.Component {
 			.style("fill", "white")
 			.attr("visibility", "hidden");
 
-		var ids = [];
+		let ids = [];
 
-		for (let i = 0; i < this.state.size; i++)
+		for (let i = 0; i < size; i++)
 		{
 			ids.push("g" + i);
 		}
@@ -994,31 +997,14 @@ export default class QuickSort extends React.Component {
 		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
-		// Data array changed in dataInit -> Make visual
-		if (this.state.arr.length > prevState.arr.length) {
-			svg = this.initialize();
-			svg.attr("visibility", "visible");
-		}
-		// IDs array changed in initialize -> sort copy of array to get steps and messages
-		else if (this.state.ids.length > prevState.ids.length) {
-			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
-		}
-		// Running changed
-		else if (this.state.running !== prevState.running)
-		{
-			this.run(svg);
-			console.log("We ran");
-		}
-		// For reset
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("We're restarting");
-			svg = this.initialize();
-			console.log("Made it out");
-			svg.attr("visibility", "visible");
-			console.log("All good");
-		}
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
 	}
+	
 
 	render() {
 		return (
@@ -1030,6 +1016,10 @@ export default class QuickSort extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Quick Sort!</h1></span></div>
 				<div class="parent-svg">

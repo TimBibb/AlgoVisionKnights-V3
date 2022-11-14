@@ -5,6 +5,7 @@ import "../css/button.css";
 import "../css/messages.css";
 import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
 	forward(svg) {
@@ -474,9 +475,8 @@ class SortedStep {
          svg.selectAll(".arrowpath").attr("visibility", "hidden");
 		 svg.selectAll(".insertTxt").attr("visibility", "hidden");
 
-         for (var i = 0; i < this.ids.length; i++) {
-		 	var color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
-
+         for (let i = 0; i < this.ids.length; i++) {
+		 	let color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
 		 	svg.select("#" + this.ids[i]).select("rect").style("fill", color);
 		 }
 	}
@@ -660,15 +660,17 @@ export default class MergeSort extends React.Component {
 		let steps = [];
 		let messages = [];
 		let test = [];
-		//console.log("step time: " + stepTime);
-		[steps, messages, test] = this.sortRecursive(arr, [...ids], ids, steps, messages, stepTime);
-
+		let pseudocodeArr = [];
+		
+		[steps, messages, test, pseudocodeArr] = this.sortRecursive(arr, [...ids], ids, steps, messages, stepTime, pseudocodeArr);
+		//console.log(pseudocodeArr);
 		this.setState({steps: steps, messages: messages})
+		this.props.handleCodeStepsChange(pseudocodeArr);
 	}
 
 	// ARR SHOULD NEVER CHANGE
 	// MOVE AROUND IDS
-	sortRecursive(arr, partition, ids, steps, messages, stepTime) {
+	sortRecursive(arr, partition, ids, steps, messages, stepTime, pseudocodeArr) {
 		// Midpoint 
 		const midpoint = Math.ceil(partition.length / 2);
 
@@ -676,21 +678,23 @@ export default class MergeSort extends React.Component {
 		// console.log("vals: " + arr);
 
 		// initial messages and steps
-		if (steps.length == 0) {
+		if (steps.length === 0) {
 			messages.push("<h1>Beginning Merge Sort!</h1>");
 			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 		}
 	
 		// Base case or terminating case
 		if(partition.length < 2){
 			messages.push("<h1>Array Too Small. Merge Sort Cannot Continue.</h1>");
 			steps.push(new EmptyStep());
-
-			return [steps, messages, partition]; 
+			pseudocodeArr.push(new HighlightLineStep(12,this.props.lines));
+			return [steps, messages, partition,pseudocodeArr]; 
 		}
 
 		messages.push("<h1>Slicing Array</h1>");
 		steps.push(new PartitionStep(0, midpoint, partition.length, partition, stepTime));
+		pseudocodeArr.push(new HighlightLineStep(14,this.props.lines));
 		
 		const left = partition.slice(0, midpoint);
 		const right = partition.slice(midpoint, partition.length)
@@ -698,17 +702,18 @@ export default class MergeSort extends React.Component {
 		// console.log("right: " + right)
 		// messages.push("<h1>Swapping values</h1>");
 		// steps.push(new SortedStep(0, 3, ids, stepTime))
-		const lMerge = this.sortRecursive(arr, left, ids, steps, messages, stepTime);
-		const rMerge = this.sortRecursive(arr, right, ids, steps, messages, stepTime);
+		const lMerge = this.sortRecursive(arr, left, ids, steps, messages, stepTime,pseudocodeArr);
+		const rMerge = this.sortRecursive(arr, right, ids, steps, messages, stepTime,pseudocodeArr);
 
 		messages.push("<h1>Merging</h1>");
-		steps.push(new EmptyStep())
+		steps.push(new EmptyStep());
+		pseudocodeArr.push(new HighlightLineStep(15,this.props.lines));
 	
-		const mergedIdArray = this.merge(lMerge, rMerge, steps, messages, arr, stepTime);
-		return [steps, messages, mergedIdArray]
+		const mergedIdArray = this.merge(lMerge, rMerge, steps, messages, arr, stepTime,pseudocodeArr);
+		return [steps, messages, mergedIdArray,pseudocodeArr]
 	}
 
-	merge(l, r, steps, messages, vals, stepTime) {
+	merge(l, r, steps, messages, vals, stepTime,pseudocodeArr) {
 		// Break out of loop if any one of the array gets empty
 		var [s, m, left] = l
 		var [s1, m1, right] = r
@@ -719,19 +724,21 @@ export default class MergeSort extends React.Component {
 
 		// New step to raise all of them
 		messages.push("<h1>Comparing values in Left and Right Sub-Arrays</h1>");
-		steps.push(new RaiseStep([...left, ...right], stepTime))
+		steps.push(new RaiseStep([...left, ...right], stepTime));
+		pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 
 		while (left.length > 0 && right.length > 0) {
 			// Pick the smaller among the smallest element of left and right sub arrays 
 			if (vals[left[0]] < vals[right[0]]) {
 				messages.push("<h1>"+ vals[left[0]]+ " value is Smaller than "+ vals[right[0]]+"</h1>");
-				steps.push(new ConvergeStep(left[0], startId, offset, stepTime))
-
+				steps.push(new ConvergeStep(left[0], startId, offset, stepTime));
+				pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 				result.push(left.shift());
 				offset += 100;
 			} else {
 				messages.push("<h1>"+ vals[right[0]]+ " value is Smaller than "+ vals[left[0]]+"</h1>");
-				steps.push(new ConvergeStep(right[0], startId, offset, stepTime))
+				steps.push(new ConvergeStep(right[0], startId, offset, stepTime));
+				pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
 
 				result.push(right.shift());
 				offset += 100;
@@ -743,7 +750,8 @@ export default class MergeSort extends React.Component {
 		while (left.length > 0) {
 			const id = left.shift()
 			messages.push("<h1>Adding the rest of the left array to the result</h1>");
-			steps.push(new ConvergeStep(id, startId, offset, stepTime))
+			steps.push(new ConvergeStep(id, startId, offset, stepTime));
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
 			result.push(id);
 			offset += 100;
@@ -752,7 +760,8 @@ export default class MergeSort extends React.Component {
 		while (right.length > 0) {
 			const id = right.shift()
 			messages.push("<h1>Adding the rest of the right array to the result</h1>");
-			steps.push(new ConvergeStep(id, startId, offset, stepTime))
+			steps.push(new ConvergeStep(id, startId, offset, stepTime));
+			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
 
 			result.push(id);
 			offset += 100;
@@ -998,6 +1007,7 @@ export default class MergeSort extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
@@ -1137,7 +1147,14 @@ export default class MergeSort extends React.Component {
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Merge Sort!</h1></span></div>
-				<div ref={this.ref} class="center-screen"></div>
+				<div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"mergesort"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
 			</div>
 		)
 	}

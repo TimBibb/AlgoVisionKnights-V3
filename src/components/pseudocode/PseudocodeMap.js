@@ -15,14 +15,14 @@ export const map = {
         tab + tab + tab + "return recursiveSearch(arr from mid + 1..end);",
         tab + "}"
     ],
-    bubblesort: [
+    bubblesort: [ //changed for loop indentations
         "bubbleSort( arr, n) {",
         tab + "var i, j;",
         tab + "for (i = 0; i < n-1; i++) {",
-        tab + tab + tab + "for (j = 0; j < n-i-1; j++) {",
-        tab + tab + tab + tab + "if (arr[j] > arr[j+1])",
-        tab + tab + tab + tab + tab + "swap(arr,j,j+1);",
-        tab + tab + tab + "}", 
+        tab + tab + "for (j = 0; j < n-i-1; j++) {",
+        tab + tab + tab + "if (arr[j] > arr[j+1])",
+        tab + tab + tab + tab + "swap(arr,j,j+1);",
+        tab + tab + "}", 
         tab + "}",
         "}"
     ],
@@ -38,15 +38,18 @@ export const map = {
         "merge(left, right) {",
         tab + "let arr = []",
         tab + "while (left.length and right.length) {",
-        tab + tab + "if (left[0] < right[0]) arr.push(left.shift());", 
-        tab + tab + "else arr.push(right.shift())", 
+        tab + tab + "if (left[0] < right[0])",
+        tab + tab + tab +  "arr.push(left.shift());", 
+        tab + tab + "else",
+        tab + tab + tab + "arr.push(right.shift())", 
         tab + "}",
         tab + "return [...arr, ...left, ...right]",
         "}",
         
         "sort(array) {",
         tab + "const half = array.length / 2",
-        tab + "if (array.length < 2) return array;", 
+        tab + "if (array.length < 2)",
+        tab + tab + "return array;", 
         tab + "const left = array.splice(0, half);",
         tab + "return merge(sort(left), sort(array))",   
         "}"
@@ -63,7 +66,73 @@ export const map = {
         tab + "return root;",
         "}"
     ],
-    bststructure: [],
+    bststructure: [
+        "binarySearchTree(){",
+        tab + "while(i < MAX_NODE){",
+        tab + tab + "declare random value",
+        tab + tab + "if(!root)",
+        tab + tab + tab + "root = value;",
+        tab + tab + "else {",
+        tab + tab + tab + "let node = root",
+        tab + tab + tab + "while(true) {",
+        tab + tab + tab + tab + "if(firstStep)",
+        tab + tab + tab + tab + tab + "next value to insert = val",
+        tab + tab + tab + tab + "if(val < node.value){",
+        tab + tab + tab + tab + tab + "if(node.left != null) traverse left",
+        tab + tab + tab + tab + tab + "else insert val into left node",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else if(val > node.value) {",
+        tab + tab + tab + tab + tab + "if(node.right != null) traverse right",
+        tab + tab + tab + tab + tab + "else insert val into right node",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else move forward, no duplicates",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + "}",
+        "}"
+    ],
+    heapsort: [
+        "function sort(arr) {",
+        tab + "var N = arr.length;",
+        // Build heap (rearrange array)
+        tab + "for (var i = Math.floor(N / 2) - 1; i >= 0; i--)",
+        tab + tab + "heapify(arr, N, i);",
+        // One by one extract an element from heap
+        tab + "for (var i = N - 1; i > 0; i--) {",
+            // Move current root to end
+        tab + tab + "var temp = arr[0];",
+        tab + tab + "arr[0] = arr[i];",
+        tab + tab + "arr[i] = temp;",
+            // call max heapify on the reduced heap
+        tab + tab + "heapify(arr, i, 0);",
+        tab + "}",
+        "}",
+ 
+        // To heapify a subtree rooted with node i which is
+        // an index in arr[]. n is size of heap
+        "function heapify(arr, N, i) {",
+        tab + "var largest = i;", // Initialize largest as root
+        tab + "var l = 2 * i + 1;", // left = 2*i + 1
+        tab + "var r = 2 * i + 2;", // right = 2*i + 2
+ 
+        // If left child is larger than root
+        tab + "if (l < N && arr[l] > arr[largest])",
+        tab + tab + "largest = l;",
+ 
+        // If right child is larger than largest so far
+        tab + "if (r < N && arr[r] > arr[largest])",
+        tab + tab + "largest = r;",
+ 
+        // If largest is not root
+        tab + "if (largest != i) {",
+        tab + tab + "var swap = arr[i];",
+        tab + tab + "arr[i] = arr[largest];",
+        tab + tab + "arr[largest] = swap;",
+            // Recursively heapify the affected sub-tree
+        tab + tab + "heapify(arr, N, largest);",
+        tab + "}",
+        "}"
+    ],
     postorder: [
         "postOrder(node) {",
         tab + "if (node is equal to null) return;",
@@ -80,15 +149,16 @@ export const map = {
         tab + "preOrder(node.right);",
         "}"
     ],
-    inorder: [
-        "inOrder(node) {",
-        tab + "if (node is equal to null) return;",
-        tab + "inOrder(node.left);",
-        tab + "print node.key;",
-        tab + "inOrder(node.right);",
-        "}"
+    inorder: [ 
+        "inOrder(node) {", 
+        tab + "if (node is equal to null)", 
+        tab + tab + "return", 
+        tab + "inOrder(node.left);", 
+        tab + "print node.key;", 
+        tab + "inOrder(node.right);", 
+        "}" 
     ],
-    insertionsort: [
+    insertionsort: [ //removed closing bracket highlights
         "insertionSort(arr, n) {",
         tab + "let i, key, j;", 
         tab + "for (i = 1; i < n; i++) {", 
@@ -124,7 +194,7 @@ export const map = {
         tab + "}",
         "}"
     ],
-    selectionsort: [
+    selectionsort: [ //added spacing in swap function call
        "selectionSort(arr,  n) {",
        tab + "let i, j, min_idx;",
        tab + "for (i = 0; i < n-1; i++) {",
@@ -133,7 +203,7 @@ export const map = {
        tab + tab + tab + "if (arr[j] < arr[min_idx])",
        tab + tab + tab + tab + "min_idx = j;",
        tab + tab + "}",
-       tab + tab + "swap(arr,min_idx, i);",
+       tab + tab + "swap(arr, min_idx, i);",
        tab + "}",
        "}"
     ],
@@ -157,6 +227,233 @@ export const map = {
             tab + "}",
             tab + "swap(arr, i + 1, high);",
             tab + "return (i + 1);",
+        "}"
+    ],
+
+    hashtable: [
+        "insertion(value) {",
+        tab + "if (info == tableLength) ",
+        tab + tab + "hash table is full",
+        tab + "for(i = 0; i < tableLength; i++) {",
+        tab + tab + "if (info.deleted[index] && firstDeleted == -1) ",
+        tab + tab + tab + "firstDeleted = index;",
+        tab + tab + "if (info.table[index] == value) ",
+        tab + tab + tab + "skip reinsertion",
+        tab + tab + "if (info.table[index] == null) ",
+        tab + tab + tab + "if(firstDeleted == -1) ",
+        tab + tab + tab + tab + "insert value here",
+        tab + tab + "if (info.deleted[index]) ",
+        tab + tab + tab + "deleted - move to next location",
+        tab + tab + "else ",
+        tab + tab + tab + " occupied - move to next location",
+        tab + "}",
+        "}",
+        "deletion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Value already deleted",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value! Marked deleted",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "}",
+        "search(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Ignore value",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value!",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "}"
+    ],
+
+    hashtablequadratic: [
+        "insertion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index] && firstDeleted == -1)",
+        tab + tab + tab + "First deleted found",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Do not reinsert value",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "Place x at this location",
+        tab + "}",
+        "deletion(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Value already deleted",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value! Marked deleted",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "search(x)",
+        tab + "for(i = 0; i < tableLength; i++){",
+        tab + tab + "if(deleted[index])",
+        tab + tab + tab + "Ignore value",
+        tab + tab + "if(table[index] == x)",
+        tab + tab + tab + "Found value!",
+        tab + tab + "if(table[index] == null)",
+        tab + tab + tab + "break",
+        tab + "}",
+        "}"
+    ],
+
+    dijkstras: [ //done
+        "dijkstras(graph, first) {",
+        "minQueue = [(first, 0)]",
+        "visitedNum = 0",
+        "while(minQueue.length != 0 && visitedNum != numOfNodes){ ",
+        tab + "if(head[0] != first)",
+        tab + tab + "head[0] is the unvisited neighbor",
+        tab + "head[0] is the current head",
+        tab + "for(i = 0; i < adjaceny of head[0]; i++){",
+        tab + tab + "temp = head[0][i][1]",
+        tab + tab + "weight = head[0][i][2]",
+        tab + tab + "edge = head[0][i][3]",
+        tab + tab + "if(graph.distances[temp] == -1){",
+        tab + tab + tab + "parent is now head[0]",
+        tab + tab + "else if(graph.distances[head[0]] + weight < graph.distances[temp])",
+        tab + tab + tab + "parent is now head[0]",
+        tab + tab + "else",
+        tab + tab + tab + "same distance, no parent change",
+        tab + "finished with new head[0] node",
+        "}"
+    ],
+
+    bellmanford: [ //done
+        "bellmanford(graph) {",
+        tab + "for(iterations = 0; iterations < numberOfNodes - 1; iterations++) {",
+        tab + tab + "for(edge = 0; edge < numberOfEdges; edge++) {",
+        tab + tab + tab + "if(distance[node1] == -1)",
+        tab + tab + tab + tab + "cannot update",
+        tab + tab + tab + "else {",
+        tab + tab + tab + tab + "if(distance1 != -1) {",
+        tab + tab + tab + tab + tab + "update distance at parent node",
+        tab + tab + tab + tab +"else {",
+        tab + tab + tab + tab + tab + "do not update parent node",
+        tab + "}",
+        "}"
+    ],
+
+    breadthfirst: [
+        "breadthfirst(graph, queue) {",
+        tab + "for(i = 0; i < numOfNodes; ++i) {",
+        tab + tab + "if(currentNode[node] == false) {",
+        tab + tab + tab + "current node = node",
+        tab + tab + "while(queue != empty) {",
+        tab + tab + tab + "temp = queue.dequeue()",
+        tab + tab + tab + "for(nodeNeighbor of temp in graph) {",
+        tab + tab + tab + tab + "if(nodeNeighbor not used) {",
+        tab + tab + tab + tab + tab + "enqueue nodeNeighbor, nodeNeighbor = visited",
+        "}"
+    ],
+
+    depthfirst: [ //done
+        "depthFirstSearch(graph, stack){",
+        tab + "nodeStack = []",
+        tab + "edgeStack = []",
+        tab + "let head = randInRange(0, 6)",
+        tab + "current location is node[head]",
+        tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
+        tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
+        tab + "}",
+        tab + "while(nodeStack.length != 0){",
+        tab + tab + "s = nodeStack.pop()",
+        tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + "travel to new node, mark prev as visited",
+        tab + tab + "else",
+        tab + tab + tab + "node already visited",
+        tab + tab + tab + "travel back to parent node",
+        tab + tab + tab + "add ajacent unvisited to stack",
+        tab + tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
+        tab + tab + tab + "if(nodeVisited = false)",
+        tab + tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
+        tab + tab + "}",
+        tab + "}",
+        "}"
+    ],
+
+    //to edit
+    prims: [
+        "prims(graph, vertex, vertices){ ",
+        tab + "for (edge of graph.adjacencyList[0]){ ",
+        tab + tab + "let [node1, node2, weight, edgeID] = edge;",
+        tab + tab + "queue.push(edgeID);",
+        tab + "}",
+        tab + "for (i = 0; tempArray.length > 0 && i < 50; i++) {",
+        tab + tab + "calculate lowest weighted edge",
+        tab + tab + "if (nodeVisited[node1] && nodeVisited[node2])",
+        tab + tab + tab + "ignore edge - already added",
+        tab + tab + "for (edge of graph.adjacencyList[nodeUnvisited]) {",
+        tab + tab + tab + "queue.push(edgeID);",
+        tab + tab + "}",
+        tab + "}",
+        tab + "holdEdges",
+        tab + "for (i = 0; i < graph.numberofEdges; i++) {",
+        tab + tab + "if(edgeSelected[i]) holdEdges = graph.edges[i][0] + graph.edges[i][1];",
+        tab + "all edges found!",
+        "}",
+        ""
+    ],
+
+    heaps: [
+        //heapify
+        "heapify(arr, x){",
+        tab + "i = x - 1",
+        tab + "while(i > 0)",
+        tab + tab + "swap arr[0] and arr[i]",
+        tab + tab + "move down the array by 1",
+        tab + tab + "decrease i by 1",
+        "}"
+    ],
+
+    nqueens: [
+        "nqueens(board, col, row, n){",
+        tab + "solveNQueens(board, col){",
+        tab + tab + "if(col >= n)",
+        tab + tab + tab + "nQueens solution found!",
+        tab + tab + "for(i = 0; i < n; i++){",
+        tab + tab + tab + "if(i + 1 != n)",
+        tab + tab + tab + tab + "move to next available space",
+        tab + tab + tab + "else",
+        tab + tab + tab + tab + "backtrack",
+        tab + tab + "}",
+        tab + "}",
+        tab + "queenSafe(board, row, col, n){",
+        tab + tab + "for(i = 0; i < col; i++){",
+        tab + tab + tab + "if(board[row][i] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "for(i = row, j = col; i >= 0 && j >= 0; i--, j--)",
+        tab + tab + tab + "if(board[i][j] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "for(i = row, j = col; i < n && j >= 0; i++, j--)",
+        tab + tab + tab + "if(board[i][j] == 1)",
+        tab + tab + tab + tab + "identify queen in range",
+        tab + tab + "}",
+        tab + tab + "no queens in range",
+        tab + "}",
+        "}"
+    ],
+
+    fibonacci: [ //done
+        "fib(n){",
+        tab + "if(n <= 1) return n",
+        tab + "return fib(n-1) + fib(n-2)",
+        "}"
+    ],
+
+    hanoi: [
+        "hanoi(n, from, to, aux){",
+        tab + "if(n == 0) return",
+        tab + "if(n > 1) Move n-1 disks to Aux",
+        tab + "hanoi(n - 1, from, aux, to)",
+        tab + "hanoi(n - 1, aux, to, from)",
         "}"
     ]
 }

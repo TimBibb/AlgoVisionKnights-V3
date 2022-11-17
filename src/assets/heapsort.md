@@ -1,15 +1,24 @@
 # Overview
-Heapsort is an application of a data structure called heaps. Refer to our page on heaps to learn more about heaps. Heapsort takes advantage of the fact that the top element of a max-heap is the biggest number. If we take the top element out and put it to the side, and percolate down to remake a heap, we can repeat the process until the heap is gone, and this leaves us a collection of elements in decending order. We can use this to produce an array of sorted elements.
+
+Heap Sort is a popular algorithm used in computer science. This algorithm uses knowledge of trees and their array visualization to make it work and how the heaps work as well.
+
+It is similar to the Selection Sort in that the elements are divided into unsorted and sorted sub-arrays, but instead of scanning the unsorted sub-array linearly, we use the unsorted sub-array to create a max heap, in which we would only have to grab the element at its root since it is the biggest in the tree and add it to our sorted sub-array.
 
 # How does it work?
-Because heaps can be applied directly to an array, we start by heapifying the array we want to sort. Once the array is in a max-heap, we swap the element at the top of the heap with the element at he bottom of the heap. This leaves the biggest element of the array in the last index. Lets consider this index out of the heap for the moment and fix the rest of the array back into a heap by percolating down. Now that we have a heap again, we swap the element at the top of the heap with the element on the bottom of the heap. Now we have the biggest element in the last index and the second biggest element in the second to last index. We consider that index out of the heap too and continue this process until a sorted array is produced.
 
+Given an array of elements, we start with the first step of this algorithm, we create a max heap with the elements of the array, which basically is organizing the elements with the largest one at its root and each of the child nodes smaller than its parent. Then having the array visualization of that heap since it is essentially a binary tree, we grab the value at the root of the heap and swap it with the value at the last place of the array and remove it from the tree and reduce the size of the heap by 1, making this the first element of the sorted sub-array.
 
-# Big-O stats
+We then heapify the root so the tree maintains the structure of the max heap so the root goes back to being the largest element in the tree and then repeat the process until each element is sorted in the array.
 
-|            | Worst Case | Average Case | Best Case |
-|------------|------------|--------------|-----------|
-| Runtime    | O(n log n) | O(n log n)   | O(n log n)|
-| Comparisons| O(n log n) | O(n log n)   | O(n log n)|
-| Heapify    | O(n log n) | O(n log n)   | O(n)      |
-| Space      | O(n)       | O(n)         | O(n)      |
+# Runtimes
+
+|                 | Worst Case | Average Case | Best Case |
+|-----------------|------------|--------------|-----------|
+| Time Complexity | O(nlog(n)) | O(nlog(n))   | O(nlog(n))|
+
+# Further information
+
+For more information about heap sort, we have the following resources:
+- [Programiz](https://www.programiz.com/dsa/heap-sort)
+- [Wikipedia](https://en.wikipedia.org/wiki/Heapsort)
+- [GeeksforGeeks](https://www.geeksforgeeks.org/heap-sort/?ref=lbp)

@@ -29,6 +29,7 @@ function randInRange(lo, hi) {
   
 class EmptyStep {
     forward() {}
+    fastForward() {}
     backward() {}
 }
 class CreateAndHighlightNodeStep {
@@ -48,6 +49,10 @@ class CreateAndHighlightNodeStep {
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 
     backward(svg) {
         UnHighlightNodeStep.forward(svg)
@@ -69,8 +74,17 @@ class HighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
-        new UnHighlightNodeStep(this.node, this.edge).forward(svg)
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", GRAY);
+        } 
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+        }
     }
 }
 
@@ -92,6 +106,10 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge2.id).style("stroke", GRAY);
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 
     backward(svg) {
         if (this.node) {
@@ -129,6 +147,10 @@ class UnHighlightPathStep {
                 return;
             }
         }
+    }
+
+    fastForward(svg){
+        this.forward(svg);
     }
 }
 
@@ -446,6 +468,7 @@ export default class binarysearchtree extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg g"));
+        this.props.codeSteps[this.state.stepId].forward();
 		console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Inorder Sort!</h1>" : "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: stepId});

@@ -18,6 +18,7 @@ import {
 	BreadthFirstSearch,
 	DepthFirstSearch,
 	Prims,
+	Kruskals,
 	// Trees,
 	AVL,
 	BinarySearchTree,
@@ -30,7 +31,8 @@ import {
 	Queens,
 	// Recursion
 	TowersofHanoi,
-	FibonacciSequence
+	FibonacciSequence,
+	Floodfill
 } from './utils/utils';
 
 const algorithms = {
@@ -169,23 +171,23 @@ const algorithms = {
 			description: <Prims />,
 			category: 'Graphs'
 		},
-		// {
-		// 	name: "Kruskal's",
-		// 	path: 'kruskals',
-		// 	type: 'js',
-		// 	description: <Dijkstras />,
-		// category: 'Graphs'
-		// },
+		{
+			name: "Kruskal's",
+			path: 'kruskals',
+			type: 'js',
+			description: <Kruskals />,
+			category: 'Graphs'
+		},
 	],
 	trees: [
 		// { name: 'Overview', description: <Trees /> },
-		// { 
-		// 	name: 'AVL', 
-		// 	path: 'avl', 
-		// 	type: 'js', 
-		// 	description: <AVL /> 
-		// category: 'Trees'
-		// },
+		{ 
+			name: 'AVL', 
+			path: 'avl', 
+			type: 'js', 
+			description: <AVL />,
+			category: 'Trees'
+		},
 		// {
 		// 	name: 'Binary Search Tree',
 		// 	path: 'binarysearchtre',
@@ -259,23 +261,23 @@ const algorithms = {
 	// 	{ name: 'Merge Sort', path: 'mergesort' },
 	// 	{ name: 'Quick Sort', path: 'quicksort' },
 	// ],
-	dynamicprogramming: [
-		{ 
-			name: 'Sequence Alignment', 
-			path: 'sequencealignment',
-			category: 'Dynamic Programming'
-		},
-		{
-			name: 'Knapsack',
-			path: 'knapsack',
-			category: 'Dynamic Programming'
-		},
-		{
-			name: 'Longest Common Subsequence',
-			path: 'lcs',
-			category: 'Dynamic Programming'
-		},
-	],
+	// dynamicprogramming: [
+	// 	{ 
+	// 		name: 'Sequence Alignment', 
+	// 		path: 'sequencealignment',
+	// 		category: 'Dynamic Programming'
+	// 	},
+	// 	{
+	// 		name: 'Knapsack',
+	// 		path: 'knapsack',
+	// 		category: 'Dynamic Programming'
+	// 	},
+	// 	{
+	// 		name: 'Longest Common Subsequence',
+	// 		path: 'lcs',
+	// 		category: 'Dynamic Programming'
+	// 	},
+	// ],
 	recursion: [
 		{
 			name: 'Fibonacci Sequence',
@@ -291,11 +293,13 @@ const algorithms = {
 			description: <TowersofHanoi />,
 			category: 'Recursion'
 		},
-		// {
-		// 	name: 'Floodfill',
-		// 	path: 'floodfill',
-		// category: 'Recursion'
-		// },
+		{
+			name: 'Floodfill',
+			path: 'floodfill',
+			type: 'js',
+			description: <Floodfill />,
+			category: 'Recursion'
+		},
 	],
 };
 

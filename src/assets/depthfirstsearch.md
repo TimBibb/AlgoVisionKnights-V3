@@ -1,20 +1,22 @@
 # Overview
-Depth-First Search(DFS) is an algorithm for searching through a tree or graph. It will start at the root node and traverse as far as it can before returning to the previous node
+
+Depth-First Search (DFS) is an algorithm for searching through a tree or graph. It will start at the root node and traverse as far as it can before returning to the previous node
+
+Depth-first search (DFS) is an algorithm for traversing or searching trees or graphs. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before returning to the previous node (backtracking).
 
 # How does it work?
-Depth-First search is a recursive function. Starting at the root node, it checks all nodes it can travel to. DFS is recusively called on each child node.
 
-Recursive calls are made until DFS reaches a node with no children. At that point, DFS returns to the previous node and then recursively calls itself on the next child.
+Depth-First Search (DFS) is a recursive function. It starts at the root (top) node of a tree and goes as far as it can down a given branch (path), then backtracks until it finds an unexplored path, and then explores it. The algorithm does this until the entire graph has been explored. This is done recursively, where it checks all nodes it can travel to, and once it reaches a node with no children, it will return to the previous node through backtracking.
 
-# Differences between trees and graphs
-In trees and graphs, a node's value can be checked either before (preorder), during (inorder), or after (postorder) the recursive call to its children. 
+# Runtimes
 
-Trees don't typcially need to track if they've been visited or discovered unless multiple tree nodes point to the same child nodes.
+|                 | Worst Case | Average Case | Best Case |
+|-----------------|------------|--------------|-----------|
+| Time Complexity | O(E + V)   |              |           |
 
-Graphs need to track if they were visited because nodes can potentially loop in a cycle.
+# Further information
 
-# References
-
-Gif pulled from:
-
-[https://commons.wikimedia.org/wiki/File:Depth-First-Search.gif](https://commons.wikimedia.org/wiki/File:Depth-First-Search.gif)
+For more information about Depth First Search, we have the following resources:
+- [Programiz](https://www.programiz.com/dsa/graph-dfs)
+- [Wikipedia](https://en.wikipedia.org/wiki/Depth-first_search)
+- [GeeksforGeeks](https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/?ref=lbp)

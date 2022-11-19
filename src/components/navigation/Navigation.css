@@ -11,7 +11,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #FFC904;
+	background: var(--accentColor);
 	border-radius: 10px;
 }
 
@@ -29,15 +29,48 @@
 #nav-title {
 	font-size: 1.7em;
 	font-weight: 700;
-	color: #FFC904;
+	color: var(--accentColor);
 }
 
 #dashboard-nav-button {
-	color: #ffffff;
+	color: var(--primaryColor);
 }
 
 .hr-color{
 	height: 0.10px;
-    background-color: #FFC904;
+    background-color: var(--accentColor);
     border: none;
+}
+
+#drawer{
+	background-color: var(--backgroundColor) !important;
+	color: var(--primaryColor);
+	position: 'inherit';
+	width: '200px';
+}
+.makeStyles-drawer-1,
+.makeStyles-drawerClose-1,
+.makeStyles-drawer-2,
+.makeStyles-drawerClose-2,
+.makeStyles-drawer-3,
+.makeStyles-drawerClose-3,
+.makeStyles-drawer-4,
+.makeStyles-drawerClose-4,
+.makeStyles-drawer-5,
+.makeStyles-drawerClose-5,
+.makeStyles-drawer-6,
+.makeStyles-drawerClose-6,
+.makeStyles-drawer-7,
+.makeStyles-drawerClose-7,
+.makeStyles-drawer-8,
+.makeStyles-drawerClose-8,
+.makeStyles-drawer-9,
+.makeStyles-drawerClose-9,
+.makeStyles-drawer-10,
+.makeStyles-drawerClose-10,
+.makeStyles-drawer-11,
+.makeStyles-drawerClose-11,
+.makeStyles-drawer-12,
+.makeStyles-drawerClose-12{
+	background-color: var(--backgroundColor) !important;
 }

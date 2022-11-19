@@ -1,6 +1,6 @@
 #header-bar {
 	position: inherit;
-	background-color: #000000;
+	background-color: var(--backgroundColor);
 	display: flex;
 	flex-direction: column;
 }
@@ -27,11 +27,12 @@
 
 #menu-icon {
 	font-size: 1.5em;
-	color: #FFC904;
+	color: var(--accentColor);
 }
 
 #header-title {
 	font-size: 1.5em;
+	color: var(--primaryColor);
 	width: max-content;
 }
 
@@ -42,7 +43,7 @@
 }
 
 #input-icon {
-	color: #ffffff;
+	color: var(--primaryColor);
 }
 
 .SearchInputMobile {
@@ -52,7 +53,7 @@
 #search-button-mobile {
 	padding: 0;
 	font-size: 1.3em;
-	color: #ffffff;
+	color: var(--primaryColor);
 }
 
 .TopPageToggle {
@@ -60,7 +61,7 @@
 }
 
 .Results {
-	background-color: #181818;
+	background-color: var(--cardColor);
 	position: absolute;
 	z-index: 1;
 	width: 100%;
@@ -77,7 +78,7 @@
 }
 
 #result-button {
-	color: #ffffff;
+	color: var(--primaryColor);
 	text-transform: none;
 	width: 100%;
 	text-align: left;
@@ -105,7 +106,7 @@
 
 .hr-color{
 	height: 0.10px;
-    background-color: #FFC904;
+    background-color: var(--accentColor);
     border: none;
 }
 
@@ -124,7 +125,7 @@
 	cursor: pointer;
 	width: 60px;
 	height: 28px;
-	background: white;
+	background: var(--primaryColor);
 	border-radius: 25px;
 	position: relative;
 	transition: background-color .2s;
@@ -139,7 +140,7 @@
 	height: 27px;
 	border-radius: 27px;
 	transition: 0.2s;
-	background: #FFC904;
+	background: var(--accentColor);
 	box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
 }
   

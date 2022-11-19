@@ -15,6 +15,7 @@ import {
 import NavLink from '../navlink/NavLink';
 
 function NavGroup({ title, algorithms, panel, expanded, handleChange }) {
+
 	return (
 		<Accordion
 			id='nav-group'
@@ -25,7 +26,7 @@ function NavGroup({ title, algorithms, panel, expanded, handleChange }) {
 					<ListItemText
 						id='nav-item-text'
 						style={{
-							color: expanded === panel ? '#FFC904' : '#ffffff',
+							color: expanded === panel ? localStorage.getItem('accentColor') : localStorage.getItem('primaryColor'),
 						}}>
 						{title}
 					</ListItemText>

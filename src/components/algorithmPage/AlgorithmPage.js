@@ -51,7 +51,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 							/>
 						}
 						label={
-						<Typography variant='h5' style={{ color: "#FFFFFF" }}>
+						<Typography variant='h5' style={{ color: localStorage.getItem('primaryColor')}}>
 							<h4>Completed?</h4>
 						</Typography>
 						}

@@ -14,6 +14,8 @@ import Settings from './components/settings/Settings';
 import categories from './components/algorithmList/Categories';
 import algorithms from './components/algorithmList/Algorithms';
 
+var r = document.querySelector(':root');
+
 function App() {
 	console.log('App.js');
 
@@ -32,6 +34,11 @@ function App() {
 	const [algoPage, setAlgoPage] = React.useState('visualizer');
 
 	React.useEffect(() => {
+		r.style.setProperty('--primaryColor', localStorage.getItem('primaryColor'));
+		r.style.setProperty('--secondaryColor', localStorage.getItem('secondaryColor'));
+		r.style.setProperty('--cardColor', localStorage.getItem('cardColor'));
+		r.style.setProperty('--backgroundColor', localStorage.getItem('backgroundColor'));
+		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
 		// Storing primaryColor in localStorage
 		if(!localStorage.getItem('primaryColor')){
 			localStorage.setItem('primaryColor', '#FFFFFF')
@@ -113,7 +120,7 @@ function App() {
 	});
 
 	return (
-		<div className='App' style={{backgroundColor: localStorage.getItem('backgroundColor')}}>
+		<div className='App'>
 			<HashRouter>
 				<Navigation
 					open={open}

@@ -1,5 +1,5 @@
 #information-button {
-	border-right: 1px solid #ffffff;
+	border-right: 1px solid var(--primaryColor);
 }
 
 #information-button,

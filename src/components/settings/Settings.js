@@ -149,9 +149,9 @@ class Settings extends React.Component {
             primaryColor: primaryColor.rgb
         })
         localStorage.setItem('primaryColor', primaryColor.hex)
-        localStorage.setItem('primaryColorR', this.state.primaryColor.r)
-        localStorage.setItem('primaryColorG', this.state.primaryColor.g)
-        localStorage.setItem('primaryColorB', this.state.primaryColor.b)
+        localStorage.setItem('primaryColorR', primaryColor.rgb.r)
+        localStorage.setItem('primaryColorG', primaryColor.rgb.g)
+        localStorage.setItem('primaryColorB', primaryColor.rgb.b)
     };
 
     onChangeSecondaryColor = (secondaryColor) => {
@@ -159,9 +159,9 @@ class Settings extends React.Component {
           secondaryColor: secondaryColor.rgb
         })
         localStorage.setItem('secondaryColor', secondaryColor.hex)
-        localStorage.setItem('secondaryColorR', this.state.secondaryColor.r)
-        localStorage.setItem('secondaryColorG', this.state.secondaryColor.g)
-        localStorage.setItem('secondaryColorB', this.state.secondaryColor.b)
+        localStorage.setItem('secondaryColorR', secondaryColor.rgb.r)
+        localStorage.setItem('secondaryColorG', secondaryColor.rgb.g)
+        localStorage.setItem('secondaryColorB', secondaryColor.rgb.b)
     };
 
     onChangeBackgroundColor = (backgroundColor) => {
@@ -169,19 +169,20 @@ class Settings extends React.Component {
             backgroundColor: backgroundColor.rgb
         })
         localStorage.setItem('backgroundColor', backgroundColor.hex)
-        localStorage.setItem('backgroundColorR', this.state.backgroundColor.r)
-        localStorage.setItem('backgroundColorG', this.state.backgroundColor.g)
-        localStorage.setItem('backgroundColorB', this.state.backgroundColor.b)
+        localStorage.setItem('backgroundColorR', backgroundColor.rgb.r)
+        localStorage.setItem('backgroundColorG', backgroundColor.rgb.g)
+        localStorage.setItem('backgroundColorB', backgroundColor.rgb.b)
     };
     
     onChangeCardColor = (cardColor) => {
         this.setState({ 
             cardColor: cardColor.rgb
         })
+
         localStorage.setItem('cardColor', cardColor.hex)
-        localStorage.setItem('cardColorR', this.state.cardColor.r)
-        localStorage.setItem('cardColorG', this.state.cardColor.g)
-        localStorage.setItem('cardColorB', this.state.cardColor.b)
+        localStorage.setItem('cardColorR', cardColor.rgb.r)
+        localStorage.setItem('cardColorG', cardColor.rgb.g)
+        localStorage.setItem('cardColorB', cardColor.rgb.b)
     };
 
     onChangeAccentColor = (accentColor) => {
@@ -189,9 +190,9 @@ class Settings extends React.Component {
             accentColor: accentColor.rgb
         })
         localStorage.setItem('accentColor', accentColor.hex)
-        localStorage.setItem('accentColorR', this.state.accentColor.r)
-        localStorage.setItem('accentColorG', this.state.accentColor.g)
-        localStorage.setItem('accentColorB', this.state.accentColor.b)
+        localStorage.setItem('accentColorR', accentColor.rgb.r)
+        localStorage.setItem('accentColorG', accentColor.rgb.g)
+        localStorage.setItem('accentColorB', accentColor.rgb.b)
     };
 
     render() {

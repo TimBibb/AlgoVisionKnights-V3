@@ -16,10 +16,15 @@ function AlgorithmPage({ path, type, algoPage }) {
 	const [val, setVal] = useState((localStorage.getItem(path) == "true") || false);
 
 	const [isChecked, setChecked] = useState((localStorage.getItem(path) == "true") || false);
-	const onCheckboxChange = (key: string, value: boolean) => {
+	const onCheckboxChange = (key, value) => {
 		localStorage.setItem(path, value.toString())
 		setChecked(value)
 	};
+
+	useEffect(() => {
+		setChecked((localStorage.getItem(path) == "true") || false);
+		setVal((localStorage.getItem(path) == "true") || false);
+	}, [path])
 
 	return (
 		<div className='AlgorithmPage'> 

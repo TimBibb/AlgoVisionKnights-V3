@@ -26,7 +26,7 @@ function Dashboard({ categories, inCategory }) {
 	Object.keys(algorithms).map((key) =>
 		algorithms[key].map((algorithm) => {
 			if(localStorage.getItem(algorithm.path) && localStorage.getItem(algorithm.path) == "true"){
-				completedAlgorithmsPercent+= 4;
+				completedAlgorithmsPercent+= 3.4482;
 				completedAlgorithms += 1;
 			}
 		}))

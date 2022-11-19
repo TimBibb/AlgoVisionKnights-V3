@@ -894,6 +894,7 @@ export default class MergeSort extends React.Component {
 		const barWidth = 100;
 		const barOffset = 1;
 		const height = 100;
+		const width = (10 * (barWidth + barOffset)) + 100
 
 		let yScale = d3.scaleLinear()
 			.domain([0, d3.max(this.state.arr)])
@@ -901,8 +902,11 @@ export default class MergeSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (10 * (barWidth + barOffset)) + 100)
+				.attr("width", "100%")
 				.attr("height", height + 250);
+
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "-25 -50 " + (width+100) + " " + (height+250))
 
 		var bars = svg.selectAll(".bar")
 					.data(this.state.arr)

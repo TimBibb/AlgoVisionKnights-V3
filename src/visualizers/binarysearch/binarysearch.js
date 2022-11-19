@@ -226,6 +226,7 @@ export default class binarysearch extends React.Component {
 		const barWidth = 70;
 		const barOffset = 5;
 		const height = 50;
+		const width = (size * (barWidth + barOffset)) + 100;
 		
 		// Used for scaling the bar heights in reference to the maximum value of the data array
 		let yScale = d3.scaleLinear()
@@ -234,8 +235,11 @@ export default class binarysearch extends React.Component {
 
 		let svg = d3.select(ref)
 			.append("svg")
-				.attr("width", (size * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+				.attr("width", "100%")
+				.attr("height", height+250);
+				
+		svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
 		let bars = svg.selectAll(".bar")
 					.data(arr)

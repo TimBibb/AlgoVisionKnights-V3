@@ -211,10 +211,14 @@ export default class HeapSort extends React.Component {
   }
 
   initialize() {
-    // let width = 900;
+    let width = 1500;
+    const height = 500;
 
     // d3.select(this.ref.current).append("svg").attr("width", width + "px").attr("height", "1000px");
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+    var svg = d3.select(this.ref.current).append("svg").attr("width", "100%").attr("height", height);
+    
+    svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
     let size = ((this.state.inputMode) ? this.state.arr.length : this.state.size);
     

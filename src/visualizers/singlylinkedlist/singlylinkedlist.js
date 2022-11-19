@@ -255,13 +255,17 @@ export default class singlylinkedlist extends React.Component {
 	initialize() {
 		console.log("Building the visualizer");
 		const height = 300;
+		const width = 1140;
 
 		// Svg for our visualizer
 		let svg = d3.select(this.ref.current)
 			.append("svg")
-			.attr("width", 1140)
+			.attr("width", "100%")
 			.attr("height", height)
 			.attr("id", "visualizer");
+
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))	
 		
 		// Gradient to split rectangle color by half
 		let grad = svg.append("defs")

@@ -32,7 +32,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 			{/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
 			<div className='container'>
 				<div className="button-location">
-					<button class="button" onClick={NavigateToDashboard}>Dashboard</button>
+					{/* <button class="button" onClick={NavigateToDashboard}>Dashboard</button> */}
 					<button class="button2" onClick={()=> setShow(!show)}>More Information</button>
 				</div>
 				<div className='checkbox-location'>

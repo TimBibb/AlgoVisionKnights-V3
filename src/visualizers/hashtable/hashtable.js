@@ -143,8 +143,12 @@ export default class HashTable extends React.Component {
     let svg = d3
       .select(this.ref.current)
       .append("svg")
-      .attr("width", "1500px")
+      .attr("width", "100%")
       .attr("height", "650px");
+
+      svg.attr("perserveAspectRatio", "xMinYMid")
+      svg.attr("viewBox", "0 0 " + 1500 + " " + (650))
+  
 
     let left = 400;
     let line = 1200;

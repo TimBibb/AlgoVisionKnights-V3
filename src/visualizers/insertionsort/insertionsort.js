@@ -564,7 +564,8 @@ export default class InsertionSort extends React.Component {
 	initialize(arr, size, ref) {
 		const barWidth = 70;
 		const barOffset = 30;
-		const height = 500;
+		const height = 450;
+		const width =  (size * (barWidth + barOffset)) + 100
 
 		let yScale = d3.scaleLinear()
 			.domain([0, d3.max(arr)])
@@ -572,8 +573,11 @@ export default class InsertionSort extends React.Component {
 
 		var svg = d3.select(ref)
 			.append("svg")
-				.attr("width", (10* (barWidth + barOffset)) + 100)
-				.attr("height", height + 300);
+				.attr("width", "100%")
+				.attr("height", height);
+
+		svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
 		var bars = svg.selectAll(".bar")
 					.data(arr)

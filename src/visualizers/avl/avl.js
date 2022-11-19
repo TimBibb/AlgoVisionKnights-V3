@@ -232,7 +232,16 @@ export default class avl extends React.Component {
     }
 
     initialize() {
-        d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+        const width = 1500
+		const height = 500
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
         let tree = new Tree();
         //tree.addnew(this.ref, 50);

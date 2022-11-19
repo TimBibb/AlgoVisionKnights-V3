@@ -22,3 +22,8 @@
 	align-content: center;
 	margin-top: 2em;
 }
+
+#visualizerDiv {
+	margin-left: auto;
+	margin-right: auto;
+}

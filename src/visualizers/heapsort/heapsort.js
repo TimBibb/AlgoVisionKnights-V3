@@ -258,7 +258,7 @@ export default class HeapSort extends React.Component {
       var x = 1.0 / size;
       x = (x * (v - 1) + x / 2.0) * 100.0;
       //((this.state.inputMode) ? arr[v-1] :
-      vals.push(new Number(this.ref, numIds[v], x + "%", "5%", arr[v], "gray", "visible"));
+      vals.push(new Number(this.ref, numIds[v], x + "%", "5%", arr[v], localStorage.getItem('secondaryColor'), "visible"));
     }
 
     let heapLines = [null, null];
@@ -288,7 +288,7 @@ export default class HeapSort extends React.Component {
     for (let v = 1; v <= size; v++) {
       heapVals.push(
       //((this.state.inputMode) ? arr[v-1] :
-      new Number(this.ref, circNumIds[v], cxs[v] + "%", cys[v] + "%", arr[v], "white", "hidden")
+      new Number(this.ref, circNumIds[v], cxs[v] + "%", cys[v] + "%", arr[v], localStorage.getItem('primaryColor'), "hidden")
       );
     }
     //console.log(arr)
@@ -355,7 +355,7 @@ export default class HeapSort extends React.Component {
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[i].attr.id));
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[i].attr.id));
       addStep(
-        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, "gray", "#FFCE36")
+        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor'))
       );
       flushBuffer();
       currentMessage = "<h1>This node has no children.</h1>";
@@ -364,8 +364,8 @@ export default class HeapSort extends React.Component {
           this.ref.current,
           stepTime,
           heapVals[i].attr.id,
-          "white",
-          "#FFCE36"
+          localStorage.getItem('primaryColor'),
+          localStorage.getItem('accentColor')
         )
       );
       flushBuffer();
@@ -377,7 +377,7 @@ export default class HeapSort extends React.Component {
      
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[i].attr.id));
       addStep(
-        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, "gray", "#FFCE36")
+        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor'))
       );
 
       let l = i * 2;
@@ -420,8 +420,8 @@ export default class HeapSort extends React.Component {
           this.ref.current,
           stepTime,
           heapVals[v].attr.id,
-          "white",
-          "#FFCE36"
+          localStorage.getItem('primaryColor'),
+          localStorage.getItem('accentColor')
         )
       );
       flushBuffer();
@@ -471,7 +471,7 @@ export default class HeapSort extends React.Component {
       // change this ^^^
       currentMessage = "<h1>" + arr[i] + " is now in it's sorted position.</h1>";
       addStep(
-        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, "#FFCE36", "#1ACA1E")
+        new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('accentColor'), "#1ACA1E")
       );
       flushBuffer();
 
@@ -486,8 +486,8 @@ export default class HeapSort extends React.Component {
           this.ref.current,
           stepTime,
           heapVals[1].attr.id,
-          "#FFCE36",
-          "white"
+          localStorage.getItem('accentColor'),
+          localStorage.getItem('primaryColor')
         )
       );
       flushBuffer();
@@ -521,8 +521,8 @@ export default class HeapSort extends React.Component {
           this.ref.current,
           stepTime,
           heapVals[v].attr.id,
-          "white",
-          "#FFCE36"
+          localStorage.getItem('primaryColor'),
+          localStorage.getItem('accentColor')
         )
       );
       flushBuffer();
@@ -533,13 +533,13 @@ export default class HeapSort extends React.Component {
     addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[1].attr.id));
     addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[1].attr.id));
     addStep(
-      new ChangeNumberColorStep(this.ref.current, stepTime, vals[1].attr.id, "#FFCE36", "#1ACA1E")
+      new ChangeNumberColorStep(this.ref.current, stepTime, vals[1].attr.id, localStorage.getItem('accentColor'), "#1ACA1E")
     );
     flushBuffer();
 
     // addStep(new FlipVisibilityStep(this.ref.current, stepTime, circNumIds[1]));
     // addStep(new FlipVisibilityStep(this.ref.current, stepTime, circIds[1]));
-    // addStep(new ChangeNumberColorStep(this.ref.current, stepTime, numIds[1], "#FFCE36", "#1ACA1E"));
+    // addStep(new ChangeNumberColorStep(this.ref.current, stepTime, numIds[1], localStorage.getItem('accentColor'), "#1ACA1E"));
     // flushBuffer();
 
     currentMessage = "<h1>Finished Heap Sort!</h1>";
@@ -739,7 +739,7 @@ export default class HeapSort extends React.Component {
 					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
-        <div class="center-screen">
+        <div id="message-pane" class="center-screen">
           <span id="message"><h1>Welcome to Heap Sort!</h1></span>
         </div>
         <div class="parent-svg">

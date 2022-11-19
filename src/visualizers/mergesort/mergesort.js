@@ -73,7 +73,7 @@ class FirstColor{
 	}
 
 	forward(svg){
-		svg.select("#g" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#g" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -81,8 +81,8 @@ class FirstColor{
 	}
 
 	backward(svg) {
-		svg.select("#g" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#g" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#g" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#g" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -114,7 +114,7 @@ class ColorLowStep {
 
 		svg.select("#lowTxt" + this.id1).attr("visibility", "hidden");
 		svg.select("#lowTxt2_" + this.id1).attr("visibility", "hidden");
-		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== "gray") ? "visible" : "hidden");
+		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== localStorage.getItem('secondaryColor')) ? "visible" : "hidden");
 
 		svg.select("#" + this.ids[this.id2]).select("rect").attr("prevColor", color2);
 
@@ -123,7 +123,7 @@ class ColorLowStep {
 			svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#648FFF");
 			svg.select("#arrowpath" + this.id2).attr("visibility", "visible");
 
-			if (color2 !== "gray")
+			if (color2 !== localStorage.getItem('secondaryColor'))
 			{
 				svg.select("#lowTxt2_" + this.id2).attr("visibility", "visible");
 			}
@@ -181,14 +181,14 @@ class MergeStep {
 
 		svg.select("#highTxt" + this.id1).attr("visibility", "hidden");
 		svg.select("#highTxt2_" + this.id1).attr("visibility", "hidden");
-		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== "gray") ? "visible" : "hidden");
+		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== localStorage.getItem('secondaryColor')) ? "visible" : "hidden");
 
 		// As long as the new bar isn't sorted
 		if (color2 !== "rgb(26, 202, 30)") {
-			svg.select("#g" + this.ids[this.id2]).select("rect").style("fill", "#EF3F88");
+			svg.select("#g" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('accentColor'));
 			svg.select("#arrowpath" + this.id2).attr("visibility", "visible");
 
-			if (color2 !== "gray")
+			if (color2 !== localStorage.getItem('secondaryColor'))
 			{
 				svg.select("#highTxt2_" + this.id2).attr("visibility", "visible");
 			}
@@ -240,7 +240,7 @@ class ColorPivotStep {
 		 var prevColor = svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor");
 
 		 svg.select("#" + this.ids[this.id1]).select("rect").style("fill", prevColor);
-		 svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", "gray");
+		 svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", localStorage.getItem('secondaryColor'));
 	}
 }
 class RaiseStep {
@@ -566,7 +566,7 @@ class SortedStep {
 
 			if (color !== "rgb(26, 202, 30)") {
 				svg.select("#" + this.ids[i]).select("rect").attr("prevColor", color);
-				svg.select("#" + this.ids[i]).select("rect").style("fill", "gray");
+				svg.select("#" + this.ids[i]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 			}
 		}
 	}
@@ -921,7 +921,7 @@ export default class MergeSort extends React.Component {
 				.attr("y", height)
 				.attr("stroke", "rgb(255,255,255)")
 				.attr("stroke-width", "2")
-				.style("fill", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
@@ -933,7 +933,7 @@ export default class MergeSort extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("defs")
 			.append("marker")
@@ -946,16 +946,16 @@ export default class MergeSort extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("path")
 			.attr("d", (_, i) => {
 				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 85], [i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 35]]);
 			})
 			.attr("stroke-width", 1)
-			.attr("stroke", "white")
+			.attr("stroke", localStorage.getItem('primaryColor'))
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -975,7 +975,7 @@ export default class MergeSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		bars.append("text").text("Low")
@@ -991,7 +991,7 @@ export default class MergeSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("High")
@@ -1007,7 +1007,7 @@ export default class MergeSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		bars.append("text").text("High")
@@ -1023,7 +1023,7 @@ export default class MergeSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("Pivot")
@@ -1039,7 +1039,7 @@ export default class MergeSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		var ids = [];

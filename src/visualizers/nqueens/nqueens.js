@@ -347,15 +347,10 @@ export default class Queens extends React.Component {
   forward() {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
-    if (this.state.stepId === this.steps.length) return;
-
-    this.running = true;
-
-    this.props.codeSteps[this.state.stepId].forward();
+    if (this.state.stepId === this.state.steps.length) return;
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-    //this.state.steps[this.state.stepId].forward();
-    
+    this.state.steps[this.state.stepId].forward();
     this.props.codeSteps[this.state.stepId].forward();
 
     console.log(this.state.steps[this.state.stepId]);
@@ -372,6 +367,7 @@ export default class Queens extends React.Component {
     var stepId = this.state.stepId - 1;
     document.getElementById("message").innerHTML = this.state.messages[stepId - 1];
     this.state.steps[stepId].backward();
+    this.props.codeSteps[this.state.stepId].forward();
 
     console.log(this.state.steps[stepId]);
     this.setState({stepId: stepId});

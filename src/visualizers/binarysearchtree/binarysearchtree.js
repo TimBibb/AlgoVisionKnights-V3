@@ -29,8 +29,9 @@ function randInRange(lo, hi) {
   }
   
 class EmptyStep {
-    forward() {}
-    backward() {}
+    forward(svg) {}
+	fastForward(svg) {}
+	backward(svg) {}
 }
 
 class NewNodeStep {
@@ -50,6 +51,20 @@ class NewNodeStep {
         }
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", GRAY);
+        svg.select("#" + this.node.id).attr("visibility", "hidden");
+        svg.select("#" + this.node.textId).attr("visibility", "hidden");
+        console.log(" EDGE EXISTS " + this.edge)
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).attr("visibility", "hidden");
+        }
+    }
 }
 
 class HighlightNodeStep {
@@ -67,6 +82,18 @@ class HighlightNodeStep {
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", GRAY);
+        svg.select("#" + this.node.id).attr("visibility", "visible");
+        svg.select("#" + this.node.textId).attr("visibility", "visible");
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).attr("visibility", "visible");
+        }
+    }
 }
 
 class UnHighlightNodeStep {
@@ -81,6 +108,15 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge.id).style("stroke", GRAY);
         }
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+        }
+    }
 }
 
 class UnHighlightPathStep {
@@ -107,8 +143,28 @@ class UnHighlightPathStep {
             }
         }
     }
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        var node = this.root;
+        var edge = null;
+        while (node != null) {
+            svg.select("#" + node.id).attr("stroke", UCF_GOLD);
+            if (this.finalVal < node.value) {
+                edge = node.lEdge;
+                node = node.left;
+                svg.select("#" + edge.id).style("stroke", UCF_GOLD);
+            } else  if (this.finalVal > node.value) {
+                edge = node.rEdge;
+                node = node.right;
+                svg.select("#" + edge.id).style("stroke", UCF_GOLD);
+            } else {
+                return;
+            }
+        }
+    }
 }
-
 class Tree {
     constructor() {
         this.root = null;
@@ -580,6 +636,19 @@ export default class binarysearchtree extends React.Component {
 
     backward(){
         console.log("BACKWARDS CLICKED");
+        if(this.state.running) return;
+        if(this.state.stepId === this.state.steps.length) return;
+
+        let stepId = this.state.stepId - 1;
+
+        this.state.steps[this.state.stepId].backward(d3.select(this.ref.current).select("svg"));
+        this.props.codeSteps[this.state.stepId].forward();
+        document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+
+		this.setState({stepId: stepId});
+
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
+
     }
 
     forward(){		
@@ -672,12 +741,12 @@ export default class binarysearchtree extends React.Component {
             <div>
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
-                    <button class="button" onClick={this.playPreorder}>Preorder</button>
-                    {/* <button class="button" onClick={this.pause}>Pause</button> */}
-                    <button class="button" onClick={this.add}>Add</button>
+                    {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
+                    <button class="button" onClick={this.pause}>Pause</button>
+                    {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
-                    {/* <button class="button" onClick={this.backward}>Step Backward</button> 
-                    <button class="button" onClick={this.forward}>Step Forward</button> */}
+                    <button class="button" onClick={this.backward}>Step Backward</button> 
+                    <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search Tree!</h1></span></div>

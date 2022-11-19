@@ -22,7 +22,9 @@
 .Queens,
 .TowersOfHanoi,
 .FibonacciSequence,
-.HashTable {
+.HashTable,
+.Floodfill,
+.Kruskals {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;

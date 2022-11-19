@@ -33,7 +33,7 @@ class FirstColor{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
 		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
@@ -58,7 +58,7 @@ class OldColor{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#f08bb5");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
 		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");

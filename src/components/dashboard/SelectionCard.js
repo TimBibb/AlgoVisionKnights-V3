@@ -59,7 +59,7 @@ class SelectionCard extends React.Component {
     render() {
         return (
             <Tilt className='category' options={{ max: 10, perspective: 900, reverse: true, max: 1.65, scale: 1.05 }}>
-                <Card id='card'>
+                <Card id='card' style={{backgroundColor: localStorage.getItem('cardColor')}}>
                     <CardContent id='card-content'>
                         <div className='CardHeader'>
                             <Typography id='card-title'>{this.key}</Typography>

@@ -10,6 +10,7 @@ import selectiongif from './images/selectiongif.gif';
 import insertiongif from './images/insertiongif.gif';
 import quicksortgif from './images/quicksortgif.gif';
 import mergergif from './images/mergegif.gif';
+import heapsort from './images/heapsort.gif';
 import binarysearchgif from './images/binarysearchgif.gif';
 import singlylinkedlistgif from './images/singlylinkedlistgif.gif';
 import hashtable from './images/hashtable.png';
@@ -24,11 +25,12 @@ import binarysearchtreegif from './images/binarysearchtreegif.gif';
 import preordergif from './images/preordergif.gif';
 import inordergif from './images/inordergif.gif';
 import postordergif from './images/postordergif.gif';
-import towersofhanoi from './images/towersofhanoi.png';
-import fibonaccipng from './images/fibonacci.png';
-import heapsort from './images/heapsort.gif';
 import maxheap from './images/maxheap.gif';
 import huffmancodingtree from './images/huffmancodingtree.gif';
+import towersofhanoi from './images/towersofhanoi.png';
+import fibonaccipng from './images/fibonacci.png';
+import floodfill from './images/floodfill.gif';
+import kruskal from './images/kruskals.gif';
 
 const constant = <MathJax.Node formula={`O(1)`} />;
 const log = <MathJax.Node formula={`O(log \\ n)`} />;
@@ -770,6 +772,48 @@ export function Prims() {
 	);
 }
 
+const union = <MathJax.Node formula={`O(E \\ (log \\ (E) \\ + \\ E^2))`} />;
+const subset = <MathJax.Node formula={`O(V)`} />;
+const find = <MathJax.Node formula={`O(E^2)`} />;
+const complexity = <MathJax.Node formula={`O(E \\ log \\ (E))`} />;
+
+export function Kruskals() {
+	return (
+		<div className='Kruskals'>
+			<MathJax.Provider>
+				<div>
+					<p className='SubHeader'>Time Complexity:</p>
+					<Table>
+						<thead>
+							<th>Implementation</th>
+							<th>Worst Case</th>
+						</thead>
+						<tbody>
+						<tr>
+							<td>Union</td>
+							<td>{union}</td>
+						</tr>
+						<tr>
+							<td>Find</td>
+							<td>{find}</td>
+						</tr>
+						<tr>
+							<td>Make Subset</td>
+							<td>{subset}</td>
+						</tr>
+						<tr>
+							<td>Runtime</td>
+							<td>{complexity}</td>
+						</tr>
+						</tbody>
+					</Table>
+				</div>
+			</MathJax.Provider>
+			<img src={kruskal} alt='graphs' rel='noreferrer' />
+		</div>
+	);
+}
+
 // Trees
 export function Trees() {
 	return <div className='Trees'>Trees JSX</div>;
@@ -1156,6 +1200,23 @@ export function TowersofHanoi() {
 				</p>
 			</div>
 			<img src={towersofhanoi} alt='towersofhanoi' rel='noreferrer' />
+		</div>
+	);
+}
+
+export function Floodfill() {
+	return (
+		<div className='Floodfill'>
+			<div>
+				<p>
+					<strong>Problem Statement:</strong> Given a 2D screen, with the location of a pixel in the screen and a color, replace the color of the given pixel and all the adjacent same colored pixels with the given new color.
+				</p><br/>
+				<p>
+					The idea is simple, we first replace the color of the current pixel, then use recursion to color the 4 surrounding points.
+				</p>
+				
+			</div>
+			<img src={floodfill} alt='floodfill' rel='noreferrer' />
 		</div>
 	);
 }

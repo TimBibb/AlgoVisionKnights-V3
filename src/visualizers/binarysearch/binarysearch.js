@@ -25,7 +25,7 @@ class FirstColor{
 	}
 
 	forward(svg){
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -33,8 +33,8 @@ class FirstColor{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -50,7 +50,7 @@ class OldColor{
 	}
 
 	forward(svg){
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#f08bb5");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
 	}
 
 	fastForward(svg) {
@@ -58,8 +58,8 @@ class OldColor{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -75,7 +75,7 @@ class ColorFound{
 	}
 
 	forward(svg){
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#1ACA1E");
 	}
 
 	fastForward(svg) {
@@ -83,8 +83,8 @@ class ColorFound{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -254,7 +254,7 @@ export default class binarysearch extends React.Component {
 				.attr("stroke", "rgb(255,255,255)")
 				.attr("stroke-width", "2")
 				.attr("y", height)
-				.style("fill", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
@@ -267,7 +267,7 @@ export default class binarysearch extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		// Arrowhead for the pointers?
 		bars.append("defs")
@@ -281,7 +281,7 @@ export default class binarysearch extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		// Pointers
 		bars.append("path")
@@ -290,9 +290,9 @@ export default class binarysearch extends React.Component {
 				[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 135]]);
 			})
 			.attr("stroke-width", 1)
-			.attr("stroke", "white")
+			.attr("stroke", localStorage.getItem('primaryColor'))
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -312,7 +312,7 @@ export default class binarysearch extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		var ids = [];

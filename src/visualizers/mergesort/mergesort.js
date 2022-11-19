@@ -58,7 +58,6 @@ class MoveStep{
 	/*translate(){
 		return 
 	}
-
 	move(svg){
 		svg.selectAll("rect").enter().append("rect")
 		.attr("transform", translate)
@@ -259,6 +258,20 @@ class RaiseStep {
             svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
         }
 	}
+
+	fastForward(svg){
+		this.forward(svg);
+	}
+	
+	backward(svg){
+		for (var i = 0; i < this.partitionIds.length; i++) {
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) + 100;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) + 100;
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
+        }
+	}
 }
 
 class ConvergeStep{
@@ -302,6 +315,42 @@ class ConvergeStep{
 		// 		.duration(this.stepTime)
 		// 		.attr("y", newytxt);
 	}
+	
+	fastForward(svg){
+		var newxbar = parseInt(svg.select("#g" + this.startId).select("rect").attr("x")) + this.offset
+		var newxtxt = parseInt(svg.select("#g" + this.startId).select("text").attr("x")) + this.offset
+
+		var newybar = parseInt(svg.select("#g" + this.id).select("rect").attr("y")) + 110;
+		var newytxt = parseInt(svg.select("#g" + this.id).select("text").attr("y")) + 110;
+		console.log("steptime: " + this.stepTime)
+		svg.select("#g" + this.id)
+			.select("rect")
+				.attr("x", newxbar)
+				.attr("y", newybar)
+
+		svg.select("#g" + this.id)
+			.select("text")
+				.attr("x", newxtxt)
+				.attr("y", newytxt)
+	}
+
+	backward(svg){
+		var newxbar = parseInt(svg.select("#g" + this.startId).select("rect").attr("x")) - this.offset
+		var newxtxt = parseInt(svg.select("#g" + this.startId).select("text").attr("x")) - this.offset
+
+		var newybar = parseInt(svg.select("#g" + this.id).select("rect").attr("y")) - 110;
+		var newytxt = parseInt(svg.select("#g" + this.id).select("text").attr("y")) - 110;
+		
+		svg.select("#g" + this.id)
+			.select("rect")
+				.attr("x", newxbar)
+				.attr("y", newybar)
+
+		svg.select("#g" + this.id)
+			.select("text")
+				.attr("x", newxtxt)
+				.attr("y", newytxt)
+	}
 }
 
 class PartitionStep {
@@ -335,6 +384,40 @@ class PartitionStep {
 
 			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) - 10;
             var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) - 10;
+
+            svg.select("#g" + this.partitionIds[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
+		}
+	}
+
+	fastForward(svg){
+		this.forward(svg);
+	}
+
+	backward(svg){
+		for (var i = this.start; i < this.mid; i++) {
+            var newxbar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("x")) + 20;
+            var newxtxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("x")) + 20;
+
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) + 10;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) + 10;
+
+            svg.select("#g" + this.partitionIds[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.partitionIds[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.partitionIds[i]).select("text").attr("y", newytxt);
+        }
+
+		for(var i = this.mid; i < this.end; i++){
+			var newxbar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("x")) - 20;
+            var newxtxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("x")) - 20;
+
+			var newybar = parseInt(svg.select("#g" + this.partitionIds[i]).select("rect").attr("y")) + 10;
+            var newytxt = parseInt(svg.select("#g" + this.partitionIds[i]).select("text").attr("y")) + 10;
 
             svg.select("#g" + this.partitionIds[i]).select("rect").attr("x", newxbar);
             svg.select("#g" + this.partitionIds[i]).select("text").attr("x", newxtxt);
@@ -428,12 +511,33 @@ class UnpartitionStep{
 	}
 
 	backward(svg) {
-        for (var i = this.id1; i <= this.id2; i++) {
-            var newybar = parseInt(svg.select("#" + this.ids[i]).select("rect").attr("y")) - 100;
-            var newytxt = parseInt(svg.select("#" + this.ids[i]).select("text").attr("y")) - 100;
-            svg.select("#" + this.ids[i]).select("rect").attr("y", newybar);
-            svg.select("#" + this.ids[i]).select("text").attr("y", newytxt);
+        for (var i = 0; i <= this.id1; i++) {
+            var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) - 20;
+            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) - 20;
+
+			var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) - 10;
+            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) - 10;
+
+            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
         }
+
+		for(var i = this.id2; i < this.ids.length; i++){
+			var newxbar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("x")) + 20;
+            var newxtxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("x")) + 20;
+
+			var newybar = parseInt(svg.select("#g" + this.ids[i]).select("rect").attr("y")) - 10;
+            var newytxt = parseInt(svg.select("#g" + this.ids[i]).select("text").attr("y")) - 10;
+
+            svg.select("#g" + this.ids[i]).select("rect").attr("x", newxbar);
+            svg.select("#g" + this.ids[i]).select("text").attr("x", newxtxt);
+
+			svg.select("#g" + this.ids[i]).select("rect").attr("y", newybar);
+            svg.select("#g" + this.ids[i]).select("text").attr("y", newytxt);
+		}
 	}
 }
 
@@ -475,8 +579,9 @@ class SortedStep {
          svg.selectAll(".arrowpath").attr("visibility", "hidden");
 		 svg.selectAll(".insertTxt").attr("visibility", "hidden");
 
-         for (let i = 0; i < this.ids.length; i++) {
-		 	let color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
+         for (var i = 0; i < this.ids.length; i++) {
+		 	var color = svg.select("#" + this.ids[i]).select("rect").attr("prevColor");
+
 		 	svg.select("#" + this.ids[i]).select("rect").style("fill", color);
 		 }
 	}
@@ -961,7 +1066,8 @@ export default class MergeSort extends React.Component {
 		if (this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) return;
 		
-		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
+		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		// console.log(this.state.steps[this.state.stepId]);
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
@@ -981,6 +1087,7 @@ export default class MergeSort extends React.Component {
 			this.state.steps[stepId] instanceof UnpartitionStep || this.state.steps[stepId] instanceof SwapStep) {
 				// console.log(this.state.steps[stepId]);
 				this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+				this.props.codeSteps[this.state.stepId].forward();
 		}
 		else { // Or make a new svg and run steps up until step before
 			d3.select(this.ref.current).select("svg").remove();

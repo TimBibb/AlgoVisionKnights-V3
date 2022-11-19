@@ -1,0 +1,21 @@
+#settings-title {
+	font-size: 24pt;
+	font-weight: 'bold';
+	color: 'white';
+	text-align: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.button-location{
+	margin-left: 3%;
+	/* display: flex; */
+	float: left;
+}

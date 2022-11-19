@@ -832,6 +832,7 @@ export default class QuickSort extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return;
 		
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		console.log(this.state.steps[this.state.stepId]);
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
@@ -851,6 +852,7 @@ export default class QuickSort extends React.Component {
 			this.state.steps[stepId] instanceof UnpartitionStep || this.state.steps[stepId] instanceof SwapStep) {
 				console.log(this.state.steps[stepId]);
 				this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+				this.props.codeSteps[this.state.stepId].forward();
 		}
 		else { // Or make a new svg and run steps up until step before
 			d3.select(this.ref.current).select("svg").remove();

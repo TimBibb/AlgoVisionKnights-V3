@@ -12,6 +12,7 @@ import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import { wait } from "@testing-library/react";
 
 var x = 50;
 var mid = 0;
@@ -284,8 +285,19 @@ export default class binarysearchtree extends React.Component {
     }
 
     initialize() {
-        var svgGroup = d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px").append("g");
+        const width = 1500
+		const height = 450
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
         
+        var svgGroup = svg.append("g");
+
         let zoom = d3.zoom()
             .on('zoom', this.handleZoom);
         
@@ -715,7 +727,7 @@ export default class binarysearchtree extends React.Component {
 	}
 
     componentDidMount() {
-        this.initialize();   
+        this.initialize();
         this.simulate();
     }
 

@@ -18,7 +18,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	color: #FFC904;
+	color: var(--accentColor);
 }
 
 .list {
@@ -28,7 +28,7 @@
   
 .list a {
 	display: inline-block;
-	color: #FFC904;
+	color: var(--accentColor);
 	text-align: center;
 	padding: 14px;
 	text-decoration: none;
@@ -42,6 +42,10 @@
 #dashboard-title {
 	font-size: 48pt;
 	font-weight: 700;
-	color: #FFC904;
+	color: var(--accentColor);
 	text-align: center;
+}
+
+.bg-colorProgressBar{
+	background-color: var(--accentColor) !important;
 }

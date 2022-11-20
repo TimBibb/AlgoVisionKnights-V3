@@ -93,11 +93,16 @@ export default class BellmanFord extends React.Component {
   }
 
   initialize() {
-    var svg = d3
-      .select(this.ref.current)
-      .append("svg")
-      .attr("width", "1500px")
-      .attr("height", "650px");
+		const width = 1500
+		const height = 450
+
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
     let isWeighted = true;
     let isDirected = true;
@@ -438,7 +443,7 @@ export default class BellmanFord extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div id="banner" class="center-screen">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>

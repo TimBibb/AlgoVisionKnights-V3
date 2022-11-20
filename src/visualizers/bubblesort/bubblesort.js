@@ -28,7 +28,7 @@ class UncolorStep {
 	}
 
 	forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 	}
 
 	fastForward(svg) {
@@ -36,7 +36,7 @@ class UncolorStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 }
 
@@ -59,7 +59,7 @@ class SortedStep {
 		}
 		else if (this.id1 === this.ids.length - 1) {
             svg.append("line")
-				.style("stroke", "white")
+				.style("stroke", localStorage.getItem('primaryColor'))
 				.style("stroke-width", 7)
 				.attr("x1", sortx - (barOffset / 2))
 				.attr("y1", 0)
@@ -75,7 +75,7 @@ class SortedStep {
 				.style("font-family", "Merriweather")
 				.attr("font-weight", "bold")
 				.style("font-size", "32px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 		}
 		else {
 			var newDivx = parseInt(svg.select("#divisor").attr("x1")) - (barWidth + barOffset);
@@ -123,7 +123,7 @@ class SortedStep {
 
         svg.select("#arrowpath" + this.id1).attr("visibility", "visible");
 		svg.select("#bubbleTxt" + this.id1).attr("visibility", "visible");
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 }
 
@@ -137,7 +137,7 @@ class QSwapStep {
         svg.selectAll(".qTxt").attr("visibility", "hidden");
         svg.selectAll("#qTxt" + this.id).attr("visibility", "visible");
 
-		svg.select("#" + this.ids[this.id]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -147,7 +147,7 @@ class QSwapStep {
 	backward(svg) {
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		svg.select("#" + this.ids[this.id]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 	}
 }
 
@@ -166,8 +166,8 @@ class BubbleSwapStep {
 		svg.select("#arrowpath" + this.id2).attr("visibility", "visible");
 		svg.select("#bubbleTxt" + this.id2).attr("visibility", "visible");        
 
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -184,8 +184,8 @@ class BubbleSwapStep {
             svg.select("#qTxt" + this.id2).attr("visibility", "visible");
         }
 
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 	}
 }
 
@@ -463,6 +463,8 @@ export default class BubbleSort extends React.Component {
 		const barWidth = 70;
 		const barOffset = 30;
 		const height = 450;
+		const width = (10 * (barWidth + barOffset)) + 100
+		
 		console.log("ARRAY SIZE: " + size)
 
 		let yScale = d3.scaleLinear()
@@ -471,9 +473,23 @@ export default class BubbleSort extends React.Component {
 
 		let svg = d3.select(ref)
 			.append("svg")
-				// size -> 10
-				.attr("width", (10 * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+			// size -> 10
+				.attr("width", "100%")
+				.attr("height", height);
+				
+		svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+
+		// var aspect = width / height,
+		// 	chart = d3.select(ref).select("svg")
+		// d3.select(window)
+		// .on("resize", function() {
+		// 	var targetWidth = svg.node().getBoundingClientRect().width;
+		// 	console.log(targetWidth)
+		// 	// svg.selectAll("rect").attr("width", targetWidth/10);
+		// 	// svg.selectAll("rect").attr("height", targetWidth / aspect);
+		// 	svg.attr("width", targetWidth)
+		// });
 
 		let bars = svg.selectAll(".bar")
 					.data(arr)
@@ -494,7 +510,7 @@ export default class BubbleSort extends React.Component {
 				.attr("y", (d) => {
 					return (height + 100) - yScale(d);
 				})
-				.style("fill", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
@@ -507,7 +523,7 @@ export default class BubbleSort extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("defs")
 			.append("marker")
@@ -520,16 +536,16 @@ export default class BubbleSort extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("path")
 			.attr("d", (_, i) => {
 				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 185], [i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 135]]);
 			})
 			.attr("stroke-width", 1)
-			.attr("stroke", "white")
+			.attr("stroke", localStorage.getItem('primaryColor'))
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -549,7 +565,7 @@ export default class BubbleSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("?")
@@ -565,7 +581,7 @@ export default class BubbleSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "32px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		var ids = [];

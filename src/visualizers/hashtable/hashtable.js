@@ -143,8 +143,12 @@ export default class HashTable extends React.Component {
     let svg = d3
       .select(this.ref.current)
       .append("svg")
-      .attr("width", "1500px")
+      .attr("width", "100%")
       .attr("height", "650px");
+
+      svg.attr("perserveAspectRatio", "xMinYMid")
+      svg.attr("viewBox", "0 0 " + 1500 + " " + (650))
+  
 
     let left = 400;
     let line = 1200;
@@ -158,7 +162,7 @@ export default class HashTable extends React.Component {
       .attr("dominant-baseline", "middle")
       .attr("font-size", "50px")
       .attr("font-weight", "bold")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("");
 
     let hashFunction = svg
@@ -170,7 +174,7 @@ export default class HashTable extends React.Component {
       .attr("dominant-baseline", "middle")
       .attr("font-size", "50px")
       .attr("font-weight", "bold")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("h(x) = x % [length of table]");
 
     let hashEvaluation = svg
@@ -182,7 +186,7 @@ export default class HashTable extends React.Component {
       .attr("dominant-baseline", "middle")
       .attr("font-size", "50px")
       .attr("font-weight", "bold")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("");
 
     svg
@@ -191,7 +195,7 @@ export default class HashTable extends React.Component {
       .attr("y1", "0px")
       .attr("x2", line + "px")
       .attr("y2", "600px")
-      .attr("stroke", "white");
+      .attr("stroke", localStorage.getItem('primaryColor'));
 
     let allArrowPos = [];
 
@@ -205,7 +209,7 @@ export default class HashTable extends React.Component {
         .attr("y1", 50 + i * (height / tableLen) + "px")
         .attr("x2", line + 25 + "px")
         .attr("y2", 50 + i * (height / tableLen) + "px")
-        .attr("stroke", "white");
+        .attr("stroke", localStorage.getItem('primaryColor'));
 
       if (i < tableLen) {
         info.table.push(null);
@@ -215,7 +219,7 @@ export default class HashTable extends React.Component {
         svg
           .append("g")
           .attr("id", "Entry" + i)
-          .style("fill", "white");
+          .style("fill", localStorage.getItem('primaryColor'));
 
         svg
           .select("#Entry" + i)
@@ -256,7 +260,7 @@ export default class HashTable extends React.Component {
       .attr("font-size", "30px")
       .attr("font-weight", "bold")
       .attr("visibility", "visible")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("Index");
 
     svg
@@ -269,7 +273,7 @@ export default class HashTable extends React.Component {
       .attr("font-size", "30px")
       .attr("font-weight", "bold")
       .attr("visibility", "visible")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("Value");
 
     let arrow = svg
@@ -282,7 +286,7 @@ export default class HashTable extends React.Component {
       .attr("font-size", "50px")
       .attr("font-weight", "bold")
       .attr("visibility", "visible")
-      .style("fill", "white")
+      .style("fill", localStorage.getItem('primaryColor'))
       .text("→");
 
     info.arrowPos = allArrowPos[0];
@@ -425,7 +429,7 @@ export default class HashTable extends React.Component {
     this.addStep(
       new ChangeTextPositionStep(`Arrow`, this.info.allArrowPos[firstDeleted], this.info.arrowPos)
     );
-    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, `white`, `#444444`));
+    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), `#444444`));
     this.flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
@@ -493,7 +497,7 @@ export default class HashTable extends React.Component {
 
       if (this.info.table[index] === x) {
         this.createMessage(`We have found ${x}! Mark it as deleted.`);
-        this.addStep(new ChangeEntryColorStep(`Entry${index}`, `#444444`, `white`));
+        this.addStep(new ChangeEntryColorStep(`Entry${index}`, `#444444`, localStorage.getItem('primaryColor')));
         this.flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
 
@@ -834,7 +838,7 @@ export default class HashTable extends React.Component {
             <button class="button" id="searchBut" onClick={this.handleSearch}>Search</button>
           </div>
         </div>
-        <div class="center-screen">
+        <div id="message-pane" class="center-screen">
           <span id="message">
             <h1>Welcome to Hash Table!</h1>
           </span>

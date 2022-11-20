@@ -3,7 +3,6 @@ import { SketchPicker } from 'react-color'
 import reactCSS from 'reactcss'
 import {Typography} from '@material-ui/core';
 import './Settings.css';
-import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
 
 function NavigateToDashboard(){
 	window.location.href = "/";
@@ -20,6 +19,11 @@ function defaultColors(){
     localStorage.setItem('secondaryColorR', '64')
     localStorage.setItem('secondaryColorG', '66')
     localStorage.setItem('secondaryColorB', '67')
+    // default accentColor
+    localStorage.setItem('accentColor', '#FFC904')
+    localStorage.setItem('accentColorR', '255')
+    localStorage.setItem('accentColorG', '201')
+    localStorage.setItem('accentColorB', '4')
     // default backgroundColor
     localStorage.setItem('backgroundColor', '#000000')
     localStorage.setItem('backgroundColorR', '0')
@@ -30,11 +34,11 @@ function defaultColors(){
     localStorage.setItem('cardColorR', '24')
     localStorage.setItem('cardColorG', '24')
     localStorage.setItem('cardColorB', '24')
-    // default accentColor
-    localStorage.setItem('accentColor', '#FFC904')
-    localStorage.setItem('accentColorR', '255')
-    localStorage.setItem('accentColorG', '201')
-    localStorage.setItem('accentColorB', '4')
+    // default nodeColor
+    localStorage.setItem('nodeColor', '#1B203D')
+    localStorage.setItem('nodeColorR', '27')
+    localStorage.setItem('nodeColorG', '32')
+    localStorage.setItem('nodeColorB', '61')
 
     window.location.reload(false);
 }
@@ -59,6 +63,12 @@ class Settings extends React.Component {
             b: localStorage.getItem('secondaryColorB'),
             a: '1',
         },
+        accentColor: {
+            r: localStorage.getItem('accentColorR'),
+            g: localStorage.getItem('accentColorG'),
+            b: localStorage.getItem('accentColorB'),
+            a: '1',
+        },
         backgroundColor: {
             r: localStorage.getItem('backgroundColorR'),
             g: localStorage.getItem('backgroundColorG'),
@@ -71,17 +81,18 @@ class Settings extends React.Component {
             b: localStorage.getItem('cardColorB'),
             a: '1',
         },
-        accentColor: {
-            r: localStorage.getItem('accentColorR'),
-            g: localStorage.getItem('accentColorG'),
-            b: localStorage.getItem('accentColorB'),
+        nodeColor: {
+            r: localStorage.getItem('nodeColorR'),
+            g: localStorage.getItem('nodeColorG'),
+            b: localStorage.getItem('nodeColorB'),
             a: '1',
         },
       showPicker: false,
       showPickerSecondaryColor: false,
+      showPickerAccentColor: false,
       showPickerBackgroundColor: false,
       showPickerCardColor: false,
-      showPickerAccentColor: false,
+      showPickerNodeColor: false,
     };
  
     onClick = () => {
@@ -105,6 +116,18 @@ class Settings extends React.Component {
     onCloseSecondaryColor = () => {
       this.setState({ 
         showPickerSecondaryColor: false 
+      })
+    };
+
+    onClickAccentColor = () => {
+        this.setState({ 
+            showPickerAccentColor: !this.state.showPickerAccentColor 
+        })
+    };
+ 
+    onCloseAccentColor = () => {
+      this.setState({ 
+        showPickerAccentColor: false 
       })
     };
 
@@ -132,15 +155,15 @@ class Settings extends React.Component {
       })
     };
 
-    onClickAccentColor = () => {
-        this.setState({ 
-            showPickerAccentColor: !this.state.showPickerAccentColor 
+    onClickNodeColor = () => {
+        this.setState({
+            showPickerNodeColor: !this.state.showPickerNodeColor 
         })
     };
  
-    onCloseAccentColor = () => {
+    onCloseNodeColor = () => {
       this.setState({ 
-        showPickerAccentColor: false 
+        showPickerNodeColor: false 
       })
     };
  
@@ -164,6 +187,16 @@ class Settings extends React.Component {
         localStorage.setItem('secondaryColorB', secondaryColor.rgb.b)
     };
 
+    onChangeAccentColor = (accentColor) => {
+        this.setState({ 
+            accentColor: accentColor.rgb
+        })
+        localStorage.setItem('accentColor', accentColor.hex)
+        localStorage.setItem('accentColorR', accentColor.rgb.r)
+        localStorage.setItem('accentColorG', accentColor.rgb.g)
+        localStorage.setItem('accentColorB', accentColor.rgb.b)
+    };
+
     onChangeBackgroundColor = (backgroundColor) => {
         this.setState({ 
             backgroundColor: backgroundColor.rgb
@@ -185,15 +218,17 @@ class Settings extends React.Component {
         localStorage.setItem('cardColorB', cardColor.rgb.b)
     };
 
-    onChangeAccentColor = (accentColor) => {
+    onChangeNodeColor = (nodeColor) => {
         this.setState({ 
-            accentColor: accentColor.rgb
+            nodeColor: nodeColor.rgb
         })
-        localStorage.setItem('accentColor', accentColor.hex)
-        localStorage.setItem('accentColorR', accentColor.rgb.r)
-        localStorage.setItem('accentColorG', accentColor.rgb.g)
-        localStorage.setItem('accentColorB', accentColor.rgb.b)
+
+        localStorage.setItem('nodeColor', nodeColor.hex)
+        localStorage.setItem('nodeColorR', nodeColor.rgb.r)
+        localStorage.setItem('nodeColorG', nodeColor.rgb.g)
+        localStorage.setItem('nodeColorB', nodeColor.rgb.b)
     };
+
 
     render() {
  
@@ -211,6 +246,12 @@ class Settings extends React.Component {
             borderRadius: '3px',
             background: `rgba(${ this.state.secondaryColor.r }, ${ this.state.secondaryColor.g }, ${ this.state.secondaryColor.b }, ${ this.state.secondaryColor.a })`,
           },
+          accentColor: {
+            width: '80px',
+            height: '30px',
+            borderRadius: '3px',
+            background: `rgba(${ this.state.accentColor.r }, ${ this.state.accentColor.g }, ${ this.state.accentColor.b }, ${ this.state.accentColor.a })`,
+          },
           backgroundColor: {
             width: '80px',
             height: '30px',
@@ -223,11 +264,11 @@ class Settings extends React.Component {
             borderRadius: '3px',
             background: `rgba(${ this.state.cardColor.r }, ${ this.state.cardColor.g }, ${ this.state.cardColor.b }, ${ this.state.cardColor.a })`,
           },
-          accentColor: {
+          nodeColor: {
             width: '80px',
             height: '30px',
             borderRadius: '3px',
-            background: `rgba(${ this.state.accentColor.r }, ${ this.state.accentColor.g }, ${ this.state.accentColor.b }, ${ this.state.accentColor.a })`,
+            background: `rgba(${ this.state.nodeColor.r }, ${ this.state.nodeColor.g }, ${ this.state.nodeColor.b }, ${ this.state.nodeColor.a })`,
           },
           popover: {
             position: 'absolute',
@@ -249,34 +290,13 @@ class Settings extends React.Component {
             display: 'inline-block',
             text: 'center',
             boxShadow: '0 0 0 1px rgba(0,0,0,.2)',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '3',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-          swatch: {
-            margin:'auto',
-            padding: '6px',
-            background: '#ffffff',
-            borderRadius: '2px',
-            cursor: 'pointer',
-            display: 'inline-block',
-            text: 'center',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.2)',
-          },      
+          },   
         },
       });
  
       return (
         <div>
-            <div className='container'>
+            <div className='settings-container'>
                 {/* Primary Color */}
                 <Typography id="settings-title"> Primary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClick }>
@@ -295,6 +315,16 @@ class Settings extends React.Component {
                 { this.state.showPickerSecondaryColor ? <div style={ styles.popover }>
                 <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
                 <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
+                </div> : null }
+
+                {/* Accent Color */}
+                <Typography id="settings-title"> Accent Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
+                <div style={ styles.accentColor } />
+                </div>
+                { this.state.showPickerAccentColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
+                <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
                 </div> : null }
 
                 {/* Background Color */}
@@ -317,21 +347,21 @@ class Settings extends React.Component {
                 <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
                 </div> : null }
 
-                {/* Accent Color */}
-                <Typography id="settings-title"> Accent Color: </Typography>
-                <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
-                <div style={ styles.accentColor } />
+                {/* Node Color */}
+                <Typography id="settings-title"> Node Color: </Typography>
+                <div style={ styles.swatch } onClick={ this.onClickNodeColor }>
+                <div style={ styles.nodeColor } />
                 </div>
-                { this.state.showPickerAccentColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
-                <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
+                { this.state.showPickerNodeColor ? <div style={ styles.popover }>
+                <div style={ styles.cover } onClick={ this.onCloseNodeColor }/>
+                <SketchPicker color={ this.state.nodeColor } onChange={ this.onChangeNodeColor } />
                 </div> : null }
 
             </div>
-            <div className='container'>
+            <div className='settings-container'>
                 <div className="button-location">
-                    <button class="button" onClick={NavigateToDashboard}>Dashboard</button>
-                    <button class="button2" onClick={defaultColors}>Default Colors</button>
+                    <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
+                    <button class="button4" onClick={defaultColors}>Default Colors</button>
                 </div>
             </div>
         </div>

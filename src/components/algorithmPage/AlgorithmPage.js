@@ -32,7 +32,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 			{/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
 			<div className='container'>
 				<div className="button-location">
-					<button class="button" onClick={NavigateToDashboard}>Dashboard</button>
+					{/* <button class="button" onClick={NavigateToDashboard}>Dashboard</button> */}
 					<button class="button2" onClick={()=> setShow(!show)}>More Information</button>
 				</div>
 				<div className='checkbox-location'>
@@ -46,12 +46,12 @@ function AlgorithmPage({ path, type, algoPage }) {
 									setVal(value.target.checked)
 								}}
 								style={{
-								color: "#FFC904"
+								color: localStorage.getItem('accentColor')
 								}}
 							/>
 						}
 						label={
-						<Typography variant='h5' style={{ color: "#FFFFFF" }}>
+						<Typography variant='h5' style={{ color: localStorage.getItem('primaryColor')}}>
 							<h4>Completed?</h4>
 						</Typography>
 						}

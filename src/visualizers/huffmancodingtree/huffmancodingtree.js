@@ -380,8 +380,19 @@ export default class huffmancodingtree extends React.Component {
     }
 
     initialize() {
-        var svgGroup = d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px").append("g");
+        const width = 1500
+		const height = 450
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
         
+        var svgGroup = svg.append("g");
+                
         let zoom = d3.zoom()
             .on('zoom', this.handleZoom);
         

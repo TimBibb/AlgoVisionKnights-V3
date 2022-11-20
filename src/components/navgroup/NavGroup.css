@@ -1,6 +1,6 @@
 #nav-group {
-	background-color: #000000;
-	color: #FFC904;
+	background-color: var(--backgroundColor);
+	color: var(--accentColor);
 	box-shadow: none;
 	margin: 0px;
 }
@@ -16,7 +16,7 @@
 }
 
 #icon-container {
-	color: #ffffff;
+	color: var(--primaryColor);
 	min-width: 0;
 }
 
@@ -34,6 +34,7 @@ div.MuiAccordionSummary-content {
 }
 
 #accordion-details {
+	color: var(--accentColor);
 	display: flex;
 	flex-direction: column;
 }

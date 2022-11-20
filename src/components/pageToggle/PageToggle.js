@@ -4,7 +4,7 @@ import './PageToggle.css';
 import { Button, ButtonGroup, Typography } from '@material-ui/core';
 
 function PageToggle({ setAlgoPage, algoPage }) {
-	const color = '#FFC904';
+	const color = localStorage.getItem('accentColor');
 
 	const handleInformationPage = () => {
 		setAlgoPage('information');
@@ -20,7 +20,7 @@ function PageToggle({ setAlgoPage, algoPage }) {
 				id='information-button'
 				onClick={handleInformationPage}
 				style={{
-					color: algoPage === 'information' ? color : '#ffffff',
+					color: algoPage === 'information' ? color : localStorage.getItem('primaryColor'),
 				}}>
 				<Typography>Information</Typography>
 			</Button>
@@ -28,7 +28,7 @@ function PageToggle({ setAlgoPage, algoPage }) {
 				id='visualizer-button'
 				onClick={handleVisualizerPage}
 				style={{
-					color: algoPage === 'visualizer' ? color : '#ffffff',
+					color: algoPage === 'visualizer' ? color : localStorage.getItem('primaryColor'),
 				}}>
 				<Typography>Visualizer</Typography>
 			</Button>

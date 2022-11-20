@@ -223,25 +223,25 @@ export default class binarysearch extends React.Component {
 
 	// Initializes the visualizer - returns the svg with a "visibility: hidden" attribute
 	initialize(arr, size, ref) {
-		const barWidth = 70;
-		const barOffset = 5;
-		const height = 50;
+		const barWidth = 100;
+		const barOffset = 1;
+		const height = 100;
 		const width = (size * (barWidth + barOffset)) + 100;
-		
+
 		// Used for scaling the bar heights in reference to the maximum value of the data array
 		let yScale = d3.scaleLinear()
 			.domain([0, d3.max(arr)])
 			.range([0, height]);
 
-		let svg = d3.select(ref)
+		var svg = d3.select(ref)
 			.append("svg")
 				.attr("width", "100%")
 				.attr("height", height+250);
-				
-		svg.attr("perserveAspectRatio", "xMinYMid")
+
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
 		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
-		let bars = svg.selectAll(".bar")
+		var bars = svg.selectAll(".bar")
 					.data(arr)
 					.enter().append("g")
 					.attr("class", "bar")
@@ -255,9 +255,9 @@ export default class binarysearch extends React.Component {
 				.attr("x", (_, i) => {
 					return (i * (barWidth + barOffset)) + 65;
 				})
+				.attr("y", height)
 				.attr("stroke", "rgb(255,255,255)")
 				.attr("stroke-width", "2")
-				.attr("y", height)
 				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
@@ -265,7 +265,7 @@ export default class binarysearch extends React.Component {
 					//console.log("BAR " + d);
 					return d;
 				})
-				.attr("y", (height + 35))
+				.attr("y", (height + 100) - 15)
 				.attr("x", (_, i) => {
 					return i * (barWidth + barOffset) + (barWidth / 2) + 65;
 				})
@@ -290,8 +290,7 @@ export default class binarysearch extends React.Component {
 		// Pointers
 		bars.append("path")
 			.attr("d", (_, i) => {
-				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 185], 
-				[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 135]]);
+				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 185], [i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 135]]);
 			})
 			.attr("stroke-width", 1)
 			.attr("stroke", localStorage.getItem('primaryColor'))
@@ -318,6 +317,23 @@ export default class binarysearch extends React.Component {
 			.style("font-size", "26px")
 			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
+
+        bars.append("text").text("?")
+			.attr("y", height + 150)
+			.attr("x", (_, i) => {
+				return i * (barWidth + barOffset) + (barWidth / 2) + 65;
+			})
+			.attr("class", "qTxt")
+			.attr("id", (_, i) => {
+				return "qTxt" + i;
+			})
+			.style("text-anchor", "middle")
+			.style("font-family", "Merriweather")
+			.attr("font-weight", "bold")
+			.style("font-size", "32px")
+			.style("fill", localStorage.getItem('primaryColor'))
+			.attr("visibility", "hidden");
+
 
 		var ids = [];
 

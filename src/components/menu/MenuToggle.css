@@ -17,13 +17,14 @@
 }
 
 #mobile-menu {
+	background-color: var(--backgroundColor);
 	margin: 44px 0px 0px 0px;
 }
 
 /* Overrides */
 div.MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
 	padding: 0;
-	background-color: #000000;
+	background-color: var(--backgroundColor);
 	border-radius: 0px;
 }
 

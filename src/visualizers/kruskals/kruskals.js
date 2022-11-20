@@ -112,8 +112,17 @@ export default class Kruskals extends React.Component {
   }
 
   initialize() {
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+    const width = 1500
+		const height = 450
 
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+    
     let isWeighted = true;
     let isDirected = false;
 
@@ -607,7 +616,7 @@ export default class Kruskals extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>

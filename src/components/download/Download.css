@@ -16,15 +16,15 @@
 }
 
 #download-button:hover {
-	border-color: #FFC904;
+	border-color: var(--accentColor);
 }
 
 #download-button:hover #os-container #os-icon {
-       color: #FFC904;
+       color: var(--accentColor);
 }       
 
 #download-button:hover #download-icon-container {
-	background-color: #FFC904;
+	background-color: var(--accentColor);
 }
 
 #os-icon, #download-icon {
@@ -54,7 +54,7 @@
 }
 
 #download-icon {
-	color: #1b203d;
+	color: var(--nodeColor);
 }
 
 @media (max-width: 770px) {

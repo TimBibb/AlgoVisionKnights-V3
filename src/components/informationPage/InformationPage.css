@@ -1,15 +1,15 @@
 .InformationPage {
 	margin: 20px 30px 20px 30px;
-	background-color: #000000;
+	background-color: var(--backgroundColor);
 	padding: 13px 25px 25px 25px;
 }
 
 table {
-	color: #000000;
+	color: var(--backgroundColor);
 }
 
 a {
-	color: #FFC904 !important;
+	color: var(--accentColor) !important;
 }
 
 h3{
@@ -20,5 +20,5 @@ h3{
 }
 
 hr{
-	border-bottom: 0.4px solid #eaecef;
+	border-bottom: 0.4px solid var(--backgroundColor);
 }

@@ -3,8 +3,21 @@ body,
 #root,
 .App {
 	/* height: 100%; */
-	background-color: #000000;
-	color: #ffffff;
+	background-color: var(--backgroundColor);
+	color: var(--primaryColor);
+}
+
+#markdown-renderer {
+	background-color: var(--backgroundColor);
+}
+
+:root {
+	--primaryColor: "#FFFFFF";
+	--secondaryColor: #404243;
+	--accentColor: #FFC904;
+	--backgroundColor: #000000;
+	--cardColor: #181818;
+	--nodeColor: #1b203d;
 }
 
 .App {
@@ -22,12 +35,8 @@ body,
 	flex-direction: column;
 }
 
-#markdown-renderer {
-	background-color: #000000;
-}
-
 .Link {
 	text-decoration: none;
-	color: '#ffffff';
+	color: var(--primaryColor);
 	display: contents;
 }

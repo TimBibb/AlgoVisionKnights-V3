@@ -215,6 +215,7 @@ export default class LinearSearch extends React.Component {
 		const barWidth = 100;
 		const barOffset = 1;
 		const height = 100;
+		const width = (size * (barWidth + barOffset)) + 100;
 
 		// Used for scaling the bar heights in reference to the maximum value of the data array
 		let yScale = d3.scaleLinear()
@@ -223,8 +224,11 @@ export default class LinearSearch extends React.Component {
 
 		var svg = d3.select(ref)
 			.append("svg")
-				.attr("width", (size * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+				.attr("width", "100%")
+				.attr("height", height+250);
+
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
 		var bars = svg.selectAll(".bar")
 					.data(arr)

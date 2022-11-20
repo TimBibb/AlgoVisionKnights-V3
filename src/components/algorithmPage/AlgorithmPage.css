@@ -22,8 +22,14 @@
 	align-content: center;
 	margin-top: 2em;
 }
+
 #message-pane{
 	color: var(--primaryColor);
 	height: 150px;
 	width: 100%;
+}
+
+#visualizerDiv {
+	margin-left: auto;
+	margin-right: auto;
 }

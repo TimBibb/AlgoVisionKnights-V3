@@ -296,7 +296,7 @@ class Settings extends React.Component {
  
       return (
         <div>
-            <div className='container'>
+            <div className='settings-container'>
                 {/* Primary Color */}
                 <Typography id="settings-title"> Primary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClick }>
@@ -358,7 +358,7 @@ class Settings extends React.Component {
                 </div> : null }
 
             </div>
-            <div className='container'>
+            <div className='settings-container'>
                 <div className="button-location">
                     <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
                     <button class="button4" onClick={defaultColors}>Default Colors</button>

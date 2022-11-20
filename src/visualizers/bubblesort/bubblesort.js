@@ -463,6 +463,8 @@ export default class BubbleSort extends React.Component {
 		const barWidth = 70;
 		const barOffset = 30;
 		const height = 450;
+		const width = (10 * (barWidth + barOffset)) + 100
+		
 		console.log("ARRAY SIZE: " + size)
 
 		let yScale = d3.scaleLinear()
@@ -471,9 +473,23 @@ export default class BubbleSort extends React.Component {
 
 		let svg = d3.select(ref)
 			.append("svg")
-				// size -> 10
-				.attr("width", (10 * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+			// size -> 10
+				.attr("width", "100%")
+				.attr("height", height);
+				
+		svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+
+		// var aspect = width / height,
+		// 	chart = d3.select(ref).select("svg")
+		// d3.select(window)
+		// .on("resize", function() {
+		// 	var targetWidth = svg.node().getBoundingClientRect().width;
+		// 	console.log(targetWidth)
+		// 	// svg.selectAll("rect").attr("width", targetWidth/10);
+		// 	// svg.selectAll("rect").attr("height", targetWidth / aspect);
+		// 	svg.attr("width", targetWidth)
+		// });
 
 		let bars = svg.selectAll(".bar")
 					.data(arr)

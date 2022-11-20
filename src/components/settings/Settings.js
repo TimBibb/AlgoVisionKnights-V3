@@ -3,7 +3,6 @@ import { SketchPicker } from 'react-color'
 import reactCSS from 'reactcss'
 import {Typography} from '@material-ui/core';
 import './Settings.css';
-import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
 
 function NavigateToDashboard(){
 	window.location.href = "/";
@@ -330,8 +329,8 @@ class Settings extends React.Component {
             </div>
             <div className='container'>
                 <div className="button-location">
-                    <button class="button" onClick={NavigateToDashboard}>Dashboard</button>
-                    <button class="button2" onClick={defaultColors}>Default Colors</button>
+                    <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
+                    <button class="button4" onClick={defaultColors}>Default Colors</button>
                 </div>
             </div>
         </div>

@@ -46,7 +46,7 @@ function AlgorithmPage({ path, type, algoPage }) {
 									setVal(value.target.checked)
 								}}
 								style={{
-								color: "#FFC904"
+								color: localStorage.getItem('accentColor')
 								}}
 							/>
 						}

@@ -22,7 +22,7 @@ span.MuiButton-label {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: #181818;
+	background-color: var(--cardColor);
 	border-radius: 15px;
     max-width: 1000px;
 	min-height: 300px;
@@ -59,12 +59,12 @@ span.MuiButton-label {
 #card-title {
 	font-size: 1.5em;
 	font-weight: bold;
-	color: #ffffff;
+	color: var(--primaryColor);
 }
 
 #card-info {
 	font-size: 1em !important;
-	color: #ffffff;
+	color: var(--primaryColor);
     overflow-x: scroll;
     max-height: 250px;
     display: block;
@@ -86,7 +86,7 @@ span.MuiButton-label {
 
 .btn {
     display: inline-block !important;
-    color: #FFC904 !important;
+    color: var(--accentColor) !important;
     text-align: center;
     /* padding: 14px !important; */
     text-decoration: none !important;
@@ -96,24 +96,24 @@ span.MuiButton-label {
 
 .selected {
     display: inline-block !important;
-    color: #FFC904 !important;
+    color: var(--accentColor) !important;
     text-align: center;
     /* padding: 14px !important; */
     text-decoration: none !important;
     text-transform: capitalize !important;
     /* border: 1px solid #FFC904 !important; */
-    background-color: #5f4a0097 !important;
+    background-color: #363847 !important;
     margin: 0.5em !important;
 }
 
 .proceed {
     display: inline-block !important;
-    color: #000000 !important;
+    color: var(--backgroundColor) !important;
     text-align: center;
     /* padding: 14px !important; */
     text-decoration: none !important;
     text-transform: capitalize !important;
     /* border: 1px solid #FFC904 !important; */
-    background-color: #FFC904 !important;
+    background-color: var(--accentColor) !important;
     margin: 0.5em !important;
 }

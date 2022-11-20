@@ -4,7 +4,7 @@ body,
 .App {
 	/* height: 100%; */
 	background-color: var(--backgroundColor);
-	color: #ffffff;
+	color: var(--primaryColor);
 }
 
 #markdown-renderer {
@@ -36,6 +36,6 @@ body,
 
 .Link {
 	text-decoration: none;
-	color: '#ffffff';
+	color: var(--primaryColor);
 	display: contents;
 }

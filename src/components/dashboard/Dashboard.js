@@ -41,7 +41,7 @@ function Dashboard({ categories, inCategory }) {
 				<Typography id="dashboard-title">Algorithm Vision Knights</Typography>
 				<h4 className='progress-header'>Completion Progress</h4>
 				<h5 className='progress-header'>{completedAlgorithms}/29</h5>
-				<ProgressBar variant="warning" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
+				<ProgressBar variant="colorProgressBar" now={completedAlgorithmsPercent} style={{width: "80%", maxWidth: "1000px", marginLeft: "auto", marginRight: "auto", marginBottom: "1em"}}/>
 			</div>
 			<div class="" style={{alignItems: 'center'}}>
 				<div class="bg">

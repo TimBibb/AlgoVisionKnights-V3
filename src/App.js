@@ -36,9 +36,10 @@ function App() {
 	React.useEffect(() => {
 		r.style.setProperty('--primaryColor', localStorage.getItem('primaryColor'));
 		r.style.setProperty('--secondaryColor', localStorage.getItem('secondaryColor'));
+		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
 		r.style.setProperty('--cardColor', localStorage.getItem('cardColor'));
 		r.style.setProperty('--backgroundColor', localStorage.getItem('backgroundColor'));
-		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
+		r.style.setProperty('--nodeColor', localStorage.getItem('nodeColor'));
 		// Storing primaryColor in localStorage
 		if(!localStorage.getItem('primaryColor')){
 			localStorage.setItem('primaryColor', '#FFFFFF')
@@ -64,6 +65,19 @@ function App() {
 		}
 		if(!localStorage.getItem('secondaryColorB')){
 			localStorage.setItem('secondaryColorB', '67')
+		}
+		// Storing accentColor in localStorage
+		if(!localStorage.getItem('accentColor')){
+			localStorage.setItem('accentColor', '#FFC904')
+		}
+		if(!localStorage.getItem('accentColorR')){
+			localStorage.setItem('accentColorR', '255')
+		}
+		if(!localStorage.getItem('accentColorG')){
+			localStorage.setItem('accentColorG', '201')
+		}
+		if(!localStorage.getItem('accentColorB')){
+			localStorage.setItem('accentColorB', '4')
 		}
 		// Storing backgroundColor in localStorage
 		if(!localStorage.getItem('backgroundColor')){
@@ -91,19 +105,20 @@ function App() {
 		if(!localStorage.getItem('cardColorB')){
 			localStorage.setItem('cardColorB', '24')
 		}
-		// Storing accentColor in localStorage
-		if(!localStorage.getItem('accentColor')){
-			localStorage.setItem('accentColor', '#FFC904')
+		// Storing nodeColor in localStorage
+		if(!localStorage.getItem('nodeColor')){
+			localStorage.setItem('nodeColor', '#1b203d')
 		}
-		if(!localStorage.getItem('accentColorR')){
-			localStorage.setItem('accentColorR', '255')
+		if(!localStorage.getItem('nodeColorR')){
+			localStorage.setItem('nodeColorR', '27')
 		}
-		if(!localStorage.getItem('accentColorG')){
-			localStorage.setItem('accentColorG', '201')
+		if(!localStorage.getItem('nodeColorG')){
+			localStorage.setItem('nodeColorG', '32')
 		}
-		if(!localStorage.getItem('accentColorB')){
-			localStorage.setItem('accentColorB', '4')
+		if(!localStorage.getItem('nodeColorB')){
+			localStorage.setItem('nodeColorB', '61')
 		}
+		
 	});
 
 	// Resize screen handlers

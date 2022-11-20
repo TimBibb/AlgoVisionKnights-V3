@@ -14,9 +14,10 @@ body,
 :root {
 	--primaryColor: "#FFFFFF";
 	--secondaryColor: #404243;
-	--cardColor: #181818;
-	--backgroundColor: #000000;
 	--accentColor: #FFC904;
+	--backgroundColor: #000000;
+	--cardColor: #181818;
+	--nodeColor: #1b203d;
 }
 
 .App {

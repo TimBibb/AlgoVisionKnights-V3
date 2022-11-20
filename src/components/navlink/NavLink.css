@@ -4,5 +4,5 @@
 
 #accordian-text {
 	padding: 0px 30px 3px;
-	color: #ffffff;
+	color: var(--primaryColor);
 }

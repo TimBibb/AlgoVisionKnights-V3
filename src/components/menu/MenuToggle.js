@@ -10,7 +10,7 @@ import {
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 function MenuToggle({ setAlgoPage, algoPage, viewWidth }) {
-	const color = '#FFC904';
+	const color = localStorage.getItem('accentColor');
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleInformationPage = () => {
@@ -46,7 +46,7 @@ function MenuToggle({ setAlgoPage, algoPage, viewWidth }) {
 					id='information-button'
 					onClick={handleInformationPage}
 					style={{
-						color: algoPage === 'information' ? color : '#ffffff',
+						color: algoPage === 'information' ? color : localStorage.getItem('primaryColor'),
 					}}>
 					<Typography>Information</Typography>
 				</Button>
@@ -54,7 +54,7 @@ function MenuToggle({ setAlgoPage, algoPage, viewWidth }) {
 					id='visualizer-button'
 					onClick={handleVisualizerPage}
 					style={{
-						color: algoPage === 'visualizer' ? color : '#ffffff',
+						color: algoPage === 'visualizer' ? color : localStorage.getItem('primaryColor'),
 					}}>
 					<Typography>Visualizer</Typography>
 				</Button>

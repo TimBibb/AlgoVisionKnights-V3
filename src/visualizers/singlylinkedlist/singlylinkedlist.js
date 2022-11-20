@@ -32,11 +32,11 @@ class Node {
             .attr('y','50')
             .style("fill", "url(#grad)")
             .attr("stroke-width", "2")
-            .attr("stroke", "grey")
+            .attr("stroke", localStorage.getItem('secondaryColor'))
 			
 		container
             .append('line')
-            .style("stroke", "grey")
+            .style("stroke", localStorage.getItem('secondaryColor'))
             .style("stroke-width", 2)
 		 	.attr("x1", (150 * this.x) + 60)
 		 	.attr("y1", 50)
@@ -50,11 +50,11 @@ class Node {
 			.attr("x", (150 * this.x) + 30)
 			.style("text-anchor", "middle")
 			.style("font-size", "28px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			
 		container
 			.append('line')
-			.style("stroke", "white")
+			.style("stroke", localStorage.getItem('primaryColor'))
 			.style("stroke-width", 5)
 			.attr("x1", (150 * this.x) + 90)
 			.attr("y1", 75)
@@ -75,7 +75,7 @@ class Node {
 			.attr("orient", "auto")
 			.append("path")
 			.attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
-			.style("stroke", "white")
+			.style("stroke", localStorage.getItem('primaryColor'))
     
     ;}
 
@@ -101,8 +101,8 @@ class ShowNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -123,8 +123,8 @@ class RemoveNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
 		if (this.id1 !== this.id2) {
@@ -138,7 +138,7 @@ class HighlightNodeStep {
 		this.idArr = idArr;
 	}
 	forward(svg){
-		svg.select("#" + this.id).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -146,8 +146,8 @@ class HighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -164,7 +164,7 @@ class SwapColorStep {
 	}
 	forward(svg) {
 		svg.select("#" + this.idArr[this.idPrev]).select("rect").style("fill", "url(#grad)");
-		svg.select("#" + this.idArr[this.idCurr]).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.idArr[this.idCurr]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -172,8 +172,8 @@ class SwapColorStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -197,8 +197,8 @@ class RevertColorNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -272,8 +272,8 @@ export default class singlylinkedlist extends React.Component {
 			.append("linearGradient")
 			.attr("id", "grad")
 			.attr("x1", "35%").attr("x2", "100%").attr("y1", "100%").attr("y2", "100%");
-		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(153,204,255)");
-		grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
+		grad.append("stop").attr("offset", "50%").style("stop-color", localStorage.getItem('secondaryColor'));
+		grad.append("stop").attr("offset", "50%").style("stop-color", localStorage.getItem('accentColor'));
 		
 		this.setState({ rendered : true });
 		//return svg;

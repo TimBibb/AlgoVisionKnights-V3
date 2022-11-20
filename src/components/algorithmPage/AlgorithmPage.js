@@ -46,12 +46,12 @@ function AlgorithmPage({ path, type, algoPage }) {
 									setVal(value.target.checked)
 								}}
 								style={{
-								color: "#FFC904"
+								color: localStorage.getItem('accentColor')
 								}}
 							/>
 						}
 						label={
-						<Typography variant='h5' style={{ color: "#FFFFFF" }}>
+						<Typography variant='h5' style={{ color: localStorage.getItem('primaryColor')}}>
 							<h4>Completed?</h4>
 						</Typography>
 						}

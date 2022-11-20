@@ -5,6 +5,8 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward(svg) {}
@@ -91,11 +93,16 @@ export default class BellmanFord extends React.Component {
   }
 
   initialize() {
-    var svg = d3
-      .select(this.ref.current)
-      .append("svg")
-      .attr("width", "1500px")
-      .attr("height", "650px");
+		const width = 1500
+		const height = 450
+
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
     let isWeighted = true;
     let isDirected = true;
@@ -169,6 +176,8 @@ export default class BellmanFord extends React.Component {
   prims(graph) {
     console.log(graph);
 
+    var pseudocodeArr = [];
+
     var messages = [];
     var currentMessage = "";
     function createMessage(msg) {
@@ -177,6 +186,7 @@ export default class BellmanFord extends React.Component {
 
     var steps = [];
     var stepBuffer = [];
+
     function flushBuffer() {
       if (stepBuffer.length === 0) return;
       steps.push(stepBuffer);
@@ -190,12 +200,14 @@ export default class BellmanFord extends React.Component {
     createMessage("We will find the shortest distance from a source node to all other nodes.");
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     createMessage(
       "We will also find the parents, where the shortest distance is coming from."
     );
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     createMessage(
       "Our source node will be node 0. With this, it takes 0 distance to reach itself."
@@ -203,6 +215,7 @@ export default class BellmanFord extends React.Component {
     addStep(new SetInfoStep(0, -1, -1, -1, 0));
     // addStep(new ChangeTextStep(dists[0].attr.id, 0, "∞"));
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     // dists[0].value = 0;
     graph.distances[0] = 0;
@@ -210,15 +223,18 @@ export default class BellmanFord extends React.Component {
     createMessage("All other distances will be set to ∞.");
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     createMessage("We will loop through all edges up to the (number of nodes - 1) times.");
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     for (let iterations = 0; iterations < graph.numberOfNodes - 1; iterations++) {
       createMessage("Starting iteration " + (iterations + 1) + ".");
       addStep(new EmptyStep());
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
       console.log(iterations);
       for (let edgeId = 0; edgeId < graph.numberOfEdges; edgeId++) {
@@ -227,6 +243,7 @@ export default class BellmanFord extends React.Component {
         createMessage("Let's look at the edge " + node1 + " → " + node2 + ".");
         addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "white", "gray"));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
         // let dist1 = parseInt(dists[node1].value);
         // let dist2 = parseInt(dists[node2].value);
@@ -235,14 +252,37 @@ export default class BellmanFord extends React.Component {
 
         if (graph.distances[node1] === -1) {
           createMessage(
+            ""
+          );
+          addStep(new EmptyStep());
+          flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+
+          createMessage(
             "Since the source of the edge has an infinite value, no update can be made."
           );
           addStep(new EmptyStep());
           flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
         } else {
           var dist2string = dist2 === -1 ? "∞" : dist2;
 
+          createMessage(
+            ""
+          );
+          addStep(new EmptyStep());
+          flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
           if (dist1 !== -1 && (dist2 === -1 || dist1 + weight < dist2)) {
+
+            createMessage(
+              ""
+            );
+            addStep(new EmptyStep());
+            flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+
             createMessage(
               `Since ${dist1} + ${weight} = ${
                 dist1 + weight
@@ -258,10 +298,19 @@ export default class BellmanFord extends React.Component {
               )
             );
             flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
 
             graph.distances[node2] = dist1 + weight;
             graph.parents[node2] = node1;
           } else {
+
+            createMessage(
+              ""
+            );
+            addStep(new EmptyStep());
+            flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
+
             createMessage(
               `Since ${dist1} + ${weight} = ${
                 dist1 + weight
@@ -269,22 +318,27 @@ export default class BellmanFord extends React.Component {
             );
             addStep(new EmptyStep());
             flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
           }
         }
         addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "gray", "white"));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
       }
     }
 
     createMessage("We have now found the shortest distances from node 0 to all other nodes!");
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
     createMessage("Finished Bellman-Ford!");
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
     this.setState({ steps: steps, messages: messages });
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -297,6 +351,8 @@ export default class BellmanFord extends React.Component {
     if (this.state.stepId === this.state.steps.length) return;
 
     let svg = d3.select(this.ref.current).select("svg");
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
@@ -329,6 +385,8 @@ export default class BellmanFord extends React.Component {
     }
 
     let svg = d3.select(this.ref.current).select("svg");
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
@@ -385,7 +443,7 @@ export default class BellmanFord extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div id="banner" class="center-screen">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>
@@ -399,6 +457,10 @@ export default class BellmanFord extends React.Component {
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"bellmanford"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
       </div>
     );
   }

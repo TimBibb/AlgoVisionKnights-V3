@@ -11,6 +11,8 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import { wait } from "@testing-library/react";
 
 var x = 50;
 var mid = 0;
@@ -28,8 +30,9 @@ function randInRange(lo, hi) {
   }
   
 class EmptyStep {
-    forward() {}
-    backward() {}
+    forward(svg) {}
+	fastForward(svg) {}
+	backward(svg) {}
 }
 
 class NewNodeStep {
@@ -49,6 +52,20 @@ class NewNodeStep {
         }
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", GRAY);
+        svg.select("#" + this.node.id).attr("visibility", "hidden");
+        svg.select("#" + this.node.textId).attr("visibility", "hidden");
+        console.log(" EDGE EXISTS " + this.edge)
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).attr("visibility", "hidden");
+        }
+    }
 }
 
 class HighlightNodeStep {
@@ -66,6 +83,18 @@ class HighlightNodeStep {
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", GRAY);
+        svg.select("#" + this.node.id).attr("visibility", "visible");
+        svg.select("#" + this.node.textId).attr("visibility", "visible");
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).attr("visibility", "visible");
+        }
+    }
 }
 
 class UnHighlightNodeStep {
@@ -80,6 +109,15 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge.id).style("stroke", GRAY);
         }
 	}
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+        }
+    }
 }
 
 class UnHighlightPathStep {
@@ -106,8 +144,28 @@ class UnHighlightPathStep {
             }
         }
     }
+    fastForward(svg){
+        this.forward(svg);
+    }
+    backward(svg){
+        var node = this.root;
+        var edge = null;
+        while (node != null) {
+            svg.select("#" + node.id).attr("stroke", UCF_GOLD);
+            if (this.finalVal < node.value) {
+                edge = node.lEdge;
+                node = node.left;
+                svg.select("#" + edge.id).style("stroke", UCF_GOLD);
+            } else  if (this.finalVal > node.value) {
+                edge = node.rEdge;
+                node = node.right;
+                svg.select("#" + edge.id).style("stroke", UCF_GOLD);
+            } else {
+                return;
+            }
+        }
+    }
 }
-
 class Tree {
     constructor() {
         this.root = null;
@@ -227,8 +285,19 @@ export default class binarysearchtree extends React.Component {
     }
 
     initialize() {
-        var svgGroup = d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px").append("g");
+        const width = 1500
+		const height = 450
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
         
+        var svgGroup = svg.append("g");
+
         let zoom = d3.zoom()
             .on('zoom', this.handleZoom);
         
@@ -351,57 +420,102 @@ export default class binarysearchtree extends React.Component {
         var steps = []
         var messages = []
         var root = null;
+        var pseudocodeArr = [];
+
+        steps.push(new EmptyStep());
+        messages.push("");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
+
+        console.log("Current Lines: " + this.props.lines);
 
         while (i < MAX_NODE) {
+            steps.push(new EmptyStep());
+            messages.push("");
+            pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
             messages.push("The next value we will insert into the tree is " + val );
+            pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+            
             console.log("level " + level);
             if(!root) {
+                steps.push(new EmptyStep());
+                messages.push("");
+                pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+
                 root = new Node(this.ref, val, x, y, i);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
                 messages.push("The tree is empty, let's add "+ val + " as the root node.");
+                pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
                 
                 // steps.push(new UnHighlightNodeStep(this.state.root, null));
                 steps.push(new UnHighlightPathStep(root, val));
                 messages.push("The tree is empty, let's add "+ val + " as the root node.");
+                pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
                 i++;
             } else {
+                steps.push(new EmptyStep());
+                messages.push("");
+                pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
                 let node = root;
                 //y += 10;
                 level = 0
                 var firstStep = true;
 
+                steps.push(new EmptyStep());
+                messages.push("");
+                pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+
                 while(true) {
+                    steps.push(new EmptyStep());
+                    messages.push("");
+                    pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
                     var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
                     //console.log(node.value);
                     if (firstStep) {
+                        steps.push(new EmptyStep());
+                        messages.push("");
+                        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
                         steps.push(new HighlightNodeStep(node, null));
                         messages.push("The next value we will insert into the tree is " + val );
+                        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
                         firstStep = false;
                     } else {
                         steps.push(new HighlightNodeStep(node, null));
                         messages.push("");
+                        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
                     }
 
                     if(val < node.value) {
                         steps.push(new EmptyStep());
+                        messages.push("");
+                        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
+                        steps.push(new EmptyStep());
                         messages.push( val + " is less than " + node.value );
+                        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is less than " + node.value);
 
                         if(node.left != null) {
+                            steps.push(new EmptyStep());
+                            messages.push("");
+                            pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
                             var edge = node.lEdge;
                             node = node.left;
                             steps.push(new HighlightNodeStep(node, edge));
                             messages.push("Let's traverse to the left edge of the node.");
-
+                            pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the left edge of the node.");
                         } else {
+                            steps.push(new EmptyStep());
+                            messages.push("");
+                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
                             temp_x = node.x - 20 + tempMod;
                             temp_y = node.y + 10;
                             temp_x2 = node.x - 17 + tempMod;
@@ -412,13 +526,16 @@ export default class binarysearchtree extends React.Component {
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no left child.");
+                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
                             steps.push(new NewNodeStep(node.left, node.lEdge));
                             messages.push("Let's insert " + val + " to the left of node " + node.value );
+                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
                             // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
                             steps.push(new UnHighlightPathStep(root, val));
                             messages.push("Let's insert " + val + " to the left of node " + node.value );
+                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
@@ -432,20 +549,31 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else if (val > node.value) {
                         steps.push(new EmptyStep());
-                        messages.push( val + " is greater than " + node.value );
+                        messages.push("");
+                        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
 
+                        steps.push(new EmptyStep());
+                        messages.push( val + " is greater than " + node.value );
+                        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is greater than " + node.value);
 
                         if(node.right != null) {
+                            steps.push(new EmptyStep());
+                            messages.push("");
+                            pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
+
                             var edge = node.rEdge
                             node = node.right;
                             steps.push(new HighlightNodeStep(node, edge));
                             messages.push("Let's traverse to the right edge of the node.");
-
+                            pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the right edge of the node.");
                         } else {
+                            steps.push(new EmptyStep());
+                            messages.push("");
+                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
                             temp_x = node.x + 20 - tempMod;
                             temp_y = node.y + 10;
                             temp_x2 = node.x + 17 - tempMod;
@@ -455,14 +583,16 @@ export default class binarysearchtree extends React.Component {
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no right child.");
-
+                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+                            
                             steps.push(new NewNodeStep(node.right, node.rEdge));
                             messages.push("Let's insert " + val + " to the right of node " + node.value );
+                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
 
                             // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
                             steps.push(new UnHighlightPathStep(root, val));
                             messages.push("Let's insert " + val + " to the right of node " + node.value );
-
+                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             // if (level > this.state.maxLevel) {
                             //     this.setState({maxLevel: level});
@@ -474,11 +604,17 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else {
                         steps.push(new EmptyStep());
+                        messages.push("");
+                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+                        
+                        steps.push(new EmptyStep());
                         messages.push(val + " is equal to " + node.value);
+                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         steps.push(new UnHighlightPathStep(root, val));
                         messages.push("There cannot be duplicate values in a BST, so we will move on.");
+                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
                         break;
                     }
                     level++;
@@ -488,9 +624,11 @@ export default class binarysearchtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Binary Search Tree insertion complete!");
+        pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
         console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});
+        this.props.handleCodeStepsChange(pseudocodeArr);
     }
 
     turnOffRunning() {
@@ -510,6 +648,19 @@ export default class binarysearchtree extends React.Component {
 
     backward(){
         console.log("BACKWARDS CLICKED");
+        if(this.state.running) return;
+        if(this.state.stepId === this.state.steps.length) return;
+
+        let stepId = this.state.stepId - 1;
+
+        this.state.steps[this.state.stepId].backward(d3.select(this.ref.current).select("svg"));
+        this.props.codeSteps[this.state.stepId].forward();
+        document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+
+		this.setState({stepId: stepId});
+
+		d3.timeout(this.turnOffRunning, this.props.waitTime);
+
     }
 
     forward(){		
@@ -519,8 +670,10 @@ export default class binarysearchtree extends React.Component {
 										// button so as not to ruin the visualizer
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		
+        this.props.codeSteps[this.state.stepId].forward();
 		// Uses the step's fastForward function and displays associated message
-		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
+		//this.props.codeSteps[this.state.stepId].forward();
+        this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 
 		this.setState({stepId: this.state.stepId + 1});
@@ -534,6 +687,8 @@ export default class binarysearchtree extends React.Component {
 			this.setState({running: false});
 			return;
 		}
+        this.props.codeSteps[this.state.stepId].forward();
+        //this.props.codeSteps[this.state.stepId].forward();
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
@@ -572,7 +727,7 @@ export default class binarysearchtree extends React.Component {
 	}
 
     componentDidMount() {
-        this.initialize();   
+        this.initialize();
         this.simulate();
     }
 
@@ -598,12 +753,12 @@ export default class binarysearchtree extends React.Component {
             <div>
                 <div class="center-screen" id="banner">
                     <button class="button" onClick={this.play}>Play</button>
-                    <button class="button" onClick={this.playPreorder}>Preorder</button>
-                    {/* <button class="button" onClick={this.pause}>Pause</button> */}
-                    <button class="button" onClick={this.add}>Add</button>
+                    {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
+                    <button class="button" onClick={this.pause}>Pause</button>
+                    {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
-                    {/* <button class="button" onClick={this.backward}>Step Backward</button> 
-                    <button class="button" onClick={this.forward}>Step Forward</button> */}
+                    <button class="button" onClick={this.backward}>Step Backward</button> 
+                    <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Binary Search Tree!</h1></span></div>
@@ -617,6 +772,10 @@ export default class binarysearchtree extends React.Component {
                         </div>
                     </tr>
                 </table>
+                <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"bststructure"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

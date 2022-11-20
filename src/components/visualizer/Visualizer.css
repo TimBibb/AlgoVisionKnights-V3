@@ -43,6 +43,7 @@
 
 .parent-svg {
 	display: flex;
+	flex-direction: row;
 	margin-right: auto;
 	margin-left: auto;
 }
@@ -55,13 +56,14 @@
 	}
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 650px) {
 	.parent-svg {
-		display: block;
+		flex-direction: column;
+		/* display: block;
 		height: fit-content;
 		overflow: visible;
 		margin-right: auto;
-		margin-left: auto;
+		margin-left: auto; */
 	}
 }
 

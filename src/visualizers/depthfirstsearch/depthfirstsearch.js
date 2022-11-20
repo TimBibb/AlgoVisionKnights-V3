@@ -6,6 +6,8 @@ import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -91,8 +93,17 @@ export default class DepthFirstSearch extends React.Component {
   }
 
   initialize() {
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+		const width = 1500
+		const height = 550
 
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+    
     let isWeighted = false;
     let isDirected = false;
 
@@ -116,6 +127,8 @@ export default class DepthFirstSearch extends React.Component {
     var nums = 0;
     let numStack = [];
 
+    var pseudocodeArr = [];
+
     function flushBuffer() {
       if (stepBuffer.length === 0) return;
       steps.push(stepBuffer);
@@ -135,6 +148,7 @@ export default class DepthFirstSearch extends React.Component {
     addStep(new EmptyStep());
     createMessage("Node " + head + " was randomly selected as the start of our search.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
     console.log("Currently visiting: " + head);
     nodeVisited[head] = true;
@@ -149,15 +163,30 @@ export default class DepthFirstSearch extends React.Component {
     );
     createMessage("Currently at node " + head + ".");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     addStep(
       new EmptyStep()
     );
     createMessage("Adding unvisited adjacent nodes to be searched into the stack.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     for (let node = 0; node < graph.adjacencyList[head].length; node++) {
+      addStep(
+        new EmptyStep()
+      );
+      createMessage("");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
       if (nodeVisited[graph.adjacencyList[head][node][1]] === false) {
+        addStep(
+          new EmptyStep()
+        );
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+
         nodeStack.push(graph.adjacencyList[head][node][1]);
         edgeStack.push(graph.adjacencyList[head][node][2]);
         let ys = 20 + (numsInStack*10);
@@ -173,6 +202,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Adding " + graph.adjacencyList[head][node][1] + " to the stack.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
         numsInStack++;
         nums++;
       }
@@ -187,6 +217,7 @@ export default class DepthFirstSearch extends React.Component {
       );
       createMessage("Checking the last node added to the stack.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
 
       addStep(
         new StackChangeStep(
@@ -198,10 +229,18 @@ export default class DepthFirstSearch extends React.Component {
       );
       createMessage("Removing " + s + " from the stack.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
       numsInStack--;
 
       if (nodeVisited[s] === false)
       {
+        addStep(
+          new EmptyStep()
+        );
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+
         addStep(
           new EdgeColorChangeStep(
             this.ref.current,
@@ -212,6 +251,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Traveling to node " + s + ".");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
         nodeVisited[s] = true;
         addStep(
@@ -225,9 +265,17 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Marking node " + s + " as visited.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
       }
       else
       {
+        addStep(
+          new EmptyStep()
+        );
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
+
         addStep(
           new EdgeColorChangeStep(
             this.ref.current,
@@ -238,6 +286,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Traveling to node " + s + ".");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
 
         addStep(
           new NodeColorChangeStep(
@@ -250,6 +299,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Node " + s + " has already been visited.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
 
         addStep(
           new NodeColorChangeStep(
@@ -262,6 +312,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Node " + s + " has already been visited.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
 
         addStep(
           new EdgeColorChangeStep(
@@ -273,6 +324,7 @@ export default class DepthFirstSearch extends React.Component {
         );
         createMessage("Traveling back to parent node.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
       }
 
       addStep(
@@ -280,9 +332,22 @@ export default class DepthFirstSearch extends React.Component {
       );
       createMessage("Adding unvisited adjacent nodes to be searched into the stack.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
 
       for (let node = 0; node < graph.adjacencyList[s].length; node++) {
+        addStep(
+          new EmptyStep()
+        );
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
         if (nodeVisited[graph.adjacencyList[s][node][1]] === false) {
+          addStep(
+            new EmptyStep()
+          );
+          createMessage("");
+          flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
           nodeStack.push(graph.adjacencyList[s][node][1]);
           edgeStack.push(graph.adjacencyList[s][node][2]);
           let ys = 20 + (numsInStack*10);
@@ -298,6 +363,7 @@ export default class DepthFirstSearch extends React.Component {
           );
           createMessage("Adding " + graph.adjacencyList[s][node][1] + " to the stack.");
           flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
           numsInStack++;
           nums++;
         }
@@ -307,12 +373,15 @@ export default class DepthFirstSearch extends React.Component {
     addStep(new EmptyStep());
     createMessage("The stack is empty.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Finished Depth First Search!");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
 
     this.setState({ steps: steps, messages: messages });
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -324,6 +393,7 @@ export default class DepthFirstSearch extends React.Component {
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
 
+    this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     // this.state.steps[this.state.stepId].forward();
@@ -353,6 +423,7 @@ export default class DepthFirstSearch extends React.Component {
       this.setState({ running: false });
       return;
     }
+    this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
@@ -414,6 +485,10 @@ export default class DepthFirstSearch extends React.Component {
 				</div>
 				<div class="center-screen"><span id="message"><h1 id="message-pane">Welcome to Depth First Search (DFS)!</h1></span></div>
 				<div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"depthfirst"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
 			</div>
 		)
 	}

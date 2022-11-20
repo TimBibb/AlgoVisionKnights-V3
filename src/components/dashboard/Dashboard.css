@@ -1,5 +1,4 @@
 .Dashboard {
-	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -19,5 +18,34 @@
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	color: #FFC904;
+	color: var(--accentColor);
+}
+
+.list {
+	overflow: auto;
+	white-space: nowrap;
+  }
+  
+.list a {
+	display: inline-block;
+	color: var(--accentColor);
+	text-align: center;
+	padding: 14px;
+	text-decoration: none;
+}
+
+.category {
+	margin: 2em;
+	box-shadow: inset;
+}
+
+#dashboard-title {
+	font-size: 48pt;
+	font-weight: 700;
+	color: var(--accentColor);
+	text-align: center;
+}
+
+.bg-colorProgressBar{
+	background-color: var(--accentColor) !important;
 }

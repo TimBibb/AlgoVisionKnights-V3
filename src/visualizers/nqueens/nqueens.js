@@ -4,7 +4,8 @@ import "./nqueens.css";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
-
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward() {}
@@ -134,23 +135,51 @@ export default class Queens extends React.Component {
     var steps = [];
     var messages = [];
 
+    var pseudocodeArr = [];
+    var lines = this.props.lines;
+
     steps.push(new EmptyStep());
     messages.push("<h1>Beginning nQueens!</h1>");
+    pseudocodeArr.push(new HighlightLineStep(0, lines));
 
     function solveNQ(board, col) {
+
+      //var pseudocodeArr = [];
+
+      steps.push(new EmptyStep());
+      messages.push("");
+      pseudocodeArr.push(new HighlightLineStep(1, lines));
+
       if(col >= n) {
         steps.push(new EmptyStep());
+        messages.push("");
+        pseudocodeArr.push(new HighlightLineStep(2, lines));
+
+        steps.push(new EmptyStep());
         messages.push("<h1>nQueens solution found!</h1>");
+        pseudocodeArr.push(new HighlightLineStep(3, lines));
         
         return true;
       }
 
       for(var i = 0; i < n; i++) {
+
         steps.push(new VisibilityStep(i, col, "visible"));
-        messages.push("<h1>Queen: Row " + (i+1) + " Column "+ (col+1) + ".</h1>");
+        messages.push("<h1>Queen: Row " + (i+1) + " Column "+ (col+1) + ".</h1>")
+        pseudocodeArr.push(new HighlightLineStep(4, lines));
+
+        //const [flag, pseudo] = queenSafe(board,i,col,n);
 
         if(queenSafe(board,i,col,n)) {
+          //pseudocodeArr = [...pseudocodeArr, ...pseudo];
+
+          steps.push(new EmptyStep());
+          messages.push("<h1>Beginning nQueens!</h1>");
+          pseudocodeArr.push(new HighlightLineStep(4, lines));
           board[i][col] = 1;
+
+          //var solveRet = solveNQ(board, col+1, n);
+          //var temp = solveRet[0];
 
           if(solveNQ(board, col+1, n)===true) {
             return true;
@@ -160,12 +189,22 @@ export default class Queens extends React.Component {
         }
 
         if (i + 1 !== n) {
+          steps.push(new EmptyStep());
+          messages.push("");
+          pseudocodeArr.push(new HighlightLineStep(5, lines));
+
           steps.push(new VisibilityStep(i, col, "hidden"));
           messages.push("<h1>Moving to next available space.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(6, lines));
         }
         else {
+          steps.push(new EmptyStep());
+          messages.push("");
+          pseudocodeArr.push(new HighlightLineStep(7, lines));
+
           steps.push(new VisibilityStep(i, col, "hidden"));
           messages.push("<h1>Backtracking...</h1>");
+          pseudocodeArr.push(new HighlightLineStep(8, lines));
         }
       }
 
@@ -173,41 +212,79 @@ export default class Queens extends React.Component {
     }
 
     function queenSafe(board, row, col, n){
+      //var pseudocodeArr = [];
+
+      steps.push(new EmptyStep());
+      messages.push("");
+      pseudocodeArr.push(new HighlightLineStep(11, lines));
+
       var flag = true;
       var i , j;
       for( i= 0; i<col;i++) {
+
+        steps.push(new EmptyStep());
+        messages.push("");
+        pseudocodeArr.push(new HighlightLineStep(12, lines));
+
         if(board[row][i]===1) {
+          steps.push(new EmptyStep());
+          messages.push("");
+          pseudocodeArr.push(new HighlightLineStep(13, lines));
           steps.push(new TileStep(row,i,"white"));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(14, lines));
           steps.push(new TileStep(row,i,"black"));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(14, lines));
 
           flag = false;
-          //return false;
+          //return flag;
         }
       }
 
       for( i = row, j = col; i>=0 &&j>=0; i--,j--) {
+
+        steps.push(new EmptyStep());
+        messages.push("");
+        pseudocodeArr.push(new HighlightLineStep(16, lines));
+
         if(board[i][j]===1) {
+          steps.push(new EmptyStep());
+          messages.push("");
+          pseudocodeArr.push(new HighlightLineStep(17, lines));
           steps.push(new TileStep(i,j,"white"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(18, lines));
           steps.push(new TileStep(i,j,"black"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          
+          pseudocodeArr.push(new HighlightLineStep(18, lines));
+
           flag = false;
-          //return false;
+          //return flag;
         }
       }
 
       for( i = row, j = col; j>=0 && i < n; i++,j--){
+
+        steps.push(new EmptyStep());
+        messages.push("");
+        pseudocodeArr.push(new HighlightLineStep(20, lines));
+
         if(board[i][j]===1){
+
+          steps.push(new EmptyStep());
+          messages.push("");
+          pseudocodeArr.push(new HighlightLineStep(21, lines));
+
           steps.push(new TileStep(i,j,"white"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(22, lines));
           steps.push(new TileStep(i,j,"black"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          
+          pseudocodeArr.push(new HighlightLineStep(22, lines));
+
           flag = false;
-          //return false;
+          //return flag;
         }
       }
 
@@ -215,11 +292,14 @@ export default class Queens extends React.Component {
 
       steps.push(new EmptyStep());
       messages.push("<h1>No queens are in range.</h1>");
+      pseudocodeArr.push(new HighlightLineStep(24, lines));
 
       return flag;
     }
+  
 
     function NQ() {
+
       const board = new Array(n);
       var i;
 
@@ -235,17 +315,29 @@ export default class Queens extends React.Component {
 
       console.log(board);
 
+      //var solveRet = solveNQ(board, 0);
+      //pseudocodeArr = [...pseudocodeArr, ...solveNQ(board, 0)];
+
+      //var temp = solveRet[0];
+
       if(solveNQ(board, 0)===false) {
         console.log("");
         return false;
       }
+      /*if(solveNQ(board, 0)===false) {
+        console.log("");
+        return false;
+      }*/
 
-        return true;
     }
+
+    //pseudocodeArr = [...pseudocodeArr, ...NQ()];
 
     NQ();
 
+    this.props.handleCodeStepsChange(pseudocodeArr);
     this.setState({steps: steps, messages: messages});
+    
   }
 
   turnOffRunning() {
@@ -259,10 +351,12 @@ export default class Queens extends React.Component {
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     this.state.steps[this.state.stepId].forward();
+    this.props.codeSteps[this.state.stepId].forward();
 
     console.log(this.state.steps[this.state.stepId]);
     this.setState({stepId: this.state.stepId + 1});
     d3.timeout(this.turnOffRunning, this.props.waitTime);
+
   }
 
   backward() {
@@ -273,6 +367,7 @@ export default class Queens extends React.Component {
     var stepId = this.state.stepId - 1;
     document.getElementById("message").innerHTML = this.state.messages[stepId - 1];
     this.state.steps[stepId].backward();
+    this.props.codeSteps[this.state.stepId].forward();
 
     console.log(this.state.steps[stepId]);
     this.setState({stepId: stepId});
@@ -282,14 +377,21 @@ export default class Queens extends React.Component {
   run() {
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
-      this.setState({ running: false });
+      //this.setState({ running: false });
+      this.running = false;
       return;
     }
 
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
+    this.props.codeSteps[this.state.stepId].forward();
+
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     this.state.steps[this.state.stepId].forward();
-
+    
     this.setState({stepId: this.state.stepId + 1});
+    //this.state.stepId = this.state.stepId + 1;
     d3.timeout(this.run, this.props.waitTime);
   }
 
@@ -354,6 +456,10 @@ export default class Queens extends React.Component {
         </div>
         <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to nQueens!</h1></span></div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"nqueens"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
       </div>
     );
   }

@@ -9,6 +9,8 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 50;
 var mid = 0;
@@ -27,6 +29,7 @@ function randInRange(lo, hi) {
   
 class EmptyStep {
     forward() {}
+    fastForward() {}
     backward() {}
 }
 
@@ -48,6 +51,10 @@ class CreateAndHighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
         UnHighlightNodeStep.forward(svg)
     }
@@ -68,8 +75,17 @@ class HighlightNodeStep {
         }
 	}
 
+    fastForward(svg){
+        this.forward(svg);
+    }
+
     backward(svg) {
-        new UnHighlightNodeStep(this.node, this.edge).forward(svg)
+        if (this.node) {
+            svg.select("#" + this.node.id).attr("stroke", GRAY);
+        } 
+        if (this.edge) {
+            svg.select("#" + this.edge.id).style("stroke", GRAY);
+        }
     }
 }
 
@@ -91,6 +107,10 @@ class UnHighlightNodeStep {
             svg.select("#" + this.edge2.id).style("stroke", GRAY);
         }
 	}
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 
     backward(svg) {
         if (this.node) {
@@ -128,6 +148,10 @@ class UnHighlightPathStep {
                 return;
             }
         }
+    }
+
+    fastForward(svg){
+        this.forward(svg);
     }
 }
 
@@ -252,7 +276,18 @@ export default class binarysearchtree extends React.Component {
     }
 
     initialize() {
-        var svgGroup = d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px").append("g");
+        const width = 1500
+		const height = 450
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+        
+        var svgGroup = svg.append("g");
         
         let zoom = d3.zoom()
             .on('zoom', this.handleZoom);
@@ -355,36 +390,49 @@ export default class binarysearchtree extends React.Component {
         var steps = []
         var messages = []
         var list = [];
+        var pseudocodeArr = [];
         console.log("preordering");
         console.log(root);
-        [steps, messages, list] = this.preorderRecursive(root, steps, messages, list);
+        [steps, messages, list, pseudocodeArr] = this.preorderRecursive(root, steps, messages, list, pseudocodeArr);
         messages.push("Finished preorder! our final list is ", list)
         this.setState({steps: steps, messages: messages})
+        this.props.handleCodeStepsChange(pseudocodeArr);
     }
 
-    preorderRecursive(root, steps, messages, list) {
+    preorderRecursive(root, steps, messages, list, pseudocodeArr) {
         var node = root;
         // messages.push("funco pop")
+
         if (node == null) return;
+
+        messages.push("<h1>Checking if Node is Equal to Null</h1>");
+        steps.push(new EmptyStep());
+        //console.log("Pushing Line 1 highlight");
+        pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
+
         console.log(node.value)
         list.push(node.value)
         messages.push(list.toString());
         steps.push(new HighlightNodeStep(node, null));
+        pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
         // # Push right and left children of the popped node
         // # to stack
         if (node.left != null) {
             messages.push(list.toString());
             steps.push(new HighlightNodeStep(node.left, node.lEdge));
-            this.preorderRecursive(node.left, steps, messages, list);
+            pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+            this.preorderRecursive(node.left, steps, messages, list, pseudocodeArr);
         }
         if (node.right != null) {
             messages.push(list.toString());
             steps.push(new HighlightNodeStep(node.right, node.rEdge));
-            this.preorderRecursive(node.right, steps, messages, list);
+            pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+            this.preorderRecursive(node.right, steps, messages, list, pseudocodeArr);
         }
         messages.push(list.toString());
         steps.push(new UnHighlightNodeStep(node, node.lEdge, node.rEdge));
-        return [steps, messages, list];
+        pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+        return [steps, messages, list, pseudocodeArr];
     }
 
     turnOffRunning() {
@@ -410,6 +458,7 @@ export default class binarysearchtree extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg g"));
+        this.props.codeSteps[this.state.stepId].forward();
 		console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Preorder Sort!</h1>" : "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: stepId});
@@ -425,7 +474,8 @@ export default class binarysearchtree extends React.Component {
 		
 		// Uses the step's fastForward function and displays associated message
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
-		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+		this.props.codeSteps[this.state.stepId].forward();
+        document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 
 		this.setState({stepId: this.state.stepId + 1});
 
@@ -439,7 +489,8 @@ export default class binarysearchtree extends React.Component {
 			return;
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
-		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
+		this.props.codeSteps[this.state.stepId].forward();
+        document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
     }
@@ -521,6 +572,10 @@ export default class binarysearchtree extends React.Component {
                         </div>
                     </tr>
                 </table>
+                <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"preorder"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

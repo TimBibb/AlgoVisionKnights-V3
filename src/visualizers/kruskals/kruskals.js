@@ -5,7 +5,47 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Create } from "@material-ui/icons";
 
+class CreatingConn {
+  constructor(nodes){
+
+    this.parent = {};
+
+    nodes.forEach(e => (this.parent[e] = e));
+  }
+
+  Connect(node1, node2){
+    let rootA = this.Check(node1);
+    let rootB = this.Check(node2);
+
+    if(rootA == rootB)
+      return;
+
+    if(rootA < rootB){
+      if(this.parent[node2] != node2)
+        this.Connect(this.parent[node2], node1);
+      
+      this.parent[node2] = this.parent[node1];
+    } else {
+      if(this.parent[node1] != node1)
+        this.Connect(this.parent[node1], node2);
+
+      this.parent[node1] = this.parent[node2];
+    }
+  }
+
+  Check(node){
+    while(this.parent[node] != node){
+      node = this.parent[node];
+    }
+    return node;
+  }
+
+  United(node1, node2){
+    return this.Check(node1) == this.Check(node2);
+  }
+}
 class EmptyStep {
   forward() {}
   backward() {}
@@ -47,7 +87,7 @@ class NodeColorChangeStep {
   }
 }
 
-export default class Prims extends React.Component {
+export default class Kruskals extends React.Component {
   constructor(props) {
     super(props);
 
@@ -72,8 +112,17 @@ export default class Prims extends React.Component {
   }
 
   initialize() {
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+    const width = 1500
+		const height = 450
 
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+    
     let isWeighted = true;
     let isDirected = false;
 
@@ -81,7 +130,8 @@ export default class Prims extends React.Component {
     this.setState({ graph: graph });
   }
 
-  prims(graph, stepTime) {
+  kruskals(graph, stepTime) {
+    var i = 0;
     console.log(graph);
     var messages = [];
     var currentMessage = "";
@@ -112,46 +162,57 @@ export default class Prims extends React.Component {
     flushBuffer();
 
     addStep(new EmptyStep());
-    createMessage("Select an arbitrary node to start building the MST.");
+    createMessage("Select all the edges of the graph and insert them in a priority queue.");
     flushBuffer();
 
     var pq = [];
     var nodeVisited = Array.from({ length: graph.numberOfNodes }, () => false);
     var edgeSelected = Array.from({ length: graph.numberOfEdges }, () => false);
-    nodeVisited[0] = true;
-    addStep(
-      new NodeColorChangeStep(
-        this.ref.current,
-        graph.nodeInfo[0].circle.attr.id,
-        graph.nodeInfo[0].text.attr.id,
-        "gray",
-        "white"
-      )
-    );
-    createMessage("We will start with node 0 to build the MST from.");
-    flushBuffer();
+    var nodes = Array.from({length: graph.numberOfNodes}, () => i++);
 
-    addStep(new EmptyStep());
-    createMessage("Insert all unvisited edges that are incident to node 0 into the queue.");
-    flushBuffer();
+    let NodesConnected = new CreatingConn(nodes);
+    //nodeVisited[0] = true;
+    // addStep(
+    //   new NodeColorChangeStep(
+    //     this.ref.current,
+    //     graph.nodeInfo[0].circle.attr.id,
+    //     graph.nodeInfo[0].text.attr.id,
+    //     "gray",
+    //     "white"
+    //   )
+    // );
+    // createMessage("We will start with node 0 to build the MST from.");
+    // flushBuffer();
 
-    for (const edge of graph.adjacencyList[0]) {
+    // addStep(new EmptyStep());
+    // createMessage("Insert all unvisited edges that are incident to node 0 into the queue.");
+    // flushBuffer();
+
+    // for (const edge of graph.adjacencyList[0]) {
+    //   let [node1, node2, _weight, edgeId] = edge;
+
+    //   addStep(
+    //     new EdgeColorChangeStep(
+    //       this.ref.current,
+    //       graph.edgeInfo[edgeId].line.attr.id,
+    //       graph.edgeInfo[edgeId].text.attr.id,
+    //       "gray",
+    //       "#FFCE36"
+    //     )
+    //   );
+    //   createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
+    //   flushBuffer();
+
+    //   pq.push(edgeId);
+    // }
+
+    for (const edge of graph.edges){
       let [node1, node2, _weight, edgeId] = edge;
-
-      addStep(
-        new EdgeColorChangeStep(
-          this.ref.current,
-          graph.edgeInfo[edgeId].line.attr.id,
-          graph.edgeInfo[edgeId].text.attr.id,
-          "gray",
-          "#FFCE36"
-        )
-      );
-      createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
-      flushBuffer();
-
       pq.push(edgeId);
     }
+
+    // pq.sort();
+    console.log(pq);
 
     for (let i = 0; pq.length > 0 && i < 50; i++) {
       addStep(new EmptyStep());
@@ -159,6 +220,7 @@ export default class Prims extends React.Component {
       flushBuffer();
 
       pq.sort(comparator);
+
       let currentId = pq[0];
       let [node1, node2, _weight, edgeId] = graph.edges[currentId];
       [pq[0], pq[pq.length - 1]] = [pq[pq.length - 1], pq[0]];
@@ -169,7 +231,7 @@ export default class Prims extends React.Component {
           this.ref.current,
           graph.edgeInfo[currentId].line.attr.id,
           graph.edgeInfo[currentId].text.attr.id,
-          "#FFCE36",
+          "grey",
           "white"
         )
       );
@@ -178,15 +240,105 @@ export default class Prims extends React.Component {
       );
       flushBuffer();
 
+      //console.log(nodes);
+
       if (nodeVisited[node1] && nodeVisited[node2]) {
+        if(!NodesConnected.United(node1, node2)){
+          NodesConnected.Connect(node1, node2);
+          edgeSelected[edgeId] = true;
+
+          addStep(new EmptyStep());
+          createMessage(
+            "Both nodes " +
+              node1 +
+              " and " +
+              node2 +
+              " have already been added to the MST.");
+          flushBuffer();
+
+          addStep(
+            new EdgeColorChangeStep(
+              this.ref.current,
+              graph.edgeInfo[currentId].line.attr.id,
+              graph.edgeInfo[currentId].text.attr.id,
+              "white",
+              "#1ACA1E"
+            )
+          );
+
+          createMessage(
+            "Include this edge and node " +
+              node2 +
+              " in the MST."
+          );
+          flushBuffer();
+
+        } 
+        else {
+          addStep(new EmptyStep());
+          createMessage(
+            "Both nodes " +
+              node1 +
+              " and " +
+              node2 +
+              " have already been added to the MST.");
+          flushBuffer();
+
+          addStep(
+            new EdgeColorChangeStep(
+              this.ref.current,
+              graph.edgeInfo[currentId].line.attr.id,
+              graph.edgeInfo[currentId].text.attr.id,
+              "white",
+              "#444444"
+            )
+          );
+          createMessage("Ignore this edge.");
+          flushBuffer();
+          // these nodes are already connected, ignore the edge
+          continue;
+        }
+      }
+
+      if(nodeVisited[node1] == false && nodeVisited[node2] == false){
+        nodeVisited[node1] = true;
+        nodeVisited[node2] = true;
+        edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
+
         addStep(new EmptyStep());
         createMessage(
-          "Both nodes " +
+          "Node " +
             node1 +
-            " and " +
-            node2 +
-            " have already been added to the MST.");
+          " has not been added to the MST.");
         flushBuffer();
+
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node1].circle.attr.id,
+            graph.nodeInfo[node1].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
+
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node2 +
+          " has not been added to the MST.");
+        flushBuffer();
+
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node2].circle.attr.id,
+            graph.nodeInfo[node2].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
 
         addStep(
           new EdgeColorChangeStep(
@@ -194,75 +346,155 @@ export default class Prims extends React.Component {
             graph.edgeInfo[currentId].line.attr.id,
             graph.edgeInfo[currentId].text.attr.id,
             "white",
-            "#444444"
+            "#1ACA1E"
           )
         );
-        createMessage("Ignore this edge.");
+
+        createMessage(
+          "Include this edge, node " +
+            node1 + " and node " + node2 +
+            " in the MST."
+        );
         flushBuffer();
-        // these nodes are already connected, ignore the edge
-        continue;
       }
+      else if(nodeVisited[node1] == false && nodeVisited[node2] == true){
+        nodeVisited[node1] = true;
+        edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
 
-      var unvisitedNode = nodeVisited[node1] ? node2 : node1;
-      nodeVisited[unvisitedNode] = true;
-      edgeSelected[edgeId] = true;
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node1 +
+          " has not been added to the MST.");
+        flushBuffer();
 
-      addStep(new EmptyStep());
-      createMessage(
-        "Node " +
-          unvisitedNode +
-        " has not been added to the MST.");
-      flushBuffer();
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node1].circle.attr.id,
+            graph.nodeInfo[node1].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
 
-      addStep(
-        new EdgeColorChangeStep(
-          this.ref.current,
-          graph.edgeInfo[currentId].line.attr.id,
-          graph.edgeInfo[currentId].text.attr.id,
-          "white",
-          "#1ACA1E"
-        )
-      );
-      addStep(
-        new NodeColorChangeStep(
-          this.ref.current,
-          graph.nodeInfo[unvisitedNode].circle.attr.id,
-          graph.nodeInfo[unvisitedNode].text.attr.id,
-          "gray",
-          "white"
-        )
-      );
-      createMessage(
-        "Include this edge and node " +
-          unvisitedNode +
-          " in the MST."
-      );
-      flushBuffer();
-
-      addStep(new EmptyStep());
-      createMessage(
-        "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
-      );
-      flushBuffer();
-
-      for (const edge of graph.adjacencyList[unvisitedNode]) {
-        let [from, to, _weight, edgeId] = edge;
-        if (nodeVisited[to]) {
-          continue;
-        }
         addStep(
           new EdgeColorChangeStep(
             this.ref.current,
-            graph.edgeInfo[edgeId].line.attr.id,
-            graph.edgeInfo[edgeId].text.attr.id,
-            "gray",
-            "#FFCE36"
+            graph.edgeInfo[currentId].line.attr.id,
+            graph.edgeInfo[currentId].text.attr.id,
+            "white",
+            "#1ACA1E"
           )
         );
-        createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
+
+        createMessage(
+          "Include this edge and node " +
+            node1 +
+            " in the MST."
+        );
         flushBuffer();
-        pq.push(edgeId);
       }
+      else if(nodeVisited[node1] == true && nodeVisited[node2] == false){
+        nodeVisited[node2] = true;
+        edgeSelected[edgeId] = true;
+        NodesConnected.Connect(node1, node2);
+
+        addStep(new EmptyStep());
+        createMessage(
+          "Node " +
+            node2 +
+          " has not been added to the MST.");
+        flushBuffer();
+
+        addStep(
+          new NodeColorChangeStep(
+            this.ref.current,
+            graph.nodeInfo[node2].circle.attr.id,
+            graph.nodeInfo[node2].text.attr.id,
+            "gray",
+            "white"
+          )
+        );
+
+        addStep(
+          new EdgeColorChangeStep(
+            this.ref.current,
+            graph.edgeInfo[currentId].line.attr.id,
+            graph.edgeInfo[currentId].text.attr.id,
+            "white",
+            "#1ACA1E"
+          )
+        );
+
+        createMessage(
+          "Include this edge and node " +
+            node2 +
+            " in the MST."
+        );
+        flushBuffer();
+      }
+      // var unvisitedNode = nodeVisited[node1] ? node2 : node1;
+      // nodeVisited[unvisitedNode] = true;
+      // edgeSelected[edgeId] = true;
+
+      // addStep(new EmptyStep());
+      // createMessage(
+      //   "Node " +
+      //     unvisitedNode +
+      //   " has not been added to the MST.");
+      // flushBuffer();
+
+      // addStep(
+      //   new EdgeColorChangeStep(
+      //     this.ref.current,
+      //     graph.edgeInfo[currentId].line.attr.id,
+      //     graph.edgeInfo[currentId].text.attr.id,
+      //     "white",
+      //     "#1ACA1E"
+      //   )
+      // );
+      // addStep(
+      //   new NodeColorChangeStep(
+      //     this.ref.current,
+      //     graph.nodeInfo[unvisitedNode].circle.attr.id,
+      //     graph.nodeInfo[unvisitedNode].text.attr.id,
+      //     "gray",
+      //     "white"
+      //   )
+      // );
+      // createMessage(
+      //   "Include this edge and node " +
+      //     unvisitedNode +
+      //     " in the MST."
+      // );
+      // flushBuffer();
+
+      // addStep(new EmptyStep());
+      // createMessage(
+      //   "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
+      // );
+      // flushBuffer();
+
+      // for (const edge of graph.adjacencyList[unvisitedNode]) {
+      //   let [from, to, _weight, edgeId] = edge;
+      //   if (nodeVisited[to]) {
+      //     continue;
+      //   }
+      //   addStep(
+      //     new EdgeColorChangeStep(
+      //       this.ref.current,
+      //       graph.edgeInfo[edgeId].line.attr.id,
+      //       graph.edgeInfo[edgeId].text.attr.id,
+      //       "gray",
+      //       "#FFCE36"
+      //     )
+      //   );
+      //   createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
+      //   flushBuffer();
+      //   pq.push(edgeId);
+      // }
     }
 
     addStep(new EmptyStep());
@@ -283,7 +515,7 @@ export default class Prims extends React.Component {
     flushBuffer();
 
     addStep(new EmptyStep());
-    createMessage("Finished Prim's!");
+    createMessage("Finished Kruskal's!");
     flushBuffer();
 
     console.log(steps);
@@ -316,7 +548,7 @@ export default class Prims extends React.Component {
     if (this.state.stepId - 1 < 0) return;
 
     var stepId = this.state.stepId - 1;
-    document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Prim's!</h1>" : this.state.messages[stepId - 1];
+    document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Kruskal's!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward();
     // this.state.steps[--stepId].backward();
     this.setState({stepId: stepId});
@@ -353,7 +585,7 @@ export default class Prims extends React.Component {
     if (this.state.stepId - 1 < 0) return;
 
     var stepId = this.state.stepId;
-    document.getElementById("message").innerHTML = "<h1>Welcome to Prim's!</h1>";
+    document.getElementById("message").innerHTML = "<h1>Welcome to Kruskal's!</h1>";
     while (stepId - 1 >= 0) {
       for (const step of this.state.steps[--stepId]) step.backward();
       // this.state.steps[--stepId].backward();
@@ -373,7 +605,7 @@ export default class Prims extends React.Component {
       console.log("SIZE CHANGED");
       this.initialize();
     } else if (this.state.graph !== prevState.graph) {
-      this.prims(this.state.graph);
+      this.kruskals(this.state.graph);
       console.log("Sorted");
     } else if (this.state.running !== prevState.running) {
       this.run();
@@ -384,7 +616,7 @@ export default class Prims extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>

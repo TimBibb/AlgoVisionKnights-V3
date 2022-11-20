@@ -6,6 +6,7 @@ import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward(svg) {}
@@ -80,6 +81,7 @@ export default class Prims extends React.Component {
       running: false,
       steps: [],
       messages: [],
+      pseudocodeArr: [],
       stepId: 0,
       stepTime: 400,
       waitTime: 4000,
@@ -97,7 +99,16 @@ export default class Prims extends React.Component {
   }
 
   initialize() {
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+		const width = 1500
+		const height = 450
+
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
     let colors = [
       "#DE3163",
@@ -200,6 +211,10 @@ export default class Prims extends React.Component {
 
   towersOfHanoi(numberOfDisks, disks, ys, textxys) {
     var messages = [];
+
+    var pseudocodeArr = [];
+    var lines = this.props.lines;
+
     var currentMessage = "";
     function createMessage(msg) {
       currentMessage = "<h1>" + msg + "</h1>";
@@ -238,23 +253,28 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage(`The goal is to move all the disks from the Source peg to the Destination peg.`);
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, lines));
 
     addStep(new EmptyStep());
     createMessage(`You can take a disk at the top of any peg and place it on any other peg.`);
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, lines));
 
     addStep(new EmptyStep());
     createMessage(`However, you cannot place a disk on top of another disk smaller than itself.`);
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, lines));
 
     // hanoi(# of disks, peg 1, peg 2, peg 3)
     function hanoi(n, source, auxillary, destination) {
+      
       if (n === 0) return;
 
       addStep(new SetPegsStep([source, auxillary, destination], oldDisks));
       createMessage(`Move the top ${n} disk(s) from the Source to the Destination.`);
       addStep(new EmptyStep());
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(0, lines));
 
       if (n > 1) {
         createMessage(
@@ -264,6 +284,7 @@ export default class Prims extends React.Component {
         );
         addStep(new ChangeOpacityStep("disk" + n, 0.25, 1.0));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(2, lines));
       }
 
       oldDisks = [source, auxillary, destination];
@@ -274,6 +295,7 @@ export default class Prims extends React.Component {
         addStep(new SetPegsStep([source, auxillary, destination], oldDisks));
         addStep(new ChangeOpacityStep("disk" + n, 1.0, 0.25));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(3, lines));
       }
 
       // disk n goes from peg source to peg destination
@@ -305,6 +327,7 @@ export default class Prims extends React.Component {
         )
       );
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(3, lines));
 
       disks[source][cnts[source] - 1].rect.attr.x = newDiskPos.x;
       disks[source][cnts[source] - 1].rect.attr.y = newDiskPos.y;
@@ -324,6 +347,7 @@ export default class Prims extends React.Component {
         );
         addStep(new ChangeOpacityStep("disk" + n, 0.25, 1.0));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(2, lines));
       }
 
       oldDisks = [source, auxillary, destination];
@@ -333,6 +357,7 @@ export default class Prims extends React.Component {
         createMessage(`The top ${n} disk(s) have successfully moved to the Destination.`);
         addStep(new ChangeOpacityStep("disk" + n, 1.0, 0.25));
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(4, lines));
       }
 
       oldDisks = [source, auxillary, destination];
@@ -345,7 +370,9 @@ export default class Prims extends React.Component {
     createMessage(`All 5 disks have made it to the Destination!`);
     addStep(new EmptyStep());
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(5, lines));
 
+    this.props.handleCodeStepsChange(pseudocodeArr);
     this.setState({ steps: steps, messages: messages });
   }
 
@@ -356,9 +383,10 @@ export default class Prims extends React.Component {
   forward() {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
-    if (this.state.stepId === this.state.steps.length) return;
+    if (this.state.stepId === this.steps.length) return;
 
     let svg = d3.select(this.ref.current).select("svg");
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
@@ -390,7 +418,12 @@ export default class Prims extends React.Component {
       return;
     }
 
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
+
     let svg = d3.select(this.ref.current).select("svg");
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
@@ -452,7 +485,7 @@ export default class Prims extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>
@@ -466,6 +499,10 @@ export default class Prims extends React.Component {
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"hanoi"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
       </div>
     );
   }

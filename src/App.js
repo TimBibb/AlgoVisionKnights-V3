@@ -8,10 +8,13 @@ import Header from './components/header/Header';
 import Navigation from './components/navigation/Navigation';
 import AlgorithmPage from './components/algorithmPage/AlgorithmPage';
 import Category from './components/category/Category';
+import Settings from './components/settings/Settings';
 
 // Algorithm Objects
 import categories from './components/algorithmList/Categories';
 import algorithms from './components/algorithmList/Algorithms';
+
+var r = document.querySelector(':root');
 
 function App() {
 	console.log('App.js');
@@ -29,6 +32,94 @@ function App() {
 
 	// Visualizer and Information page toggler
 	const [algoPage, setAlgoPage] = React.useState('visualizer');
+
+	React.useEffect(() => {
+		r.style.setProperty('--primaryColor', localStorage.getItem('primaryColor'));
+		r.style.setProperty('--secondaryColor', localStorage.getItem('secondaryColor'));
+		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
+		r.style.setProperty('--cardColor', localStorage.getItem('cardColor'));
+		r.style.setProperty('--backgroundColor', localStorage.getItem('backgroundColor'));
+		r.style.setProperty('--nodeColor', localStorage.getItem('nodeColor'));
+		// Storing primaryColor in localStorage
+		if(!localStorage.getItem('primaryColor')){
+			localStorage.setItem('primaryColor', '#FFFFFF')
+		}
+		if(!localStorage.getItem('primaryColorR')){
+			localStorage.setItem('primaryColorR', '255')
+		}
+		if(!localStorage.getItem('primaryColorG')){
+			localStorage.setItem('primaryColorG', '255')
+		}
+		if(!localStorage.getItem('primaryColorB')){
+			localStorage.setItem('primaryColorB', '255')
+		}
+		// Storing secondaryColor in localStorage
+		if(!localStorage.getItem('secondaryColor')){
+			localStorage.setItem('secondaryColor', '#404243')
+		}
+		if(!localStorage.getItem('secondaryColorR')){
+			localStorage.setItem('secondaryColorR', '64')
+		}
+		if(!localStorage.getItem('secondaryColorG')){
+			localStorage.setItem('secondaryColorG', '66')
+		}
+		if(!localStorage.getItem('secondaryColorB')){
+			localStorage.setItem('secondaryColorB', '67')
+		}
+		// Storing accentColor in localStorage
+		if(!localStorage.getItem('accentColor')){
+			localStorage.setItem('accentColor', '#FFC904')
+		}
+		if(!localStorage.getItem('accentColorR')){
+			localStorage.setItem('accentColorR', '255')
+		}
+		if(!localStorage.getItem('accentColorG')){
+			localStorage.setItem('accentColorG', '201')
+		}
+		if(!localStorage.getItem('accentColorB')){
+			localStorage.setItem('accentColorB', '4')
+		}
+		// Storing backgroundColor in localStorage
+		if(!localStorage.getItem('backgroundColor')){
+			localStorage.setItem('backgroundColor', '#000000')
+		}
+		if(!localStorage.getItem('backgroundColorR')){
+			localStorage.setItem('backgroundColorR', '0')
+		}
+		if(!localStorage.getItem('backgroundColorG')){
+			localStorage.setItem('backgroundColorG', '0')
+		}
+		if(!localStorage.getItem('backgroundColorB')){
+			localStorage.setItem('backgroundColorB', '0')
+		}
+		// Storing cardColor in localStorage
+		if(!localStorage.getItem('cardColor')){
+			localStorage.setItem('cardColor', '#181818')
+		}
+		if(!localStorage.getItem('cardColorR')){
+			localStorage.setItem('cardColorR', '24')
+		}
+		if(!localStorage.getItem('cardColorG')){
+			localStorage.setItem('cardColorG', '24')
+		}
+		if(!localStorage.getItem('cardColorB')){
+			localStorage.setItem('cardColorB', '24')
+		}
+		// Storing nodeColor in localStorage
+		if(!localStorage.getItem('nodeColor')){
+			localStorage.setItem('nodeColor', '#1b203d')
+		}
+		if(!localStorage.getItem('nodeColorR')){
+			localStorage.setItem('nodeColorR', '27')
+		}
+		if(!localStorage.getItem('nodeColorG')){
+			localStorage.setItem('nodeColorG', '32')
+		}
+		if(!localStorage.getItem('nodeColorB')){
+			localStorage.setItem('nodeColorB', '61')
+		}
+		
+	});
 
 	// Resize screen handlers
 	const [viewWidth, setViewWidth] = React.useState(window.innerWidth);
@@ -80,6 +171,15 @@ function App() {
 									algorithms={algorithms}
 									inCategory={false}
 								/>
+							}
+						/>
+
+						{/* Settings page. Where you will see the Color Picker for now */}
+						<Route
+							exact={true}
+							path='/settings'
+							element={
+								<Settings/>
 							}
 						/>
 

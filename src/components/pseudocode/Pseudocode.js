@@ -72,8 +72,8 @@ class Pseudocode extends React.Component {
         let code = this.getLines(this.algorithm)
         let pseudocodeSvg = d3.select("#pseudocodeDiv")
 			.append("svg")
-			.attr("width", 400)
-			.attr("height", 620)
+			.attr("width", "100%")
+			.attr("height", 500)
 			.attr("id", "pseudoSvg");
 
         this.setState({svg: pseudocodeSvg})
@@ -89,6 +89,11 @@ class Pseudocode extends React.Component {
             console.log(this.props.lines)
             // this.state.lines.push(new Line(code[line], line, pseudocodeSvg));
         }
+
+        pseudocodeSvg.attr("height", lines.length*30 + 15)
+        console.log("lines height", lines.length*30)
+        this.setState({svg: pseudocodeSvg})
+
         this.props.handleLinesChange(
             lines
         )

@@ -5,6 +5,7 @@ import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph";
 import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward() {}
@@ -72,7 +73,16 @@ export default class Prims extends React.Component {
   }
 
   initialize() {
-    d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px");
+    const width = 1500
+		const height = 500
+
+    var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
     let isWeighted = true;
     let isDirected = false;
@@ -85,6 +95,9 @@ export default class Prims extends React.Component {
     console.log(graph);
     var messages = [];
     var currentMessage = "";
+
+    var pseudocodeArr = [];
+
     function createMessage(msg) {
       currentMessage = "<h1>" + msg + "</h1>";
     }
@@ -106,14 +119,17 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("We will construct the Minimum Spanning Tree (MST).");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     addStep(new EmptyStep());
     createMessage("We will maintain a minimum priority queue of edges based on weight.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     addStep(new EmptyStep());
     createMessage("Select an arbitrary node to start building the MST.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     var pq = [];
     var nodeVisited = Array.from({ length: graph.numberOfNodes }, () => false);
@@ -130,13 +146,25 @@ export default class Prims extends React.Component {
     );
     createMessage("We will start with node 0 to build the MST from.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     addStep(new EmptyStep());
     createMessage("Insert all unvisited edges that are incident to node 0 into the queue.");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     for (const edge of graph.adjacencyList[0]) {
+      addStep(new EmptyStep());
+      createMessage("");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
+
       let [node1, node2, _weight, edgeId] = edge;
+
+      addStep(new EmptyStep());
+      createMessage("");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
 
       addStep(
         new EdgeColorChangeStep(
@@ -149,14 +177,21 @@ export default class Prims extends React.Component {
       );
       createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 
       pq.push(edgeId);
     }
 
     for (let i = 0; pq.length > 0 && i < 50; i++) {
       addStep(new EmptyStep());
+      createMessage("");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+      addStep(new EmptyStep());
       createMessage("Select the lowest weighted edge in the queue.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
 
       pq.sort(comparator);
       let currentId = pq[0];
@@ -177,8 +212,14 @@ export default class Prims extends React.Component {
         "The lowest weighted edge in the queue is (" + node1 + ", " + node2 + ")."
       );
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
 
       if (nodeVisited[node1] && nodeVisited[node2]) {
+        addStep(new EmptyStep());
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
+
         addStep(new EmptyStep());
         createMessage(
           "Both nodes " +
@@ -187,6 +228,7 @@ export default class Prims extends React.Component {
             node2 +
             " have already been added to the MST.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
         addStep(
           new EdgeColorChangeStep(
@@ -199,6 +241,7 @@ export default class Prims extends React.Component {
         );
         createMessage("Ignore this edge.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
         // these nodes are already connected, ignore the edge
         continue;
       }
@@ -213,6 +256,7 @@ export default class Prims extends React.Component {
           unvisitedNode +
         " has not been added to the MST.");
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 
       addStep(
         new EdgeColorChangeStep(
@@ -238,14 +282,21 @@ export default class Prims extends React.Component {
           " in the MST."
       );
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 
       addStep(new EmptyStep());
       createMessage(
         "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
       );
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 
       for (const edge of graph.adjacencyList[unvisitedNode]) {
+        addStep(new EmptyStep());
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
+
         let [from, to, _weight, edgeId] = edge;
         if (nodeVisited[to]) {
           continue;
@@ -261,6 +312,7 @@ export default class Prims extends React.Component {
         );
         createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
         pq.push(edgeId);
       }
     }
@@ -268,10 +320,21 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("The edges in the MST have been found!");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(13, this.props.lines));
 
     let mstEdges = "";
     for (let i = 0; i < graph.numberOfEdges; i++) {
+      addStep(new EmptyStep());
+      createMessage("");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+
       if (edgeSelected[i]) {
+        addStep(new EmptyStep());
+        createMessage("");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+
         mstEdges += "(" + graph.edges[i][0] + ", " + graph.edges[i][1] + "), ";
       }
     }
@@ -281,10 +344,12 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("The edges in the MST are: " + mstEdges + ".");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
     addStep(new EmptyStep());
     createMessage("Finished Prim's!");
     flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
 
     console.log(steps);
     console.log(messages);
@@ -301,6 +366,7 @@ export default class Prims extends React.Component {
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
 
+    this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     // this.state.steps[this.state.stepId].forward();
@@ -329,6 +395,7 @@ export default class Prims extends React.Component {
       this.setState({ running: false });
       return;
     }
+    this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     // this.state.steps[this.state.stepId].forward();
@@ -384,7 +451,7 @@ export default class Prims extends React.Component {
   render() {
     return (
       <div>
-        <div class="center-screen">
+        <div class="center-screen" id="banner">
           <button class="button" onClick={this.play}>Play</button>
           <button class="button" onClick={this.pause}>Pause</button>
           <button class="button" onClick={this.restart}>Restart</button>
@@ -398,6 +465,10 @@ export default class Prims extends React.Component {
           </span>
         </div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"prims"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
       </div>
     );
   }

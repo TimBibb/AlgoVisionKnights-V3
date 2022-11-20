@@ -3,6 +3,7 @@ import "./quicksort.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
@@ -42,7 +43,7 @@ class ColorLowStep {
 
 		svg.select("#lowTxt" + this.id1).attr("visibility", "hidden");
 		svg.select("#lowTxt2_" + this.id1).attr("visibility", "hidden");
-		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== "gray") ? "visible" : "hidden");
+		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== localStorage.getItem('secondaryColor')) ? "visible" : "hidden");
 
 		svg.select("#" + this.ids[this.id2]).select("rect").attr("prevColor", color2);
 
@@ -51,7 +52,7 @@ class ColorLowStep {
 			svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#648FFF");
 			svg.select("#arrowpath" + this.id2).attr("visibility", "visible");
 
-			if (color2 !== "gray")
+			if (color2 !== localStorage.getItem('secondaryColor'))
 			{
 				svg.select("#lowTxt2_" + this.id2).attr("visibility", "visible");
 			}
@@ -102,14 +103,14 @@ class ColorHighStep {
 
 		svg.select("#highTxt" + this.id1).attr("visibility", "hidden");
 		svg.select("#highTxt2_" + this.id1).attr("visibility", "hidden");
-		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== "gray") ? "visible" : "hidden");
+		svg.select("#arrowpath" + this.id1).attr("visibility", (prev1 !== localStorage.getItem('secondaryColor')) ? "visible" : "hidden");
 
 		// As long as the new bar isn't sorted
 		if (color2 !== "rgb(26, 202, 30)") {
-			svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#EF3F88");
+			svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('accentColor'));
 			svg.select("#arrowpath" + this.id2).attr("visibility", "visible");
 
-			if (color2 !== "gray")
+			if (color2 !== localStorage.getItem('secondaryColor'))
 			{
 				svg.select("#highTxt2_" + this.id2).attr("visibility", "visible");
 			}
@@ -148,7 +149,7 @@ class ColorPivotStep {
 		var color = svg.select("#" + this.ids[this.id1]).select("rect").style("fill");
 
 		svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", color);
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFCE36");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
 		svg.select("#pivTxt" + this.id1).attr("visibility", "visible");
 		svg.select("#arrowpath" + this.id1).attr("visibility", "visible");
 	}
@@ -161,7 +162,7 @@ class ColorPivotStep {
 		// var prevColor = svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor");
 
 		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", prevColor);
-		// svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", "gray");
+		// svg.select("#" + this.ids[this.id1]).select("rect").attr("prevColor", localStorage.getItem('secondaryColor'));
 	}
 }
 
@@ -272,7 +273,7 @@ class SortedStep {
 
 			if (color !== "rgb(26, 202, 30)") {
 				svg.select("#" + this.ids[i]).select("rect").attr("prevColor", color);
-				svg.select("#" + this.ids[i]).select("rect").style("fill", "gray");
+				svg.select("#" + this.ids[i]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 			}
 		}
 	}
@@ -431,7 +432,9 @@ export default class QuickSort extends React.Component {
 			running: false,
 			stepId: 0,
 			stepTime: 300,
-			waitTime: (9 * 2000) / 8
+			waitTime: (9 * 2000) / 8,
+			inputMode: false,
+			restartFlag: false
 		};
 
 		this.ref = React.createRef();
@@ -443,12 +446,14 @@ export default class QuickSort extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
+
 	}
 
 	printArray(arr, size) {
 		for (let i = 0; i < size; i++)
 		{
-			console.log(arr[i]);
+			//console.log(arr[i]);
 		}
 	}
 
@@ -629,8 +634,8 @@ export default class QuickSort extends React.Component {
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
 
-		console.log(steps);
-		console.log(messages);
+		//console.log(steps);
+		//console.log(messages);
 	}
 
 	dataInit() {
@@ -648,10 +653,11 @@ export default class QuickSort extends React.Component {
 		this.setState({arr: arr});
 	}
 
-	initialize() {
+	initialize(arr,size,ref) {
 		const barWidth = 70;
 		const barOffset = 30;
-		const height = 500;
+		const height = 450;
+		const width = (10 * (barWidth + barOffset)) + 100;
 
 		let yScale = d3.scaleLinear()
 			.domain([0, d3.max(this.state.arr)])
@@ -659,8 +665,12 @@ export default class QuickSort extends React.Component {
 
 		var svg = d3.select(this.ref.current)
 			.append("svg")
-				.attr("width", (this.state.size * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+				.attr("width", "100%")
+				.attr("height", height);
+
+		svg.attr("perserveAspectRatio", "xMinYMid")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
+		
 
 		var bars = svg.selectAll(".bar")
 					.data(this.state.arr)
@@ -681,8 +691,8 @@ export default class QuickSort extends React.Component {
 				.attr("y", (d) => {
 					return (height + 100) - yScale(d);
 				})
-				.style("fill", "gray")
-				.attr("prevColor", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'))
+				.attr("prevColor", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
@@ -694,7 +704,7 @@ export default class QuickSort extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("defs")
 			.append("marker")
@@ -707,16 +717,16 @@ export default class QuickSort extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		bars.append("path")
 			.attr("d", (_, i) => {
 				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 85], [i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 35]]);
 			})
 			.attr("stroke-width", 1)
-			.attr("stroke", "white")
+			.attr("stroke", localStorage.getItem('primaryColor'))
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -736,7 +746,7 @@ export default class QuickSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		bars.append("text").text("Low")
@@ -752,7 +762,7 @@ export default class QuickSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("High")
@@ -768,7 +778,7 @@ export default class QuickSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		bars.append("text").text("High")
@@ -784,7 +794,7 @@ export default class QuickSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("Pivot")
@@ -800,12 +810,12 @@ export default class QuickSort extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
-		var ids = [];
+		let ids = [];
 
-		for (let i = 0; i < this.state.size; i++)
+		for (let i = 0; i < size; i++)
 		{
 			ids.push("g" + i);
 		}
@@ -827,6 +837,7 @@ export default class QuickSort extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return;
 		
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		console.log(this.state.steps[this.state.stepId]);
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
@@ -846,6 +857,7 @@ export default class QuickSort extends React.Component {
 			this.state.steps[stepId] instanceof UnpartitionStep || this.state.steps[stepId] instanceof SwapStep) {
 				console.log(this.state.steps[stepId]);
 				this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+				this.props.codeSteps[this.state.stepId].forward();
 		}
 		else { // Or make a new svg and run steps up until step before
 			d3.select(this.ref.current).select("svg").remove();
@@ -881,7 +893,7 @@ export default class QuickSort extends React.Component {
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
-		this.setState({running: true});
+		this.setState({running: true, restartFlag: false});
 		this.run(d3.select(this.ref.current).select("svg"));
 	}
 
@@ -894,15 +906,15 @@ export default class QuickSort extends React.Component {
 		console.log("RESTART CLICKED");
 
 		var svg = d3.select(this.ref.current).select("svg");
-		console.log(svg);
+		//console.log(svg);
 
         svg.remove();
-		console.log("Removed og");
+		//console.log("Removed og");
 
         document.getElementById("message").innerHTML = "<h1>Welcome to Quick Sort!</h1>";
 
-		console.log("Reset state");
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
+		//console.log("Reset state");
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
 	}
 
 	componentDidMount() {
@@ -910,33 +922,94 @@ export default class QuickSort extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-			var svg = d3.select(this.ref.current).select("svg");
-
-		// Data array changed in dataInit -> Make visual
-		if (this.state.arr.length > prevState.arr.length) {
-			svg = this.initialize();
-			svg.attr("visibility", "visible");
-		}
-		// IDs array changed in initialize -> sort copy of array to get steps and messages
-		else if (this.state.ids.length > prevState.ids.length) {
-			console.log("We initialized. Time to sort.");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
-		}
-		// Running changed
-		else if (this.state.running !== prevState.running)
-		{
-			this.run(svg);
-			console.log("We ran");
-		}
-		// For reset
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("We're restarting");
-			svg = this.initialize();
-			console.log("Made it out");
-			svg.attr("visibility", "visible");
-			console.log("All good");
+		if (this.state.inputMode) {
+			if (JSON.stringify(this.state.arr)!==JSON.stringify(prevState.arr)) {
+				console.log("1");
+				d3.select(this.ref.current).select("svg").remove();
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.play();
+				this.setState({inputMode: false});
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				this.setState({inputMode: false});
+			}
+		} else {
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1a");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				console.log("2a")
+				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3a");
+				let svg = this.initialize(this.state.arr, this.state.arr.length, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4a");
+			}
 		}
 	}
+	
+	handleInsert() {
+		if (this.state.running || this.state.inputMode || this.state.restartFlag) {
+			return;
+		}
+		let input = document.getElementById("insertVal").value;
+		// Array is split by commas
+		let arr = input.split(',');
+		// Checks if size is too small or big 1 < size < 11
+		if (arr.length < 2 || arr.length > 10) {
+			document.getElementById("message").innerHTML = "<h1>Array size must be between 2 and 10!</h1>";
+			return;
+		}
+		// Check each content if it is a number
+		let i = 0;
+		for (let value of arr) {
+			if (!this.isNum(value)) {
+				document.getElementById("message").innerHTML = "<h1>Incorrect format.</h1>";
+				return;
+			}
+			// Parse value from string to Number
+			arr[i++] = parseInt(value);
+		}
+		// Must input pass all the requirements..
+		// Set state for running, inputmode, and array
+		//console.log("inserted array: " + arr)
+		this.setState({inputMode: true, arr:arr, running: false, steps: [], ids: [], messages: [], stepId: 0});
+	}
+
+	isNum(value) {
+		// Short circuit parsing & validation
+		let x;
+		if (isNaN(value)) return false;
+		x = parseFloat(value);
+		return (x | 0) === x;
+	}
+	
 
 	render() {
 		return (
@@ -948,6 +1021,10 @@ export default class QuickSort extends React.Component {
 					<button class="button" onClick={this.backward}>Step Backward</button>
 					<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Quick Sort!</h1></span></div>
 				<div class="parent-svg">

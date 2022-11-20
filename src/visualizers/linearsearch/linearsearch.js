@@ -3,10 +3,7 @@ import "./linearsearch.css";
 import * as d3 from "d3";
 import "../css/button.css";
 import "../css/messages.css";
-import UserInput from "../../components/userInput/UserInput";
-import createDefaultGraph from "../../foundation/graph/CreateDefaultGraph.js";
-import { ConsoleView } from "react-device-detect";
-import { Component } from "react";
+import "../css/input.css";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
@@ -35,7 +32,7 @@ class FirstColor{
 	}
 
 	forward(svg){
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -43,8 +40,8 @@ class FirstColor{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -61,7 +58,7 @@ class ColorFound{
 	}
 
 	forward(svg){
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#1ACA1E");
 	}
 
 	fastForward(svg) {
@@ -69,8 +66,8 @@ class ColorFound{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -87,8 +84,8 @@ class ColorSwapStep{
     }
 
     forward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "gray");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "#EF3F88");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('accentColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
         svg.selectAll("#qTxt" + this.id2).attr("visibility", "visible");
@@ -99,8 +96,8 @@ class ColorSwapStep{
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
 		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
@@ -128,7 +125,9 @@ export default class LinearSearch extends React.Component {
 			stepId: 0, // ID of the current step
 			stepTime: 300, // Milliseconds for transition durations aka duration of each animation
 			waitTime: 2000, // Milliseconds between each step
-            target: -1
+            target: -1,
+			inputMode: false,
+			inputFlag: false
 		};
 
 		// Bindings
@@ -142,19 +141,22 @@ export default class LinearSearch extends React.Component {
 		this.forward = this.forward.bind(this);
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
+		this.handleInsert = this.handleInsert.bind(this);
 	}
 
     printArray(arr, size){
         for(let i = 0; i < size; i++){
-            console.log(arr[i]);
+            //console.log(arr[i]);
         }
     }
 
-    sort(arr, ids, length, stepTime){
+    sort(isteps, imsg,arr, ids, length, stepTime){
+		console.log(this.state.target);
+		console.log(this.state.inputMode);
 
-        var steps = [];
-        var messages = [];
-		var pseudocodeArr = [];
+		let steps = ((this.state.inputMode) ? isteps : []);
+        let messages = ((this.state.inputMode) ? imsg : []);
+		let pseudocodeArr = [];
 
         messages.push("<h1>Beginning Linear Search!</h1>");
 		messages.push("<h1>Beginning Linear Search!</h1>");
@@ -168,7 +170,8 @@ export default class LinearSearch extends React.Component {
 			steps.push(new EmptyStep());
             messages.push("<h1>Searching Index [" + i + "] for Value " + this.state.target + ".</h1>");
 			pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
-            if(arr[i] === this.state.target){
+            console.log(typeof(arr[i]) + " = " + typeof(this.state.target));
+			if(arr[i] === this.state.target){
 				steps.push(new ColorFound(i, ids));
                 messages.push("<h1>Found Item at Index [" + i + "].</h1>");
 				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
@@ -178,15 +181,13 @@ export default class LinearSearch extends React.Component {
 				pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 				break;
             }
-            else if(arr[i] != this.state.target){
+            else if(arr[i] !== this.state.target){
 				steps.push(new ColorSwapStep(i, i+1, ids));
                 messages.push("<h1>" + arr[i] + " does NOT equal " + this.state.target + ".</h1>");
 				pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
             }
         }
-
-        // messages.push("<h1>Requested Item Not Found");
-
+		
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
@@ -214,6 +215,7 @@ export default class LinearSearch extends React.Component {
 		const barWidth = 100;
 		const barOffset = 1;
 		const height = 100;
+		const width = (size * (barWidth + barOffset)) + 100;
 
 		// Used for scaling the bar heights in reference to the maximum value of the data array
 		let yScale = d3.scaleLinear()
@@ -222,8 +224,11 @@ export default class LinearSearch extends React.Component {
 
 		var svg = d3.select(ref)
 			.append("svg")
-				.attr("width", (size * (barWidth + barOffset)) + 100)
-				.attr("height", height + 250);
+				.attr("width", "100%")
+				.attr("height", height+250);
+
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
 
 		var bars = svg.selectAll(".bar")
 					.data(arr)
@@ -242,11 +247,11 @@ export default class LinearSearch extends React.Component {
 				.attr("y", height)
 				.attr("stroke", "rgb(255,255,255)")
 				.attr("stroke-width", "2")
-				.style("fill", "gray");
+				.style("fill", localStorage.getItem('secondaryColor'));
 
 		bars.append("text")
 				.text((d) => {
-					console.log("BAR " + d);
+					//console.log("BAR " + d);
 					return d;
 				})
 				.attr("y", (height + 100) - 15)
@@ -255,7 +260,7 @@ export default class LinearSearch extends React.Component {
 				})
 				.style("text-anchor", "middle")
 				.style("font-size", "28px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 		// Arrowhead for the pointers?
 		bars.append("defs")
@@ -269,7 +274,7 @@ export default class LinearSearch extends React.Component {
 				.attr("orient", "auto-start-reverse")
 			.append("path")
 				.attr("d", d3.line()([[0, 0], [0, 50], [50, 25]]))
-				.attr("fill", "white");
+				.attr("fill", localStorage.getItem('primaryColor'));
 
 		// Pointers
 		bars.append("path")
@@ -277,9 +282,9 @@ export default class LinearSearch extends React.Component {
 				return d3.line()([[i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 185], [i * (barWidth + barOffset) + (barWidth / 2) + 65, height + 135]]);
 			})
 			.attr("stroke-width", 1)
-			.attr("stroke", "white")
+			.attr("stroke", localStorage.getItem('primaryColor'))
 			.attr("marker-end", "url(#arrow)")
-			.attr("fill", "white")
+			.attr("fill", localStorage.getItem('primaryColor'))
 			.attr("class", "arrowpath")
 			.attr("id", (_, i) => {
 				return "arrowpath" + i;
@@ -299,7 +304,7 @@ export default class LinearSearch extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
         bars.append("text").text("?")
@@ -315,7 +320,7 @@ export default class LinearSearch extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "32px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			.attr("visibility", "hidden");
 
 		var ids = [];
@@ -348,6 +353,7 @@ export default class LinearSearch extends React.Component {
 		
 		// Uses the step's fastForward function and displays associated message
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 
 		this.setState({stepId: this.state.stepId + 1});
@@ -365,6 +371,7 @@ export default class LinearSearch extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[this.state.stepId].forward();
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Linear Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
@@ -388,6 +395,7 @@ export default class LinearSearch extends React.Component {
 	play() {
 		console.log("PLAY CLICKED");
 		if (this.state.running) return;
+		console.log("HI!")
 		this.setState({running: true});
 		this.run();
 	}
@@ -399,10 +407,8 @@ export default class LinearSearch extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "<h1>Welcome to Linear Search!</h1>";
-
 		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
@@ -413,29 +419,54 @@ export default class LinearSearch extends React.Component {
 
 	// Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
-		// Component mounted and unsorted array created -> Initialize visualizer
-		if (this.state.arr.length > prevState.arr.length) {
-			console.log("Unsorted");
-			this.printArray(this.state.arr, this.state.size);
-			this.initialize(this.state.arr, this.state.size, this.ref.current);
+			if (this.state.inputMode) {
+				console.log("0");
+				let inputSteps = [];
+				let inputMessages = [];
+				this.sort(inputSteps, inputMessages, [...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+				this.setState({inputMode:false, running:true});
+			}
+			// Component mounted and unsorted array created -> Initialize visualizer
+			if (this.state.arr.length > prevState.arr.length) {
+				console.log("1");
+				//this.printArray(this.state.arr, this.state.size);
+				this.initialize(this.state.arr, this.state.size, this.ref.current);
+			}
+			// Visualizer initialized -> Sort copy of array and get steps
+			else if (this.state.ids.length > prevState.ids.length) {
+				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
+				this.sort([],[],[...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
+				console.log("2");
+			}
+			// Part of restart -> Reinitialize with original array
+			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
+				console.log("3");
+				var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
+				svg.attr("visibility", "visible");
+			}
+			else if (this.state.running !== prevState.running && this.state.running === true)
+			{
+				this.run();
+				console.log("4");
+				console.log(this.state.steps.length)
+				console.log(this.state.messages.length)
+
+			}
+	}
+
+	handleInsert() {
+		if (this.state.running || this.state.inputMode) {
+			return;
 		}
-		// Visualizer initialized -> Sort copy of array and get steps
-		else if (this.state.ids.length > prevState.ids.length) {
-			d3.select(this.ref.current).select("svg").attr("visibility", "visible");
-			this.sort([...this.state.arr], this.state.ids, this.state.size, this.state.stepTime);
-			console.log("ran visualizer");
-		}
-		// Part of restart -> Reinitialize with original array
-        else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
-			console.log("Steps changed");
-			var svg = this.initialize(this.state.arr, this.state.size, this.ref.current);
-			svg.attr("visibility", "visible");
-		}
-		else if (this.state.running !== prevState.running && this.state.running === true)
-		{
-			this.run();
-			console.log("We ran");
-		}
+		let input = parseInt(document.getElementById("insertVal").value);
+		//console.log(input);
+		// Array is split by commas
+		// Checks if size is too small or big 1 < size < 11
+		if (input < -999 || input > 999) {
+			document.getElementById("message").innerHTML = "<h1>Target size must be between -999 and 999</h1>";
+			return;
+		}	
+		this.setState({inputMode: true, running: false, inputFlag: true, target: input});
 	}
 
 	render() {
@@ -448,6 +479,10 @@ export default class LinearSearch extends React.Component {
 		        	<button class="button" onClick={this.backward}>Step Backward</button>
 		        	<button class="button" onClick={this.forward}>Step Forward</button>
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+				</div>
+				<div class="center-screen">
+					<input class="searchInput"type="number" id="insertVal" placeholder="Target"></input>
+					<button class="button" id="insertBut" onClick={this.handleInsert}>Search</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Linear Search!</h1></span></div>
 				<div class="parent-svg">

@@ -1,5 +1,5 @@
 import './Navigation.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Child components
@@ -12,19 +12,20 @@ import {
 	ListItem,
 	ListItemText,
 	Typography,
+	Button
 } from '@material-ui/core/';
 import clsx from 'clsx';
 
 // Material UI Styles
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+var useStyles = makeStyles((theme) => ({
 	burger: {
-		backgroundColor: '#000000',
+		backgroundColor: localStorage.getItem('backgroundColor'),
 	},
 	drawer: {
-		backgroundColor: '#000000',
-		color: '#ffffff',
+		backgroundColor: localStorage.getItem('backgroundColor'),
+		color: localStorage.getItem('primaryColor'),
 		position: 'inherit',
 		width: '200px',
 		transition: theme.transitions.create('width', {
@@ -34,14 +35,15 @@ const useStyles = makeStyles((theme) => ({
 	},
 	toolbar: theme.mixins.toolbar,
 	drawerClose: {
+		backgroundColor: localStorage.getItem('backgroundColor'),
 		transition: theme.transitions.create('width', {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 		width: '0px',
-		backgroundColor: '#000000',
 	},
 }));
+
 
 function Navigation({
 	open,
@@ -61,7 +63,34 @@ function Navigation({
 	};
 
 	// Instantiating useStyles
-	const classes = useStyles();
+	var classes = useStyles();
+
+	useEffect(() => {useStyles = makeStyles((theme) => ({
+		burger: {
+			backgroundColor: localStorage.getItem('backgroundColor'),
+		},
+		drawer: {
+			backgroundColor: localStorage.getItem('backgroundColor'),
+			color: localStorage.getItem('primaryColor'),
+			position: 'inherit',
+			width: '200px',
+			transition: theme.transitions.create('width', {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.enteringScreen,
+			}),
+		},
+		toolbar: theme.mixins.toolbar,
+		drawerClose: {
+			backgroundColor: localStorage.getItem('backgroundColor'),
+			transition: theme.transitions.create('width', {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.leavingScreen,
+			}),
+			width: '0px',
+		},
+	}));}, [localStorage])
+
+	useEffect(() => {classes = useStyles}, [useStyles])
 
 	return (
 		// If we want to add a line to the navigator:
@@ -82,7 +111,9 @@ function Navigation({
 							  }),
 				}}>
 				<div id='toolbar-container' className={classes.toolbar}>
-					<Typography id='nav-title'>AVK</Typography>
+					<Link className='Link' to='/'>
+						<Button onClick={handleChange('Dashboard')} ><Typography id='nav-title'>AVK</Typography></Button>
+					</Link>
 				</div>
 				<List>
 					
@@ -92,8 +123,8 @@ function Navigation({
 							style={{
 								color:
 									page === 'Dashboard'
-										? '#FFC904'
-										: '#ffffff',
+										? localStorage.getItem('accentColor')
+										: localStorage.getItem('primaryColor'),
 							}}
 							onClick={handleChange('Dashboard')}
 							button>
@@ -102,16 +133,14 @@ function Navigation({
 					</Link>
 					{categories.map((category, i) => {
 						return (
-							<Link className='Link' to={category.path}>
-								<NavGroup
-									title={category.title}
-									algorithms={algorithms[category.path]}
-									key={category.title}
-									panel={category.title}
-									expanded={expanded}
-									handleChange={handleChange}
-								/>
-							</Link>
+							<NavGroup
+								title={category.title}
+								algorithms={algorithms[category.path]}
+								key={category.title}
+								panel={category.title}
+								expanded={expanded}
+								handleChange={handleChange}
+							/>
 						);
 					})}
 				</List>

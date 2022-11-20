@@ -1,7 +1,7 @@
 .button {
-  background-color: #181818;
-  border: 2.5px solid white;
-  color: white;
+  background-color: var(--backgroundColor);
+  border: 2.5px solid var(--primaryColor);
+  color: var(--primaryColor);
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
@@ -17,19 +17,19 @@
 }
 
 .button:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--primaryColor);
+  color: var(--backgroundColor);
 }
 
 .button:active {
-  background-color: black;
-  color: white;
+  background-color: var(--backgroundColor);
+  color: var(--primaryColor);
 }
 
 .button2 {
-  background-color: #FFC904;
-  border: 2.5px solid #FFC904;
-  color: black;
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--backgroundColor);
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
@@ -43,13 +43,23 @@
 }
 
 .button2:hover {
-  background-color: #FFC904;
-  border: 2.5px solid #FFC904;
-  color: white;
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--primaryColor);
 }
 
 .button2:active {
-  background-color: #e0b20b;
-  border: 2.5px solid #e0b20b;
-  color: black;
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--backgroundColor);
+}
+
+#removeBut {
+	color: red;
+}
+#insertBut {
+	color: green;
+}
+#searchBut {
+	color: rgb(251, 255, 10);
 }

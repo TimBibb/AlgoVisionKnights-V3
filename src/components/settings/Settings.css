@@ -1,0 +1,77 @@
+#settings-title {
+	font-size: 24pt;
+	font-weight: 'bold';
+	color: var(--primaryColor);
+	text-align: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.settings-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.button-location{
+	margin-left: 3%;
+	/* display: flex; */
+	float: left;
+}
+
+.button3 {
+    background-color: var(--backgroundColor);
+    border: 2.5px solid var(--primaryColor);
+    color: var(--primaryColor);
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 4px 4px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    border-radius: 15px;
+    white-space: nowrap;
+  
+  }
+  
+  .button3:hover {
+    background-color: var(--primaryColor);
+    color: var(--backgroundColor);
+  }
+  
+  .button3:active {
+    background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+  }
+  
+  .button4 {
+    background-color: var(--accentColor);
+    border: 2.5px solid var(--accentColor);
+    color: var(--backgroundColor);
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 4px 4px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    border-radius: 15px;
+  }
+  
+  .button4:hover {
+    background-color: var(--accentColor);
+    border: 2.5px solid var(--accentColor);
+    color: var(--primaryColor);
+  }
+  
+  .button4:active {
+    background-color: var(--accentColor);
+    border: 2.5px solid var(--accentColor);
+    color: var(--backgroundColor);
+  }

@@ -781,11 +781,11 @@ export default class avl extends React.Component {
                     <tr>
                         <div ref={this.ref} class=""></div>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <div style={{width: "500px"}}>
                             <p>Miguel</p>
                         </div>
-                    </tr>
+                    </tr> */}
                 </table>
             </div>
         )

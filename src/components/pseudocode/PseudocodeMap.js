@@ -395,24 +395,34 @@ export const map = {
     //to edit
     prims: [
         "prims(graph, vertex, vertices){ ",
-        tab + "for (edge of graph.adjacencyList[0]) { ",
-        tab + tab + "let [node1, node2, weight, edgeID] = edge;",
-        tab + tab + "queue.push(edgeID);",
-        tab + "}", //4
-        tab + "for (i = 0; tempArray.length > 0 && i < 50; i++) {",
-        tab + tab + "Calculate Lowest Weighted Edge",
-        tab + tab + "if (nodeVisited[node1] && nodeVisited[node2])",
-        tab + tab + tab + "Edge Already Added! Ignore",
-        tab + tab + "for (edge of graph.adjacencyList[nodeUnvisited]) {",
-        tab + tab + tab + "queue.push(edgeID);",
-        tab + tab + "}", //11
-        tab + "}", //12
-        tab + "var holdEdges;",
-        tab + "for (i = 0; i < graph.numberofEdges; i++) {",
-        tab + tab + "if(edgeSelected[i]) holdEdges = graph.edges[i][0] + graph.edges[i][1];",
-        tab + "All Edges Found!",
-        "}", //17
-        ""
+        tab + "var pq = [];",
+        tab + "var nodeVisited, edgeSelected;",
+        tab + "for(const edge of graph.adjacencyList[0]) {", //3
+        tab + tab + "let [node1, node2, _weight, edgeId] = edge;",
+        tab + tab + "pq.push(edgeId);",
+        tab + "}",
+        tab + "for(let i = 0; pq.length > 0 && i < 50; i++) {",  //7
+        tab + tab + "pq.sort();",
+        tab + tab + "let currentId = pq[0];",
+        tab + tab + "pq.pop();",
+        tab + tab + "if(nodeVisited[node1] && nodeVisited[node2]) {",
+        tab + tab + tab + "continue;",
+        tab + tab + "}",
+        tab + tab + "unvisitedNode = nodeVisited[node1] ? node2 : node1;", //14
+        tab + tab + "nodeVisited[unvisitedNode] = true;",
+        tab + tab + "edgeSelected[edgeId] = true;",
+        tab + tab + "for(const edge of graph.adjacencyList[unvisitedNode]) {",
+        tab + tab + tab + "let[from, to, _weight, edgeId] = edge;",
+        tab + tab + tab + "pq.push(edgeId);",
+        tab + tab + "}",
+        tab + "}",
+        tab + "var mstEdges;", //22
+        tab + "for(let i = 0; i < graph.numberOfEdges; i++) {",
+        tab + tab + "if(edgeSelected[i]) {",
+        tab + tab + tab + "mstEdges += (graph.edges[i][0] + graph.edges[i][1]);",
+        tab + tab + "}",
+        tab + "}",
+        "}"
     ],
 
     heaps: [

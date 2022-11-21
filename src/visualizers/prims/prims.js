@@ -157,14 +157,14 @@ export default class Prims extends React.Component {
       addStep(new EmptyStep());
       createMessage("Moving the the Next Edge of the Graph Adjacency List.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 
       let [node1, node2, _weight, edgeId] = edge;
 
       addStep(new EmptyStep());
       createMessage("Setting the Edge.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
 
       addStep(
         new EdgeColorChangeStep(
@@ -177,7 +177,7 @@ export default class Prims extends React.Component {
       );
       createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
 
       pq.push(edgeId);
     }
@@ -186,12 +186,12 @@ export default class Prims extends React.Component {
       addStep(new EmptyStep());
       createMessage("Iterating through to find the lowest weighted edge.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
 
       addStep(new EmptyStep());
       createMessage("Select the lowest weighted edge in the queue.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
       pq.sort(comparator);
       let currentId = pq[0];
@@ -212,13 +212,13 @@ export default class Prims extends React.Component {
         "The lowest weighted edge in the queue is (" + node1 + ", " + node2 + ")."
       );
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
 
       if (nodeVisited[node1] && nodeVisited[node2]) {
         addStep(new EmptyStep());
         createMessage("Checking if the two current nodes have already been visited.");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
 
         addStep(new EmptyStep());
         createMessage(
@@ -228,7 +228,7 @@ export default class Prims extends React.Component {
             node2 +
             " have already been added to the MST.");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines));
 
         addStep(
           new EdgeColorChangeStep(
@@ -241,7 +241,7 @@ export default class Prims extends React.Component {
         );
         createMessage("Ignore this edge.");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines));
         // these nodes are already connected, ignore the edge
         continue;
       }
@@ -256,7 +256,7 @@ export default class Prims extends React.Component {
           unvisitedNode +
         " has not been added to the MST.");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
       addStep(
         new EdgeColorChangeStep(
@@ -282,20 +282,20 @@ export default class Prims extends React.Component {
           " in the MST."
       );
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
 
       addStep(new EmptyStep());
       createMessage(
         "Insert all unvisited edges incident to node " + unvisitedNode + " into the queue."
       );
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
       for (const edge of graph.adjacencyList[unvisitedNode]) {
         addStep(new EmptyStep());
         createMessage("");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
 
         let [from, to, _weight, edgeId] = edge;
         if (nodeVisited[to]) {
@@ -312,7 +312,7 @@ export default class Prims extends React.Component {
         );
         createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
         pq.push(edgeId);
       }
     }
@@ -320,20 +320,20 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("The edges in the MST have been found!");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(13, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
 
     let mstEdges = "";
     for (let i = 0; i < graph.numberOfEdges; i++) {
       addStep(new EmptyStep());
       createMessage("Iterating through each edge...");
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
 
       if (edgeSelected[i]) {
         addStep(new EmptyStep());
         createMessage("Checking for the current edge.");
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
 
         mstEdges += "(" + graph.edges[i][0] + ", " + graph.edges[i][1] + "), ";
       }
@@ -344,12 +344,12 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("The edges in the MST are: " + mstEdges + ".");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(25, this.props.lines));
 
     addStep(new EmptyStep());
     createMessage("Finished Prim's!");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     console.log(steps);
     console.log(messages);

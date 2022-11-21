@@ -190,7 +190,7 @@ export default class Dijkstras extends React.Component {
 				messages.push("<h1>Node " + head[0] + " is the unvisited neighbor with the smallest distance.</h1>");
 				steps.push(new EmptyStep());
 				pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
-				messages.push("");
+				messages.push("<h1>Node " + head[0] + " is the unvisited neighbor with the smallest distance.</h1>");
 				steps.push(new EmptyStep());
 				pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
 			}
@@ -312,11 +312,11 @@ export default class Dijkstras extends React.Component {
 
         messages.push("<h1>Found shortest paths from Node " + first +  " to all nodes.</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
 		messages.push("<h1>Finished Dijkstra's!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});

@@ -155,14 +155,14 @@ export default class Prims extends React.Component {
 
     for (const edge of graph.adjacencyList[0]) {
       addStep(new EmptyStep());
-      createMessage("");
+      createMessage("Moving the the Next Edge of the Graph Adjacency List.");
       flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
 
       let [node1, node2, _weight, edgeId] = edge;
 
       addStep(new EmptyStep());
-      createMessage("");
+      createMessage("Setting the Edge.");
       flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
 
@@ -184,7 +184,7 @@ export default class Prims extends React.Component {
 
     for (let i = 0; pq.length > 0 && i < 50; i++) {
       addStep(new EmptyStep());
-      createMessage("");
+      createMessage("Iterating through to find the lowest weighted edge.");
       flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
 
@@ -216,7 +216,7 @@ export default class Prims extends React.Component {
 
       if (nodeVisited[node1] && nodeVisited[node2]) {
         addStep(new EmptyStep());
-        createMessage("");
+        createMessage("Checking if the two current nodes have already been visited.");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
 
@@ -325,13 +325,13 @@ export default class Prims extends React.Component {
     let mstEdges = "";
     for (let i = 0; i < graph.numberOfEdges; i++) {
       addStep(new EmptyStep());
-      createMessage("");
+      createMessage("Iterating through each edge...");
       flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
       if (edgeSelected[i]) {
         addStep(new EmptyStep());
-        createMessage("");
+        createMessage("Checking for the current edge.");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
 
@@ -349,11 +349,12 @@ export default class Prims extends React.Component {
     addStep(new EmptyStep());
     createMessage("Finished Prim's!");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
     console.log(steps);
     console.log(messages);
 
+    this.props.handleCodeStepsChange(pseudocodeArr);
     this.setState({ steps: steps, messages: messages });
   }
 
@@ -395,6 +396,11 @@ export default class Prims extends React.Component {
       this.setState({ running: false });
       return;
     }
+
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
+
     this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();

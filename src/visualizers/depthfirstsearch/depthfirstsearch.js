@@ -176,14 +176,14 @@ export default class DepthFirstSearch extends React.Component {
       addStep(
         new EmptyStep()
       );
-      createMessage("");
+      createMessage("Checking the next node.");
       flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
       if (nodeVisited[graph.adjacencyList[head][node][1]] === false) {
         addStep(
           new EmptyStep()
         );
-        createMessage("");
+        createMessage("Checking if we have visited the current node.");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
@@ -237,7 +237,7 @@ export default class DepthFirstSearch extends React.Component {
         addStep(
           new EmptyStep()
         );
-        createMessage("");
+        createMessage("Checking if the recently popped node was visited.");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
@@ -272,7 +272,7 @@ export default class DepthFirstSearch extends React.Component {
         addStep(
           new EmptyStep()
         );
-        createMessage("");
+        createMessage("Is travel to node " + s + " necessary?");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
 
@@ -338,14 +338,14 @@ export default class DepthFirstSearch extends React.Component {
         addStep(
           new EmptyStep()
         );
-        createMessage("");
+        createMessage("Next iteration!");
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
         if (nodeVisited[graph.adjacencyList[s][node][1]] === false) {
           addStep(
             new EmptyStep()
           );
-          createMessage("");
+          createMessage("Checking if we have visited the current node.");
           flushBuffer();
           pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
           nodeStack.push(graph.adjacencyList[s][node][1]);
@@ -373,12 +373,12 @@ export default class DepthFirstSearch extends React.Component {
     addStep(new EmptyStep());
     createMessage("The stack is empty.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Finished Depth First Search!");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     this.setState({ steps: steps, messages: messages });
     this.props.handleCodeStepsChange(pseudocodeArr);

@@ -430,7 +430,7 @@ export default class binarysearchtree extends React.Component {
 
         while (i < MAX_NODE) {
             steps.push(new EmptyStep());
-            messages.push("");
+            messages.push("Obtain a new random value (val).");
             pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
             val = Math.floor(Math.random() * 100);
@@ -441,7 +441,7 @@ export default class binarysearchtree extends React.Component {
             console.log("level " + level);
             if(!root) {
                 steps.push(new EmptyStep());
-                messages.push("");
+                messages.push("Does the tree have a root node?");
                 pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
                 root = new Node(this.ref, val, x, y, i);
@@ -458,7 +458,7 @@ export default class binarysearchtree extends React.Component {
                 i++;
             } else {
                 steps.push(new EmptyStep());
-                messages.push("");
+                messages.push("The tree has a root node!");
                 pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
 
                 let node = root;
@@ -467,18 +467,18 @@ export default class binarysearchtree extends React.Component {
                 var firstStep = true;
 
                 steps.push(new EmptyStep());
-                messages.push("");
+                messages.push("We will be inserting a new value into the tree!");
                 pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
                 while(true) {
                     steps.push(new EmptyStep());
-                    messages.push("");
+                    messages.push("We will be inserting a new value into the tree!");
                     pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
                     var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
                     //console.log(node.value);
                     if (firstStep) {
                         steps.push(new EmptyStep());
-                        messages.push("");
+                        messages.push("What value is being inserted?");
                         pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
                         steps.push(new HighlightNodeStep(node, null));
                         messages.push("The next value we will insert into the tree is " + val );
@@ -486,13 +486,13 @@ export default class binarysearchtree extends React.Component {
                         firstStep = false;
                     } else {
                         steps.push(new HighlightNodeStep(node, null));
-                        messages.push("");
+                        messages.push("No insertion has occurred...");
                         pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
                     }
 
                     if(val < node.value) {
                         steps.push(new EmptyStep());
-                        messages.push("");
+                        messages.push("Is our new value less than the value in the current node?");
                         pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
                         steps.push(new EmptyStep());
                         messages.push( val + " is less than " + node.value );
@@ -503,7 +503,7 @@ export default class binarysearchtree extends React.Component {
 
                         if(node.left != null) {
                             steps.push(new EmptyStep());
-                            messages.push("");
+                            messages.push("Is the left node empty?");
                             pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
                             var edge = node.lEdge;
                             node = node.left;
@@ -514,7 +514,7 @@ export default class binarysearchtree extends React.Component {
                             // messages.push("Let's traverse to the left edge of the node.");
                         } else {
                             steps.push(new EmptyStep());
-                            messages.push("");
+                            messages.push("Is the left node empty?");
                             pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
                             temp_x = node.x - 20 + tempMod;
                             temp_y = node.y + 10;
@@ -549,7 +549,7 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else if (val > node.value) {
                         steps.push(new EmptyStep());
-                        messages.push("");
+                        messages.push("Is our new value greater than the current node's value?");
                         pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
 
                         steps.push(new EmptyStep());
@@ -560,7 +560,7 @@ export default class binarysearchtree extends React.Component {
 
                         if(node.right != null) {
                             steps.push(new EmptyStep());
-                            messages.push("");
+                            messages.push("Is the right node empty?");
                             pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
 
                             var edge = node.rEdge
@@ -572,7 +572,7 @@ export default class binarysearchtree extends React.Component {
                             // messages.push("Let's traverse to the right edge of the node.");
                         } else {
                             steps.push(new EmptyStep());
-                            messages.push("");
+                            messages.push("Is the right node empty?");
                             pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
                             temp_x = node.x + 20 - tempMod;
                             temp_y = node.y + 10;
@@ -604,7 +604,7 @@ export default class binarysearchtree extends React.Component {
                         }
                     } else {
                         steps.push(new EmptyStep());
-                        messages.push("");
+                        messages.push("Are the new value and node values equal?");
                         pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
                         
                         steps.push(new EmptyStep());
@@ -624,7 +624,7 @@ export default class binarysearchtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Binary Search Tree insertion complete!");
-        pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
         console.log(this.state.root);
         this.setState({steps: steps});
         this.setState({messages: messages});

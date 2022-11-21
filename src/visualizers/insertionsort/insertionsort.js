@@ -530,16 +530,16 @@ export default class InsertionSort extends React.Component {
             }
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new SortedStep(j + 1, i, ids));
-			pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
 
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new UnpartitionStep(0, i, ids));
-			pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
         }
 
 		messages.push("<h1>Finished Insertion Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(11,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});

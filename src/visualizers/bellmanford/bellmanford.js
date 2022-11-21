@@ -252,7 +252,7 @@ export default class BellmanFord extends React.Component {
 
         if (graph.distances[node1] === -1) {
           createMessage(
-            ""
+            "Checking the source value of the current edge."
           );
           addStep(new EmptyStep());
           flushBuffer();
@@ -277,7 +277,7 @@ export default class BellmanFord extends React.Component {
           if (dist1 !== -1 && (dist2 === -1 || dist1 + weight < dist2)) {
 
             createMessage(
-              ""
+              "Calculating distance and parent updates..."
             );
             addStep(new EmptyStep());
             flushBuffer();
@@ -305,7 +305,7 @@ export default class BellmanFord extends React.Component {
           } else {
 
             createMessage(
-              ""
+              "Calculating distance and parent updates..."
             );
             addStep(new EmptyStep());
             flushBuffer();
@@ -323,19 +323,19 @@ export default class BellmanFord extends React.Component {
         }
         addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "gray", "white"));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
       }
     }
 
     createMessage("We have now found the shortest distances from node 0 to all other nodes!");
     addStep(new EmptyStep());
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     createMessage("Finished Bellman-Ford!");
     addStep(new EmptyStep());
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     this.setState({ steps: steps, messages: messages });
     this.props.handleCodeStepsChange(pseudocodeArr);

@@ -249,7 +249,7 @@ export const map = {
         tab + tab + tab + "Occupied! Move Forward",
         tab + "}", //15
         "}", //16
-        "deletion(x)",
+        "deletion(x) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Already Deleted!",
@@ -259,7 +259,7 @@ export const map = {
         tab + tab + tab + "break;",
         tab + "}", //25
         "}", //26
-        "search(x)",
+        "search(x) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Ignore Value!",
@@ -304,23 +304,39 @@ export const map = {
 
     dijkstras: [ //fixed tabbing and added closing bracket
         "dijkstras(graph, first) {",
-        tab + "minQueue = [(first, 0)];",
-        tab + "visitedNum = 0;",
-        tab + "while(minQueue.length != 0 && visitedNum != numOfNodes){ ",
-        tab + tab + "if(head[0] != first)",
-        tab + tab + tab + "head[0] is the Unvisited Neighbor",
-        tab + tab + "head = head[0];",
-        tab + tab + "for(i = 0; i < adjaceny of head[0]; i++){",
-        tab + tab + tab + "temp = head[0][i][1];",
-        tab + tab + tab + "weight = head[0][i][2];",
-        tab + tab + tab + "edge = head[0][i][3];",
-        tab + tab + tab + "if(graph.distances[temp] == -1){",
-        tab + tab + tab + tab + "parent = head[0];",
-        tab + tab + tab + "else if(graph.distances[head[0]] + weight < graph.distances[temp])",
-        tab + tab + tab + tab + "parent = head[0]",
-        tab + tab + tab + "else",
+        tab + "var minQueue = [(first, 0)];",
+        tab + "var visitedNum = 0;",
+        tab + "graph.distance[first] = 0;",
+        tab + "while(minQueue.length != 0 && visitedNum != graph.numOfNodes) { ",
+        tab + tab + "var head = minQueue.shift();",
+        tab + tab + "if(graph.visited[head[0]] == true) {",
+        tab + tab + tab + "continue;",
+        tab + tab + "}",
+        tab + tab + "if(head[0] != first) {",
+        tab + tab + tab + "head[0] is the unvisited neighbor",
+        tab + tab + "}",
+        tab + tab + "for(var i = 0; i < graph.adjacencyList[head[0]].length; i++) {",
+        tab + tab + tab + "var v = head[0][i][1];", //13
+        tab + tab + tab + "var weight = head[0][i][2];",
+        tab + tab + tab + "var edge = head[0][i][3];",
+        tab + tab + tab + "if(graph.visited[v] == true) {", //16
+        tab + tab + tab + tab + "continue;",
+        tab + tab + tab + "}",
+        tab + tab + tab + "if(graph.distances[v] == -1) {", //19
+        tab + tab + tab + tab + "graph.parents[v] = head[0];",
+        tab + tab + tab + tab + "graph.parentEdges[v] = edge;",
+        tab + tab + tab + tab + "graph.distances[v] = graph.distances[head[0]] + weight;",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else if(graph.distances[head[0]] + weight < graph.distances[v]) {",
+        tab + tab + tab + tab + "graph.parents[v] = head[0];", //25
+        tab + tab + tab + tab + "graph.parentEdges[v] = edge;",
+        tab + tab + tab + tab + "graph.distances[v] = graph.distances[head[0]] + weight;",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else {", //29
         tab + tab + tab + tab + "Same Distance! No Parent Change Required!",
-        tab + tab + "Finished with New head[0] Node",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "graph.visited[head[0]] = true;", //33
         tab + "}", //18
         "}" //19
     ],

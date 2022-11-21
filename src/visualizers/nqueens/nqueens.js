@@ -147,12 +147,12 @@ export default class Queens extends React.Component {
       //var pseudocodeArr = [];
 
       steps.push(new EmptyStep());
-      messages.push("Entering the solve function!");
+      messages.push("<h1>solveNQ(board, col)</h1>");
       pseudocodeArr.push(new HighlightLineStep(1, lines));
 
       if(col >= n) {
         steps.push(new EmptyStep());
-        messages.push("Checking if problem is solved.");
+        messages.push("<h1>Checking if problem is solved.</h1>");
         pseudocodeArr.push(new HighlightLineStep(2, lines));
 
         steps.push(new EmptyStep());
@@ -174,8 +174,8 @@ export default class Queens extends React.Component {
           //pseudocodeArr = [...pseudocodeArr, ...pseudo];
 
           steps.push(new EmptyStep());
-          messages.push("<h1>Beginning nQueens!</h1>");
-          pseudocodeArr.push(new HighlightLineStep(4, lines));
+          messages.push("<h1>Is the Queen currently safe?</h1>");
+          pseudocodeArr.push(new HighlightLineStep(5, lines));
           board[i][col] = 1;
 
           //var solveRet = solveNQ(board, col+1, n);
@@ -190,21 +190,21 @@ export default class Queens extends React.Component {
 
         if (i + 1 !== n) {
           steps.push(new EmptyStep());
-          messages.push("Checking if next space is available.");
-          pseudocodeArr.push(new HighlightLineStep(5, lines));
-
-          steps.push(new VisibilityStep(i, col, "hidden"));
-          messages.push("<h1>Moving to next available space.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(6, lines));
-        }
-        else {
-          steps.push(new EmptyStep());
-          messages.push("Checking if next space is available.");
+          messages.push("<h1>Checking if next space is available.</h1>");
           pseudocodeArr.push(new HighlightLineStep(7, lines));
 
           steps.push(new VisibilityStep(i, col, "hidden"));
-          messages.push("<h1>Backtracking...</h1>");
+          messages.push("<h1>Moving to next available space.</h1>");
           pseudocodeArr.push(new HighlightLineStep(8, lines));
+        }
+        else {
+          steps.push(new EmptyStep());
+          messages.push("<h1>Checking if next space is available.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(9, lines));
+
+          steps.push(new VisibilityStep(i, col, "hidden"));
+          messages.push("<h1>Backtracking...</h1>");
+          pseudocodeArr.push(new HighlightLineStep(10, lines));
         }
       }
 
@@ -215,27 +215,27 @@ export default class Queens extends React.Component {
       //var pseudocodeArr = [];
 
       steps.push(new EmptyStep());
-      messages.push("");
-      pseudocodeArr.push(new HighlightLineStep(11, lines));
+      messages.push("<h1>queenSafe(board, row, col, n)</h1>");
+      pseudocodeArr.push(new HighlightLineStep(13, lines));
 
       var flag = true;
       var i , j;
       for( i= 0; i<col;i++) {
 
         steps.push(new EmptyStep());
-        messages.push("Next iteration...");
-        pseudocodeArr.push(new HighlightLineStep(12, lines));
+        messages.push("<h1>Row " + row + ", Column " + i + "</h1>");
+        pseudocodeArr.push(new HighlightLineStep(14, lines));
 
         if(board[row][i]===1) {
           steps.push(new EmptyStep());
-          messages.push("Checking if board[row][i] is equal to 1.");
-          pseudocodeArr.push(new HighlightLineStep(13, lines));
+          messages.push("<h1>Checking if board[row][i] is equal to 1.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(15, lines));
           steps.push(new TileStep(row,i,"white"));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(14, lines));
+          pseudocodeArr.push(new HighlightLineStep(16, lines));
           steps.push(new TileStep(row,i,"black"));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(14, lines));
+          pseudocodeArr.push(new HighlightLineStep(17, lines));
 
           flag = false;
           //return flag;
@@ -245,19 +245,19 @@ export default class Queens extends React.Component {
       for( i = row, j = col; i>=0 &&j>=0; i--,j--) {
 
         steps.push(new EmptyStep());
-        messages.push("Next iteration...");
-        pseudocodeArr.push(new HighlightLineStep(16, lines));
+        messages.push("<h1>Row " + i + ", Column " + j + "</h1>");
+        pseudocodeArr.push(new HighlightLineStep(20, lines));
 
         if(board[i][j]===1) {
           steps.push(new EmptyStep());
-          messages.push("Checking if board[i][j] is equal to 1.");
-          pseudocodeArr.push(new HighlightLineStep(17, lines));
+          messages.push("<h1>Checking if board[i][j] is equal to 1.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(21, lines));
           steps.push(new TileStep(i,j,"white"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(18, lines));
+          pseudocodeArr.push(new HighlightLineStep(22, lines));
           steps.push(new TileStep(i,j,"black"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(18, lines));
+          pseudocodeArr.push(new HighlightLineStep(23, lines));
 
           flag = false;
           //return flag;
@@ -267,21 +267,21 @@ export default class Queens extends React.Component {
       for( i = row, j = col; j>=0 && i < n; i++,j--){
 
         steps.push(new EmptyStep());
-        messages.push("Next iteration...");
-        pseudocodeArr.push(new HighlightLineStep(20, lines));
+        messages.push("<h1>Row " + i + ", Column " + j + "</h1>");
+        pseudocodeArr.push(new HighlightLineStep(26, lines));
 
         if(board[i][j]===1){
 
           steps.push(new EmptyStep());
-          messages.push("Checking if board[i][j] is equal to 1.");
-          pseudocodeArr.push(new HighlightLineStep(21, lines));
+          messages.push("<h1>Checking if board[i][j] is equal to 1.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(27, lines));
 
           steps.push(new TileStep(i,j,"white"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(22, lines));
+          pseudocodeArr.push(new HighlightLineStep(28, lines));
           steps.push(new TileStep(i,j,"black"));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(22, lines));
+          pseudocodeArr.push(new HighlightLineStep(29, lines));
 
           flag = false;
           //return flag;
@@ -292,7 +292,7 @@ export default class Queens extends React.Component {
 
       steps.push(new EmptyStep());
       messages.push("<h1>No queens are in range.</h1>");
-      pseudocodeArr.push(new HighlightLineStep(24, lines));
+      pseudocodeArr.push(new HighlightLineStep(32, lines));
 
       return flag;
     }

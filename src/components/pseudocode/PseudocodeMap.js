@@ -465,33 +465,41 @@ export const map = {
     ],
 
     nqueens: [
-        "nqueens(board, col, row, n){",
-        tab + "solveNQueens(board, col){",
+        "nqueens(board, col, row, n) {",
+        tab + "solveNQueens(board, col) {",
         tab + tab + "if(col >= n)",
         tab + tab + tab + "return;",
-        tab + tab + "for(i = 0; i < n; i++){",
-        tab + tab + tab + "if(i + 1 != n)",
-        tab + tab + tab + tab + "Move to Next Available Space",
+        tab + tab + "for(i = 0; i < n; i++) {", //4
+        tab + tab + tab + "if(queenSafe(board, i, col, n))",
+        tab + tab + tab + tab + "board[i][col] = 1;",
+        tab + tab + tab + "if(i + 1 != n)", //7
+        tab + tab + tab + tab + "moveSpace(i, col)",
         tab + tab + tab + "else",
-        tab + tab + tab + tab + "Backtracking Required",
-        tab + tab + "}", //9
-        tab + "}", //10
-        tab + "queenSafe(board, row, col, n){",
-        tab + tab + "for(i = 0; i < col; i++){",
-        tab + tab + tab + "if(board[row][i] == 1)",
-        tab + tab + tab + tab + "Identify Queen in Range!",
-        tab + tab + "}", //15
-        tab + tab + "for(i = row, j = col; i >= 0 && j >= 0; i--, j--)",
-        tab + tab + tab + "if(board[i][j] == 1)",
-        tab + tab + tab + tab + "Identify Queen in Range!",
-        tab + tab + "}", //19
-        tab + tab + "for(i = row, j = col; i < n && j >= 0; i++, j--)",
-        tab + tab + tab + "if(board[i][j] == 1)",
-        tab + tab + tab + tab + "Identify Queen in Range!",
-        tab + tab + "}", //23
-        tab + tab + "No Queens in Range!",
-        tab + "}", //25
-        "}" //26
+        tab + tab + tab + tab + "backtrack(i, col)", //10
+        tab + tab + "}", //11
+        tab + "}", //12
+        tab + "queenSafe(board, row, col, n) {", //13
+        tab + tab + "for(i = 0; i < col; i++) {",
+        tab + tab + tab + "if(board[row][i] == 1) {", //15
+        tab + tab + tab + tab + "whiteTileStep(row, i);", //16
+        tab + tab + tab + tab + "blackTileStep(row, i);", //17
+        tab + tab + tab + "}",
+        tab + tab + "}", 
+        tab + tab + "for(i = row, j = col; i >= 0 && j >= 0; i--, j--) {", //20
+        tab + tab + tab + "if(board[i][j] == 1) {",
+        tab + tab + tab + tab + "whiteTileStep(i, j);",
+        tab + tab + tab + tab + "blackTileStep(i, j);",
+        tab + tab + tab + "}",
+        tab + tab + "}", 
+        tab + tab + "for(i = row, j = col; i < n && j >= 0; i++, j--) {", //26
+        tab + tab + tab + "if(board[i][j] == 1) {",
+        tab + tab + tab + tab + "whiteTileStep(i, j);",
+        tab + tab + tab + tab + "blackTileStep(i, j);",
+        tab + tab + tab + "}",
+        tab + tab + "}", 
+        tab + tab + "return;",
+        tab + "}", 
+        "}" 
     ],
 
     fibonacci: [ //done

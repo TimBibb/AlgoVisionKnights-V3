@@ -34,12 +34,7 @@ function App() {
 	const [algoPage, setAlgoPage] = React.useState('visualizer');
 
 	React.useEffect(() => {
-		r.style.setProperty('--primaryColor', localStorage.getItem('primaryColor'));
-		r.style.setProperty('--secondaryColor', localStorage.getItem('secondaryColor'));
-		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
-		r.style.setProperty('--cardColor', localStorage.getItem('cardColor'));
-		r.style.setProperty('--backgroundColor', localStorage.getItem('backgroundColor'));
-		r.style.setProperty('--nodeColor', localStorage.getItem('nodeColor'));
+
 		// Storing primaryColor in localStorage
 		if(!localStorage.getItem('primaryColor')){
 			localStorage.setItem('primaryColor', '#FFFFFF')
@@ -118,6 +113,14 @@ function App() {
 		if(!localStorage.getItem('nodeColorB')){
 			localStorage.setItem('nodeColorB', '61')
 		}
+
+		// Setting the css dynamic variables
+		r.style.setProperty('--primaryColor', localStorage.getItem('primaryColor'));
+		r.style.setProperty('--secondaryColor', localStorage.getItem('secondaryColor'));
+		r.style.setProperty('--accentColor', localStorage.getItem('accentColor'));
+		r.style.setProperty('--cardColor', localStorage.getItem('cardColor'));
+		r.style.setProperty('--backgroundColor', localStorage.getItem('backgroundColor'));
+		r.style.setProperty('--nodeColor', localStorage.getItem('nodeColor'));
 		
 	});
 

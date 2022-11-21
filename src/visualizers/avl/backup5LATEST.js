@@ -557,13 +557,13 @@ export default class avl extends React.Component {
             messages.push("Let's insert " + val );
             return [node, steps, messages];
         }
-        else if(val < node.value){
+        if(val < node.value){
             [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev, mod);
         }
-        else if(val > node.value){
+        if(val > node.value){
             [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev, mod);
         }
-        else{
+        if(val === node.value){
             steps.push(new EmptyStep());
             messages.push("There cannot be duplicate values in a BST, so we will move on.");
             console.log("DUPLICATE: " + val);
@@ -574,33 +574,27 @@ export default class avl extends React.Component {
         node.height = 1 + max(height(node.left), height(node.right));
         var balance = getHeight(node);
         //console.log("Node: " + node.value + ", height: " + node.height + ", balance: " + balance)
-        //console.log("node" + node.value + " height " + node.height);
-        console.log("node" + node.value + " balance " + balance);
 
         if(balance > 1){
             if(val < node.left.value){
                 console.log("RIGHT ROTATE in node: " + node.value);
-                [node, steps, messages] = rightRotation(node, steps, messages);
-                return [node, steps, messages];
+                return rightRotation(node, steps, messages);
             }
             else if(val > node.left.value){
                 console.log("LEFT-RIGHT ROTATE in node: " + node.left.value + " and " + node.value);
                 [node.left, steps, messages] = leftRotation(node.left, steps, messages);
-                [node, steps, messages] = rightRotation(node, steps, messages);
-                return [node, steps, messages];
+                return rightRotation(node, steps, messages);
             }
         }
         if(balance < -1){
             if(val > node.right.value){
                 console.log("LEFT ROTATE in node: " + node.value);
-                [node, steps, messages] = leftRotation(node, steps, messages);
-                return [node, steps, messages];
+                return leftRotation(node, steps, messages);
             }
             else if(val < node.right.value){
                 console.log("RIGHT-LEFT ROTATE in node: " + node.right.value + " and " + node.value);
                 [node.right, steps, messages] = rightRotation(node.right, steps, messages);
-                [node, steps, messages] = leftRotation(node, steps, messages);
-                return [node, steps, messages];
+                return leftRotation(node, steps, messages);
             }
         }
 
@@ -781,11 +775,11 @@ export default class avl extends React.Component {
                     <tr>
                         <div ref={this.ref} class=""></div>
                     </tr>
-                    {/* <tr>
+                    <tr>
                         <div style={{width: "500px"}}>
                             <p>Miguel</p>
                         </div>
-                    </tr> */}
+                    </tr>
                 </table>
             </div>
         )

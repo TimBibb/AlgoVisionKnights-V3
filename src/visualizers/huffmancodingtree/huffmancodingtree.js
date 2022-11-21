@@ -1057,11 +1057,11 @@ export default class huffmancodingtree extends React.Component {
                     <tr>
                         <div ref={this.ref} class=""></div>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <div style={{width: "500px"}}>
                             <p>gian</p>
                         </div>
-                    </tr>
+                    </tr> */}
                 </table>
             </div>
         )

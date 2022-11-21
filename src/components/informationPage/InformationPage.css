@@ -4,8 +4,29 @@
 	padding: 13px 25px 25px 25px;
 }
 
-table {
-	color: var(--backgroundColor);
+th{
+	color: var(--primaryColor) !important;
+	background-color: var(--backgroundColor) !important;
+}
+
+tr{
+	color: var(--primaryColor) !important;
+	background-color: var(--backgroundColor) !important;
+}
+
+table td{
+	color: var(--primaryColor) !important;
+	background-color: var(--backgroundColor) !important;
+}
+
+tbody{
+	color: var(--primaryColor) !important;
+	background-color: var(--backgroundColor) !important;
+}
+
+thead{
+	color: var(--primaryColor) !important;
+	background-color: var(--backgroundColor) !important;
 }
 
 a {

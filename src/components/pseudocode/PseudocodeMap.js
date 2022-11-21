@@ -326,18 +326,26 @@ export const map = {
     ],
 
     bellmanford: [ //done
-        "bellmanford(graph) {",
-        tab + "for(iterations = 0; iterations < numberOfNodes - 1; iterations++) {",
-        tab + tab + "for(edge = 0; edge < numberOfEdges; edge++) {",
-        tab + tab + tab + "if(distance[node1] == -1)",
-        tab + tab + tab + tab + "Cannot Update",
+        "bellmanFord(graph) {",
+        tab + "for(let iterations = 0; iterations < graph.numberOfNodes - 1; iterations++) {",
+        tab + tab + "for(let edgeId = 0; edgeId < graph.numberOfEdges; edgeId++) {",
+        tab + tab + tab + "let [node1, node2, weight, _edgeId] = graph.edges[edgeId];",
+        tab + tab + tab + "let dist1 = parseInt(graph.distances[node1];",
+        tab + tab + tab + "let dist2 = parseInt(graph.distances[node2];",
+        tab + tab + tab + "if(graph.distances[node1] == -1)",
+        tab + tab + tab + tab + "return;",
         tab + tab + tab + "else {",
-        tab + tab + tab + tab + "if(distance1 != -1) {",
-        tab + tab + tab + tab + tab + "Update Distance at Parent Node",
-        tab + tab + tab + tab +"else {",
-        tab + tab + tab + tab + tab + "Do Not Update Parent Node",
-        tab + "}", //10
-        "}" //11
+        tab + tab + tab + tab + "if(dist1 != -1 && (dist2 == -1 || dist1 + weight < dist2)) {",
+        tab + tab + tab + tab + tab + "graph.distances[node2] = dist1 + weight;",
+        tab + tab + tab + tab + tab + "graph.parents[node2] = node1;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else {", //13
+        tab + tab + tab + tab + tab + "return;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + "}", 
+        "}" 
     ],
 
     breadthfirst: [ //added closing brackets for all loops

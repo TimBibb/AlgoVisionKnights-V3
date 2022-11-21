@@ -256,14 +256,14 @@ export default class BellmanFord extends React.Component {
           );
           addStep(new EmptyStep());
           flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+          pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
           createMessage(
             "Since the source of the edge has an infinite value, no update can be made."
           );
           addStep(new EmptyStep());
           flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+          pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
         } else {
           var dist2string = dist2 === -1 ? "∞" : dist2;
 
@@ -272,7 +272,7 @@ export default class BellmanFord extends React.Component {
           );
           addStep(new EmptyStep());
           flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+          pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
 
           if (dist1 !== -1 && (dist2 === -1 || dist1 + weight < dist2)) {
 
@@ -281,7 +281,7 @@ export default class BellmanFord extends React.Component {
             );
             addStep(new EmptyStep());
             flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+            pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
 
             createMessage(
               `Since ${dist1} + ${weight} = ${
@@ -298,7 +298,7 @@ export default class BellmanFord extends React.Component {
               )
             );
             flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+            pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
 
             graph.distances[node2] = dist1 + weight;
             graph.parents[node2] = node1;
@@ -309,7 +309,7 @@ export default class BellmanFord extends React.Component {
             );
             addStep(new EmptyStep());
             flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
+            pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
 
             createMessage(
               `Since ${dist1} + ${weight} = ${
@@ -318,12 +318,15 @@ export default class BellmanFord extends React.Component {
             );
             addStep(new EmptyStep());
             flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
+            pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
           }
         }
+        createMessage(
+          "Checking next Edge ID"
+        );
         addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "gray", "white"));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
       }
     }
 

@@ -146,7 +146,7 @@ class Node {
         this.id =  "node" + i;
         this.textId = "label" + i;
         this.parent = parent;
-        this.height = 0;
+        this.height = 1;
         this.balance = 0;
 
         this.node = new LabeledNode(
@@ -156,7 +156,7 @@ class Node {
             this.x + "%",
             this.y + "%",
             this.value,
-            "hidden",
+            "visible",
             "white"
         );
     }
@@ -176,52 +176,65 @@ function max(a, b){
 }
 
 function getHeight(node){
-    if(node == null)
+    if(node === null)
         return 0;
     return height(node.left) - height(node.right);
 }
 
-function rightRotation(y){
-    let x = y.left;
-    let temp = x.right;
-    let temp_p1 = y.parent;
+class rightRotation{
+    constructor(y){
+        this.y = y;
+    }
+    forward(svg){
+        let x = this.y.left;
+        let temp = x.right;
+        let temp_p1 = this.y.parent;
 
-    x.right = y;
-    y.left = temp;
+        x.right = this.y;
+        this.y.left = temp;
 
-    x.parent = temp_p1;
-    y.parent =  x;
-    //console.log("Y: " + y + ", y.left: " + y.left);
-    if(y.left != null)
-        y.left.parent = y;
+        x.parent = temp_p1;
+        this.y.parent =  x;
+        //console.log("Y: " + y + ", y.left: " + y.left);
+        if(this.y.left != null)
+            this.y.left.parent = y;
 
-    //switchNodes();
-    updateHeights(y);
-    updateHeights(x);
+        //switchNodes();
+        updateHeights(this.y);
+        updateHeights(x);
 
-    return x;
+        // return x;
+    }
 }
 
-function leftRotation(x){
-    let y = x.right;
-    let temp = y.left;
-    let temp_p1 = x.parent;
+class leftRotation{
 
-    y.left = x;
-    x.right = temp;
+    constructor(x){
+        this.x = x;
+    }
 
-    y.parent = temp_p1;
-    x.parent = y;
-    //console.log("X: " + x + ", x.right: " + x.right);
-    if(x.right != null)
-        x.right.parent = x;
+    forward(svg){
+        let y = this.x.right;
+        let temp = y.left;
+        let temp_p1 = this.x.parent;
+
+        y.left = this.x;
+        this.x.right = temp;
+
+        y.parent = temp_p1;
+        this.x.parent = y;
+        //console.log("X: " + x + ", x.right: " + x.right);
+        if(this.x.right != null)
+            this.x.right.parent = x;
+        
+
+        //switchNodes();
+        updateHeights(y);
+        updateHeights(this.x);
+
+        //return y;
+    }
     
-
-    //switchNodes();
-    updateHeights(y);
-    updateHeights(x);
-
-    return y;
 }
 
 function updateHeights(node){
@@ -232,7 +245,7 @@ function updateHeights(node){
     //console.log("AQUIIII" + node.value + " " + node.height);
     
     if(node.left == null && node.right == null)
-      node.height = 0;
+      node.height = 1;
     else
       node.height = 1 + max(height(node.left), height(node.right));
   }
@@ -334,13 +347,171 @@ export default class avl extends React.Component {
         return svgGroup;
     }
 
-    play(){
-        console.log("PLAY CLICKED");
-    }
+    // simulate() {
+    //     console.log("SIMULATING");
+    //     var val = Math.floor(Math.random() * 100);
+    //     var level = 0;
+    //     var modifier = 4;
+    //     var steps = []
+    //     var messages = []
+    //     var root = null;
 
-    pause(){
-        console.log("PAUSE CLICKED");
-    }
+    //     while (i < MAX_NODE) {
+    //         val = Math.floor(Math.random() * 100);
+    //         steps.push(new EmptyStep());
+    //         messages.push("The next value we will insert into the tree is " + val );
+    //         console.log("level " + level);
+    //         if(!root) {
+    //             root = new Node(this.ref, val, x, y, i, null);
+    //             this.setState({root: root})
+    //             //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
+    //             steps.push(new NewNodeStep(root, null));
+    //             messages.push("The tree is empty, let's add "+ val + " as the root node.");
+                
+    //             // steps.push(new UnHighlightNodeStep(this.state.root, null));
+    //             //steps.push(new UnHighlightPathStep(root, val));
+    //             steps.push(new EmptyStep());
+    //             messages.push("The tree is empty, let's add "+ val + " as the root node.");
+    //             i++;
+    //         } else {
+    //             let node = root;
+    //             //y += 10;
+    //             level = 0
+    //             var firstStep = true;
+
+    //             while(true) {
+    //                 var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
+    //                 //console.log(node.value);
+    //                 if (firstStep) {
+    //                     //steps.push(new HighlightNodeStep(node, null));
+    //                     steps.push(new EmptyStep());
+    //                     messages.push("The next value we will insert into the tree is " + val );
+    //                     firstStep = false;
+    //                 } else {
+    //                     //steps.push(new HighlightNodeStep(node, null));
+    //                     steps.push(new EmptyStep());
+    //                     messages.push(" ");
+    //                 }
+
+    //                 if(val < node.value) {
+    //                     steps.push(new EmptyStep());
+    //                     messages.push( val + " is less than " + node.value );
+
+    //                     // steps.push(new UnHighlightNodeStep(node, null));
+    //                     // messages.push(val + " is less than " + node.value);
+
+    //                     if(node.left != null) {
+    //                         // var edge = node.lEdge;
+    //                         node = node.left;
+    //                         // steps.push(new HighlightNodeStep(node, edge));
+    //                         steps.push(new EmptyStep());
+    //                         messages.push("Let's traverse to the left edge of the node.");
+
+    //                         // steps.push(new UnHighlightNodeStep(node, edge));
+    //                         // messages.push("Let's traverse to the left edge of the node.");
+    //                     } else {
+    //                         temp_x = node.x - 20 + tempMod;
+    //                         temp_y = node.y + 10;
+    //                         temp_x2 = node.x - 17 + tempMod;
+    //                         temp_y2 = node.y + 8;
+
+    //                         // node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+    //                         node.left = new Node(this.ref, val, temp_x, temp_y, i, node);
+
+    //                         steps.push(new EmptyStep());
+    //                         messages.push( node.value + " has no left child.");
+
+    //                         steps.push(new NewNodeStep(node.left, node.lEdge));
+    //                         messages.push("Let's insert " + val + " to the left of node " + node.value );
+
+    //                         // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
+    //                         //steps.push(new UnHighlightPathStep(root, val));
+    //                         steps.push(new EmptyStep());
+    //                         messages.push("Let's insert " + val + " to the left of node " + node.value );
+
+    //                         //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
+    //                         // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
+    //                         // if (level > this.state.maxLevel) {
+    //                         //     this.setState({maxLevel: level});
+    //                         //     this.adjustDistances(root, level);
+    //                         // }
+    //                         i++;
+    //                         j++;
+    //                         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
+    //                         // updateHeights(root);
+    //                         break;
+    //                     }
+    //                 } else if (val > node.value) {
+    //                     steps.push(new EmptyStep());
+    //                     messages.push( val + " is greater than " + node.value );
+
+    //                     // steps.push(new UnHighlightNodeStep(node, null));
+    //                     // messages.push(val + " is greater than " + node.value);
+
+    //                     if(node.right != null) {
+    //                         // var edge = node.rEdge
+    //                         node = node.right;
+    //                         // steps.push(new HighlightNodeStep(node, edge));
+    //                         steps.push(new EmptyStep());
+    //                         messages.push("Let's traverse to the right edge of the node.");
+
+    //                         // steps.push(new UnHighlightNodeStep(node, edge));
+    //                         // messages.push("Let's traverse to the right edge of the node.");
+    //                     } else {
+    //                         temp_x = node.x + 20 - tempMod;
+    //                         temp_y = node.y + 10;
+    //                         temp_x2 = node.x + 17 - tempMod;
+    //                         temp_y2 = node.y + 8;
+    //                         // node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
+    //                         node.right = new Node(this.ref, val, temp_x, temp_y, i, node);
+
+    //                         steps.push(new EmptyStep());
+    //                         messages.push( node.value + " has no right child.");
+
+    //                         steps.push(new NewNodeStep(node.right, node.rEdge));
+    //                         messages.push("Let's insert " + val + " to the right of node " + node.value );
+
+    //                         // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
+    //                         //steps.push(new UnHighlightPathStep(root, val));
+    //                         steps.push(new EmptyStep());
+    //                         messages.push("Let's insert " + val + " to the right of node " + node.value );
+
+    //                         //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
+    //                         // if (level > this.state.maxLevel) {
+    //                         //     this.setState({maxLevel: level});
+    //                         //     this.adjustDistances(root, level);
+    //                         // }
+    //                         i++;
+    //                         j++;
+    //                         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
+    //                         //updateHeights(root);
+    //                         break;
+    //                     }
+    //                 } else {
+    //                     steps.push(new EmptyStep());
+    //                     messages.push(val + " is equal to " + node.value);
+
+    //                     // steps.push(new UnHighlightNodeStep(node, null));
+    //                     //steps.push(new UnHighlightPathStep(root, val));
+    //                     messages.push("There cannot be duplicate values in a BST, so we will move on.");
+    //                     break;
+    //                 }
+    //                 level++;
+    //             }
+    //         }
+
+    //         //console.log(root);
+    //         root = this.BalancingRecursion(root, val);
+    //         readjustCoordinates(root)
+    //         console.log(root);
+    //     }
+
+    //     steps.push(new EmptyStep())
+    //     messages.push("AVL Tree insertion complete!");
+    //     console.log(this.state.root);
+    //     this.setState({steps: steps});
+    //     this.setState({messages: messages});
+    // }
 
     simulate() {
         console.log("SIMULATING");
@@ -350,14 +521,18 @@ export default class avl extends React.Component {
         var steps = []
         var messages = []
         var root = null;
+        var temp_x = x;
+        var temp_y = y;
 
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
             messages.push("The next value we will insert into the tree is " + val );
-            console.log("level " + level);
+
+            //console.log(root);
+
             if(!root) {
-                root = new Node(this.ref, val, x, y, i, null);
+                root = new Node(this.ref, val, x, y, i);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -368,142 +543,70 @@ export default class avl extends React.Component {
                 steps.push(new EmptyStep());
                 messages.push("The tree is empty, let's add "+ val + " as the root node.");
                 i++;
-            } else {
-                let node = root;
-                //y += 10;
-                level = 0
-                var firstStep = true;
-
-                while(true) {
-                    var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-                    //console.log(node.value);
-                    if (firstStep) {
-                        //steps.push(new HighlightNodeStep(node, null));
-                        steps.push(new EmptyStep());
-                        messages.push("The next value we will insert into the tree is " + val );
-                        firstStep = false;
-                    } else {
-                        //steps.push(new HighlightNodeStep(node, null));
-                        steps.push(new EmptyStep());
-                        messages.push(" ");
-                    }
-
-                    if(val < node.value) {
-                        steps.push(new EmptyStep());
-                        messages.push( val + " is less than " + node.value );
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        // messages.push(val + " is less than " + node.value);
-
-                        if(node.left != null) {
-                            // var edge = node.lEdge;
-                            node = node.left;
-                            // steps.push(new HighlightNodeStep(node, edge));
-                            steps.push(new EmptyStep());
-                            messages.push("Let's traverse to the left edge of the node.");
-
-                            // steps.push(new UnHighlightNodeStep(node, edge));
-                            // messages.push("Let's traverse to the left edge of the node.");
-                        } else {
-                            temp_x = node.x - 20 + tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x - 17 + tempMod;
-                            temp_y2 = node.y + 8;
-
-                            // node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.left = new Node(this.ref, val, temp_x, temp_y, i, node, level===1);
-
-                            steps.push(new EmptyStep());
-                            messages.push( node.value + " has no left child.");
-
-                            steps.push(new NewNodeStep(node.left, node.lEdge));
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-                            // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
-                            //steps.push(new UnHighlightPathStep(root, val));
-                            steps.push(new EmptyStep());
-                            messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-                            //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-                            // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(root, level);
-                            // }
-                            i++;
-                            j++;
-                            updateHeights(root);
-                            break;
-                        }
-                    } else if (val > node.value) {
-                        steps.push(new EmptyStep());
-                        messages.push( val + " is greater than " + node.value );
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        // messages.push(val + " is greater than " + node.value);
-
-                        if(node.right != null) {
-                            // var edge = node.rEdge
-                            node = node.right;
-                            // steps.push(new HighlightNodeStep(node, edge));
-                            steps.push(new EmptyStep());
-                            messages.push("Let's traverse to the right edge of the node.");
-
-                            // steps.push(new UnHighlightNodeStep(node, edge));
-                            // messages.push("Let's traverse to the right edge of the node.");
-                        } else {
-                            temp_x = node.x + 20 - tempMod;
-                            temp_y = node.y + 10;
-                            temp_x2 = node.x + 17 - tempMod;
-                            temp_y2 = node.y + 8;
-                            // node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-                            node.right = new Node(this.ref, val, temp_x, temp_y, i, node, level===1);
-
-                            steps.push(new EmptyStep());
-                            messages.push( node.value + " has no right child.");
-
-                            steps.push(new NewNodeStep(node.right, node.rEdge));
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-                            // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
-                            //steps.push(new UnHighlightPathStep(root, val));
-                            steps.push(new EmptyStep());
-                            messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-                            //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-                            // if (level > this.state.maxLevel) {
-                            //     this.setState({maxLevel: level});
-                            //     this.adjustDistances(root, level);
-                            // }
-                            i++;
-                            j++;
-                            updateHeights(root);
-                            break;
-                        }
-                    } else {
-                        steps.push(new EmptyStep());
-                        messages.push(val + " is equal to " + node.value);
-
-                        // steps.push(new UnHighlightNodeStep(node, null));
-                        //steps.push(new UnHighlightPathStep(root, val));
-                        messages.push("There cannot be duplicate values in a BST, so we will move on.");
-                        break;
-                    }
-                    level++;
-                }
+            }
+            else{
+                console.log(val);
+                [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, level, modifier);
+                i++;
             }
 
-            //console.log(root);
-            root = this.BalancingRecursion(root, val);
-            readjustCoordinates(root)
             console.log(root);
+
         }
 
-        steps.push(new EmptyStep())
-        messages.push("AVL Tree insertion complete!");
-        console.log(this.state.root);
-        this.setState({steps: steps});
-        this.setState({messages: messages});
+        
+    }
+
+    insertingvalue(node, steps, messages, val, x, y, lev, mod){
+
+        var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
+        if(node === null){
+
+            node = new Node(this.ref, val, x, y, i);
+            steps.push(new NewNodeStep(node, null));
+            messages.push("Let's insert " + val );
+
+            return [node, steps, messages];
+        }
+        if(val < node.value){
+            [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev, mod);
+        }
+        if(val > node.value){
+            [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev, mod);
+        }
+        else{
+            steps.push(new EmptyStep());
+            messages.push("There cannot be duplicate values in a BST, so we will move on.");
+            return [node, steps, messages];
+        }
+
+        node.height = 1 + max(height(node.left), height(node.right));
+        var balance = getHeight(node);
+
+        if(balance > 1){
+            if(val < node.left.value){
+                console.log("RIGHT ROTATE");
+                // return rightRotation(node);
+            }
+            else if(val > node.left.value){
+                console.log("LEFT-RIGHT ROTATE");
+                // node.left = leftRotation(node.left);
+                // return rightRotation(node);
+            }
+        }
+        if(balance < -1){
+            if(val > node.right.value){
+                console.log("LEFT ROTATE");
+                // return leftRotation(node);
+            }
+            else if(val < node.right.value){
+                console.log("RIGHT-LEFT ROTATE");
+                // node.right = rightRotation(node.right);
+                // return leftRotation(node);
+            }
+        }
+
+        return[node, steps, messages];
     }
 
     BalancingRecursion(node, val){
@@ -515,28 +618,37 @@ export default class avl extends React.Component {
         var balance = getHeight(node);
         node.balance = balance;
 
-        //console.log("NODE " + node.value + ": " + balance);
+        // console.log("NODE " + node.value + ": " + balance);
+        // console.log("NODE " + node.value);
+        // if(node.right !=null)
+        //     console.log("NODER " + node.right.value);
+        // if(node.left !=null)
+        //     console.log("NODEL " + node.left.value);
 
         if(balance > 1 && val < node.left.value){
+            //console.log("RR NODE " + node.value + ": " + balance);
             console.log("RIGHT ROTATE");
-            node = rightRotation(node);
+            node = new rightRotation(node);
         }
 
         if(balance < -1 && val > node.right.value){
+            //console.log("LR NODE " + node.value + ": " + balance);
             console.log("LEFT ROTATE");
-            node = leftRotation(node);
+            node = new leftRotation(node);
         }
 
         if(balance > 1 && val > node.left.value){
+            //console.log("LRR NODE " + node.value + ": " + balance);
             console.log("LEFT-RIGHT ROTATE");
-            node.left = leftRotation(node.left);
-            node = rightRotation(node);
+            // node.left = new leftRotation(node.left);
+            // node = new rightRotation(node);
         }
 
         if(balance < -1 && val < node.right.value){
+            //console.log("RLR NODE " + node.value + ": " + balance);
             console.log("RIGHT-LEFT ROTATE");
-            node.right = rightRotation(node.right);
-            node = leftRotation(node);  
+            // node.right = new rightRotation(node.right);
+            // node = new leftRotation(node);  
         }
 
         return node;

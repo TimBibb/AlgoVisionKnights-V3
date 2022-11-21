@@ -1,5 +1,5 @@
 #pseudocodeDiv {
-	border: solid 1px #FFC904;
+	border: solid 1px var(--accentColor);
 	background-color: white;
 	display: block;
 	border-radius: 15px;

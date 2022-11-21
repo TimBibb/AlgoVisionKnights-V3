@@ -21,7 +21,7 @@ function InformationPage({ path }) {
 		<div className='InformationPage'>
 			<h3>More Information Below</h3>
 			<hr />
-			<MarkdownPreview source={markdown} style={{ color: 'white' }} />
+			<MarkdownPreview source={markdown} style={{ color: localStorage.getItem('primaryColor') }} />
 		</div>
 	);
 }

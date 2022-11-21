@@ -10,7 +10,7 @@ class Line {
         .attr("width", 370)
         .attr("height", 25)
         .attr("visibility", "hidden")
-        .attr("fill", "#FFD700")
+        .attr("fill", localStorage.getItem('accentColor'))
         .attr("rx", 5)
 
     pseudocodeSvg

@@ -587,11 +587,11 @@ export default class binarysearchtree extends React.Component {
                     <tr>
                         <div ref={this.ref} class=""></div>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <div style={{width: "500px"}}>
                             <p>tim</p>
                         </div>
-                    </tr>
+                    </tr> */}
                 </table>
                 <div class="parent-svg">
                     <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>

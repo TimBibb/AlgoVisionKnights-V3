@@ -68,39 +68,39 @@
 }
 
 input[type="range"]::-webkit-slider-thumb {
-  background: #FFC904 !important;
+	background: var(--accentColor) !important;
 }
 
 /* All the same stuff for Firefox */
 input[type="range"]::-moz-range-thumb {
-  background: #FFC904 !important;
+	background: var(--accentColor) !important;
 }
 
 
 input[type="range"]::-ms-thumb {
-	background: #FFC904 !important;
+	background: var(--accentColor) !important;
 }
 
 
 
 input[type="range"]::-ms-track {
-	background: black !important;
-	border: 1px solid #ffc904a5;
+	background: var(--backgroundColor) !important;
+	border: 1px solid var(--accentColor);
 
 }
 
 input[type="range"]::-moz-range-track {
-	background: black !important;
-	border: 1px solid #FFC904a5;
+	background: var(--backgroundColor) !important;
+	border: 1px solid var(--accentColor);
 
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-	background: black !important;
-	border: 1px solid #FFC904a5;
+	background: var(--backgroundColor) !important;
+	border: 1px solid var(--accentColor);
 }
 
 input[type="range"] {
-	background: black !important;
+	background: var(--backgroundColor) !important;
 	/* border: 1px solid yellow; */
 }

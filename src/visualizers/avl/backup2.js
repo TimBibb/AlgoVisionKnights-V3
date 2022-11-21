@@ -146,7 +146,7 @@ class Node {
         this.id =  "node" + i;
         this.textId = "label" + i;
         this.parent = parent;
-        this.height = 0;
+        this.height = 1;
         this.balance = 0;
 
         this.node = new LabeledNode(
@@ -181,47 +181,60 @@ function getHeight(node){
     return height(node.left) - height(node.right);
 }
 
-function rightRotation(y){
-    let x = y.left;
-    let temp = x.right;
-    let temp_p1 = y.parent;
+class rightRotation{
+    constructor(y){
+        this.y = y;
+    }
+    forward(svg){
+        let x = this.y.left;
+        let temp = x.right;
+        let temp_p1 = this.y.parent;
 
-    x.right = y;
-    y.left = temp;
+        x.right = this.y;
+        this.y.left = temp;
 
-    x.parent = temp_p1;
-    y.parent =  x;
-    //console.log("Y: " + y + ", y.left: " + y.left);
-    if(y.left != null)
-        y.left.parent = y;
+        x.parent = temp_p1;
+        this.y.parent =  x;
+        //console.log("Y: " + y + ", y.left: " + y.left);
+        if(this.y.left != null)
+            this.y.left.parent = y;
 
-    //switchNodes();
-    updateHeights(y);
-    updateHeights(x);
+        //switchNodes();
+        updateHeights(this.y);
+        updateHeights(x);
 
-    return x;
+        // return x;
+    }
 }
 
-function leftRotation(x){
-    let y = x.right;
-    let temp = y.left;
-    let temp_p1 = x.parent;
+class leftRotation{
 
-    y.left = x;
-    x.right = temp;
+    constructor(x){
+        this.x = x;
+    }
 
-    y.parent = temp_p1;
-    x.parent = y;
-    //console.log("X: " + x + ", x.right: " + x.right);
-    if(x.right != null)
-        x.right.parent = x;
+    forward(svg){
+        let y = this.x.right;
+        let temp = y.left;
+        let temp_p1 = this.x.parent;
+
+        y.left = this.x;
+        this.x.right = temp;
+
+        y.parent = temp_p1;
+        this.x.parent = y;
+        //console.log("X: " + x + ", x.right: " + x.right);
+        if(this.x.right != null)
+            this.x.right.parent = x;
+        
+
+        //switchNodes();
+        updateHeights(y);
+        updateHeights(this.x);
+
+        //return y;
+    }
     
-
-    //switchNodes();
-    updateHeights(y);
-    updateHeights(x);
-
-    return y;
 }
 
 function updateHeights(node){
@@ -232,7 +245,7 @@ function updateHeights(node){
     //console.log("AQUIIII" + node.value + " " + node.height);
     
     if(node.left == null && node.right == null)
-      node.height = 0;
+      node.height = 1;
     else
       node.height = 1 + max(height(node.left), height(node.right));
   }
@@ -519,24 +532,24 @@ export default class avl extends React.Component {
 
         if(balance > 1 && val < node.left.value){
             console.log("RIGHT ROTATE");
-            node = rightRotation(node);
+            node = new rightRotation(node);
         }
 
         if(balance < -1 && val > node.right.value){
             console.log("LEFT ROTATE");
-            node = leftRotation(node);
+            node = new leftRotation(node);
         }
 
         if(balance > 1 && val > node.left.value){
             console.log("LEFT-RIGHT ROTATE");
-            node.left = leftRotation(node.left);
-            node = rightRotation(node);
+            node.left = new leftRotation(node.left);
+            node = new rightRotation(node);
         }
 
         if(balance < -1 && val < node.right.value){
             console.log("RIGHT-LEFT ROTATE");
-            node.right = rightRotation(node.right);
-            node = leftRotation(node);  
+            node.right = new rightRotation(node.right);
+            node = new leftRotation(node);  
         }
 
         return node;

@@ -13,7 +13,7 @@ class SpeedSlider extends React.Component {
     render() {
         return (
             <div style={{display: "grid"}}>
-                <Form.Text style={{margin: 'auto', color: 'white'}}>{this.props.waitTimeMultiplier}x</Form.Text>
+                <Form.Text style={{margin: 'auto', color: localStorage.getItem('primaryColor')}}>{this.props.waitTimeMultiplier}x</Form.Text>
                 <Form.Range
                     step={0.25} min={0.25} max={5}
                     value={this.props.waitTimeMultiplier}

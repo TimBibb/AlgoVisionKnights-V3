@@ -367,29 +367,35 @@ export const map = {
     ],
 
     depthfirst: [ //done
-        "depthFirstSearch(graph, stack){",
-        tab + "nodeStack = []",
-        tab + "edgeStack = []",
-        tab + "let head = randInRange(0, 6)",
-        tab + "current location is node[head]",
-        tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
-        tab + tab + "if(nodeVisited = false)",
-        tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
-        tab + "}", //8
-        tab + "while(nodeStack.length != 0){",
-        tab + tab + "s = nodeStack.pop()",
-        tab + tab + "if(nodeVisited = false)",
-        tab + tab + tab + "travel to new node, mark prev as visited",
-        tab + tab + "else",
-        tab + tab + tab + "node already visited",
-        tab + tab + tab + "travel back to parent node",
-        tab + tab + tab + "add ajacent unvisited to stack",
-        tab + tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++){",
-        tab + tab + tab + "if(nodeVisited = false)",
-        tab + tab + tab + tab + "add graph.adjacenyList[head][node][1] to stack",
-        tab + tab + "}", //20
-        tab + "}", //21
-        "}" //22
+        "depthFirstSearch(graph, stack) {",
+        tab + "let nodeStack = [];",
+        tab + "let edgeStack = [];",
+        tab + "let nodeVisited = [];",
+        tab + "let head = randInRange(0, 6);", //4
+        tab + "nodeVisited[head] = true;",
+        tab + "for(let node = 0; node < graph.adjacencyList[head].length; node++) {", //6
+        tab + tab + "if(nodeVisited[graph.adjacencyList[head][node][1]] == false) {",
+        tab + tab + tab + "nodeStack.push(graph.adjacencyList[head][node][1]);",
+        tab + tab + tab + "edgeStack.push(graph.adjacencyList[head][node][2]);",
+        tab + tab + "}",
+        tab + "}", 
+        tab + "while(nodeStack.length != 0) {", //12
+        tab + tab + "let s = nodeStack.pop();",
+        tab + tab + "let e = edgeStack.pop();",
+        tab + tab + "if(nodeVisited[s] = false) {",
+        tab + tab + tab + "nodeVisited[s] = true;",
+        tab + tab + "}",
+        tab + tab + "else {", //17
+        tab + tab + tab + "continue;",
+        tab + tab + "}",
+        tab + tab + "for(let node = 0; node < graph.adjacencyList[s].length; node++) {",
+        tab + tab + tab + "if(nodeVisited[graph.adjacencyList[s][node][1]] == false) {",
+        tab + tab + tab + tab + "nodeStack.push(graph.adjacencyList[s][node][1]);",
+        tab + tab + tab + tab + "edgeStack.push(graph.adjacencyList[s][node][2]);",
+        tab + tab + tab + "}",
+        tab + tab + "}", 
+        tab + "}", 
+        "}" 
     ],
 
     //to edit

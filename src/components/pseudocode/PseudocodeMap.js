@@ -343,26 +343,36 @@ export const map = {
     breadthfirst: [ //added closing brackets for all loops
        "breadthfirst(graph, queue) {", //0
         tab + "var temp = randInRange(0, graph.numberofNodes);", //1
-        tab + "nodeLevel[temp] = 0;", //2
-        tab + "let currNode, adjNode, edgeId;", //3
-        tab + "for(var i = 0; i < graph.numberOfNodes; ++i) {", //4
-        tab + tab + "for(const edge of graph.adjacencyList[temp]) {", //5
-        tab + tab + tab + "[currNode, adjNode, edgeId] = edge;", //6
-        tab + tab + tab + "if(currentNode[currNode] == false)", //7
-        tab + tab + tab + tab + "currentNode[currNode] = true;", //8
-        tab + tab + tab + "if(!(nodeQueue.includes(currNode)))", //9
-        tab + tab + tab + tab + "nodeQueue.push(currNode);", //10
+        tab + "var nodeQueue = [];",
+        tab + "var nodeStack = [];",
+        tab + "nodeLevel[temp] = 0;", 
+        tab + "let currNode, adjNode, edgeId;", 
+        tab + "for(var i = 0; i < graph.numberOfNodes; ++i) {", //6
+        tab + tab + "for(const edge of graph.adjacencyList[temp]) {", 
+        tab + tab + tab + "[currNode, adjNode, edgeId] = edge;", 
+        tab + tab + tab + "if(currentNode[currNode] == false)",
+        tab + tab + tab + tab + "currentNode[currNode] = true;", 
+        tab + tab + tab + "if(!(nodeQueue.includes(currNode)))", //11
+        tab + tab + tab + tab + "nodeQueue.push(currNode);", 
         tab + tab + tab + "if(!(nodeVisited[adjNode]) && nodeLevel[adjNode] == 0)",
         tab + tab + tab + tab + "nodeLevel[adjNode] = nodeLevel[currNode] + 1;",
         tab + tab + tab + "if(!(nodeVisited[adjNode])) {",
-        tab + tab + tab + tab + "if(edgeSelected[adjNode] == false) {", //14
-        tab + tab + tab + tab + tab + "currNode Shares Edge with adjNode!",
-        tab + tab + tab + tab + tab + "if(!(nodeQueue.includes(adjNode)))",
+        tab + tab + tab + tab + "if(edgeSelected[adjNode] == false) {", 
+        tab + tab + tab + tab + tab + "if(!(nodeQueue.includes(adjNode))) {",
         tab + tab + tab + tab + tab + tab + "nodeQueue.push(adjNode);",
-        tab + tab + tab + tab + "else nodeVisited[currNode] = true;", //18
-        tab + tab + tab + "else currNode Shares Edge with adjNode!",
+        tab + tab + tab + tab + tab + tab + "nodeStack.push(adjNode);",
+        tab + tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else {", //22
+        tab + tab + tab + tab + tab + "nodeVisited[currNode] = true;", 
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else {",
+        tab + tab + tab + tab + "currNode shares edge with adjNode.",
+        tab + tab + tab + "}",
         tab + tab + "}",
         tab + "}",
+        tab + "nodeQueue.shift();", //31
         "}"
     ],
 

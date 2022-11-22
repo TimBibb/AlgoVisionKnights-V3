@@ -298,7 +298,6 @@ class Settings extends React.Component {
         <div>
             <div className='settings-container'>
                 {/* Primary Color */}
-                <Typography id="settings-title"> Primary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClick }>
                 <div style={ styles.primaryColor } />
                 </div>
@@ -306,9 +305,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onClose }/>
                 <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
                 </div> : null }
+                <Typography id="settings-title"> Primary Color </Typography>
 
                 {/* Secondary Color */}
-                <Typography id="settings-title"> Secondary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
                 <div style={ styles.secondaryColor } />
                 </div>
@@ -316,9 +315,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
                 <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
                 </div> : null }
+                <Typography id="settings-title"> Secondary Color </Typography>
 
                 {/* Accent Color */}
-                <Typography id="settings-title"> Accent Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
                 <div style={ styles.accentColor } />
                 </div>
@@ -326,9 +325,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
                 <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
                 </div> : null }
+                <Typography id="settings-title"> Accent Color </Typography>
 
                 {/* Background Color */}
-                <Typography id="settings-title"> Background Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
                 <div style={ styles.backgroundColor } />
                 </div>
@@ -336,9 +335,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
                 <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
                 </div> : null }
+                <Typography id="settings-title"> Background Color </Typography>
 
                 {/* Card Color */}
-                <Typography id="settings-title"> Card Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickCardColor }>
                 <div style={ styles.cardColor } />
                 </div>
@@ -346,9 +345,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseCardColor }/>
                 <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
                 </div> : null }
+                <Typography id="settings-title"> Card Color </Typography>
 
                 {/* Node Color */}
-                <Typography id="settings-title"> Node Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickNodeColor }>
                 <div style={ styles.nodeColor } />
                 </div>
@@ -356,6 +355,7 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseNodeColor }/>
                 <SketchPicker color={ this.state.nodeColor } onChange={ this.onChangeNodeColor } />
                 </div> : null }
+                <Typography id="settings-title"> Node Color </Typography>
 
             </div>
             <div className='settings-container'>

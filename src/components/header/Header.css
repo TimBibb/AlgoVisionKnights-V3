@@ -40,15 +40,25 @@
 	display: inherit;
 	margin: 0px 10px 0px 30px;
 	width: 100%;
-	background-color: var(--cardColor);
+	background-color: var(--backgroundColor);
+	border: 2px solid var(--cardColor);
+	color: var(--primaryColor);
 }
 
 #input-icon {
 	color: var(--primaryColor);
 }
 
+.UCF-Logo{
+	margin-left: 25px;
+}
+
 .SearchInputMobile {
 	display: inherit;
+}
+
+::placeholder {
+	color: var(--primaryColor) !important;
 }
 
 #search-button-mobile {
@@ -62,7 +72,7 @@
 }
 
 .Results {
-	background-color: var(--cardColor);
+	background-color: var(--secondaryColor);
 	position: absolute;
 	z-index: 1;
 	width: 100%;

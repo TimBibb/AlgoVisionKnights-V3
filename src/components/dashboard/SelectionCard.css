@@ -72,6 +72,54 @@ span.MuiButton-label {
     margin-bottom: 1em;
 }
 
+th{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+.tr{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+.table td{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+.table th{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+.tbody{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+.thead{
+	color: var(--primaryColor) !important;
+	background-color: var(--cardColor) !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+
 @media (max-width: 639px) {
 	#algorithm {
 		margin: 0px 0px 20px 0px;

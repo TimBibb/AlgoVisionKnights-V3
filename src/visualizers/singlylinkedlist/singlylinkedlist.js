@@ -297,7 +297,7 @@ export default class singlylinkedlist extends React.Component {
 
 		this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
-		this.state.pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
 		for (let k = 7; k >= 3; k--) {
 			this.removeTail();

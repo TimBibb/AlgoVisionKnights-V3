@@ -314,6 +314,8 @@ export default class HeapSort extends React.Component {
   }
 
   sort(arr, size, steps, heapLines, heapCircs, heapVals, vals, stepTime) {
+    //var pseudocodeArr = [];
+    
     var messages = [];
     messages.push("<h1>Begin by building a heap from the bottom up.</h1>");
     steps.push([new EmptyStep()]);
@@ -555,6 +557,8 @@ export default class HeapSort extends React.Component {
       steps: steps,
       messages: messages,
     });
+
+    //this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -565,6 +569,8 @@ export default class HeapSort extends React.Component {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
+
+    //this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.fastForward();
@@ -584,7 +590,7 @@ export default class HeapSort extends React.Component {
 
     document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Heap Sort!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward();
-    // this.state.steps[--stepId].backward();
+    this.state.steps[--stepId].backward();
     this.setState({ stepId: stepId });
     d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
@@ -595,6 +601,7 @@ export default class HeapSort extends React.Component {
       this.setState({ running: false });
       return;
     }
+    //this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });

@@ -458,7 +458,7 @@ export default class SelectionSort extends React.Component {
 
 		messages.push("<h1>Finished Selection Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(10,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});

@@ -237,13 +237,31 @@ export default class BreadthFirstSearch extends React.Component {
 
     for(var i=0; i<graph.numberOfNodes;++i){
 
-    for (const edge of graph.adjacencyList[temp]) {
+      addStep(new EmptyStep());
+      createMessage("Next Iteration...");
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+
+      for (const edge of graph.adjacencyList[temp]) {
+
+        console.log("we have reached the second for loop");
       
-          [currNode, adjNode, edgeId] = edge;
-          console.log(currNode.edgeInfo);
+        [currNode, adjNode, edgeId] = edge;
+        console.log(currNode.edgeInfo);
+
+        addStep(new EmptyStep());
+        createMessage("Setting Edge...");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+
+        addStep(new EmptyStep());
+        createMessage("Setting Edge...");
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
 
     if(currentNode[currNode] === false){
           createMessage("Current Node: " + currNode + ".");
+          pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
           addStep(
           new NodeColorChangeStep(
             this.ref.current,
@@ -267,6 +285,7 @@ export default class BreadthFirstSearch extends React.Component {
           queue.push(new Number(this.ref, "queue" + currNode, "7%", factor + "%", currNode, "grey", "hidden"));
           
           createMessage("Node " + currNode + " added to the queue.");
+          pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
             addStep(
               new StackChangeStep(
                 this.ref.current,
@@ -278,6 +297,10 @@ export default class BreadthFirstSearch extends React.Component {
             flushBuffer();
             queueLength++;
           
+          createMessage("Node " + currNode + " added to the queue.");
+          pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+          addStep(new EmptyStep());
+          flushBuffer();
     }
 
 
@@ -297,7 +320,7 @@ export default class BreadthFirstSearch extends React.Component {
         createMessage(
         "Node " + currNode + " shares an edge with Node " + adjNode + "."
         );
-
+        pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))  
         addStep(
             new EdgeColorChangeStep(
             this.ref.current,
@@ -319,7 +342,8 @@ export default class BreadthFirstSearch extends React.Component {
           queue.push(new Number(this.ref, "queue" + adjNode, "7%", factor + "%", adjNode, "grey", "hidden"));
           
           createMessage("Node " + adjNode + " added to  queue.");
-            
+          pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))  
+
           addStep(
               new StackChangeStep(
               this.ref.current,
@@ -330,6 +354,17 @@ export default class BreadthFirstSearch extends React.Component {
             );
 
           flushBuffer();
+
+          createMessage("Node " + adjNode + " added to  queue.");
+          pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+          addStep(new EmptyStep());
+          flushBuffer();
+
+          createMessage("Node " + adjNode + " added to  queue.");
+          pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
+          addStep(new EmptyStep());
+          flushBuffer();
+
           queueLength++;
           
         }
@@ -345,7 +380,8 @@ export default class BreadthFirstSearch extends React.Component {
       else{
 
         createMessage("Node "+ adjNode +" has been previously visited.");
-        
+        pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
+
         addStep(
             new EdgeColorChangeStep(
             this.ref.current,
@@ -357,6 +393,12 @@ export default class BreadthFirstSearch extends React.Component {
         
 
         flushBuffer();
+
+        createMessage("Node "+ adjNode +" has been previously visited.");
+        pseudocodeArr.push(new HighlightLineStep(23, this.props.lines))
+        addStep(new EmptyStep());
+        flushBuffer();
+
         nodeVisited[currNode]=true;
       }
 
@@ -366,18 +408,20 @@ export default class BreadthFirstSearch extends React.Component {
 
       
         createMessage("Node " + currNode + "  shares an edge with " + adjNode + ".");
+        pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
         addStep(new EmptyStep());
         flushBuffer();
 
     }
 
-
+    //for loop ends here
     }
 
       nodeQueue.shift();
 
       createMessage("Node " + currNode + " exits the queue.");
-      
+      pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
+
       addStep(
         new StackChangeStep(
         this.ref.current,
@@ -390,6 +434,7 @@ export default class BreadthFirstSearch extends React.Component {
       flushBuffer();
 
       createMessage("Node " + currNode + " is checked. Node Level: " + nodeLevel[currNode] + ".");
+      pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
 
       if(nodeLevel[currNode] === 0){
         addStep(
@@ -452,12 +497,13 @@ export default class BreadthFirstSearch extends React.Component {
 
     temp = nodeStack.shift();
 
-
+    //main for loop ends here
     }
 
       createMessage("Finished Breadth First Search!");
       
       addStep(new EmptyStep());
+      pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
 
       flushBuffer();
 
@@ -476,6 +522,10 @@ export default class BreadthFirstSearch extends React.Component {
     if (this.state.stepId === this.state.steps.length) return;
 
     let svg = d3.select(this.ref.current).select("svg");
+
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
 
     this.props.codeSteps[this.state.stepId].forward();
 
@@ -510,6 +560,10 @@ export default class BreadthFirstSearch extends React.Component {
       return;
     }
     let svg = d3.select(this.ref.current).select("svg");
+
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
 
     this.props.codeSteps[this.state.stepId].forward();
 

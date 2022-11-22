@@ -665,12 +665,12 @@ export default class FibonacciSequence extends React.Component {
     addStep(new NodeColorChangeStep(this.ref.current, 9, 9, "white", "gray"));
     createMessage("The Fibonacci function has completed, returning fib(4) = 3.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
     createMessage("Finished Fibonacci Sequence!");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     this.setState({steps: steps, messages: messages});
     this.props.handleCodeStepsChange(pseudocodeArr);

@@ -412,13 +412,13 @@ export default class HashTable extends React.Component {
 
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
         }
 
     this.createMessage(`Although this entry is empty, we already found a deleted entry.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
 
     this.createMessage(`Replace the first deleted entry we found.`);
     this.addStep(
@@ -426,7 +426,7 @@ export default class HashTable extends React.Component {
     );
     this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), `#444444`));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
 
     let newText = `${x}`;
 
@@ -508,13 +508,13 @@ export default class HashTable extends React.Component {
       this.createMessage(`The value at index ${index} does not match, continue.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
     }
 
     this.createMessage(`No entry matching ${x} was found. There is nothing to delete.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
 
     this.setState({ message: this.messages, steps: this.steps });
 
@@ -579,7 +579,7 @@ export default class HashTable extends React.Component {
     this.createMessage(`No entry matching ${x} was found.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
 
     this.setState({ message: this.messages, steps: this.steps });
 
@@ -634,7 +634,7 @@ export default class HashTable extends React.Component {
     this.createMessage(`Finished with Hash Table example!`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     this.props.handleCodeStepsChange(pseudocodeArr);
     this.setState({ message: this.messages, steps: this.steps });    

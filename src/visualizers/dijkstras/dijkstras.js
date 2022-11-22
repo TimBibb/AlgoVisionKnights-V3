@@ -173,7 +173,7 @@ export default class Dijkstras extends React.Component {
 
 		messages.push("<h1>Node " + first + "'s distance is 0.</h1>");
 		steps.push(new SetInfoStep(first, -1, -1, -1, 0));
-		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
 		console.log("LIST");
 		console.log(graph.adjacencyList);
@@ -181,7 +181,16 @@ export default class Dijkstras extends React.Component {
 		var minQueue = [[first, 0]];
 
 		while (minQueue.length !== 0 && visitedNum !== graph.numberOfNodes) {
+			messages.push("<h1>Starting Algorithm!</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+			
 			var head = minQueue.shift();
+
+			messages.push("<h1>Obtaining Head Information</h1>");
+			steps.push(new EmptyStep());
+			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
 			if (graph.visited[head[0]] === true) {
                 continue;
             }
@@ -189,17 +198,21 @@ export default class Dijkstras extends React.Component {
 			if (head[0] !== first) {
 				messages.push("<h1>Node " + head[0] + " is the unvisited neighbor with the smallest distance.</h1>");
 				steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
-				messages.push("");
+				pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
+				messages.push("<h1>Node " + head[0] + " is the unvisited neighbor with the smallest distance.</h1>");
 				steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+				pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
 			}
 
 			messages.push("<h1>Node " + head[0] + " is the current head node.</h1>");
 			steps.push(new ColorNodeStep(head[0], (head[0] === first) ? "#1ACA1E" : "gray", "#648FFF"));
-			pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
 
 			for (var i = 0; i < graph.adjacencyList[head[0]].length; i++) {
+				messages.push("<h1>Starting Iteration " + (i+1) + ".</h1>");
+				steps.push(new EmptyStep());
+				pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+				
 				var v = graph.adjacencyList[head[0]][i][1];
 				var weight = graph.adjacencyList[head[0]][i][2];
 				var edge = graph.adjacencyList[head[0]][i][3];
@@ -210,94 +223,96 @@ export default class Dijkstras extends React.Component {
 
 				messages.push(this.compareMessage(v, head[0]));
 				steps.push(new ColorNodeStep(v, (graph.visited[head[0]]) ? "black" : "gray", "#EF3F88"));
-				pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+				pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
 				if (graph.distances[v] === -1) {
 					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
-					pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " < ∞.</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
 					
 					messages.push("<h1>Distance through " + head[0] + " is less than " + v + "'s current distance.</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
 
 					messages.push(this.newParentMessage(v, head[0]));
 					steps.push(new SetInfoStep(v, graph.parents[v], head[0], -1, -1));
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
 
 					graph.parents[v] = head[0];
 					graph.parentEdges[v] = edge;
 
 					messages.push(this.newDistanceMessage(v, parseInt(graph.distances[head[0]] + weight)));
 					steps.push(new SetInfoStep(v, -1, -1, graph.distances[v], graph.distances[head[0]] + weight));
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
 
 					graph.distances[v] = graph.distances[head[0]] + weight;
 
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 					steps.push(new ColorEdgeStep(edge, "white", "#1ACA1E"));
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
 
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
-					pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
 
 				}
 				else if (graph.distances[head[0]] + weight < graph.distances[v]) {
 					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
-					pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " < " + graph.distances[v] + ".</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
 
 					messages.push("<h1>Distance through " + head[0] + " is less than " + v + "'s current distance.</h1>");
 					steps.push(new ColorEdgeStep(graph.parentEdges[v], "#1ACA1E", "#444444"));
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
 
 					messages.push(this.newParentMessage(v, head[0]));
 					steps.push(new SetInfoStep(v, graph.parents[v], head[0], -1, -1));
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(25, this.props.lines))
 
 					graph.parents[v] = head[0];
 					graph.parentEdges[v] = edge;
 
 					messages.push(this.newDistanceMessage(v, parseInt(graph.distances[head[0]] + weight)));
 					steps.push(new SetInfoStep(v, -1, -1, graph.distances[v], graph.distances[head[0]] + weight));
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
 
 					graph.distances[v] = graph.distances[head[0]] + weight;
 					
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
 					steps.push(new ColorEdgeStep(edge, "white", "#1ACA1E"));
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
 
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
-					pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
 				}
 				else
 				{
 					messages.push(this.compareMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "gray", "white"));
-					pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(29, this.props.lines))
 
 					messages.push("<h1>" + graph.distances[head[0]] + " + " + weight + " > " + graph.distances[v] + ".</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 
 					messages.push(this.sameDistanceMessage(v, head[0]));
 					steps.push(new ColorEdgeStep(edge, "white", (graph.parentEdges.includes(edge)) ? "#1ACA1E" : "#444444"));
-					pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 
 					messages.push(this.sameDistanceMessage(v, head[0]));
-					pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+					pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 				}
 
+				messages.push("<h1>Finished Iteration " + (i+1) + ".</h1>");
 				steps.push(new ColorNodeStep(v, "#EF3F88", "gray"));
+				pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
 
 				this.minInsert(minQueue, v, graph.distances[v]);
 			}
@@ -307,16 +322,16 @@ export default class Dijkstras extends React.Component {
 
 			messages.push("<h1>Finished with Node " + head[0] + ".</h1>");
 			steps.push(new ColorNodeStep(head[0], "#648FFF", (head[0] !== first) ? "black" : "#1ACA1E"));
-			pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
+			pseudocodeArr.push(new HighlightLineStep(33, this.props.lines))
 		}
 
         messages.push("<h1>Found shortest paths from Node " + first +  " to all nodes.</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
 		messages.push("<h1>Finished Dijkstra's!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+		pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
 		this.setState({steps: steps});
 		this.setState({messages: messages});

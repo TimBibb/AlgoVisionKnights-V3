@@ -44,7 +44,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === "white") ? UCF_GOLD : "white");
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('accentColor')) ? localStorage.getItem('nodeColor') : localStorage.getItem('accentColor'));
   }
 }
 
@@ -147,7 +147,7 @@ export default class Floodfill extends React.Component {
           board[i][j] = 'BLACKGRAY';
         }
         else {
-            tile.attr("fill", UCF_GOLD);
+            tile.attr("fill", localStorage.getItem('nodeColor'));
             board[i][j] = 'UCFGOLD';
         }
 
@@ -208,10 +208,10 @@ export default class Floodfill extends React.Component {
         if (board[i][j] != "UCFGOLD") return [steps, messages, board];
 
         //console.log(i + " " + j)
-        steps.push(new TileStep(i, j, "white"));
+        steps.push(new TileStep(i, j, localStorage.getItem('accentColor')));
         messages.push("<h1>MegaTile at (" + i + " , "+ j +") is in range.</h1>");
 
-        board[i][j] = "white";
+        board[i][j] = localStorage.getItem('accentColor');
 
         [steps, messages, board] = floodFillUtil(board, i - 1, j, n);
         [steps, messages, board] = floodFillUtil(board, i + 1, j, n);

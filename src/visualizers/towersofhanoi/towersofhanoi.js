@@ -145,12 +145,12 @@ export default class Prims extends React.Component {
         .attr("y1", "25%")
         .attr("x2", xs[i] + "%")
         .attr("y2", "71%")
-        .style("stroke", "white")
+        .style("stroke", localStorage.getItem('primaryColor'))
         .style("stroke-width", "5%");
     }
-    new Number(this.ref, "peg0", xs[0] + "%", "80%", "Source", "white", "visible", "3em");
-    new Number(this.ref, "peg1", xs[1] + "%", "80%", "Auxillary", "white", "visible", "3em");
-    new Number(this.ref, "peg2", xs[2] + "%", "80%", "Destination", "white", "visible", "3em");
+    new Number(this.ref, "peg0", xs[0] + "%", "80%", "Source", localStorage.getItem('primaryColor'), "visible", "3em");
+    new Number(this.ref, "peg1", xs[1] + "%", "80%", "Auxillary", localStorage.getItem('primaryColor'), "visible", "3em");
+    new Number(this.ref, "peg2", xs[2] + "%", "80%", "Destination", localStorage.getItem('primaryColor'), "visible", "3em");
 
     for (let i = 0; i < 3; i++) {
       let curWidth = smallWidth;
@@ -201,8 +201,8 @@ export default class Prims extends React.Component {
       .attr("y", "70%")
       .attr("width", "100%")
       .attr("height", "5%")
-      .style("fill", "white")
-      .style("stroke", "white");
+      .style("fill", localStorage.getItem('primaryColor'))
+      .style("stroke", localStorage.getItem('primaryColor'));
 
     console.log(ys);
 

@@ -43,7 +43,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === "white") ? "black" : "white");
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('primaryColor')) ? localStorage.getItem('backgroundColor') : localStorage.getItem('primaryColor'));
   }
 }
 
@@ -107,10 +107,10 @@ export default class Queens extends React.Component {
           .attr("height",size + "px");
 
         if ((i+j)%2===0) {
-          tile.attr("fill", "#EF3F88");
+          tile.attr("fill", localStorage.getItem('nodeColor'));
         }
         else {
-          tile.attr("fill", "#FFCE36");
+          tile.attr("fill", localStorage.getItem('accentColor'));
         }
 
         const piece = svg.append("text")
@@ -230,10 +230,10 @@ export default class Queens extends React.Component {
           steps.push(new EmptyStep());
           messages.push("<h1>Checking if board[row][i] is equal to 1.</h1>");
           pseudocodeArr.push(new HighlightLineStep(15, lines));
-          steps.push(new TileStep(row,i,"white"));
+          steps.push(new TileStep(row,i,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(16, lines));
-          steps.push(new TileStep(row,i,"black"));
+          steps.push(new TileStep(row,i,localStorage.getItem('backgroundColor')));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(17, lines));
 
@@ -252,10 +252,10 @@ export default class Queens extends React.Component {
           steps.push(new EmptyStep());
           messages.push("<h1>Checking if board[i][j] is equal to 1.</h1>");
           pseudocodeArr.push(new HighlightLineStep(21, lines));
-          steps.push(new TileStep(i,j,"white"));
+          steps.push(new TileStep(i,j,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(22, lines));
-          steps.push(new TileStep(i,j,"black"));
+          steps.push(new TileStep(i,j,localStorage.getItem('backgroundColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(23, lines));
 
@@ -276,10 +276,10 @@ export default class Queens extends React.Component {
           messages.push("<h1>Checking if board[i][j] is equal to 1.</h1>");
           pseudocodeArr.push(new HighlightLineStep(27, lines));
 
-          steps.push(new TileStep(i,j,"white"));
+          steps.push(new TileStep(i,j,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(28, lines));
-          steps.push(new TileStep(i,j,"black"));
+          steps.push(new TileStep(i,j,localStorage.getItem('backgroundColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(29, lines));
 

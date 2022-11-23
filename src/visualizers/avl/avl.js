@@ -536,7 +536,8 @@ export default class avl extends React.Component {
                 i++;
             }
 
-            console.log(root);
+            // console.log(root);
+            console.log(JSON.parse(JSON.stringify(root)));
 
         }
 

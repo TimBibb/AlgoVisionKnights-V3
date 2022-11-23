@@ -5,6 +5,7 @@ import "../css/button.css";
 import "../css/messages.css";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 // returns a random number in the range [lo, hi)
 function randInRange(lo, hi) {
@@ -825,6 +826,7 @@ export default class HashTable extends React.Component {
           <button class="button" onClick={this.restart}>Restart</button>
           <button class="button" onClick={this.backward}>Step Backward</button>
           <button class="button" onClick={this.forward}>Step Forward</button>
+          <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div id="message-pane" class="center-screen">
           <span id="message">

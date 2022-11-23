@@ -44,7 +44,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('accentColor')) ? localStorage.getItem('nodeColor') : localStorage.getItem('accentColor'));
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('accentColor')) ? localStorage.getItem('backgroundColor') : localStorage.getItem('accentColor'));
   }
 }
 
@@ -147,7 +147,7 @@ export default class Floodfill extends React.Component {
           board[i][j] = 'BLACKGRAY';
         }
         else {
-            tile.attr("fill", localStorage.getItem('nodeColor'));
+            tile.attr("fill", localStorage.getItem('backgroundColor'));
             board[i][j] = 'UCFGOLD';
         }
 

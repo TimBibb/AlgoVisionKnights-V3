@@ -10,6 +10,7 @@ import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, gray, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 var x = 35;
 var mid = 0;
@@ -1051,6 +1052,7 @@ export default class huffmancodingtree extends React.Component {
                     <button class="button" onClick={this.refreshPage}>Restart</button>
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
+                    <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Huffman Coding Tree!</h1></span></div>
                 <table>

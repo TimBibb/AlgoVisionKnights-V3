@@ -10,6 +10,7 @@ import Edge from "../../foundation/tree/Edge";
 import { create, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 var x = 50;
 var mid = 0;
@@ -976,6 +977,7 @@ export default class binarysearchtree extends React.Component {
                     <button class="button" onClick={this.restart}>Restart</button>
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
+                    <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Heaps!</h1></span></div>
                 <table>

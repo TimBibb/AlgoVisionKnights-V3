@@ -181,7 +181,7 @@ function createFibGraph(ref) {
     10 + "%",
     "f4",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -191,7 +191,7 @@ function createFibGraph(ref) {
     20 + "%",
     "f3",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -201,7 +201,7 @@ function createFibGraph(ref) {
     30 + "%",
     "f2",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -211,7 +211,7 @@ function createFibGraph(ref) {
     40 + "%",
     "f1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -221,7 +221,7 @@ function createFibGraph(ref) {
     40 + "%",
     "f0",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -231,7 +231,7 @@ function createFibGraph(ref) {
     30 + "%",
     "f1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -241,7 +241,7 @@ function createFibGraph(ref) {
     20 + "%",
     "f2",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -251,7 +251,7 @@ function createFibGraph(ref) {
     30 + "%",
     "f1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -261,7 +261,7 @@ function createFibGraph(ref) {
     30 + "%",
     "f0",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -271,7 +271,7 @@ function createFibGraph(ref) {
     10 + "%",
     "3",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -281,7 +281,7 @@ function createFibGraph(ref) {
     20 + "%",
     "2",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -291,7 +291,7 @@ function createFibGraph(ref) {
     30 + "%",
     "1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -301,7 +301,7 @@ function createFibGraph(ref) {
     40 + "%",
     "1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -311,7 +311,7 @@ function createFibGraph(ref) {
     40 + "%",
     "0",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -321,7 +321,7 @@ function createFibGraph(ref) {
     30 + "%",
     "1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -331,7 +331,7 @@ function createFibGraph(ref) {
     20 + "%",
     "1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -341,7 +341,7 @@ function createFibGraph(ref) {
     30 + "%",
     "1",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
   graph.nodeInfo.push(new LabeledNode(
     ref,
@@ -351,7 +351,7 @@ function createFibGraph(ref) {
     30 + "%",
     "0",
     "hidden",
-    "gray"
+    localStorage.getItem('primaryColor')
   ));
 
   return graph;
@@ -429,7 +429,7 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 0, 0, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 0, 0, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 0, 0, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("We begin by calling fib(4).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
@@ -439,16 +439,16 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
-    addStep(new NodeColorChangeStep(this.ref.current, 0, 0, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 0, 0, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 0, "hidden", "visible"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 0, "gray", "white"));
+    addStep(new EdgeColorChangeStep(this.ref.current, 0, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
-    addStep(new EdgeColorChangeStep(this.ref.current, 0, "white", "gray"));
+    addStep(new EdgeColorChangeStep(this.ref.current, 0, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 1, 1, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 1, 1, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 1, 1, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("fib(n-1) = fib(3)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
@@ -458,16 +458,16 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
-    addStep(new NodeColorChangeStep(this.ref.current, 1, 1, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 1, 1, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 1, "hidden", "visible"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 1, "gray", "white"));
+    addStep(new EdgeColorChangeStep(this.ref.current, 1, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
-    addStep(new EdgeColorChangeStep(this.ref.current, 1, "white", "gray"));
+    addStep(new EdgeColorChangeStep(this.ref.current, 1, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 2, 2, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 2, 2, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 2, 2, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("fib(n-1) = fib(2)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
@@ -477,109 +477,109 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
-    addStep(new NodeColorChangeStep(this.ref.current, 2, 2, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 2, 2, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 2, "hidden", "visible"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 2, "gray", "white"));
+    addStep(new EdgeColorChangeStep(this.ref.current, 2, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 3, 3, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 3, 3, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 2, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 3, 3, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 2, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-1) = fib(1)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 3, 3, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 12, 12, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 3, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "white", "gray"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 3, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 3, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 4, 4, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 4, 4, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 3, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 4, 4, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 3, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-2) = fib(0)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 4, 4, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 13, 13, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 13, 13, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 13, 13, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
-    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Using the values of fib(1) and fib(0), we can calculate fib(2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 2, 2, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 11, 11, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "gray", "white"));
-    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, "white", "gray"));
-    addStep(new NodeColorChangeStep(this.ref.current, 13, 13, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 13, 13, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("1 + 0 = 1");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 4, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "white", "gray"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 4, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 4, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 5, 5, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 5, 5, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 4, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 5, 5, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 4, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-2) = fib(1)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 5, 5, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 14, 14, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 14, 14, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 14, 14, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
-    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Using the values of fib(2) and fib(1), we can calculate fib(3).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 1, 1, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 10, 10, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "gray", "white"));
-    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, "white", "gray"));
-    addStep(new NodeColorChangeStep(this.ref.current, 14, 14, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 11, 11, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 14, 14, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("1 + 1 = 2");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 5, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "white", "gray"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 5, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 5, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 6, 6, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 6, 6, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 5, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 6, 6, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 5, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-2) = fib(2)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
@@ -590,79 +590,79 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 6, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 6, 6, "white", "gray"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 6, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 6, 6, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 6, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-1).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 7, 7, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 7, 7, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 6, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 7, 7, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 6, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-1) = fib(1)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 7, 7, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 16, 16, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 7, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "white", "gray"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 7, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 7, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Calculating fib(n-2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 8, 8, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 8, 8, "gray", "white"));
-    addStep(new EdgeColorChangeStep(this.ref.current, 7, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 8, 8, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new EdgeColorChangeStep(this.ref.current, 7, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("fib(n-2) = fib(0)");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 8, 8, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 17, 17, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 17, 17, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 17, 17, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
 
     addStep(new EmptyStep());
-    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Using the values of fib(1) and fib(0), we can calculate fib(2).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 6, 6, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 15, 15, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 15, 15, "gray", "white"));
-    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, "white", "gray"));
-    addStep(new NodeColorChangeStep(this.ref.current, 17, 17, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 15, 15, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 17, 17, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("1 + 0 = 1");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
-    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "gray", "white"));
+    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Using the values of fib(3) and fib(2), we can calculate fib(4).");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new NodeVisibilityChangeStep(this.ref.current, 0, 0, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 9, 9, "hidden", "visible"));
-    addStep(new NodeColorChangeStep(this.ref.current, 9, 9, "gray", "white"));
-    addStep(new NodeColorChangeStep(this.ref.current, 15, 15, "white", "gray"));
-    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 9, 9, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 15, 15, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
+    addStep(new NodeColorChangeStep(this.ref.current, 10, 10, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("2 + 1 = 3");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
-    addStep(new NodeColorChangeStep(this.ref.current, 9, 9, "white", "gray"));
+    addStep(new NodeColorChangeStep(this.ref.current, 9, 9, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     createMessage("The Fibonacci function has completed, returning fib(4) = 3.");
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))

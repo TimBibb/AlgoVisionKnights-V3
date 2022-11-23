@@ -41,12 +41,12 @@ class CreateAndHighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.node.id).attr("visibility", "visible");
             svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
@@ -68,10 +68,10 @@ class HighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
         }
 	}
 
@@ -81,10 +81,10 @@ class HighlightNodeStep {
 
     backward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", GRAY);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
     }
 }
@@ -98,13 +98,13 @@ class UnHighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", GRAY);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         }
         if (this.edge1) {
-            svg.select("#" + this.edge1.id).style("stroke", GRAY);
+            svg.select("#" + this.edge1.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
         if (this.edge2) {
-            svg.select("#" + this.edge2.id).style("stroke", GRAY);
+            svg.select("#" + this.edge2.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
 	}
 
@@ -114,13 +114,13 @@ class UnHighlightNodeStep {
 
     backward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         }
         if (this.edge1) {
-            svg.select("#" + this.edge1.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge1.id).style("stroke", localStorage.getItem('accentColor'));
         }
         if (this.edge2) {
-            svg.select("#" + this.edge2.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge2.id).style("stroke", localStorage.getItem('accentColor'));
         }
 	}
 }
@@ -135,15 +135,15 @@ class UnHighlightPathStep {
         var node = this.root;
         var edge = null;
         while (node != null) {
-            svg.select("#" + node.id).attr("stroke", GRAY);
+            svg.select("#" + node.id).attr("stroke", localStorage.getItem('secondaryColor'));
             if (this.finalVal < node.value) {
                 edge = node.lEdge;
                 node = node.left;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else  if (this.finalVal > node.value) {
                 edge = node.rEdge;
                 node = node.right;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else {
                 return;
             }

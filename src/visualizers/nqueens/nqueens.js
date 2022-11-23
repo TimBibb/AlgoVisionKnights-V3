@@ -6,6 +6,7 @@ import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import { color } from "d3";
 
 class EmptyStep {
   forward() {}
@@ -13,14 +14,16 @@ class EmptyStep {
 }
 
 class VisibilityStep {
-  constructor(rowID, colID, visibility) {
+  constructor(rowID, colID, visibility, color) {
     this.rowID = rowID;
     this.colID = colID;
     this.visibility = visibility;
+    this.color = color;
   }
 
   forward() {
     d3.select("#code"+ this.rowID + this.colID).attr("visibility", this.visibility);
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", this.color);
   }
 
   backward() {
@@ -43,7 +46,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('primaryColor')) ? localStorage.getItem('backgroundColor') : localStorage.getItem('primaryColor'));
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('primaryColor')) ? localStorage.getItem('secondaryColor') : localStorage.getItem('primaryColor'));
   }
 }
 
@@ -119,13 +122,14 @@ export default class Queens extends React.Component {
           .attr("x", i * size)
           .attr("y", j * size)
           .attr("dx", size / 2)
-          .attr("dy", size * 4/5);
+          .attr("dy", size * 4/5)
+          // .style("fill", localStorage.getItem("secondaryColor"));
 
 
         piece.attr("id", "code" + j + i)
           .classed('team1', true)
           .text(queen.code)
-          .attr("visibility", "hidden");
+          .attr("visibility", "hidden")
       }
     }
     this.setState({n : n});
@@ -164,7 +168,7 @@ export default class Queens extends React.Component {
 
       for(var i = 0; i < n; i++) {
 
-        steps.push(new VisibilityStep(i, col, "visible"));
+        steps.push(new VisibilityStep(i, col, "visible", localStorage.getItem('secondaryColor')));
         messages.push("<h1>Queen: Row " + (i+1) + " Column "+ (col+1) + ".</h1>")
         pseudocodeArr.push(new HighlightLineStep(4, lines));
 
@@ -193,7 +197,7 @@ export default class Queens extends React.Component {
           messages.push("<h1>Checking if next space is available.</h1>");
           pseudocodeArr.push(new HighlightLineStep(7, lines));
 
-          steps.push(new VisibilityStep(i, col, "hidden"));
+          steps.push(new VisibilityStep(i, col, "hidden", localStorage.getItem('secondaryColor')));
           messages.push("<h1>Moving to next available space.</h1>");
           pseudocodeArr.push(new HighlightLineStep(8, lines));
         }
@@ -202,7 +206,7 @@ export default class Queens extends React.Component {
           messages.push("<h1>Checking if next space is available.</h1>");
           pseudocodeArr.push(new HighlightLineStep(9, lines));
 
-          steps.push(new VisibilityStep(i, col, "hidden"));
+          steps.push(new VisibilityStep(i, col, "hidden", localStorage.getItem('secondaryColor')));
           messages.push("<h1>Backtracking...</h1>");
           pseudocodeArr.push(new HighlightLineStep(10, lines));
         }
@@ -233,7 +237,7 @@ export default class Queens extends React.Component {
           steps.push(new TileStep(row,i,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(16, lines));
-          steps.push(new TileStep(row,i,localStorage.getItem('backgroundColor')));
+          steps.push(new TileStep(row,i,localStorage.getItem('secondaryColor')));
           messages.push("<h1>Queen at (" + (row+1)+ " , "+ (i+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(17, lines));
 
@@ -255,7 +259,7 @@ export default class Queens extends React.Component {
           steps.push(new TileStep(i,j,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(22, lines));
-          steps.push(new TileStep(i,j,localStorage.getItem('backgroundColor')));
+          steps.push(new TileStep(i,j,localStorage.getItem('secondaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(23, lines));
 
@@ -279,7 +283,7 @@ export default class Queens extends React.Component {
           steps.push(new TileStep(i,j,localStorage.getItem('primaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(28, lines));
-          steps.push(new TileStep(i,j,localStorage.getItem('backgroundColor')));
+          steps.push(new TileStep(i,j,localStorage.getItem('secondaryColor')));
           messages.push("<h1>Queen at (" + (i+1)+ " , "+ (j+1)+") is in range.</h1>");
           pseudocodeArr.push(new HighlightLineStep(29, lines));
 

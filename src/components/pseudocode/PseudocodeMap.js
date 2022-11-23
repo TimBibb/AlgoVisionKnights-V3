@@ -84,28 +84,55 @@ export const map = {
     ],
     bststructure: [
         "binarySearchTree(){",
-        tab + "while(i < MAX_NODE){",
-        tab + tab + "let temp = rand();",
-        tab + tab + "if(!root)",
-        tab + tab + tab + "root = temp;",
-        tab + tab + "else {",
+        tab + "root = null;",
+        tab + "var val = Math.floor(Math.random() * 100);",
+        tab + "while(i < MAX_NODE){", //3
+        tab + tab + "val = Math.floor(Math.random() * 100);", //4
+        tab + tab + "if(!root) {",
+        tab + tab + tab + "root = val;",
+        tab + tab + tab + "i++;",
+        tab + tab + "}",
+        tab + tab + "else {", //9
         tab + tab + tab + "let node = root;",
-        tab + tab + tab + "while(true) {",
-        tab + tab + tab + tab + "if(firstStep)",
-        tab + tab + tab + tab + tab + "insert temp;",
-        tab + tab + tab + tab + "if(temp < node.value){",
-        tab + tab + tab + tab + tab + "if(node.left != null) traverse left;",
-        tab + tab + tab + tab + tab + "else left node = temp;",
-        tab + tab + tab + tab + "}", //13
-        tab + tab + tab + tab + "else if(temp > node.value) {",
-        tab + tab + tab + tab + tab + "if(node.right != null) traverse right;",
-        tab + tab + tab + tab + tab + "else right node = temp;",
-        tab + tab + tab + tab + "}", //17
-        tab + tab + tab + tab + "else traverse forward;",
-        tab + tab + tab + "}", //19
-        tab + tab + "}", //20
-        tab + "}", //21
-        "}" //22
+        tab + tab + tab + "var firstStep = true;",
+        tab + tab + tab + "while(true) {", //12
+        tab + tab + tab + tab + "if(firstStep) {",
+        tab + tab + tab + tab + tab + "Val will be inserted next.",
+        tab + tab + tab + tab + tab + "firstStep = false;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "else {", //17
+        tab + tab + tab + tab + tab + "No insertion made.",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "if(val < node.value){", //20
+        tab + tab + tab + tab + tab + "if(node.left != null) {",
+        tab + tab + tab + tab + tab + tab + "node = node.left;",
+        tab + tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + tab + "else {", //24
+        tab + tab + tab + tab + tab + tab + "Val inserted to left of node.",
+        tab + tab + tab + tab + tab + tab + "i++;",
+        tab + tab + tab + tab + tab + tab + "j++;",
+        tab + tab + tab + tab + tab + tab + "break;",
+        tab + tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "}", 
+        tab + tab + tab + tab + "else if(val > node.value) {", //31
+        tab + tab + tab + tab + tab + "if(node.right != null) {", //32
+        tab + tab + tab + tab + tab + tab + "node = node.right;",
+        tab + tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + tab + "else {", //35
+        tab + tab + tab + tab + tab + tab + "Val inserted to right of node.",
+        tab + tab + tab + tab + tab + tab + "i++;",
+        tab + tab + tab + tab + tab + tab + "j++;",
+        tab + tab + tab + tab + tab + tab + "break;",
+        tab + tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "}", 
+        tab + tab + tab + tab + "else {", //42
+        tab + tab + tab + tab + tab + "Move forward to prevent duplicate value.",
+        tab + tab + tab + tab + tab + "break;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + "}", 
+        tab + tab + "}", 
+        tab + "}", 
+        "}" 
     ],
     heapsort: [
         "heapSort(arr, size, heapVals, vals) {",
@@ -661,6 +688,72 @@ export const map = {
         tab + "}",
         tab + "hanoi(n - 1, from, aux, to);",
         tab + "hanoi(n - 1, aux, to, from);",
+        "}"
+    ],
+
+    kruskals: [
+        "kruskals(graph) {",
+        tab + "var i = 0;",
+        tab + "var pq = [];",
+        tab + "var nodeVisited, edgeSelected, nodes;",
+        tab + "for(const edge of graph.edges) {",
+        tab + tab + "let [node1, node2, _weight, edgeId] = edge;",
+        tab + tab + "pq.push(edgeId);",
+        tab + "}",
+        tab + "for(let i = 0; pq.length > 0 && i < 50; i++) {",
+        tab + tab + "let currentId = pq[0];",
+        tab + tab + "let [node1, node2, _weight, edgeId] = graph.edges[currentId];",
+        tab + tab + "[pq[0], pq[pq.length - 1]] = [pq[pq.length - 1], pq[0]];",
+        tab + tab + "pq.pop();",
+        tab + tab + "if(nodeVisited[node1] && nodeVisited[node2]) {",
+        tab + tab + tab + "if(!NodesConnected.United(node1, node2)) {",
+        tab + tab + tab + tab + "Both nodes already added.",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else {",
+        tab + tab + tab + tab + "Ignore the edge.",
+        tab + tab + tab + tab + "continue;",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "if(nodeVisited[node1] = false && nodeVisited[node2] = false) {",
+        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "nodeVisited[node2] = true;",
+        tab + tab + tab + "edgeSelected[edgeId] = true;",
+        tab + tab + tab + "NodesConnected.Connect(node1, node2);",
+        tab + tab + tab + "Include edge and both nodes in the tree.",
+        tab + tab + "}",
+        tab + tab + "else if(nodeVisited[node1] = false && nodeVisited[node2] = true) {",
+        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "edgeSelected[edgeId] = true;",
+        tab + tab + tab + "NodesConnected.Connect(node1, node2);",
+        tab + tab + tab + "Include edge and node 1 in the tree.",
+        tab + tab + "}",
+        tab + tab + "else if(nodeVisited[node1] = true && nodeVisited[node2] = false) {",
+        tab + tab + tab + "nodeVisited[node2] = true;",
+        tab + tab + tab + "edgeSelected[edgeId] = true;",
+        tab + tab + tab + "NodesConnected.Connect(node1, node2);",
+        tab + tab + tab + "Include edge and node 2 in the tree.",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+    ],
+
+    floodfill: [
+        "floodfill(board, col, row, n) {",
+        tab + "col = Math.floor(Math.random() * 10);",
+        tab + "row = Math.floow(Math.random() * 10);",
+        tab + "performFloodfill(board, col, row, n);",
+        "}",
+        "",
+        "performFloodfill(board, i, j, n) {", //6
+        tab + "if(i < 0 || i > n || j < 0 || j > n) {",
+        tab + tab + "return board;",
+        tab + "}",
+        tab + "Filling board[i][j].", //10
+        tab + "performFloodfill(board, i-1, j, n);",
+        tab + "performFloodfill(board, i+1, j, n);",
+        tab + "performFloodfill(board, i, j+1, n);",
+        tab + "performFloodfill(board, i, j-1, n);",
+        tab + "return board;",
         "}"
     ]
 }

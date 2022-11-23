@@ -72,7 +72,7 @@ class SetPegsStep {
   }
 }
 
-export default class Prims extends React.Component {
+export default class TowersofHanoi extends React.Component {
   constructor(props) {
     super(props);
 
@@ -383,7 +383,7 @@ export default class Prims extends React.Component {
   forward() {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
-    if (this.state.stepId === this.steps.length) return;
+    if (this.state.stepId === this.state.steps.length) return;
 
     let svg = d3.select(this.ref.current).select("svg");
     this.props.codeSteps[this.state.stepId].forward();

@@ -3,6 +3,8 @@ import * as d3 from "d3";
 import "./hashtablequadratic.css";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
+import "../css/button.css";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
@@ -138,8 +140,11 @@ export default class HashTable extends React.Component {
     let svg = d3
       .select(this.ref.current)
       .append("svg")
-      .attr("width", "1500px")
+      .attr("width", "100%")
       .attr("height", "650px");
+
+      svg.attr("perserveAspectRatio", "xMinYMid")
+      svg.attr("viewBox", "0 0 " + 1500 + " " + (650))
 
     let left = 400;
     let line = 1200;

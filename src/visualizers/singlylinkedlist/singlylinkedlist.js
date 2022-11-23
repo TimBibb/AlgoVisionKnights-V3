@@ -101,13 +101,15 @@ class ShowNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		svg.select("#" + this.idArr[this.id1]).attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 
@@ -123,13 +125,13 @@ class RemoveNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class HighlightNodeStep {
@@ -146,14 +148,15 @@ class HighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class SwapColorStep {
@@ -172,14 +175,17 @@ class SwapColorStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.idArr[this.idCurr]).select("rect").style("fill", "url(#grad)");
+		svg.select("#" + this.idArr[this.idPrev]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 
 }
@@ -197,14 +203,16 @@ class RevertColorNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		svg.select("#" + this.idArr[this.id]).select("rect").style("fill", "url(#grad)");
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 
@@ -445,7 +453,7 @@ export default class singlylinkedlist extends React.Component {
 		this.state.stepsArr[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
 		this.props.codeSteps[this.state.stepId].fastForward();
 		// this.state.pseudocodeArr[this.state.stepId].fastForward();
-		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
 		this.setState({ stepId: this.state.stepId + 1 });
 		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
 	}
@@ -456,9 +464,9 @@ export default class singlylinkedlist extends React.Component {
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
 		let stepId = this.state.stepId - 1;
-		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.state.stepsArr[stepId].backward(d3.select(this.ref.current).select("svg"));
 		//console.log(this.state.steps[stepId]);
-		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Singly Linked List!</h1>" : this.state.messages[stepId - 1];
+		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Singly Linked List!</h1>" : this.state.messagesArr[stepId - 1];
 		this.setState({ stepId: stepId });
 		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
@@ -595,7 +603,7 @@ export default class singlylinkedlist extends React.Component {
 		return (
 			<div>
 				<div class="center-screen" id="banner">
-					<button class="button" onClick={this.play}>Autoplay</button>
+					<button class="button" onClick={this.play}>Play</button>
 					<button class="button" onClick={this.pause}>Pause</button>
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>

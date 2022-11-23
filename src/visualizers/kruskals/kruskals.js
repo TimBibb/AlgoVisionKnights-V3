@@ -177,8 +177,8 @@ export default class Kruskals extends React.Component {
     //     this.ref.current,
     //     graph.nodeInfo[0].circle.attr.id,
     //     graph.nodeInfo[0].text.attr.id,
-    //     "gray",
-    //     "white"
+    //     localStorage.getItem('secondaryColor'),
+    //     localStorage.getItem('accentColor')
     //   )
     // );
     // createMessage("We will start with node 0 to build the MST from.");
@@ -196,7 +196,7 @@ export default class Kruskals extends React.Component {
     //       this.ref.current,
     //       graph.edgeInfo[edgeId].line.attr.id,
     //       graph.edgeInfo[edgeId].text.attr.id,
-    //       "gray",
+    //       localStorage.getItem('secondaryColor'),
     //       "#FFCE36"
     //     )
     //   );
@@ -232,7 +232,7 @@ export default class Kruskals extends React.Component {
           graph.edgeInfo[currentId].line.attr.id,
           graph.edgeInfo[currentId].text.attr.id,
           "grey",
-          "white"
+          localStorage.getItem('accentColor')
         )
       );
       createMessage(
@@ -261,7 +261,7 @@ export default class Kruskals extends React.Component {
               this.ref.current,
               graph.edgeInfo[currentId].line.attr.id,
               graph.edgeInfo[currentId].text.attr.id,
-              "white",
+              localStorage.getItem('accentColor'),
               "#1ACA1E"
             )
           );
@@ -289,8 +289,8 @@ export default class Kruskals extends React.Component {
               this.ref.current,
               graph.edgeInfo[currentId].line.attr.id,
               graph.edgeInfo[currentId].text.attr.id,
-              "white",
-              "#444444"
+              localStorage.getItem('accentColor'),
+              localStorage.getItem('secondaryColor')
             )
           );
           createMessage("Ignore this edge.");
@@ -318,8 +318,8 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.nodeInfo[node1].circle.attr.id,
             graph.nodeInfo[node1].text.attr.id,
-            "gray",
-            "white"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
 
@@ -335,8 +335,8 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.nodeInfo[node2].circle.attr.id,
             graph.nodeInfo[node2].text.attr.id,
-            "gray",
-            "white"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
 
@@ -345,7 +345,7 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.edgeInfo[currentId].line.attr.id,
             graph.edgeInfo[currentId].text.attr.id,
-            "white",
+            localStorage.getItem('accentColor'),
             "#1ACA1E"
           )
         );
@@ -374,8 +374,8 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.nodeInfo[node1].circle.attr.id,
             graph.nodeInfo[node1].text.attr.id,
-            "gray",
-            "white"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
 
@@ -384,7 +384,7 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.edgeInfo[currentId].line.attr.id,
             graph.edgeInfo[currentId].text.attr.id,
-            "white",
+            localStorage.getItem('accentColor'),
             "#1ACA1E"
           )
         );
@@ -413,8 +413,8 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.nodeInfo[node2].circle.attr.id,
             graph.nodeInfo[node2].text.attr.id,
-            "gray",
-            "white"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
 
@@ -423,7 +423,7 @@ export default class Kruskals extends React.Component {
             this.ref.current,
             graph.edgeInfo[currentId].line.attr.id,
             graph.edgeInfo[currentId].text.attr.id,
-            "white",
+            localStorage.getItem('accentColor'),
             "#1ACA1E"
           )
         );
@@ -451,7 +451,7 @@ export default class Kruskals extends React.Component {
       //     this.ref.current,
       //     graph.edgeInfo[currentId].line.attr.id,
       //     graph.edgeInfo[currentId].text.attr.id,
-      //     "white",
+      //     localStorage.getItem('accentColor'),
       //     "#1ACA1E"
       //   )
       // );
@@ -460,8 +460,8 @@ export default class Kruskals extends React.Component {
       //     this.ref.current,
       //     graph.nodeInfo[unvisitedNode].circle.attr.id,
       //     graph.nodeInfo[unvisitedNode].text.attr.id,
-      //     "gray",
-      //     "white"
+      //     localStorage.getItem('secondaryColor'),
+      //     localStorage.getItem('accentColor')
       //   )
       // );
       // createMessage(
@@ -487,7 +487,7 @@ export default class Kruskals extends React.Component {
       //       this.ref.current,
       //       graph.edgeInfo[edgeId].line.attr.id,
       //       graph.edgeInfo[edgeId].text.attr.id,
-      //       "gray",
+      //       localStorage.getItem('secondaryColor'),
       //       "#FFCE36"
       //     )
       //   );

@@ -15,10 +15,10 @@ function defaultColors(){
     localStorage.setItem('primaryColorG', '255')
     localStorage.setItem('primaryColorB', '255')
     // default secondaryColor
-    localStorage.setItem('secondaryColor', '#404243')
-    localStorage.setItem('secondaryColorR', '64')
-    localStorage.setItem('secondaryColorG', '66')
-    localStorage.setItem('secondaryColorB', '67')
+    localStorage.setItem('secondaryColor', '#5D6365')
+    localStorage.setItem('secondaryColorR', '93')
+    localStorage.setItem('secondaryColorG', '96')
+    localStorage.setItem('secondaryColorB', '101')
     // default accentColor
     localStorage.setItem('accentColor', '#FFC904')
     localStorage.setItem('accentColorR', '255')
@@ -70,10 +70,10 @@ function skybluePalette(){
     localStorage.setItem('cardColorG', '132')
     localStorage.setItem('cardColorB', '152')
     // default nodeColor
-    localStorage.setItem('nodeColor', '#D7CDCD')
-    localStorage.setItem('nodeColorR', '215')
-    localStorage.setItem('nodeColorG', '205')
-    localStorage.setItem('nodeColorB', '205')
+    localStorage.setItem('nodeColor', '#000000')
+    localStorage.setItem('nodeColorR', '0')
+    localStorage.setItem('nodeColorG', '0')
+    localStorage.setItem('nodeColorB', '0')
 
     window.location.reload(false);
 }

@@ -50,16 +50,16 @@ function App() {
 		}
 		// Storing secondaryColor in localStorage
 		if(!localStorage.getItem('secondaryColor')){
-			localStorage.setItem('secondaryColor', '#404243')
+			localStorage.setItem('secondaryColor', '##5D6365')
 		}
 		if(!localStorage.getItem('secondaryColorR')){
-			localStorage.setItem('secondaryColorR', '64')
+			localStorage.setItem('secondaryColorR', '93')
 		}
 		if(!localStorage.getItem('secondaryColorG')){
-			localStorage.setItem('secondaryColorG', '66')
+			localStorage.setItem('secondaryColorG', '99')
 		}
 		if(!localStorage.getItem('secondaryColorB')){
-			localStorage.setItem('secondaryColorB', '67')
+			localStorage.setItem('secondaryColorB', '101')
 		}
 		// Storing accentColor in localStorage
 		if(!localStorage.getItem('accentColor')){

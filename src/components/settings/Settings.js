@@ -43,6 +43,41 @@ function defaultColors(){
     window.location.reload(false);
 }
 
+function skybluePalette(){
+    // default primaryColor
+    localStorage.setItem('primaryColor', '#000000')
+    localStorage.setItem('primaryColorR', '0')
+    localStorage.setItem('primaryColorG', '0')
+    localStorage.setItem('primaryColorB', '0')
+    // default secondaryColor
+    localStorage.setItem('secondaryColor', '#8B979D')
+    localStorage.setItem('secondaryColorR', '139')
+    localStorage.setItem('secondaryColorG', '151')
+    localStorage.setItem('secondaryColorB', '157')
+    // default accentColor
+    localStorage.setItem('accentColor', '#91C1FF')
+    localStorage.setItem('accentColorR', '145')
+    localStorage.setItem('accentColorG', '193')
+    localStorage.setItem('accentColorB', '255')
+    // default backgroundColor
+    localStorage.setItem('backgroundColor', '#FFFFFF')
+    localStorage.setItem('backgroundColorR', '255')
+    localStorage.setItem('backgroundColorG', '255')
+    localStorage.setItem('backgroundColorB', '255')
+    // default cardColor
+    localStorage.setItem('cardColor', '#748498')
+    localStorage.setItem('cardColorR', '116')
+    localStorage.setItem('cardColorG', '132')
+    localStorage.setItem('cardColorB', '152')
+    // default nodeColor
+    localStorage.setItem('nodeColor', '#D7CDCD')
+    localStorage.setItem('nodeColorR', '215')
+    localStorage.setItem('nodeColorG', '205')
+    localStorage.setItem('nodeColorB', '205')
+
+    window.location.reload(false);
+}
+
 class Settings extends React.Component {
     
     // primaryColor = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : "#FFFFFF"
@@ -362,6 +397,7 @@ class Settings extends React.Component {
                 <div className="button-location">
                     <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
                     <button class="button4" onClick={defaultColors}>Default Colors</button>
+                    <button class="button4" onClick={skybluePalette}>Skyblue Palette</button>
                 </div>
             </div>
         </div>

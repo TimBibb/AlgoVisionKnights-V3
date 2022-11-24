@@ -70,10 +70,10 @@ function skybluePalette(){
     localStorage.setItem('cardColorG', '132')
     localStorage.setItem('cardColorB', '152')
     // default nodeColor
-    localStorage.setItem('nodeColor', '#000000')
-    localStorage.setItem('nodeColorR', '0')
-    localStorage.setItem('nodeColorG', '0')
-    localStorage.setItem('nodeColorB', '0')
+    localStorage.setItem('nodeColor', '#4D5159')
+    localStorage.setItem('nodeColorR', '77')
+    localStorage.setItem('nodeColorG', '81')
+    localStorage.setItem('nodeColorB', '89')
 
     window.location.reload(false);
 }

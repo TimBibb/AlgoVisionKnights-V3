@@ -11,7 +11,7 @@ class UndirectedEdge {
       visibility: visibility,
     };
     this.style = {
-      stroke: "gray",
+      stroke: localStorage.getItem('secondaryColor'),
       "stroke-width": 5,
     };
 

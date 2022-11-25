@@ -50,6 +50,7 @@
 
 #card-info div .SubHeader {
 	font-size: 1.1em;
+	font-weight: bold;
 }
 
 #card-info img {
@@ -57,14 +58,14 @@
 	height: 200px;
 }
 
-#card-info table {
+/* #card-info table {
 	color: #ffffff;
 	width: 100%;
 }
 
 #card-info table tr:nth-child(even) {
 	background-color: #272b3f;
-}
+} */
 
 #card-info table tr {
 	text-align: left !important;

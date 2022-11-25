@@ -129,7 +129,7 @@ export default class BellmanFord extends React.Component {
         .style("font-family", "Merriweather")
         .attr("font-weight", "bold")
         .style("font-size", "26px")
-        .style("fill", "white");
+        .style("fill", localStorage.getItem('primaryColor'));
 
       var dTxt = svg
         .append("text")
@@ -138,7 +138,7 @@ export default class BellmanFord extends React.Component {
         .style("font-family", "Merriweather")
         .attr("font-weight", "bold")
         .style("font-size", "26px")
-        .style("fill", "white");
+        .style("fill", localStorage.getItem('primaryColor'));
 
       if (i === 0) {
         pTxt
@@ -241,7 +241,7 @@ export default class BellmanFord extends React.Component {
         let [node1, node2, weight, _edgeId] = graph.edges[edgeId];
 
         createMessage("Let's look at the edge " + node1 + " → " + node2 + ".");
-        addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "white", "gray"));
+        addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
@@ -324,7 +324,7 @@ export default class BellmanFord extends React.Component {
         createMessage(
           "Checking next Edge ID"
         );
-        addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], "gray", "white"));
+        addStep(new ChangeDirectedEdgeColorStep(graph.edgeInfo[edgeId], localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
         flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
       }

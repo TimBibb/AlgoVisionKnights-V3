@@ -15,8 +15,8 @@ import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudoc
 var x = 50;
 var mid = 0;
 var y = 10;
-var i = 0;
-var j = 0;
+// var i = 0;
+// var j = 0;
 var MAX_NODE = 10;
 var temp_x = 0;
 var temp_y = 0;
@@ -40,12 +40,12 @@ class CreateAndHighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.node.id).attr("visibility", "visible");
             svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
@@ -67,10 +67,10 @@ class HighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
         }
 	}
 
@@ -80,10 +80,10 @@ class HighlightNodeStep {
 
     backward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", GRAY);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         } 
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
     }
 }
@@ -97,13 +97,13 @@ class UnHighlightNodeStep {
 
     forward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", GRAY);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         }
         if (this.edge1) {
-            svg.select("#" + this.edge1.id).style("stroke", GRAY);
+            svg.select("#" + this.edge1.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
         if (this.edge2) {
-            svg.select("#" + this.edge2.id).style("stroke", GRAY);
+            svg.select("#" + this.edge2.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
 	}
 
@@ -113,13 +113,13 @@ class UnHighlightNodeStep {
 
     backward(svg) {
         if (this.node) {
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         }
         if (this.edge1) {
-            svg.select("#" + this.edge1.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge1.id).style("stroke", localStorage.getItem('accentColor'));
         }
         if (this.edge2) {
-            svg.select("#" + this.edge2.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge2.id).style("stroke", localStorage.getItem('accentColor'));
         }
 	}
 }
@@ -134,15 +134,15 @@ class UnHighlightPathStep {
         var node = this.root;
         var edge = null;
         while (node != null) {
-            svg.select("#" + node.id).attr("stroke", GRAY);
+            svg.select("#" + node.id).attr("stroke", localStorage.getItem('secondaryColor'));
             if (this.finalVal < node.value) {
                 edge = node.lEdge;
                 node = node.left;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else  if (this.finalVal > node.value) {
                 edge = node.rEdge;
                 node = node.right;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else {
                 return;
             }
@@ -310,6 +310,8 @@ export default class binarysearchtree extends React.Component {
         var steps = []
         var messages = []
         var root = null;
+        var i = 0;
+        var j = 0;
 
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
@@ -540,8 +542,8 @@ export default class binarysearchtree extends React.Component {
         document.getElementById("message").innerHTML = "Welcome to Inorder Traversal!";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
-        i = 0;
-        j = 0;
+        // i = 0;
+        // j = 0;
 
 	}
 

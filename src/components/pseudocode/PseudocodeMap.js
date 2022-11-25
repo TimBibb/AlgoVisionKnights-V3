@@ -419,6 +419,7 @@ export const map = {
         tab + "}", //26
         "}" //27
     ],
+    hashtablelinkedlist: [],
 
     dijkstras: [ //fixed tabbing and added closing bracket
         "dijkstras(graph, first) {",

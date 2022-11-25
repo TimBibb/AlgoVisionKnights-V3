@@ -133,7 +133,7 @@ function createDefaultGraph(ref, isWeighted = false, isDirected = false) {
       ys[i] + "%",
       i,
       "visible",
-      "gray"
+      localStorage.getItem('secondaryColor')
     );
     graph.nodeInfo.push(node);
   }

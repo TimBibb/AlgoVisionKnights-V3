@@ -7,9 +7,9 @@ class UnlabeledNode {
       cx: cx,
       cy: cy,
       r: "3.75%",
-      stroke: "gray",
+      stroke: localStorage.getItem('secondaryColor'),
       "stroke-width": 7,
-      fill: "#1b203d",
+      fill: localStorage.getItem('nodeColor'),
       visibility: visibility,
       level: level != null ? level : false
     };

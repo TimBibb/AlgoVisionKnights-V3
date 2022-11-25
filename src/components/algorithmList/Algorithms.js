@@ -12,6 +12,7 @@ import {
 	// DataStructures,
 	SinglyLinkedList,
 	HashTable,
+	HashTableLinkedlist,
 	// Graphs,
 	Dijkstras,
 	BellmanFord,
@@ -115,12 +116,20 @@ const algorithms = {
 			category: 'Data Structures'
 		},
 		{
+			name: 'Hash Table Linked List',
+			path: 'hashtablelinkedlist',
+			type: 'js',
+			description: <HashTable />,
+			category: 'Data Structures'
+		},
+		{
 			name: 'Hash Table Quadratic Probing',
 			path: 'hashtablequadratic',
 			type: 'js',
 			description: <HashTable />,
 			category: 'Data Structures'
 		},
+		
 		// {
 		// 	name: 'Tries',
 		// 	path: 'tries'

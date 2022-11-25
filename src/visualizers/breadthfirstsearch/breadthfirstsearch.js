@@ -142,7 +142,7 @@ export default class BreadthFirstSearch extends React.Component {
     let graph = createDefaultGraph(this.ref, isWeighted, isDirected);
 
     let queue = [];
-    queue.push(new Number(this.ref, "queue", "10%", "5%", "Queue", "grey", "visible"));
+    queue.push(new Number(this.ref, "queue", "10%", "5%", "Queue", localStorage.getItem('secondaryColor'), "visible"));
     
     for(var i=0; i<graph.numberOfNodes;i++){
 
@@ -155,7 +155,7 @@ export default class BreadthFirstSearch extends React.Component {
 			.style("font-family", "Merriweather")
 			.attr("font-weight", "bold")
 			.style("font-size", "26px")
-			.style("fill", "white");
+			.style("fill", localStorage.getItem('primaryColor'));
 
       if (i === 0) {
 				lTxt
@@ -267,8 +267,8 @@ export default class BreadthFirstSearch extends React.Component {
             this.ref.current,
             graph.nodeInfo[currNode].circle.attr.id,
             graph.nodeInfo[currNode].text.attr.id,
-            "gray",
-            "#1ACA1E"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
         flushBuffer();
@@ -282,7 +282,7 @@ export default class BreadthFirstSearch extends React.Component {
         
           let factor = 20 + (queueLength*10);
           
-          queue.push(new Number(this.ref, "queue" + currNode, "7%", factor + "%", currNode, "grey", "hidden"));
+          queue.push(new Number(this.ref, "queue" + currNode, "7%", factor + "%", currNode, localStorage.getItem('secondaryColor'), "hidden"));
           
           createMessage("Node " + currNode + " added to the queue.");
           pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
@@ -325,8 +325,8 @@ export default class BreadthFirstSearch extends React.Component {
             new EdgeColorChangeStep(
             this.ref.current,
             graph.edgeInfo[edgeId].attr.id,
-            "gray",
-            "white"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
             )
         );
 
@@ -339,7 +339,7 @@ export default class BreadthFirstSearch extends React.Component {
 
           let factor = 20 + (queueLength*10);
           
-          queue.push(new Number(this.ref, "queue" + adjNode, "7%", factor + "%", adjNode, "grey", "hidden"));
+          queue.push(new Number(this.ref, "queue" + adjNode, "7%", factor + "%", adjNode, localStorage.getItem('secondaryColor'), "hidden"));
           
           createMessage("Node " + adjNode + " added to  queue.");
           pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))  
@@ -386,8 +386,8 @@ export default class BreadthFirstSearch extends React.Component {
             new EdgeColorChangeStep(
             this.ref.current,
             graph.edgeInfo[edgeId].attr.id,
-            "gray",
-            "black"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('cardColor')
             )
         );
         
@@ -442,7 +442,7 @@ export default class BreadthFirstSearch extends React.Component {
           this.ref.current,
           graph.nodeInfo[currNode].circle.attr.id,
           graph.nodeInfo[currNode].text.attr.id,
-          "white",
+          localStorage.getItem('accentColor'),
           "#FFB050"
           )
         );
@@ -457,8 +457,8 @@ export default class BreadthFirstSearch extends React.Component {
           this.ref.current,
           graph.nodeInfo[currNode].circle.attr.id,
           graph.nodeInfo[currNode].text.attr.id,
-          "white",
-          "#EF3F88"
+          localStorage.getItem('accentColor'),
+          "#1ACA1E"
           )
         );
 
@@ -471,7 +471,7 @@ export default class BreadthFirstSearch extends React.Component {
           this.ref.current,
           graph.nodeInfo[currNode].circle.attr.id,
           graph.nodeInfo[currNode].text.attr.id,
-          "white",
+          localStorage.getItem('accentColor'),
           "#648FFF"
           )
         );
@@ -485,8 +485,8 @@ export default class BreadthFirstSearch extends React.Component {
           this.ref.current,
           graph.nodeInfo[currNode].circle.attr.id,
           graph.nodeInfo[currNode].text.attr.id,
-          "white",
-          "#CC01BE"
+          localStorage.getItem('accentColor'),
+          "#EF3F88"
           )
         );
 

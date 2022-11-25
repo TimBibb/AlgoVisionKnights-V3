@@ -423,43 +423,44 @@ export default class binarysearchtree extends React.Component {
         var pseudocodeArr = [];
 
         steps.push(new EmptyStep());
-        messages.push("");
+        messages.push("Welcome to Binary Search Tree!");
         pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
         console.log("Current Lines: " + this.props.lines);
 
         while (i < MAX_NODE) {
             steps.push(new EmptyStep());
-            messages.push("Obtain a new random value (val).");
-            pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+            messages.push("There are less nodes than the max allowed.");
+            pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
             messages.push("The next value we will insert into the tree is " + val );
-            pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+            pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
             
             console.log("level " + level);
-            if(!root) {
-                steps.push(new EmptyStep());
-                messages.push("Does the tree have a root node?");
-                pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
+            steps.push(new EmptyStep());
+            messages.push("Does the tree have a root node?");
+            pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+
+            if(!root) {
                 root = new Node(this.ref, val, x, y, i);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
                 messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+                pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
                 
                 // steps.push(new UnHighlightNodeStep(this.state.root, null));
                 steps.push(new UnHighlightPathStep(root, val));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+                messages.push("Incrementing number of total nodes.");
+                pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
                 i++;
             } else {
                 steps.push(new EmptyStep());
                 messages.push("The tree has a root node!");
-                pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
+                pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
 
                 let node = root;
                 //y += 10;
@@ -468,54 +469,66 @@ export default class binarysearchtree extends React.Component {
 
                 steps.push(new EmptyStep());
                 messages.push("We will be inserting a new value into the tree!");
-                pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+                pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
 
                 while(true) {
                     steps.push(new EmptyStep());
-                    messages.push("We will be inserting a new value into the tree!");
-                    pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+                    messages.push("The value can be inserted. Continuing.");
+                    pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
                     var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
                     //console.log(node.value);
+                    steps.push(new EmptyStep());
+                    messages.push("Has the insertion already occurred?");
+                    pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
                     if (firstStep) {
-                        steps.push(new EmptyStep());
-                        messages.push("What value is being inserted?");
-                        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
                         steps.push(new HighlightNodeStep(node, null));
-                        messages.push("The next value we will insert into the tree is " + val );
-                        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
+                        messages.push("No. The next value we will insert into the tree is " + val );
+                        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+                        
+                        steps.push(new HighlightNodeStep(node, null));
+                        messages.push("No. The next value we will insert into the tree is " + val );
+                        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
                         firstStep = false;
                     } else {
                         steps.push(new HighlightNodeStep(node, null));
-                        messages.push("No insertion has occurred...");
-                        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+                        messages.push("Yes. No insertion has occurred...");
+                        pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
+
+                        steps.push(new HighlightNodeStep(node, null));
+                        messages.push("Yes. No insertion has occurred...");
+                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
                     }
 
+                    steps.push(new HighlightNodeStep(node, null));
+                    messages.push("Is the new value < the current node?");
+                    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
                     if(val < node.value) {
                         steps.push(new EmptyStep());
-                        messages.push("Is our new value less than the value in the current node?");
-                        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
-                        steps.push(new EmptyStep());
-                        messages.push( val + " is less than " + node.value );
-                        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
+                        messages.push("Yes " + val + " is less than " + node.value );
+                        pseudocodeArr.push(new HighlightLineStep(20, this.props.lines))
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is less than " + node.value);
 
+                        steps.push(new EmptyStep());
+                        messages.push("Does node.left = null?");
+                        pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
+
                         if(node.left != null) {
                             steps.push(new EmptyStep());
-                            messages.push("Is the left node empty?");
-                            pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+                            messages.push("No, node.left != null.");
+                            pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
                             var edge = node.lEdge;
                             node = node.left;
                             steps.push(new HighlightNodeStep(node, edge));
                             messages.push("Let's traverse to the left edge of the node.");
-                            pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the left edge of the node.");
                         } else {
                             steps.push(new EmptyStep());
-                            messages.push("Is the left node empty?");
-                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+                            messages.push("Yes, let's perform an insertion.");
+                            pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
                             temp_x = node.x - 20 + tempMod;
                             temp_y = node.y + 10;
                             temp_x2 = node.x - 17 + tempMod;
@@ -526,16 +539,16 @@ export default class binarysearchtree extends React.Component {
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no left child.");
-                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
 
                             steps.push(new NewNodeStep(node.left, node.lEdge));
                             messages.push("Let's insert " + val + " to the left of node " + node.value );
-                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(25, this.props.lines))
 
                             // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
                             steps.push(new UnHighlightPathStep(root, val));
                             messages.push("Let's insert " + val + " to the left of node " + node.value );
-                            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(25, this.props.lines))
 
                             //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
                             // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
@@ -543,37 +556,50 @@ export default class binarysearchtree extends React.Component {
                             //     this.setState({maxLevel: level});
                             //     this.adjustDistances(root, level);
                             // }
+                            steps.push(new EmptyStep());
+                            messages.push("Incrementing total node count.");
+                            pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
                             i++;
+                            steps.push(new EmptyStep());
+                            messages.push("Incrementing total node count.");
+                            pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
                             j++;
+                            steps.push(new EmptyStep());
+                            messages.push("Inserted!");
+                            pseudocodeArr.push(new HighlightLineStep(28, this.props.lines))
                             break;
                         }
                     } else if (val > node.value) {
                         steps.push(new EmptyStep());
                         messages.push("Is our new value greater than the current node's value?");
-                        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+                        pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
 
                         steps.push(new EmptyStep());
                         messages.push( val + " is greater than " + node.value );
-                        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+                        pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
                         // steps.push(new UnHighlightNodeStep(node, null));
                         // messages.push(val + " is greater than " + node.value);
 
+                        steps.push(new EmptyStep());
+                        messages.push("Does node.right = null?");
+                        pseudocodeArr.push(new HighlightLineStep(32, this.props.lines))
+
                         if(node.right != null) {
                             steps.push(new EmptyStep());
-                            messages.push("Is the right node empty?");
-                            pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
+                            messages.push("No, node.right != null.");
+                            pseudocodeArr.push(new HighlightLineStep(32, this.props.lines))
 
                             var edge = node.rEdge
                             node = node.right;
                             steps.push(new HighlightNodeStep(node, edge));
                             messages.push("Let's traverse to the right edge of the node.");
-                            pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(33, this.props.lines))
                             // steps.push(new UnHighlightNodeStep(node, edge));
                             // messages.push("Let's traverse to the right edge of the node.");
                         } else {
                             steps.push(new EmptyStep());
-                            messages.push("Is the right node empty?");
-                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+                            messages.push("Yes, let's perform an insertion.");
+                            pseudocodeArr.push(new HighlightLineStep(35, this.props.lines))
                             temp_x = node.x + 20 - tempMod;
                             temp_y = node.y + 10;
                             temp_x2 = node.x + 17 - tempMod;
@@ -583,38 +609,47 @@ export default class binarysearchtree extends React.Component {
 
                             steps.push(new EmptyStep());
                             messages.push( node.value + " has no right child.");
-                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(35, this.props.lines))
                             
                             steps.push(new NewNodeStep(node.right, node.rEdge));
                             messages.push("Let's insert " + val + " to the right of node " + node.value );
-                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
 
                             // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
                             steps.push(new UnHighlightPathStep(root, val));
                             messages.push("Let's insert " + val + " to the right of node " + node.value );
-                            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines))
+                            pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
                             //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
                             // if (level > this.state.maxLevel) {
                             //     this.setState({maxLevel: level});
                             //     this.adjustDistances(root, level);
                             // }
+                            steps.push(new EmptyStep());
+                            messages.push("Incrementing total node count.");
+                            pseudocodeArr.push(new HighlightLineStep(37, this.props.lines))
                             i++;
+                            steps.push(new EmptyStep());
+                            messages.push("Incrementing total node count.");
+                            pseudocodeArr.push(new HighlightLineStep(38, this.props.lines))
                             j++;
+                            steps.push(new EmptyStep());
+                            messages.push("Inserted!");
+                            pseudocodeArr.push(new HighlightLineStep(39, this.props.lines))
                             break;
                         }
                     } else {
                         steps.push(new EmptyStep());
                         messages.push("Are the new value and node values equal?");
-                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+                        pseudocodeArr.push(new HighlightLineStep(42, this.props.lines))
                         
                         steps.push(new EmptyStep());
                         messages.push(val + " is equal to " + node.value);
-                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+                        pseudocodeArr.push(new HighlightLineStep(43, this.props.lines))
 
                         // steps.push(new UnHighlightNodeStep(node, null));
                         steps.push(new UnHighlightPathStep(root, val));
                         messages.push("There cannot be duplicate values in a BST, so we will move on.");
-                        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
+                        pseudocodeArr.push(new HighlightLineStep(44, this.props.lines))
                         break;
                     }
                     level++;

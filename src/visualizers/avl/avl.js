@@ -218,8 +218,12 @@ function leftRotation(node_x, steps, messages){
     
 
     //switchNodes();
-    node_y.height = max(height(node_y.left), height(node_y.right)) + 1;
+    // node_y.height = max(height(node_y.left), height(node_y.right)) + 1;
     node_x.height = max(height(node_x.left), height(node_x.right)) + 1;
+    node_y.height = max(height(node_y.left), height(node_y.right)) + 1;
+
+    // console.log(node)
+    // console.log(JSON.parse(JSON.stringify(node_y)));
 
     return [node_y, steps, messages];
 }
@@ -333,172 +337,6 @@ export default class avl extends React.Component {
         console.log("initialized");
         return svgGroup;
     }
-
-    // simulate() {
-    //     console.log("SIMULATING");
-    //     var val = Math.floor(Math.random() * 100);
-    //     var level = 0;
-    //     var modifier = 4;
-    //     var steps = []
-    //     var messages = []
-    //     var root = null;
-
-    //     while (i < MAX_NODE) {
-    //         val = Math.floor(Math.random() * 100);
-    //         steps.push(new EmptyStep());
-    //         messages.push("The next value we will insert into the tree is " + val );
-    //         console.log("level " + level);
-    //         if(!root) {
-    //             root = new Node(this.ref, val, x, y, i, null);
-    //             this.setState({root: root})
-    //             //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-    //             steps.push(new NewNodeStep(root, null));
-    //             messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                
-    //             // steps.push(new UnHighlightNodeStep(this.state.root, null));
-    //             //steps.push(new UnHighlightPathStep(root, val));
-    //             steps.push(new EmptyStep());
-    //             messages.push("The tree is empty, let's add "+ val + " as the root node.");
-    //             i++;
-    //         } else {
-    //             let node = root;
-    //             //y += 10;
-    //             level = 0
-    //             var firstStep = true;
-
-    //             while(true) {
-    //                 var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-    //                 //console.log(node.value);
-    //                 if (firstStep) {
-    //                     //steps.push(new HighlightNodeStep(node, null));
-    //                     steps.push(new EmptyStep());
-    //                     messages.push("The next value we will insert into the tree is " + val );
-    //                     firstStep = false;
-    //                 } else {
-    //                     //steps.push(new HighlightNodeStep(node, null));
-    //                     steps.push(new EmptyStep());
-    //                     messages.push(" ");
-    //                 }
-
-    //                 if(val < node.value) {
-    //                     steps.push(new EmptyStep());
-    //                     messages.push( val + " is less than " + node.value );
-
-    //                     // steps.push(new UnHighlightNodeStep(node, null));
-    //                     // messages.push(val + " is less than " + node.value);
-
-    //                     if(node.left != null) {
-    //                         // var edge = node.lEdge;
-    //                         node = node.left;
-    //                         // steps.push(new HighlightNodeStep(node, edge));
-    //                         steps.push(new EmptyStep());
-    //                         messages.push("Let's traverse to the left edge of the node.");
-
-    //                         // steps.push(new UnHighlightNodeStep(node, edge));
-    //                         // messages.push("Let's traverse to the left edge of the node.");
-    //                     } else {
-    //                         temp_x = node.x - 20 + tempMod;
-    //                         temp_y = node.y + 10;
-    //                         temp_x2 = node.x - 17 + tempMod;
-    //                         temp_y2 = node.y + 8;
-
-    //                         // node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-    //                         node.left = new Node(this.ref, val, temp_x, temp_y, i, node);
-
-    //                         steps.push(new EmptyStep());
-    //                         messages.push( node.value + " has no left child.");
-
-    //                         steps.push(new NewNodeStep(node.left, node.lEdge));
-    //                         messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-    //                         // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
-    //                         //steps.push(new UnHighlightPathStep(root, val));
-    //                         steps.push(new EmptyStep());
-    //                         messages.push("Let's insert " + val + " to the left of node " + node.value );
-
-    //                         //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-    //                         // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-    //                         // if (level > this.state.maxLevel) {
-    //                         //     this.setState({maxLevel: level});
-    //                         //     this.adjustDistances(root, level);
-    //                         // }
-    //                         i++;
-    //                         j++;
-    //                         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
-    //                         // updateHeights(root);
-    //                         break;
-    //                     }
-    //                 } else if (val > node.value) {
-    //                     steps.push(new EmptyStep());
-    //                     messages.push( val + " is greater than " + node.value );
-
-    //                     // steps.push(new UnHighlightNodeStep(node, null));
-    //                     // messages.push(val + " is greater than " + node.value);
-
-    //                     if(node.right != null) {
-    //                         // var edge = node.rEdge
-    //                         node = node.right;
-    //                         // steps.push(new HighlightNodeStep(node, edge));
-    //                         steps.push(new EmptyStep());
-    //                         messages.push("Let's traverse to the right edge of the node.");
-
-    //                         // steps.push(new UnHighlightNodeStep(node, edge));
-    //                         // messages.push("Let's traverse to the right edge of the node.");
-    //                     } else {
-    //                         temp_x = node.x + 20 - tempMod;
-    //                         temp_y = node.y + 10;
-    //                         temp_x2 = node.x + 17 - tempMod;
-    //                         temp_y2 = node.y + 8;
-    //                         // node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "hidden");
-    //                         node.right = new Node(this.ref, val, temp_x, temp_y, i, node);
-
-    //                         steps.push(new EmptyStep());
-    //                         messages.push( node.value + " has no right child.");
-
-    //                         steps.push(new NewNodeStep(node.right, node.rEdge));
-    //                         messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-    //                         // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
-    //                         //steps.push(new UnHighlightPathStep(root, val));
-    //                         steps.push(new EmptyStep());
-    //                         messages.push("Let's insert " + val + " to the right of node " + node.value );
-
-    //                         //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-    //                         // if (level > this.state.maxLevel) {
-    //                         //     this.setState({maxLevel: level});
-    //                         //     this.adjustDistances(root, level);
-    //                         // }
-    //                         i++;
-    //                         j++;
-    //                         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
-    //                         //updateHeights(root);
-    //                         break;
-    //                     }
-    //                 } else {
-    //                     steps.push(new EmptyStep());
-    //                     messages.push(val + " is equal to " + node.value);
-
-    //                     // steps.push(new UnHighlightNodeStep(node, null));
-    //                     //steps.push(new UnHighlightPathStep(root, val));
-    //                     messages.push("There cannot be duplicate values in a BST, so we will move on.");
-    //                     break;
-    //                 }
-    //                 level++;
-    //             }
-    //         }
-
-    //         //console.log(root);
-    //         root = this.BalancingRecursion(root, val);
-    //         readjustCoordinates(root)
-    //         console.log(root);
-    //     }
-
-    //     steps.push(new EmptyStep())
-    //     messages.push("AVL Tree insertion complete!");
-    //     console.log(this.state.root);
-    //     this.setState({steps: steps});
-    //     this.setState({messages: messages});
-    // }
 
     simulate() {
         console.log("SIMULATING");
@@ -689,7 +527,7 @@ export default class avl extends React.Component {
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		
 		// Uses the step's fastForward function and displays associated message
-		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
+		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 
 		this.setState({stepId: this.state.stepId + 1});

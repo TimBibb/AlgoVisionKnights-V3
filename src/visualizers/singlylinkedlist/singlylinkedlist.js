@@ -149,6 +149,7 @@ class HighlightNodeStep {
 
 	backward(svg) {
 		svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", "url(#grad)");
 		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
@@ -176,7 +177,7 @@ class SwapColorStep {
 
 	backward(svg) {
 		svg.select("#" + this.idArr[this.idCurr]).select("rect").style("fill", "url(#grad)");
-		svg.select("#" + this.idArr[this.idPrev]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.idArr[this.idPrev]).select("rect").style("fill", localStorage.getItem('accentColor'));
 		
 		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
@@ -204,6 +205,7 @@ class RevertColorNodeStep {
 
 	backward(svg) {
 
+		svg.select("#" + this.idArr[this.id]).select("rect").style("fill", localStorage.getItem('accentColor'));
 		svg.select("#" + this.idArr[this.id]).select("rect").style("fill", "url(#grad)");
 		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
 		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));

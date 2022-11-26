@@ -164,6 +164,26 @@ class Node {
     }
 }
 
+class Edges {
+    constructor(ref, x1, y1, x2, y2, j){
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.id = "edge" + j;
+
+        this.edge = new Edge(
+            ref,
+            this.id,
+            this.x1 + "%",
+            this.y1 + "%",
+            this.x2 + "%",
+            this.y2 + "%",
+            "hidden"
+        );
+    }
+}
+
 function height(node){
     if(node === null)
         return 0;
@@ -262,6 +282,16 @@ function HightlightNodes(node, steps, messages, x_coor, y_coor, lev){
         node.x = x_coor;
         node.y = y_coor;
         node.level = lev
+        
+        node.leftEdge.x1 = node.x-3;
+        node.leftEdge.y1 = node.y+1.5;
+        node.leftEdge.x2 = node.x-17+tempMod;
+        node.leftEdge.y2 = node.y+8;
+
+        node.rightEdge.x1 = node.x+3;
+        node.rightEdge.y1 = node.y+1.5;
+        node.rightEdge.x2 = node.x+17-tempMod;
+        node.rightEdge.y2 = node.y+8;
 
         steps.push(new HighlightNodeStep(node));
         messages.push("Highlighting node " + node.value);
@@ -291,7 +321,7 @@ function RotatingNodes(node, steps, messages){
     if (node !== null){
 
         //console.log(node.value + ": xcoor-> " + node.x + " ycoor-> " + node.y);
-        steps.push(new RotationStep(node, node.x, node.y));
+        steps.push(new RotationStep(node, node.x, node.y, node.leftEdge, node.rightEdge, node.leftEdge.x1, node.leftEdge.y1, node.leftEdge.x2, node.leftEdge.y2, node.rightEdge.x1, node.rightEdge.y1, node.rightEdge.x2, node.rightEdge.y2));
         messages.push("Rotating node " + node.value + ".");
 
         if(node.left !== null)
@@ -304,10 +334,22 @@ function RotatingNodes(node, steps, messages){
 }
 
 class RotationStep{
-    constructor(node, cx, cy){
+    constructor(node, cx, cy, ledge, redge, lx1, ly1, lx2, ly2, rx1, ry1, rx2, ry2){
         this.node = node;
         this.cx = cx;
         this.cy = cy;
+
+        this.ledge = ledge;
+        this.lx1 = lx1;
+        this.ly1 = ly1;
+        this.lx2 = lx2;
+        this.ly2 = ly2;
+
+        this.redge = redge;
+        this.rx1 = rx1;
+        this.ry1 = ry1;
+        this.rx2 = rx2;
+        this.ry2 = ry2;
     }
     
     forward(svg){
@@ -318,6 +360,30 @@ class RotationStep{
         svg.select("#" + this.node.textId)
             .attr("x", this.cx + "%")
             .attr("y", this.cy + "%");
+
+        if(this.node.left === null){
+            svg.select("#" + this.ledge.id)
+                .attr("visibility", "hidden");
+        }else{
+            svg.select("#" + this.ledge.id)
+                .attr("x1", this.lx1 + "%")
+                .attr("y1", this.ly1 + "%")
+                .attr("x2", this.lx2 + "%")
+                .attr("y2", this.ly2 + "%")
+                .attr("visibility", "visible");
+        }
+
+        if(this.node.right === null){
+            svg.select("#" + this.redge.id)
+                .attr("visibility", "hidden");
+        }else{
+            svg.select("#" + this.ledge.id)
+                .attr("x1", this.rx1 + "%")
+                .attr("y1", this.ry1 + "%")
+                .attr("x2", this.rx2 + "%")
+                .attr("y2", this.ry2 + "%")
+                .attr("visibility", "visible");
+        }
     }
 }
 
@@ -453,11 +519,11 @@ export default class avl extends React.Component {
             console.log(val);
 
             if(!root) {
-                
+
                 root = new Node(this.ref, val, x, y, i, 0);
                 var tempMod = (root.level*mod) > 15 ? 15 : (root.level*mod);
-                root.leftEdge = new Edge(this.ref, "edge" + j++, root.x-3 + "%", root.y+1.5 + "%", root.x-17+tempMod + "%", root.y+8 + "%", "hidden");
-                root.rightEdge = new Edge(this.ref, "edge" + j++, root.x+3 + "%", root.y+1.5 + "%", root.x+17-tempMod + "%", root.y+8 + "%", "hidden");
+                root.leftEdge = new Edges(this.ref, root.x-3, root.y+1.5, root.x-17+tempMod, root.y+8, j++);
+                root.rightEdge = new Edges(this.ref, root.x+3, root.y+1.5, root.x+17-tempMod, root.y+8, j++);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -493,8 +559,8 @@ export default class avl extends React.Component {
         if(node === null){
 
             node = new Node(this.ref, val, x, y, i, lev);
-            node.leftEdge = new Edge(this.ref, "edge" + j++, node.x-3 + "%", node.y+1.5 + "%", node.x-17+tempMod + "%", node.y+8 + "%", "hidden");
-            node.rightEdge = new Edge(this.ref, "edge" + j++, node.x+3 + "%", node.y+1.5 + "%", node.x+17-tempMod + "%", node.y+8 + "%", "hidden");
+            node.leftEdge = new Edges(this.ref, node.x-3, node.y+1.5, node.x-17+tempMod, node.y+8, j++);
+            node.rightEdge = new Edges(this.ref, node.x+3, node.y+1.5, node.x+17-tempMod, node.y+8, j++);
             steps.push(new NewNodeStep(node, null));
             messages.push("Let's insert " + val );
             return [node, steps, messages, j];

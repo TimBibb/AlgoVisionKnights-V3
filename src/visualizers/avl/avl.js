@@ -297,9 +297,9 @@ function HightlightNodes(node, steps, messages, x_coor, y_coor, lev){
         messages.push("Highlighting node " + node.value);
 
         if(node.left !== null)
-            [node.left, steps, messages] = HightlightNodes(node.left, steps, messages, node.x-20+tempMod, node.y+10, ++lev);
+            [node.left, steps, messages] = HightlightNodes(node.left, steps, messages, node.x-20+tempMod, node.y+10, node.level + 1);
         if(node.right !== null)
-            [node.right, steps, messages] = HightlightNodes(node.right, steps, messages, node.x+20-tempMod, node.y+10, ++lev);
+            [node.right, steps, messages] = HightlightNodes(node.right, steps, messages, node.x+20-tempMod, node.y+10, node.level + 1);
     }
 
     return [node, steps, messages]
@@ -353,6 +353,7 @@ class RotationStep{
     }
     
     forward(svg){
+        console.log(JSON.parse(JSON.stringify(this.node)));
         svg.select("#" + this.node.id)
 			.attr("cx", this.cx + "%")
             .attr("cy", this.cy + "%");
@@ -363,6 +364,10 @@ class RotationStep{
 
         if(this.node.left === null){
             svg.select("#" + this.ledge.id)
+                .attr("x1", this.lx1 + "%")
+                .attr("y1", this.ly1 + "%")
+                .attr("x2", this.lx2 + "%")
+                .attr("y2", this.ly2 + "%")
                 .attr("visibility", "hidden");
         }else{
             svg.select("#" + this.ledge.id)
@@ -375,9 +380,13 @@ class RotationStep{
 
         if(this.node.right === null){
             svg.select("#" + this.redge.id)
+                .attr("x1", this.rx1 + "%")
+                .attr("y1", this.ry1 + "%")
+                .attr("x2", this.rx2 + "%")
+                .attr("y2", this.ry2 + "%")
                 .attr("visibility", "hidden");
         }else{
-            svg.select("#" + this.ledge.id)
+            svg.select("#" + this.redge.id)
                 .attr("x1", this.rx1 + "%")
                 .attr("y1", this.ry1 + "%")
                 .attr("x2", this.rx2 + "%")
@@ -537,7 +546,7 @@ export default class avl extends React.Component {
             }
             else{
                 
-                [root, steps, messages, j] = this.insertingvalue(root, steps, messages, val, x, y, root.level, j);
+                [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, root.level);
                 i++;
             }
 
@@ -553,7 +562,7 @@ export default class avl extends React.Component {
         
     }
 
-    insertingvalue(node, steps, messages, val, x, y, lev, j){
+    insertingvalue(node, steps, messages, val, x, y, lev){
 
         var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
         if(node === null){
@@ -563,7 +572,7 @@ export default class avl extends React.Component {
             node.rightEdge = new Edges(this.ref, node.x+3, node.y+1.5, node.x+17-tempMod, node.y+8, j++);
             steps.push(new NewNodeStep(node, null));
             messages.push("Let's insert " + val );
-            return [node, steps, messages, j];
+            return [node, steps, messages];
         }
         else if(val < node.value){
             steps.push(new EmptyStep());
@@ -572,7 +581,7 @@ export default class avl extends React.Component {
             steps.push(new EdgeVisible(node.leftEdge));
             messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
 
-            [node.left, steps, messages, j] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev, j);
+            [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev);
         }
         else if(val > node.value){
             steps.push(new EmptyStep());
@@ -581,7 +590,7 @@ export default class avl extends React.Component {
             steps.push(new EdgeVisible(node.rightEdge));
             messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
 
-            [node.right, steps, messages, j] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev, j);
+            [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev);
         }
         else{
             steps.push(new EmptyStep());
@@ -595,7 +604,7 @@ export default class avl extends React.Component {
         var balance = getHeight(node);
         //console.log("Node: " + node.value + ", height: " + node.height + ", balance: " + balance)
         //console.log("node" + node.value + " height " + node.height);
-        console.log("node" + node.value + " balance " + balance);
+        //console.log("node" + node.value + " balance " + balance);
 
         if(balance > 1){
             if(val < node.left.value){
@@ -624,7 +633,7 @@ export default class avl extends React.Component {
             }
         }
 
-        return[node, steps, messages, j];
+        return[node, steps, messages];
     }
 
     BalancingRecursion(node, val){

@@ -348,6 +348,16 @@ class UnHighlightNodeStep{
     }
 }
 
+class EdgeVisible{
+    constructor(edge){
+        this.edge = edge;
+    }
+
+    forward(svg){
+        svg.select("#" + this.edge.id).attr("visibility", "visible");
+    }
+}
+
 function updateHeights(node){
     
   if(node != null){
@@ -361,50 +371,6 @@ function updateHeights(node){
     else
       node.height = 1 + max(height(node.left), height(node.right));
   }
-}
-
-function readjustCoordinates(node){
-    var modifier = 4;
-    if(node != null){
-        if(node.parent == null){
-            node.x = x;
-            node.y = y;
-            node.level = 0;
-
-            // d3.select(ref.current).select("svg").select("#" + node.id).attr("cx", node.x + "%");
-            // d3.select(ref.current).select("svg").select("#" + node.id).attr("cy", node.y + "%");
-            // d3.select(ref.current).select("svg").select("#" + node.textId).attr("x", node.x + "%");
-            // d3.select(ref.current).select("svg").select("#" + node.textId).attr("y", node.y + "%");
-        }
-        else{
-            if(node.value < node.parent.value){
-                node.level = node.parent.level + 1;
-                var temp_mod = (node.level*modifier) > 15 ? 15 : (node.level*modifier);
-                node.x = node.parent.x - 20 + temp_mod;
-                node.y = node.parent.y + 10;
-
-                // d3.select(ref.current).select("svg").select("#" + node.id).attr("cx", node.x + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.id).attr("cy", node.y + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.textId).attr("x", node.x + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.textId).attr("y", node.y + "%");
-            }
-            else{
-                node.level = node.parent.level + 1;
-                var temp_mod = (node.level*modifier) > 15 ? 15 : (node.level*modifier);
-                node.x = node.parent.x + 20 - temp_mod;
-                node.y = node.parent.y + 10;
-
-                // d3.select(ref.current).select("svg").select("#" + node.id).attr("cx", node.x + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.id).attr("cy", node.y + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.textId).attr("x", node.x + "%");
-                // d3.select(ref.current).select("svg").select("#" + node.textId).attr("y", node.y + "%");
-            }
-        }
-
-        readjustCoordinates(node.left);
-        readjustCoordinates(node.right);
-        
-    }
 }
 
 export default class avl extends React.Component {
@@ -487,7 +453,11 @@ export default class avl extends React.Component {
             console.log(val);
 
             if(!root) {
+                
                 root = new Node(this.ref, val, x, y, i, 0);
+                var tempMod = (root.level*mod) > 15 ? 15 : (root.level*mod);
+                root.leftEdge = new Edge(this.ref, "edge" + j++, root.x-3 + "%", root.y+1.5 + "%", root.x-17+tempMod + "%", root.y+8 + "%", "hidden");
+                root.rightEdge = new Edge(this.ref, "edge" + j++, root.x+3 + "%", root.y+1.5 + "%", root.x+17-tempMod + "%", root.y+8 + "%", "hidden");
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -501,7 +471,7 @@ export default class avl extends React.Component {
             }
             else{
                 
-                [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, root.level);
+                [root, steps, messages, j] = this.insertingvalue(root, steps, messages, val, x, y, root.level, j);
                 i++;
             }
 
@@ -517,28 +487,42 @@ export default class avl extends React.Component {
         
     }
 
-    insertingvalue(node, steps, messages, val, x, y, lev){
+    insertingvalue(node, steps, messages, val, x, y, lev, j){
 
         var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
         if(node === null){
 
             node = new Node(this.ref, val, x, y, i, lev);
+            node.leftEdge = new Edge(this.ref, "edge" + j++, node.x-3 + "%", node.y+1.5 + "%", node.x-17+tempMod + "%", node.y+8 + "%", "hidden");
+            node.rightEdge = new Edge(this.ref, "edge" + j++, node.x+3 + "%", node.y+1.5 + "%", node.x+17-tempMod + "%", node.y+8 + "%", "hidden");
             steps.push(new NewNodeStep(node, null));
             messages.push("Let's insert " + val );
-            return [node, steps, messages];
+            return [node, steps, messages, j];
         }
         else if(val < node.value){
-            [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev);
+            steps.push(new EmptyStep());
+            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+
+            steps.push(new EdgeVisible(node.leftEdge));
+            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+
+            [node.left, steps, messages, j] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev, j);
         }
         else if(val > node.value){
-            [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev);
+            steps.push(new EmptyStep());
+            messages.push("Is the value " + val + " bigger than the current node " + node.value + "?");
+
+            steps.push(new EdgeVisible(node.rightEdge));
+            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+
+            [node.right, steps, messages, j] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev, j);
         }
         else{
             steps.push(new EmptyStep());
             messages.push("There cannot be duplicate values in a BST, so we will move on.");
             console.log("DUPLICATE: " + val);
             
-            return [node, steps, messages];
+            return [node, steps, messages, j];
         }
 
         node.height = 1 + max(height(node.left), height(node.right));
@@ -574,7 +558,7 @@ export default class avl extends React.Component {
             }
         }
 
-        return[node, steps, messages];
+        return[node, steps, messages, j];
     }
 
     BalancingRecursion(node, val){
@@ -586,65 +570,11 @@ export default class avl extends React.Component {
         var balance = getHeight(node);
         node.balance = balance;
     }
-    // BalancingRecursion(node, val){
-    //     if(node == null) return;
-
-    //     this.BalancingRecursion(node.left);
-    //     this.BalancingRecursion(node.right);
-        
-    //     var balance = getHeight(node);
-    //     node.balance = balance;
-
-    //     // console.log("NODE " + node.value + ": " + balance);
-    //     // console.log("NODE " + node.value);
-    //     // if(node.right !=null)
-    //     //     console.log("NODER " + node.right.value);
-    //     // if(node.left !=null)
-    //     //     console.log("NODEL " + node.left.value);
-
-    //     if(balance > 1 && val < node.left.value){
-    //         //console.log("RR NODE " + node.value + ": " + balance);
-    //         console.log("RIGHT ROTATE");
-    //         node = new rightRotation(node);
-    //     }
-
-    //     if(balance < -1 && val > node.right.value){
-    //         //console.log("LR NODE " + node.value + ": " + balance);
-    //         console.log("LEFT ROTATE");
-    //         node = new leftRotation(node);
-    //     }
-
-    //     if(balance > 1 && val > node.left.value){
-    //         //console.log("LRR NODE " + node.value + ": " + balance);
-    //         console.log("LEFT-RIGHT ROTATE");
-    //         // node.left = new leftRotation(node.left);
-    //         // node = new rightRotation(node);
-    //     }
-
-    //     if(balance < -1 && val < node.right.value){
-    //         //console.log("RLR NODE " + node.value + ": " + balance);
-    //         console.log("RIGHT-LEFT ROTATE");
-    //         // node.right = new rightRotation(node.right);
-    //         // node = new leftRotation(node);  
-    //     }
-
-    //     return node;
-    // }
 
     turnOffRunning() {
 		console.log("setting running to false");
 		this.setState({running: false});
 	}
-
-    // restart(){
-    //     console.log("RESTART CLICKED");
-    //     d3.select(this.ref.current).select("svg").remove();
-    //     document.getElementById("message").innerHTML = "<h1>Welcome to Binary Search Tree!</h1>";
-    //     i = 0;
-    //     j = 0;
-    //     this.setState({maxLevel: -1, root: null})
-    //     this.initialize();
-    // }
 
     backward(){
         console.log("BACKWARDS CLICKED");

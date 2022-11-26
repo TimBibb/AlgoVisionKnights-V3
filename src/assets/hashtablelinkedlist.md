@@ -13,9 +13,7 @@ This method as its name suggest it chains together the values, in the same spot,
 | Time Complexity |   Worst Case   | Average Case | Best Case |
 |-----------------|----------------|--------------|-----------|
 | Search          | O(n)           | O(1)         | O(1)      |
-|-----------------|----------------|--------------|-----------|
 | Insert          | O(n)           | O(1)         | O(1)      |
-|-----------------|----------------|--------------|-----------|
 | Deletion        | O(n)           | O(1)         | O(1)      |
 
 # Further information

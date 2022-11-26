@@ -108,13 +108,15 @@ class ShowNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+    svg.select("#" + this.id1).attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class HighlightNodeStep {
@@ -130,14 +132,17 @@ class HighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+    svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", "url(#grad)");
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class DeHighlightNodeStep {
@@ -153,14 +158,15 @@ class DeHighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+    svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class RemoveNodeStep {
@@ -171,19 +177,13 @@ class RemoveNodeStep {
 	forward(svg) {
     console.log(this.node.id)
     console.log(this.id);
-		svg.select("#" + this.id).remove();
+		svg.select("#" + this.id).attr("visibility", "hidden");
 	}
 	fastForward(svg) {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		svg.select("#" + this.id).attr("visibility", "visible");
 	}
 }
 
@@ -325,10 +325,13 @@ function modRand(n) {
       };
   
       let svg = d3
-        .select(this.ref.current)
-        .append("svg")
-        .attr("width", "1600px")
-        .attr("height", "700px");
+      .select(this.ref.current)
+      .append("svg")
+      .attr("width", "100%")
+      .attr("height", "650px");
+
+      svg.attr("perserveAspectRatio", "xMinYMid")
+      svg.attr("viewBox", "0 0 " + 1500 + " " + (650))
   
       let left = 400;
       let line = 310;
@@ -347,7 +350,7 @@ function modRand(n) {
   
       let hashFunction = svg
         .append("text")
-        .attr("x", "1200px")
+        .attr("x", "1150px")
         .attr("y", "300px")
         .attr("id", "Function")
         .attr("text-anchor", "start")
@@ -956,6 +959,8 @@ function modRand(n) {
         for (const step of this.steps[this.stepId - 1]) step.backward(svg);
         this.stepId = this.stepId - 1;
       }
+
+      document.getElementById("message").innerHTML = "<h1>Welcome to Hash Table Linked List!</h1>";
   
       this.running = false;
     }
@@ -997,6 +1002,7 @@ function modRand(n) {
   
       return false;
     }
+
     render() {
       return (
         <div>

@@ -394,6 +394,10 @@ class RotationStep{
                 .attr("visibility", "visible");
         }
     }
+
+    fastForward(svg){
+        this.forward(svg);
+    }
 }
 
 function UnHightlightNodes(node, steps, messages){
@@ -745,7 +749,7 @@ export default class avl extends React.Component {
                     <button class="button" onClick={this.pause}>Pause</button>
                     {/* <button class="button" onClick={this.add}>Add</button> */}
                     <button class="button" onClick={this.restart}>Restart</button>
-                    <button class="button" onClick={this.backward}>Step Backward</button> 
+                    {/* <button class="button" onClick={this.backward}>Step Backward</button>  */}
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>

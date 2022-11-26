@@ -301,26 +301,41 @@ export default class singlylinkedlist extends React.Component {
 		for (let i = 0; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " at the tail</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 			this.insert(arr[i], i);
 		}
 
 		this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
-		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
 
 		for (let k = 7; k >= 3; k--) {
+			this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
 			this.removeTail();
 		}
 
 		this.state.messagesArr.push("<h1>Let's insert the nodes back.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
-		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
 		for (let i = 3; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " back at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " back at the tail</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
 			this.insert(arr[i], i);
 		}
 
@@ -348,27 +363,34 @@ export default class singlylinkedlist extends React.Component {
 		// Push into ids array for referencing
 		this.state.idArr.push(node.id);
 		console.log(this.props.lines)
+		this.state.messagesArr.push("<h1>Is the head equal to null?</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+
 		if (this.head == null)  {
 			this.head = node;
 			this.state.messagesArr.push("<h1>Creating head node " + element + ".</h1>");
 			this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
 		}
 		else {
 			let i = 1;
 			this.state.messagesArr.push("<h1>Let current = head</h1>");
 			this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
 
+			this.state.messagesArr.push("<h1>Let current = head</h1>");
+			this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
+			this.state.pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 			let current = this.head;
 			while (current.next) {
 				this.state.messagesArr.push("<h1>While current.next != null</h1>");
 				this.state.stepsArr.push(new EmptyStep());
-				this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
 
 				this.state.messagesArr.push("<h1>current = current.next</h1>");
 				this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(20, this.props.lines));
 
 				current = current.next;
 				i++;
@@ -377,14 +399,17 @@ export default class singlylinkedlist extends React.Component {
 				current.next = node;
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
 
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new RevertColorNodeStep(id - 1,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
 
 		}
 		this.size++;
+		this.state.messagesArr.push("<h1>Incrementing Size.</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
 		this.setState({stepsArr: this.state.stepsArr }, () => {
 			//console.log(this.state.stepsArr.length)
 		});
@@ -402,28 +427,28 @@ export default class singlylinkedlist extends React.Component {
 		let i = 0;
 		this.state.messagesArr.push("<h1>let current = head</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
 
 		// "LL iteration D3"
 		for (i = 1; i < this.state.idArr.length; i++) {
 			this.state.messagesArr.push("<h1>while current != null</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
 
 			this.state.messagesArr.push("<h1>current = current.next</h1>");
 			this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
 
 		}
 		// remove after
 		let tailID = this.state.idArr.pop();
 		this.state.messagesArr.push("<h1>current === null, we are now at the tail</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep(tailID,this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
 
 		this.state.messagesArr.push("<h1>Tail node has been removed.</h1>");
 		this.state.stepsArr.push(new RemoveNodeStep(tailID,this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
 
 		this.setState({
 			stepsArr: this.state.stepsArr,
@@ -436,11 +461,37 @@ export default class singlylinkedlist extends React.Component {
 	
 		// Linked List Removal
 		let current = this.head;
-		if (current.next === null) current = null;
+
+		this.state.messagesArr.push("<h1>Is the next node equal to null?</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
+
+		if (current.next === null) {
+			this.state.messagesArr.push("<h1>Yes, setting current equal to null.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
+			current = null;
+		}
 		else { 
+			this.state.messagesArr.push("<h1>No, checking the following node.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(35, this.props.lines));
 			while (current.next.next != null) {
+				this.state.messagesArr.push("<h1>Swapping the current and next nodes.</h1>");
+				this.state.stepsArr.push(new EmptyStep());
+				this.state.pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
+				
+				this.state.messagesArr.push("<h1>Swapping the current and next nodes.</h1>");
+				this.state.stepsArr.push(new EmptyStep());
+				this.state.pseudocodeArr.push(new HighlightLineStep(37, this.props.lines));
+
 				current = current.next;
 			} 
+
+			this.state.messagesArr.push("<h1>Setting next node to null.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
+
 			current.next = null;
 		}
 	}

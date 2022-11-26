@@ -8,7 +8,7 @@ import "../css/messages.css";
 import LabeledNode from "../../foundation/tree/LabeledNode";
 import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
-import { svg, tree } from "d3";
+import { local, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
@@ -42,49 +42,22 @@ class NewNodeStep {
     }
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.node.id).attr("visibility", "visible");
         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
-        console.log(" EDGE EXISTS " + this.edge)
-        if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('secondaryColor'));
-            svg.select("#" + this.edge.id).attr("visibility", "visible");
-        }
-		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
 }
 
-// class HighlightNodeStep {
-//   constructor(node, edge) {
-// 	  this.node = node;
-//         this.edge = edge;
-// 	}
-
-//     forward(svg) {
-// 		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-//         svg.select("#" + this.node.id).attr("visibility", "visible");
-//         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
-//         if (this.edge) {
-//             svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
-//             svg.select("#" + this.edge.id).attr("visibility", "visible");
-//         }
-// 	}
-// }
-
-// class UnHighlightNodeStep {
-//     constructor(node, edge) {
-// 		this.node = node;
-//         this.edge = edge;
-// 	}
-
-//     forward(svg) {
-// 		svg.select("#" + this.node.id).attr("stroke", GRAY);
-//         if (this.edge) {
-//             svg.select("#" + this.edge.id).style("stroke", GRAY);
-//         }
-// 	}
-// }
-
+class HighlightPathStep {
+    constructor(node) {
+        this.node = node;
+    }
+    
+    forward(svg) {
+        svg.select("#" + this.node.id).attr("stroke", localStorage.getItem("accentColor"));
+        
+    }
+}
 class UnHighlightPathStep {
     constructor(root, finalVal) {
         this.root = root;
@@ -95,36 +68,19 @@ class UnHighlightPathStep {
         var node = this.root;
         var edge = null;
         while (node != null) {
-            svg.select("#" + node.id).attr("stroke", GRAY);
+            svg.select("#" + node.id).attr("stroke", localStorage.getItem("secondaryColor"));
             if (this.finalVal < node.value) {
                 edge = node.lEdge;
                 node = node.left;
-                if(edge != null)
-                    svg.select("#" + edge.id).style("stroke", GRAY);
             } else  if (this.finalVal > node.value) {
                 edge = node.rEdge;
                 node = node.right;
-                if(edge != null)
-                    svg.select("#" + edge.id).style("stroke", GRAY);
             } else {
                 return;
             }
         }
     }
 }
-// class UnHighlightPathStep {
-//     constructor(node, edge) {
-//         this.node = node;
-//         this.edge = edge;
-//     }
-
-//     forward(svg) {
-//         svg.select("#" + this.node.id).attr("stroke", GRAY);
-//         if (this.edge) {
-//             svg.select("#" + this.edge.id).style("stroke", GRAY);
-//         }
-//     }
-// }
 
 class Tree {
     constructor() {
@@ -204,6 +160,7 @@ function getHeight(node){
 }
 
 function rightRotation(node_y, steps, messages){
+    var flag = 1;
     let node_x = node_y.left;
     let temp = node_x.right;
     //let temp_p1 = y.parent;
@@ -222,9 +179,9 @@ function rightRotation(node_y, steps, messages){
     node_x.height = max(height(node_x.left), height(node_x.right)) + 1;
 
     steps.push(new EmptyStep());
-    messages.push("Starting Left Rotation in the following subtree.");
+    messages.push("Starting Right Rotation in the following subtree.");
 
-    [node_x, steps, messages] = HightlightNodes(node_x, steps, messages, node_y.x, node_y.y, node_y.level);
+    [node_x, steps, messages] = HightlightNodes(node_x, steps, messages, node_y.x, node_y.y, node_y.level, flag);
 
     steps.push(new EmptyStep());
     messages.push("Doing the Right Rotation.");
@@ -238,6 +195,7 @@ function rightRotation(node_y, steps, messages){
 }
 
 function leftRotation(node_x, steps, messages){
+    var flag = 0;
     let node_y = node_x.right;
     let temp = node_y.left;
     // let temp_p1 = x.parent;
@@ -260,7 +218,7 @@ function leftRotation(node_x, steps, messages){
     steps.push(new EmptyStep());
     messages.push("Starting Left Rotation in the following subtree.");
 
-    [node_y, steps, messages] = HightlightNodes(node_y, steps, messages, node_x.x, node_x.y, node_x.level);
+    [node_y, steps, messages] = HightlightNodes(node_y, steps, messages, node_x.x, node_x.y, node_x.level, flag);
 
     steps.push(new EmptyStep());
     messages.push("Doing the Left Rotation.");
@@ -276,7 +234,7 @@ function leftRotation(node_x, steps, messages){
     return [node_y, steps, messages];
 }
 
-function HightlightNodes(node, steps, messages, x_coor, y_coor, lev){
+function HightlightNodes(node, steps, messages, x_coor, y_coor, lev, flag){
     var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
     if(node !== null){
         node.x = x_coor;
@@ -293,13 +251,18 @@ function HightlightNodes(node, steps, messages, x_coor, y_coor, lev){
         node.rightEdge.x2 = node.x+17-tempMod;
         node.rightEdge.y2 = node.y+8;
 
-        steps.push(new HighlightNodeStep(node));
-        messages.push("Highlighting node " + node.value);
+        if(flag === 0){
+            steps.push(new HighlightNodeStep(node));
+            messages.push("Starting Left Rotation in the following subtree.");
+        }else{
+            steps.push(new HighlightNodeStep(node));
+            messages.push("Starting Right Rotation in the following subtree.");
+        }
 
         if(node.left !== null)
-            [node.left, steps, messages] = HightlightNodes(node.left, steps, messages, node.x-20+tempMod, node.y+10, node.level + 1);
+            [node.left, steps, messages] = HightlightNodes(node.left, steps, messages, node.x-20+tempMod, node.y+10, node.level + 1, flag);
         if(node.right !== null)
-            [node.right, steps, messages] = HightlightNodes(node.right, steps, messages, node.x+20-tempMod, node.y+10, node.level + 1);
+            [node.right, steps, messages] = HightlightNodes(node.right, steps, messages, node.x+20-tempMod, node.y+10, node.level + 1, flag);
     }
 
     return [node, steps, messages]
@@ -312,14 +275,15 @@ class HighlightNodeStep{
 
     forward(svg){
         if(this.node !== null){
-            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem("accentColor"));
         }
     }
 }
 
-function RotatingNodes(node, steps, messages){
-    if (node !== null){
+function RotatingNodes(tempNode, steps, messages){
+    if (tempNode !== null){
 
+        var node = JSON.parse(JSON.stringify(tempNode));
         //console.log(node.value + ": xcoor-> " + node.x + " ycoor-> " + node.y);
         steps.push(new RotationStep(node, node.x, node.y, node.leftEdge, node.rightEdge, node.leftEdge.x1, node.leftEdge.y1, node.leftEdge.x2, node.leftEdge.y2, node.rightEdge.x1, node.rightEdge.y1, node.rightEdge.x2, node.rightEdge.y2));
         messages.push("Rotating node " + node.value + ".");
@@ -437,21 +401,6 @@ class EdgeVisible{
     }
 }
 
-function updateHeights(node){
-    
-  if(node != null){
-    updateHeights(node.left);
-    updateHeights(node.right);
-
-    //console.log("AQUIIII" + node.value + " " + node.height);
-    
-    if(node.left == null && node.right == null)
-      node.height = 1;
-    else
-      node.height = 1 + max(height(node.left), height(node.right));
-  }
-}
-
 export default class avl extends React.Component {
     constructor(props) {
 		super(props);
@@ -526,10 +475,16 @@ export default class avl extends React.Component {
         while (i < MAX_NODE) {
             val = Math.floor(Math.random() * 100);
             steps.push(new EmptyStep());
-            messages.push("The next value we will insert into the tree is " + val );
+            messages.push("There are less nodes than the max allowed.");
 
             //console.log(root);
             console.log(val);
+
+            steps.push(new EmptyStep());
+            messages.push("The next value we will insert into the tree is " + val);
+
+            steps.push(new EmptyStep());
+            messages.push("Does the tree have a root node?");
 
             if(!root) {
 
@@ -539,19 +494,26 @@ export default class avl extends React.Component {
                 root.rightEdge = new Edges(this.ref, root.x+3, root.y+1.5, root.x+17-tempMod, root.y+8, j++);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-                steps.push(new NewNodeStep(root, null));
-                messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                
                 // steps.push(new UnHighlightNodeStep(this.state.root, null));
                 //steps.push(new UnHighlightPathStep(root, val));
-                steps.push(new EmptyStep());
+
+                steps.push(new NewNodeStep(root, null));
                 messages.push("The tree is empty, let's add "+ val + " as the root node.");
+
+
+                steps.push(new UnHighlightPathStep(root, val));
+                messages.push("The tree has a root node!");
                 i++;
             }
             else{
                 
+                steps.push(new EmptyStep());
+                messages.push("Yes! It has root!");
+                steps.push(new EmptyStep());
+                messages.push("We will be inserting a new value into the tree!");
+
                 [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, root.level);
-                i++;
+
             }
 
             // console.log(root);
@@ -574,31 +536,43 @@ export default class avl extends React.Component {
             node = new Node(this.ref, val, x, y, i, lev);
             node.leftEdge = new Edges(this.ref, node.x-3, node.y+1.5, node.x-17+tempMod, node.y+8, j++);
             node.rightEdge = new Edges(this.ref, node.x+3, node.y+1.5, node.x+17-tempMod, node.y+8, j++);
+            i++;
+
             steps.push(new NewNodeStep(node, null));
-            messages.push("Let's insert " + val );
+            messages.push("Let's insert the new value " + val );
+
+            steps.push(new UnHighlightPathStep(node));
+            messages.push("Let's insert the new value " + val);
+
             return [node, steps, messages];
         }
         else if(val < node.value){
-            steps.push(new EmptyStep());
-            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+            steps.push(new HighlightPathStep(node));
+            messages.push("Is the new value " + val + " < the current node " + node.value + "?");
 
             steps.push(new EdgeVisible(node.leftEdge));
-            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+            messages.push("Is the value " + val + " < the current node " + node.value + "?");
+
+            steps.push(new UnHighlightPathStep(node));
+            messages.push("Is the value " + val + " < the current node " + node.value + "?");
 
             [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev);
         }
         else if(val > node.value){
-            steps.push(new EmptyStep());
-            messages.push("Is the value " + val + " bigger than the current node " + node.value + "?");
+            steps.push(new HighlightPathStep(node));
+            messages.push("Is the value " + val + " > the current node " + node.value + "?");
 
             steps.push(new EdgeVisible(node.rightEdge));
-            messages.push("Is the value " + val + " smaller than the current node " + node.value + "?");
+            messages.push("Is the value " + val + " > the current node " + node.value + "?");
+
+            steps.push(new UnHighlightPathStep(node));
+            messages.push("Is the value " + val + " > the current node " + node.value + "?");
 
             [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev);
         }
         else{
             steps.push(new EmptyStep());
-            messages.push("There cannot be duplicate values in a BST, so we will move on.");
+            messages.push("There cannot be duplicate values in an AVL, so we will move on.");
             console.log("DUPLICATE: " + val);
             
             return [node, steps, messages, j];
@@ -613,11 +587,19 @@ export default class avl extends React.Component {
         if(balance > 1){
             if(val < node.left.value){
                 console.log("RIGHT ROTATE in node: " + node.value);
+
+                steps.push(new EmptyStep());
+                messages.push("We will perform a Right Rotation in node " + node.value);
+
                 [node, steps, messages] = rightRotation(node, steps, messages);
                 return [node, steps, messages];
             }
             else if(val > node.left.value){
                 console.log("LEFT-RIGHT ROTATE in node: " + node.left.value + " and " + node.value);
+                
+                steps.push(new EmptyStep());
+                messages.push("We will perform a Left-Right Rotation in the subtree starting in node " + node.value);
+                
                 [node.left, steps, messages] = leftRotation(node.left, steps, messages);
                 [node, steps, messages] = rightRotation(node, steps, messages);
                 return [node, steps, messages];
@@ -626,11 +608,19 @@ export default class avl extends React.Component {
         if(balance < -1){
             if(val > node.right.value){
                 console.log("LEFT ROTATE in node: " + node.value);
+
+                steps.push(new EmptyStep());
+                messages.push("We will perform a Light Rotation in node " + node.value);
+
                 [node, steps, messages] = leftRotation(node, steps, messages);
                 return [node, steps, messages];
             }
             else if(val < node.right.value){
                 console.log("RIGHT-LEFT ROTATE in node: " + node.right.value + " and " + node.value);
+                
+                steps.push(new EmptyStep());
+                messages.push("We will perform a Right-Left Rotation in the subtree starting in node " + node.value);
+                
                 [node.right, steps, messages] = rightRotation(node.right, steps, messages);
                 [node, steps, messages] = leftRotation(node, steps, messages);
                 return [node, steps, messages];

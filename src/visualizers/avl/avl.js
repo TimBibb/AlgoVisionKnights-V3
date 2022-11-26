@@ -11,6 +11,7 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode, HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 50;
 var mid = 0;
@@ -22,6 +23,7 @@ var temp_x = 0;
 var temp_y = 0;
 var temp_x2 = 0;
 var temp_y2 = 0;
+var mod = 4;
 
 function randInRange(lo, hi) {
     return Math.floor(Math.random() * (hi - lo)) + lo;
@@ -40,48 +42,48 @@ class NewNodeStep {
     }
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+		svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         svg.select("#" + this.node.id).attr("visibility", "visible");
         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         console.log(" EDGE EXISTS " + this.edge)
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
 	}
 }
 
-class HighlightNodeStep {
-  constructor(node, edge) {
-	  this.node = node;
-    this.edge = edge;
-	}
+// class HighlightNodeStep {
+//   constructor(node, edge) {
+// 	  this.node = node;
+//         this.edge = edge;
+// 	}
 
-    forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.node.id).attr("visibility", "visible");
-        svg.select("#" + this.node.node.textId).attr("visibility", "visible");
-        if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
-            svg.select("#" + this.edge.id).attr("visibility", "visible");
-        }
-	}
-}
+//     forward(svg) {
+// 		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+//         svg.select("#" + this.node.id).attr("visibility", "visible");
+//         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
+//         if (this.edge) {
+//             svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+//             svg.select("#" + this.edge.id).attr("visibility", "visible");
+//         }
+// 	}
+// }
 
-class UnHighlightNodeStep {
-    constructor(node, edge) {
-		this.node = node;
-        this.edge = edge;
-	}
+// class UnHighlightNodeStep {
+//     constructor(node, edge) {
+// 		this.node = node;
+//         this.edge = edge;
+// 	}
 
-    forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", GRAY);
-        if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", GRAY);
-        }
-	}
-}
+//     forward(svg) {
+// 		svg.select("#" + this.node.id).attr("stroke", GRAY);
+//         if (this.edge) {
+//             svg.select("#" + this.edge.id).style("stroke", GRAY);
+//         }
+// 	}
+// }
 
 class UnHighlightPathStep {
     constructor(root, finalVal) {
@@ -134,7 +136,7 @@ class Tree {
 }
 
 class Node {
-    constructor(ref, value, x, y, i, parent, level, leftEdge, rightEdge) {
+    constructor(ref, value, x, y, i, level, parent, leftEdge, rightEdge) {
         this.value = value;
         this.left = null;
         this.right = null;
@@ -199,6 +201,19 @@ function rightRotation(node_y, steps, messages){
     node_y.height = max(height(node_y.left), height(node_y.right)) + 1;
     node_x.height = max(height(node_x.left), height(node_x.right)) + 1;
 
+    steps.push(new EmptyStep());
+    messages.push("Starting Left Rotation in the following subtree.");
+
+    [node_x, steps, messages] = HightlightNodes(node_x, steps, messages, node_y.x, node_y.y, node_y.level);
+
+    steps.push(new EmptyStep());
+    messages.push("Doing the Right Rotation.");
+
+    [steps, messages] = RotatingNodes(node_x, steps, messages);
+
+    //Trying to Unhighlight
+    [steps, messages] = UnHightlightNodes(node_x, steps, messages);
+
     return [node_x, steps, messages];
 }
 
@@ -222,13 +237,119 @@ function leftRotation(node_x, steps, messages){
     node_x.height = max(height(node_x.left), height(node_x.right)) + 1;
     node_y.height = max(height(node_y.left), height(node_y.right)) + 1;
 
+    steps.push(new EmptyStep());
+    messages.push("Starting Left Rotation in the following subtree.");
+
+    [node_y, steps, messages] = HightlightNodes(node_y, steps, messages, node_x.x, node_x.y, node_x.level);
+
+    steps.push(new EmptyStep());
+    messages.push("Doing the Left Rotation.");
+
+    [steps, messages] = RotatingNodes(node_y, steps, messages);
+
+    //Trying to Unhighlight
+    [steps, messages] = UnHightlightNodes(node_y, steps, messages);
+
     // console.log(node)
     // console.log(JSON.parse(JSON.stringify(node_y)));
 
     return [node_y, steps, messages];
 }
 
+function HightlightNodes(node, steps, messages, x_coor, y_coor, lev){
+    var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
+    if(node !== null){
+        node.x = x_coor;
+        node.y = y_coor;
+        node.level = lev
+
+        steps.push(new HighlightNodeStep(node));
+        messages.push("Highlighting node " + node.value);
+
+        if(node.left !== null)
+            [node.left, steps, messages] = HightlightNodes(node.left, steps, messages, node.x-20+tempMod, node.y+10, ++lev);
+        if(node.right !== null)
+            [node.right, steps, messages] = HightlightNodes(node.right, steps, messages, node.x+20-tempMod, node.y+10, ++lev);
+    }
+
+    return [node, steps, messages]
+}
+
+class HighlightNodeStep{
+    constructor(node){
+        this.node = node;
+    }
+
+    forward(svg){
+        if(this.node !== null){
+            svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        }
+    }
+}
+
+function RotatingNodes(node, steps, messages){
+    if (node !== null){
+
+        //console.log(node.value + ": xcoor-> " + node.x + " ycoor-> " + node.y);
+        steps.push(new RotationStep(node, node.x, node.y));
+        messages.push("Rotating node " + node.value + ".");
+
+        if(node.left !== null)
+            [steps, messages] = RotatingNodes(node.left, steps, messages);
+        if(node.right !== null)
+            [steps, messages] = RotatingNodes(node.right, steps, messages);
+    }
+
+    return [steps, messages];
+}
+
+class RotationStep{
+    constructor(node, cx, cy){
+        this.node = node;
+        this.cx = cx;
+        this.cy = cy;
+    }
+    
+    forward(svg){
+        svg.select("#" + this.node.id)
+			.attr("cx", this.cx + "%")
+            .attr("cy", this.cy + "%");
+
+        svg.select("#" + this.node.textId)
+            .attr("x", this.cx + "%")
+            .attr("y", this.cy + "%");
+    }
+}
+
+function UnHightlightNodes(node, steps, messages){
+    if(node !== null){
+
+        steps.push(new UnHighlightNodeStep(node));
+        messages.push("Finishing Rotation(s)");
+
+        if(node.left !== null)
+            [steps, messages] = UnHightlightNodes(node.left, steps, messages);
+        if(node.right !== null)
+            [steps, messages] = UnHightlightNodes(node.right, steps, messages);
+    }
+
+    return [steps, messages];
+}
+
+class UnHighlightNodeStep{
+    constructor(node){
+        this.node = node;
+    }
+
+    forward(svg){
+        if(this.node !== null){
+            svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
+        }
+    }
+}
+
 function updateHeights(node){
+    
   if(node != null){
     updateHeights(node.left);
     updateHeights(node.right);
@@ -324,8 +445,19 @@ export default class avl extends React.Component {
     }
 
     initialize() {
-        var svgGroup = d3.select(this.ref.current).append("svg").attr("width", "1500px").attr("height", "750px").append("g");
+        const width = 1500
+		const height = 450
+
+        var svg = d3.select(this.ref.current)
+			.append("svg")
+			.attr("width", "100%")
+			.attr("height", height);
+		
+		svg.attr("perserveAspectRatio", "xMinYMid meet")
+		svg.attr("viewBox", "0 0 " + width + " " + (height+250))
         
+        var svgGroup = svg.append("g");
+
         let zoom = d3.zoom()
             .on('zoom', this.handleZoom);
         
@@ -341,8 +473,7 @@ export default class avl extends React.Component {
     simulate() {
         console.log("SIMULATING");
         var val = Math.floor(Math.random() * 100);
-        var level = 0;
-        var modifier = 4;
+        // var modifier = 4;
         var steps = []
         var messages = []
         var root = null;
@@ -356,7 +487,7 @@ export default class avl extends React.Component {
             console.log(val);
 
             if(!root) {
-                root = new Node(this.ref, val, x, y, i);
+                root = new Node(this.ref, val, x, y, i, 0);
                 this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 steps.push(new NewNodeStep(root, null));
@@ -370,7 +501,7 @@ export default class avl extends React.Component {
             }
             else{
                 
-                [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, level, modifier);
+                [root, steps, messages] = this.insertingvalue(root, steps, messages, val, x, y, root.level);
                 i++;
             }
 
@@ -386,21 +517,21 @@ export default class avl extends React.Component {
         
     }
 
-    insertingvalue(node, steps, messages, val, x, y, lev, mod){
+    insertingvalue(node, steps, messages, val, x, y, lev){
 
         var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
         if(node === null){
 
-            node = new Node(this.ref, val, x, y, i);
+            node = new Node(this.ref, val, x, y, i, lev);
             steps.push(new NewNodeStep(node, null));
             messages.push("Let's insert " + val );
             return [node, steps, messages];
         }
         else if(val < node.value){
-            [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev, mod);
+            [node.left, steps, messages] = this.insertingvalue(node.left, steps, messages, val, node.x-20+tempMod, node.y+10, ++lev);
         }
         else if(val > node.value){
-            [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev, mod);
+            [node.right, steps, messages] = this.insertingvalue(node.right, steps, messages, val, node.x+20-tempMod, node.y+10, ++lev);
         }
         else{
             steps.push(new EmptyStep());
@@ -571,8 +702,6 @@ export default class avl extends React.Component {
 
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "Welcome to AVL!";
-        this.initialize();  
-        this.simulate();
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
         i = 0;
@@ -626,6 +755,10 @@ export default class avl extends React.Component {
                         </div>
                     </tr> */}
                 </table>
+                <div class="parent-svg">
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"avl"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

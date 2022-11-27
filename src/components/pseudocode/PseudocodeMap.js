@@ -351,37 +351,45 @@ export const map = {
 
     hashtable: [
         "insertion(value) {",
-        tab + "if (info == tableLength) ",
+        tab + "if (size == tableLength) {",
         tab + tab + "Hash Table Full!",
+        tab + "}",
         tab + "for(i = 0; i < tableLength; i++) {",
-        tab + tab + "if (info.deleted[index] && firstDeleted == -1) ",
+        tab + tab + "if (info.deleted[index] && firstDeleted == -1) {", //4
         tab + tab + tab + "firstDeleted = index;",
-        tab + tab + "if (info.table[index] == value) ",
+        tab + tab + tab + "continue;",
+        tab + tab + "}",
+        tab + tab + "if (info.table[index] == value) {", //7
         tab + tab + tab + "Skip to Prevent Reinsertion!",
-        tab + tab + "if (info.table[index] == null) ",
-        tab + tab + tab + "if(firstDeleted == -1) ",
+        tab + tab + "}",
+        tab + tab + "if (info.table[index] == null) {", //9
+        tab + tab + tab + "if(firstDeleted == -1) {",
         tab + tab + tab + tab + "Insert Value!",
-        tab + tab + "if (info.deleted[index]) ",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "if (info.deleted[index]) {",
         tab + tab + tab + "Already Deleted! Move Forward",
-        tab + tab + "else ",
+        tab + tab + "}",
+        tab + tab + "else {",
         tab + tab + tab + "Occupied! Move Forward",
+        tab + tab + "}",
         tab + "}", //15
         "}", //16
-        "deletion(x) {",
+        "deletion(value) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Already Deleted!",
-        tab + tab + "if(table[index] == x)",
+        tab + tab + "if(table[index] == value)",
         tab + tab + tab + "Value Found! Marked as Deleted",
         tab + tab + "if(table[index] == null)",
         tab + tab + tab + "break;",
         tab + "}", //25
         "}", //26
-        "search(x) {",
+        "search(value) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Ignore Value!",
-        tab + tab + "if(table[index] == x)",
+        tab + tab + "if(table[index] == value)",
         tab + tab + tab + "Found Value!",
         tab + tab + "if(table[index] == null)",
         tab + tab + tab + "break;",
@@ -390,7 +398,7 @@ export const map = {
     ],
 
     hashtablequadratic: [
-        "insertion(x)",
+        "insertion(x) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index] && firstDeleted == -1)",
         tab + tab + tab + "Found First Deleted Index!",
@@ -399,7 +407,8 @@ export const map = {
         tab + tab + "if(table[index] == null)",
         tab + tab + tab + "Insert x;",
         tab + "}", //8
-        "deletion(x)",
+        "}",
+        "deletion(x) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Value Already Deleted!",
@@ -408,7 +417,8 @@ export const map = {
         tab + tab + "if(table[index] == null)",
         tab + tab + tab + "break;",
         tab + "}", //17
-        "search(x)",
+        "}",
+        "search(x) {",
         tab + "for(i = 0; i < tableLength; i++){",
         tab + tab + "if(deleted[index])",
         tab + tab + tab + "Ignore",
@@ -417,9 +427,27 @@ export const map = {
         tab + tab + "if(table[index] == null)",
         tab + tab + tab + "break;",
         tab + "}", //26
-        "}" //27
+        "}"
     ],
-    hashtablelinkedlist: [],
+
+    hashtablelinkedlist: [
+        "insertion(x) {",
+        tab + "if(size == tableLength) {",
+        tab + tab + "Hash Table Full!",
+        tab + "}",
+        tab + "for(let i = 0; i < tableLength; i++) {",
+        tab + tab + "let index = (hash + i) % tableLength;",
+        tab + tab + "if(deleted[index] && firstDeleted == -1) {",
+        tab + tab + tab + "firstDeleted = index;",
+        tab + tab + tab + "continue;",
+        tab + tab + "}",
+        tab + tab + "let currentNode = table[index];",
+        tab + tab + "if(currentNode == null) {",
+        tab + tab + tab + "The head is null - create first node.",
+        tab + tab + "}",
+        tab + tab + "else {",
+        tab + tab + tab + ""
+    ],
 
     dijkstras: [ //fixed tabbing and added closing bracket
         "dijkstras(graph, first) {",
@@ -699,31 +727,31 @@ export const map = {
         tab + "var nodeVisited, edgeSelected, nodes;",
         tab + "for(const edge of graph.edges) {",
         tab + tab + "let [node1, node2, _weight, edgeId] = edge;",
-        tab + tab + "pq.push(edgeId);",
+        tab + tab + "pq.push(edgeId);", //6
         tab + "}",
         tab + "for(let i = 0; pq.length > 0 && i < 50; i++) {",
         tab + tab + "let currentId = pq[0];",
         tab + tab + "let [node1, node2, _weight, edgeId] = graph.edges[currentId];",
         tab + tab + "[pq[0], pq[pq.length - 1]] = [pq[pq.length - 1], pq[0]];",
-        tab + tab + "pq.pop();",
+        tab + tab + "pq.pop();", //12
         tab + tab + "if(nodeVisited[node1] && nodeVisited[node2]) {",
         tab + tab + tab + "if(!NodesConnected.United(node1, node2)) {",
         tab + tab + tab + tab + "Both nodes already added.",
         tab + tab + tab + "}",
         tab + tab + tab + "else {",
         tab + tab + tab + tab + "Ignore the edge.",
-        tab + tab + tab + tab + "continue;",
+        tab + tab + tab + tab + "continue;", //19
         tab + tab + tab + "}",
         tab + tab + "}",
         tab + tab + "if(nodeVisited[node1] = false && nodeVisited[node2] = false) {",
-        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "nodeVisited[node1] = true;", //23
         tab + tab + tab + "nodeVisited[node2] = true;",
         tab + tab + tab + "edgeSelected[edgeId] = true;",
         tab + tab + tab + "NodesConnected.Connect(node1, node2);",
         tab + tab + tab + "Include edge and both nodes in the tree.",
         tab + tab + "}",
         tab + tab + "else if(nodeVisited[node1] = false && nodeVisited[node2] = true) {",
-        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "nodeVisited[node1] = true;", //30
         tab + tab + tab + "edgeSelected[edgeId] = true;",
         tab + tab + tab + "NodesConnected.Connect(node1, node2);",
         tab + tab + tab + "Include edge and node 1 in the tree.",
@@ -756,5 +784,40 @@ export const map = {
         tab + "performFloodfill(board, i, j-1, n);",
         tab + "return board;",
         "}"
-    ]
+    ],
+
+    AVL: [
+        "avlMain() {",
+        tab + "var root = null;",
+        tab + "var val = Math.floor(Math.random() * 100);",
+        tab + "while(i < MAX_NODE) {",
+        tab + tab + "val = Math.floor(Math.random() * 100);",
+        tab + tab + "if(!root) {",
+        tab + tab + tab + "root = new Node(val);",
+        tab + tab + tab + "i++;",
+        tab + tab + "}",
+        tab + tab + "else {",
+        tab + tab + tab + "insertValue(root, val);",
+        tab + tab + tab + "i++;",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+        "",
+        "insertValue(node, val) {",
+        tab + "if(node == null) {",
+        tab + tab + "node = new Node(val);",
+        tab + tab + "return node;",
+        tab + "}",
+        tab + "if(val < node.value) {",
+        tab + tab + "node.left = insertValue(node.left, val);",
+        tab + "}",
+        tab + "if(val > node.value) {",
+        tab + tab + "node.right = insertValue(node.right, val);",
+        tab + "}",
+        tab + "if(val == node.value) {",
+        tab + tab + "return node;",
+        tab + "}",
+        tab + "return node;",
+        "}"
+    ],
 }

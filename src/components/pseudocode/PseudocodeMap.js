@@ -708,15 +708,18 @@ export const map = {
     ],
 
     hanoi: [
-        "hanoi(n, from, to, aux){",
+        "hanoi(n, source, auxillary, destination) {",
         tab + "if(n == 0) {",
         tab + tab + "return;",
         tab + "}",
         tab + "if(n > 1) {", //4
-        tab + tab + "Move n - 1 Disks to Aux",
+        tab + tab + "Move n - 1 disks to auxillary.",
         tab + "}",
-        tab + "hanoi(n - 1, from, aux, to);",
-        tab + "hanoi(n - 1, aux, to, from);",
+        tab + "hanoi(n - 1, source, destination, auxillary);",
+        tab + "if(n > 1) {",
+        tab + tab + "Move n - 1 disks to destination.",
+        tab + "}",
+        tab + "hanoi(n - 1, auxillary, source, destination);",
         "}"
     ],
 

@@ -291,7 +291,7 @@ function modRand(n) {
       this.stepBuffer = [];
       this.stepTime = 400;
       this.waitTime = 4000;
-      this.hashArr = [10][5];
+      
   
       this.ref = React.createRef();
   
@@ -301,13 +301,7 @@ function modRand(n) {
       this.backward = this.backward.bind(this);
       this.forward = this.forward.bind(this);
       this.turnOffRunning = this.turnOffRunning.bind(this);
-      this.run = this.run.bind(this);
-  
-      // this.isRunningCheck = this.isRunningCheck.bind(this);
-      // this.handleInsertion = this.handleInsertion.bind(this);
-      // this.handleDeletion = this.handleDeletion.bind(this);
-      // this.handleSearch = this.handleSearch.bind(this);
-    
+      this.run = this.run.bind(this);  
     }
   
     initialize() {
@@ -949,11 +943,13 @@ function modRand(n) {
     }
   
     restart() {
-      if (this.running) return;
+      //if (this.running) return;
       if (this.stepId - 1 < 0) return;
       this.running = true;
       let svg = d3.select(this.ref.current).select("svg");
-      svg.select("#nodecontainer").remove();
+      //svg.select("#nodecontainer").remove();
+      svg.remove();
+      this.initialize();
       document.getElementById("message").innerHTML = this.messages[0];
       while (this.stepId - 1 >= 0) {
         for (const step of this.steps[this.stepId - 1]) step.backward(svg);
@@ -963,6 +959,7 @@ function modRand(n) {
       document.getElementById("message").innerHTML = "<h1>Welcome to Hash Table Linked List!</h1>";
   
       this.running = false;
+      this.stepId = 0;
     }
   
     componentDidMount() {
@@ -1003,13 +1000,17 @@ function modRand(n) {
       return false;
     }
 
+    refreshPage() {
+      window.location.reload(false);
+    }
+    
     render() {
       return (
         <div>
           <div class="center-screen" id="banner">
             <button class="button" onClick={this.play}>Play</button>
             <button class="button" onClick={this.pause}>Pause</button>
-            <button class="button" onClick={this.restart}>Restart</button>
+            <button class="button" onClick={this.refreshPage}>Restart</button>
             <button class="button" onClick={this.backward}>Step Backward</button>
             <button class="button" onClick={this.forward}>Step Forward</button>
             <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>

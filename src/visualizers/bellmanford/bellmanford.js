@@ -79,6 +79,7 @@ export default class BellmanFord extends React.Component {
       stepId: 0,
       stepTime: 0,
       waitTime: 5000,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -381,6 +382,7 @@ export default class BellmanFord extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -388,14 +390,16 @@ export default class BellmanFord extends React.Component {
     }
 
     let svg = d3.select(this.ref.current).select("svg");
-
+    console.log(this.state)
     this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
 
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
   }
 
   play() {
@@ -437,10 +441,15 @@ export default class BellmanFord extends React.Component {
     } else if (this.state.graph !== prevState.graph) {
       this.prims(this.state.graph);
       console.log("Sorted");
-    } else if (this.state.running !== prevState.running) {
+    } else if (this.state.running !== prevState.running && this.state.running) {
       this.run();
       console.log("We ran");
     }
+  }
+
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

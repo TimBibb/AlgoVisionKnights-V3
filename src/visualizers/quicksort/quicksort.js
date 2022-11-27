@@ -477,7 +477,7 @@ export default class QuickSort extends React.Component {
 			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));       
              
 			messages.push("<h1>Returned from calling QuickSort from index " + low + " through " + high + ".</h1>");
-			steps.push(new UnpartitionStep(low, high, ids, stepTime));     
+			steps.push(new EmptyStep());     
 			pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));  
 
             pseudocodeArr = this.quickSort(low, split - 1, arr, split - low, ids, steps, messages, stepTime, pseudocodeArr);

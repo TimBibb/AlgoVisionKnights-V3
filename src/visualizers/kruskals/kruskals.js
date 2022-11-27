@@ -136,6 +136,9 @@ export default class Kruskals extends React.Component {
     console.log(graph);
     var messages = [];
     var currentMessage = "";
+
+    var pseudocodeArr = [];
+
     function createMessage(msg) {
       currentMessage = "<h1>" + msg + "</h1>";
     }
@@ -156,14 +159,17 @@ export default class Kruskals extends React.Component {
 
     addStep(new EmptyStep());
     createMessage("We will construct the Minimum Spanning Tree (MST).");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     addStep(new EmptyStep());
     createMessage("We will maintain a minimum priority queue of edges based on weight.");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     addStep(new EmptyStep());
     createMessage("Select all the edges of the graph and insert them in a priority queue.");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     var pq = [];
@@ -207,17 +213,33 @@ export default class Kruskals extends React.Component {
     //   pq.push(edgeId);
     // }
 
+    addStep(new EmptyStep());
+    createMessage("Checking for edges.");
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
+    flushBuffer();
+
     for (const edge of graph.edges){
       let [node1, node2, _weight, edgeId] = edge;
       pq.push(edgeId);
+
+      addStep(new EmptyStep());
+      createMessage("Checking for edges.");
+      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+      flushBuffer();
     }
 
     // pq.sort();
     console.log(pq);
 
+    addStep(new EmptyStep());
+    createMessage("Beginning the insertion process.");
+    pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
+    flushBuffer();
+
     for (let i = 0; pq.length > 0 && i < 50; i++) {
       addStep(new EmptyStep());
       createMessage("Select the lowest weighted edge in the queue.");
+      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
       flushBuffer();
 
       pq.sort(comparator);
@@ -239,12 +261,30 @@ export default class Kruskals extends React.Component {
       createMessage(
         "The lowest weighted edge in the queue is (" + node1 + ", " + node2 + ")."
       );
+      pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
       flushBuffer();
 
       //console.log(nodes);
 
+      addStep(new EmptyStep());
+      createMessage("Comparing Node 1 and Node 2.");
+      pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
+      flushBuffer();
+
       if (nodeVisited[node1] && nodeVisited[node2]) {
+
+        addStep(new EmptyStep());
+        createMessage("Are Nodes 1 and 2 in the tree?");
+        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+        flushBuffer();
+
         if(!NodesConnected.United(node1, node2)){
+
+          addStep(new EmptyStep());
+          createMessage("No, both nodes have already been added.");
+          pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
+          flushBuffer();
+
           NodesConnected.Connect(node1, node2);
           edgeSelected[edgeId] = true;
 
@@ -255,6 +295,7 @@ export default class Kruskals extends React.Component {
               " and " +
               node2 +
               " have already been added to the MST.");
+          pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
           flushBuffer();
 
           addStep(
@@ -272,10 +313,17 @@ export default class Kruskals extends React.Component {
               node2 +
               " in the MST."
           );
+          pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
           flushBuffer();
 
         } 
         else {
+
+          addStep(new EmptyStep());
+          createMessage("Both nodes have been added, but the edge is ignored.");
+          pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
+          flushBuffer();
+
           addStep(new EmptyStep());
           createMessage(
             "Both nodes " +
@@ -283,6 +331,7 @@ export default class Kruskals extends React.Component {
               " and " +
               node2 +
               " have already been added to the MST.");
+          pseudocodeArr.push(new HighlightLineStep(18, this.props.lines))
           flushBuffer();
 
           addStep(
@@ -295,13 +344,25 @@ export default class Kruskals extends React.Component {
             )
           );
           createMessage("Ignore this edge.");
+          pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
           flushBuffer();
           // these nodes are already connected, ignore the edge
           continue;
         }
       }
 
+      addStep(new EmptyStep());
+      createMessage("Comparing Node 1 and Node 2.");
+      pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
+      flushBuffer();
+
       if(nodeVisited[node1] == false && nodeVisited[node2] == false){
+
+        addStep(new EmptyStep());
+        createMessage("Nodes 1 and 2 are not in the tree.");
+        pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
+        flushBuffer();
+
         nodeVisited[node1] = true;
         nodeVisited[node2] = true;
         edgeSelected[edgeId] = true;
@@ -312,6 +373,7 @@ export default class Kruskals extends React.Component {
           "Node " +
             node1 +
           " has not been added to the MST.");
+          pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
         flushBuffer();
 
         addStep(
@@ -330,6 +392,7 @@ export default class Kruskals extends React.Component {
             node2 +
           " has not been added to the MST.");
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
 
         addStep(
           new NodeColorChangeStep(
@@ -357,8 +420,15 @@ export default class Kruskals extends React.Component {
             " in the MST."
         );
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
       }
       else if(nodeVisited[node1] == false && nodeVisited[node2] == true){
+
+        addStep(new EmptyStep());
+        createMessage("Node 1 has not been added to the tree.");
+        pseudocodeArr.push(new HighlightLineStep(29, this.props.lines))
+        flushBuffer();
+
         nodeVisited[node1] = true;
         edgeSelected[edgeId] = true;
         NodesConnected.Connect(node1, node2);
@@ -368,6 +438,7 @@ export default class Kruskals extends React.Component {
           "Node " +
             node1 +
           " has not been added to the MST.");
+          pseudocodeArr.push(new HighlightLineStep(33, this.props.lines))
         flushBuffer();
 
         addStep(
@@ -396,8 +467,15 @@ export default class Kruskals extends React.Component {
             " in the MST."
         );
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(33, this.props.lines))
       }
       else if(nodeVisited[node1] == true && nodeVisited[node2] == false){
+
+        addStep(new EmptyStep());
+        createMessage("Node 2 has not been added to the tree.");
+        pseudocodeArr.push(new HighlightLineStep(35, this.props.lines))
+        flushBuffer();
+
         nodeVisited[node2] = true;
         edgeSelected[edgeId] = true;
         NodesConnected.Connect(node1, node2);
@@ -407,6 +485,7 @@ export default class Kruskals extends React.Component {
           "Node " +
             node2 +
           " has not been added to the MST.");
+          pseudocodeArr.push(new HighlightLineStep(39, this.props.lines))
         flushBuffer();
 
         addStep(
@@ -435,6 +514,7 @@ export default class Kruskals extends React.Component {
             " in the MST."
         );
         flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(39, this.props.lines))
       }
       // var unvisitedNode = nodeVisited[node1] ? node2 : node1;
       // nodeVisited[unvisitedNode] = true;
@@ -500,6 +580,7 @@ export default class Kruskals extends React.Component {
 
     addStep(new EmptyStep());
     createMessage("The edges in the MST have been found!");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     let mstEdges = "";
@@ -513,16 +594,20 @@ export default class Kruskals extends React.Component {
 
     addStep(new EmptyStep());
     createMessage("The edges in the MST are: " + mstEdges + ".");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     addStep(new EmptyStep());
     createMessage("Finished Kruskal's!");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
     flushBuffer();
 
     console.log(steps);
     console.log(messages);
+    console.log(pseudocodeArr);
 
     this.setState({ steps: steps, messages: messages });
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -533,6 +618,12 @@ export default class Kruskals extends React.Component {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
+
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
+
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
@@ -562,6 +653,13 @@ export default class Kruskals extends React.Component {
       this.setState({ running: false });
       return;
     }
+
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.state.stepId);
+
+    this.props.codeSteps[this.state.stepId].forward();
+
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     // this.state.steps[this.state.stepId].forward();

@@ -50,7 +50,7 @@ function App() {
 		}
 		// Storing secondaryColor in localStorage
 		if(!localStorage.getItem('secondaryColor')){
-			localStorage.setItem('secondaryColor', '##5D6365')
+			localStorage.setItem('secondaryColor', '#5D6365')
 		}
 		if(!localStorage.getItem('secondaryColorR')){
 			localStorage.setItem('secondaryColorR', '93')

@@ -77,6 +77,7 @@ class Visualizer extends React.Component {
 			const JSVisual =
 				require(`../../visualizers/${this.props.path}/${this.props.path}.js`).default;
 
+			console.log("lines", this.state.lines)
 			return (
 				<div className='Visualizer'>
 					<JSVisual

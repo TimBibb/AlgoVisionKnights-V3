@@ -268,13 +268,25 @@ export default class TowersofHanoi extends React.Component {
     // hanoi(# of disks, peg 1, peg 2, peg 3)
     function hanoi(n, source, auxillary, destination) {
       
-      if (n === 0) return;
+      addStep(new EmptyStep());
+      createMessage(`Checking the recursive base case.`);
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(1, lines));
+
+      if (n === 0) {
+        addStep(new EmptyStep());
+        createMessage(`Base case met. Returning.`);
+        flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(2, lines));
+
+        return;
+      }
 
       addStep(new SetPegsStep([source, auxillary, destination], oldDisks));
       createMessage(`Move the top ${n} disk(s) from the Source to the Destination.`);
       addStep(new EmptyStep());
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(0, lines));
+      pseudocodeArr.push(new HighlightLineStep(4, lines));
 
       if (n > 1) {
         createMessage(
@@ -284,18 +296,31 @@ export default class TowersofHanoi extends React.Component {
         );
         addStep(new ChangeOpacityStep("disk" + n, 0.25, 1.0));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(2, lines));
+        pseudocodeArr.push(new HighlightLineStep(5, lines));
       }
 
       oldDisks = [source, auxillary, destination];
+
+      addStep(new EmptyStep());
+      createMessage(`First, focus on moving the top ${
+        n - 1
+      } disk(s) to the Auxillary via recursive call.`);
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(7, lines));
+
       hanoi(n - 1, source, destination, auxillary);
+
+      addStep(new EmptyStep());
+      createMessage(`Checking if the move to auxillary was successful.`);
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(4, lines));
 
       if (n > 1) {
         createMessage(`The top ${n - 1} disk(s) have successfully moved to the Auxillary.`);
         addStep(new SetPegsStep([source, auxillary, destination], oldDisks));
         addStep(new ChangeOpacityStep("disk" + n, 1.0, 0.25));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(3, lines));
+        pseudocodeArr.push(new HighlightLineStep(5, lines));
       }
 
       // disk n goes from peg source to peg destination
@@ -327,7 +352,7 @@ export default class TowersofHanoi extends React.Component {
         )
       );
       flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(3, lines));
+      pseudocodeArr.push(new HighlightLineStep(8, lines));
 
       disks[source][cnts[source] - 1].rect.attr.x = newDiskPos.x;
       disks[source][cnts[source] - 1].rect.attr.y = newDiskPos.y;
@@ -347,17 +372,30 @@ export default class TowersofHanoi extends React.Component {
         );
         addStep(new ChangeOpacityStep("disk" + n, 0.25, 1.0));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(2, lines));
+        pseudocodeArr.push(new HighlightLineStep(9, lines));
       }
 
       oldDisks = [source, auxillary, destination];
+
+      addStep(new EmptyStep());
+      createMessage(`Move the top ${
+        n - 1
+      } disk(s) to the Destination via recursive call.`);
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(11, lines));
+
       hanoi(n - 1, auxillary, source, destination);
+
+      addStep(new EmptyStep());
+      createMessage(`Checking if the move to destination was successful.`);
+      flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(8, lines));
 
       if (n > 1) {
         createMessage(`The top ${n} disk(s) have successfully moved to the Destination.`);
         addStep(new ChangeOpacityStep("disk" + n, 1.0, 0.25));
         flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(4, lines));
+        pseudocodeArr.push(new HighlightLineStep(9, lines));
       }
 
       oldDisks = [source, auxillary, destination];
@@ -370,7 +408,7 @@ export default class TowersofHanoi extends React.Component {
     createMessage(`All 5 disks have made it to the Destination!`);
     addStep(new EmptyStep());
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(5, lines));
+    pseudocodeArr.push(new HighlightLineStep(0, lines));
 
     this.props.handleCodeStepsChange(pseudocodeArr);
     this.setState({ steps: steps, messages: messages });

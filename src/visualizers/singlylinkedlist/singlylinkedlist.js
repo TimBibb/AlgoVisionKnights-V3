@@ -101,13 +101,15 @@ class ShowNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		svg.select("#" + this.idArr[this.id1]).attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 
@@ -123,13 +125,13 @@ class RemoveNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class HighlightNodeStep {
@@ -146,14 +148,16 @@ class HighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", "url(#grad)");
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class SwapColorStep {
@@ -172,14 +176,17 @@ class SwapColorStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.idArr[this.idCurr]).select("rect").style("fill", "url(#grad)");
+		svg.select("#" + this.idArr[this.idPrev]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 
 }
@@ -197,14 +204,17 @@ class RevertColorNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		svg.select("#" + this.idArr[this.id]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		svg.select("#" + this.idArr[this.id]).select("rect").style("fill", "url(#grad)");
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", localStorage.getItem('secondaryColor'));
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 
@@ -291,26 +301,41 @@ export default class singlylinkedlist extends React.Component {
 		for (let i = 0; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " at the tail</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 			this.insert(arr[i], i);
 		}
 
 		this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
-		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
 
 		for (let k = 7; k >= 3; k--) {
+			this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Removing nodes at the tail.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
 			this.removeTail();
 		}
 
 		this.state.messagesArr.push("<h1>Let's insert the nodes back.</h1>");
 		this.state.stepsArr.push(new EmptyStep());
-		this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
 		for (let i = 3; i < 8; i++) {
 			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " back at the tail</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+
+			this.state.messagesArr.push("<h1>Let's add " + arr[i] + " back at the tail</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
 			this.insert(arr[i], i);
 		}
 
@@ -338,27 +363,34 @@ export default class singlylinkedlist extends React.Component {
 		// Push into ids array for referencing
 		this.state.idArr.push(node.id);
 		console.log(this.props.lines)
+		this.state.messagesArr.push("<h1>Is the head equal to null?</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+
 		if (this.head == null)  {
 			this.head = node;
 			this.state.messagesArr.push("<h1>Creating head node " + element + ".</h1>");
 			this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
 		}
 		else {
 			let i = 1;
 			this.state.messagesArr.push("<h1>Let current = head</h1>");
 			this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
 
+			this.state.messagesArr.push("<h1>Let current = head</h1>");
+			this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
+			this.state.pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 			let current = this.head;
 			while (current.next) {
 				this.state.messagesArr.push("<h1>While current.next != null</h1>");
 				this.state.stepsArr.push(new EmptyStep());
-				this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
 
 				this.state.messagesArr.push("<h1>current = current.next</h1>");
 				this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(20, this.props.lines));
 
 				current = current.next;
 				i++;
@@ -367,14 +399,17 @@ export default class singlylinkedlist extends React.Component {
 				current.next = node;
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new ShowNodeStep(id,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
 
 				this.state.messagesArr.push("<h1>Inserting " + element + " into the Linked List.</h1>");
 				this.state.stepsArr.push(new RevertColorNodeStep(id - 1,this.state.idArr));
-				this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+				this.state.pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
 
 		}
 		this.size++;
+		this.state.messagesArr.push("<h1>Incrementing Size.</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
 		this.setState({stepsArr: this.state.stepsArr }, () => {
 			//console.log(this.state.stepsArr.length)
 		});
@@ -392,28 +427,28 @@ export default class singlylinkedlist extends React.Component {
 		let i = 0;
 		this.state.messagesArr.push("<h1>let current = head</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep("g0",this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
 
 		// "LL iteration D3"
 		for (i = 1; i < this.state.idArr.length; i++) {
 			this.state.messagesArr.push("<h1>while current != null</h1>");
 			this.state.stepsArr.push(new EmptyStep());
-			this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
 
 			this.state.messagesArr.push("<h1>current = current.next</h1>");
 			this.state.stepsArr.push(new SwapColorStep(i-1,i,this.state.idArr));
-			this.state.pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
+			this.state.pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
 
 		}
 		// remove after
 		let tailID = this.state.idArr.pop();
 		this.state.messagesArr.push("<h1>current === null, we are now at the tail</h1>");
 		this.state.stepsArr.push(new HighlightNodeStep(tailID,this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
 
 		this.state.messagesArr.push("<h1>Tail node has been removed.</h1>");
 		this.state.stepsArr.push(new RemoveNodeStep(tailID,this.state.idArr));
-		this.state.pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
+		this.state.pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
 
 		this.setState({
 			stepsArr: this.state.stepsArr,
@@ -426,11 +461,37 @@ export default class singlylinkedlist extends React.Component {
 	
 		// Linked List Removal
 		let current = this.head;
-		if (current.next === null) current = null;
+
+		this.state.messagesArr.push("<h1>Is the next node equal to null?</h1>");
+		this.state.stepsArr.push(new EmptyStep());
+		this.state.pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
+
+		if (current.next === null) {
+			this.state.messagesArr.push("<h1>Yes, setting current equal to null.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
+			current = null;
+		}
 		else { 
+			this.state.messagesArr.push("<h1>No, checking the following node.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(35, this.props.lines));
 			while (current.next.next != null) {
+				this.state.messagesArr.push("<h1>Swapping the current and next nodes.</h1>");
+				this.state.stepsArr.push(new EmptyStep());
+				this.state.pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
+				
+				this.state.messagesArr.push("<h1>Swapping the current and next nodes.</h1>");
+				this.state.stepsArr.push(new EmptyStep());
+				this.state.pseudocodeArr.push(new HighlightLineStep(37, this.props.lines));
+
 				current = current.next;
 			} 
+
+			this.state.messagesArr.push("<h1>Setting next node to null.</h1>");
+			this.state.stepsArr.push(new EmptyStep());
+			this.state.pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
+
 			current.next = null;
 		}
 	}
@@ -445,7 +506,7 @@ export default class singlylinkedlist extends React.Component {
 		this.state.stepsArr[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg"));
 		this.props.codeSteps[this.state.stepId].fastForward();
 		// this.state.pseudocodeArr[this.state.stepId].fastForward();
-		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
 		this.setState({ stepId: this.state.stepId + 1 });
 		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
 	}
@@ -456,9 +517,9 @@ export default class singlylinkedlist extends React.Component {
 		if (this.state.running) return;
 		if (this.state.stepId - 1 < 0) return;
 		let stepId = this.state.stepId - 1;
-		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.state.stepsArr[stepId].backward(d3.select(this.ref.current).select("svg"));
 		//console.log(this.state.steps[stepId]);
-		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Singly Linked List!</h1>" : this.state.messages[stepId - 1];
+		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Singly Linked List!</h1>" : this.state.messagesArr[stepId - 1];
 		this.setState({ stepId: stepId });
 		d3.timeout(this.turnOffRunning, this.props.waitTime);
 	}
@@ -595,7 +656,7 @@ export default class singlylinkedlist extends React.Component {
 		return (
 			<div>
 				<div class="center-screen" id="banner">
-					<button class="button" onClick={this.play}>Autoplay</button>
+					<button class="button" onClick={this.play}>Play</button>
 					<button class="button" onClick={this.pause}>Pause</button>
 					<button class="button" onClick={this.restart}>Restart</button>
 					<button class="button" onClick={this.backward}>Step Backward</button>

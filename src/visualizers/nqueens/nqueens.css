@@ -1,15 +1,13 @@
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-    
-    .dark-mode {
-        background-color: #112;
-        color: #d3d3d3
-    }
-    
-    .center-screen {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
+.color1{
+    color: blue;
+    text-shadow: 0 0 0 red;
+}
 
     

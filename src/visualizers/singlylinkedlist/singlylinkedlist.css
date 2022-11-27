@@ -25,9 +25,13 @@
 .inputBox {
 	font-size: 15px;
 	border-radius: 15px;
+	border-color: var(--accentColor);
     width: 60px;
     height: 55px;
 	padding-left: 15px;
+	background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+    outline: var(--accentColor);
     
 }
 #removeBut {

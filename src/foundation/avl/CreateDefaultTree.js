@@ -57,7 +57,7 @@ function createDefaultTree(ref){
           ys[i] + "%",
           nodes[i],
           "visible",
-          "gray"
+          localStorage.getItem('secondaryColor')
         );
         tree.nodeInfo.push(node);
     }

@@ -25,7 +25,7 @@ class WeightedUndirectedEdge extends UndirectedEdge {
         cx: xm + "%",
         cy: ym + "%",
         r: "3.75%",
-        fill: "#1b203d",
+        fill: localStorage.getItem('nodeColor'),
       },
     };
 
@@ -37,7 +37,7 @@ class WeightedUndirectedEdge extends UndirectedEdge {
       .attr("cy", this.circle.attr.cy)
       .attr("r", this.circle.attr.r)
       .attr("fill", this.circle.attr.fill);
-    this.text = new Number(ref, textId, xm + "%", ym + "%", weight, "gray", "visible", "3em");
+    this.text = new Number(ref, textId, xm + "%", ym + "%", weight, localStorage.getItem('secondaryColor'), "visible", "3em");
   }
 }
 

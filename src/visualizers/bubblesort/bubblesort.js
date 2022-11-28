@@ -365,6 +365,10 @@ export default class BubbleSort extends React.Component {
 		}
 	}
 
+	sum(a,b) {
+		return a + b;
+	}
+
 	sort(arr, ids, size, stepTime)
 	{
 		let steps = [];
@@ -436,16 +440,9 @@ export default class BubbleSort extends React.Component {
 		messages.push("<h1>Finished Bubble Sort!</h1>");
 		steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
-
-		//console.log("Sorted");
-		//this.printArray(arr, size);
-
 		this.setState({steps: steps});
 		this.setState({messages: messages});
 		this.props.handleCodeStepsChange(pseudocodeArr);
-
-		//console.log(steps);
-		//console.log(messages);
 	}
 
 	dataInit(size) {

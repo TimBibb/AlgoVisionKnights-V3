@@ -937,4 +937,52 @@ export const map = {
         tab + "return;",
         "}"
     ],
+
+    huffman: [
+        "huffmanCodingTree() {",
+        tab + "var root = null;",
+        tab + "var k, l;",
+        tab + "var priorityQueue;",
+        tab + "let workingQueue = priorityQueue;",
+        tab + "while(q.length > 1) {", //5
+        tab + tab + "let left = priorityQueue[0];",
+        tab + tab + "let right = priortityQueue[0];",
+        tab + tab + "if(!root) {", //8
+        tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + "}",
+        tab + tab + "if(leftChar == '-' && rightChar != '-') {", //13
+        tab + tab + tab + "The current parent has edges.",
+        tab + tab + "}",
+        tab + tab + "if(rightChar == '-' && leftChar != '-') {", //16
+        tab + tab + tab + "if(k < 20) {", //17
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "}",
+        tab + tab + tab + "if(k >= 20) {", //20
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "}",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;", //23
+        tab + tab + tab + "priorityQueue.push(workingQueue);", //24
+        tab + tab + "}",
+        tab + tab + "if(rightChar == '-' && leftChar == '-') {", //26
+        tab + tab + tab + "if(k <= 20) {", //27
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else if(k > 20) {", //32
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "if(rightChar != '-' && leftChar != '-' && k >= 10) {", //38
+        tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + "}",
+        tab + "}",
+        "}"
+    ]
 }

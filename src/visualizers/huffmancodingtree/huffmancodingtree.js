@@ -11,6 +11,8 @@ import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, gray, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
+import { Pseudocode } from "../../components/pseudocode/Pseudocode";
+import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
 
 var x = 35;
 var mid = 0;
@@ -426,6 +428,7 @@ export default class huffmancodingtree extends React.Component {
         var temp = "";
         var steps = []
         var messages = []
+        var pseudocodeArr = [];
         var lettersArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "a", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
         var arr = { letters:[], numbers:[], node:[]}
         var root = null;
@@ -437,6 +440,7 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Starting to work on the tree!");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -498,6 +502,11 @@ export default class huffmancodingtree extends React.Component {
         let f = q;
 
         while ((q.length) > 1) {
+
+            steps.push(new EmptyStep())
+            messages.push("The priority queue has more than one entry.");
+            pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
             var modx = k+k;
             var mody = k+5;
             var tempx = k + 15;
@@ -514,6 +523,10 @@ export default class huffmancodingtree extends React.Component {
             let right = q[0];
             console.log(right)
             q.shift();
+
+            steps.push(new EmptyStep())
+            messages.push("Is there a root node?");
+            pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
             if(!root){
 
@@ -536,20 +549,25 @@ export default class huffmancodingtree extends React.Component {
 
                 steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                 messages.push("We take the first two items from our priority queue: " + f.left.display + " and " + f.right.display);
+                pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
                 steps.push(new EmptyStep())
                 messages.push("We take the first two items from our priority queue: " + f.left.display + " and " + f.right.display)
+                pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
 
                 f = new Node(this.ref, "hidden", left.value + right.value, x+modx, y-modx-10, i, f.lEdge, f.rEdge, f.left, f.right)
                 i++;
 
                 steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
 
                 steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
 
                 steps.push(new EmptyStep())
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
 
                 n++;
                 console.log("!root: " + n);
@@ -575,7 +593,15 @@ export default class huffmancodingtree extends React.Component {
                 q.sort(function(a,b){return a.data-b.data;});
             }
             // This case doesn't exist because of the nature of the priority queue, it is here to follow the rhythm ;)
+            steps.push(new EmptyStep())
+            messages.push("Comparing the left and right values.");
+            pseudocodeArr.push(new HighlightLineStep(13, this.props.lines));
+            
             if(left.character == '-' && right.character != '-'){
+                steps.push(new EmptyStep())
+                messages.push("Left character = " + left.character + " and right character = " + right.character);
+                pseudocodeArr.push(new HighlightLineStep(13, this.props.lines));
+
                 // new node f which is equal
                 let f = new Node(this.ref, "hidden", left.value + right.value, x+modx, y-modx-10, i);
                 i++;
@@ -590,15 +616,18 @@ export default class huffmancodingtree extends React.Component {
 
                 steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                 messages.push("Showing left and right child!!!");
+                pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
                 f = new Node(this.ref, "hidden", left.value + right.value, x+modx, y-modx-10, i, f.lEdge, f.rEdge, f.left, f.right);
                 i++;
 
                 steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                 messages.push("Showing parent with edges!!!!");
+                pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
                 steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                 messages.push("Showing everything unhighlighted!!!");
+                pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
                 m++;
                 console.log("left.character == '-' && right.character != '-': " + m);
@@ -622,9 +651,26 @@ export default class huffmancodingtree extends React.Component {
                 q.push(f);
                 q.sort(function(a,b){return a.data-b.data;});
             }
+            steps.push(new EmptyStep())
+            messages.push("Comparing the left and right values.");
+            pseudocodeArr.push(new HighlightLineStep(13, this.props.lines));
+
             if(right.character == '-' && left.character != '-'){
+                steps.push(new EmptyStep())
+                messages.push("Left character = " + left.character + " and right character = " + right.character);
+                pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
+
                 console.log(k)
+
+                steps.push(new EmptyStep())
+                messages.push("Checking character count.");
+                pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+
                 if(k < 20){
+                    steps.push(new EmptyStep())
+                    messages.push("Character count < 20");
+                    pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+
                 // new node f which is equal
                     let f = new Node(this.ref, "hidden", left.value + right.value, x+modx, y-modx-20, i);
                     i++;
@@ -639,20 +685,25 @@ export default class huffmancodingtree extends React.Component {
 
                     steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                     messages.push("We take the next two items from our priority queue: " + f.right.display + " and " + f.left.display);
+                    pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
                     steps.push(new EmptyStep())
                     messages.push("We take the next two items from our priority queue: " + f.right.display + " and " + f.left.display);
+                    pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
 
                     f = new Node(this.ref, "hidden", left.value + right.value, x+modx, y-modx-20, i, f.lEdge, f.rEdge, f.left, f.right)
                     i++;
 
                     steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
 
                     steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
 
                     steps.push(new EmptyStep())
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
 
                     w++;
                     console.log((x+modx-tempx+l))
@@ -661,6 +712,10 @@ export default class huffmancodingtree extends React.Component {
                     console.log(k)
                 }
                 if(k >= 20){
+                    steps.push(new EmptyStep())
+                    messages.push("Character count >= 20");
+                    pseudocodeArr.push(new HighlightLineStep(20, this.props.lines));
+
                     let f = new Node(this.ref, "hidden", left.value + right.value, moveRightParentx+48, moveRightParenty-30, i);
                     i++;
 
@@ -674,21 +729,25 @@ export default class huffmancodingtree extends React.Component {
 
                     steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                     messages.push("We take the next two items from our priority queue: " + f.right.display + " and " + f.left.display);
+                    pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
                     steps.push(new EmptyStep())
                     messages.push("We take the next two items from our priority queue: " + f.right.display + " and " + f.left.display)
+                    pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
 
                     f = new Node(this.ref, "hidden", left.value + right.value, moveRightParentx+48, moveRightParenty-30, i, f.lEdge, f.rEdge, f.left, f.right)
                     i++;
 
                     steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
-
+                    pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
+                    
                     steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
-                    
+                    pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
+
                     steps.push(new EmptyStep())
                     messages.push("To get our parent node, we sum left and right childs, so: " + right.value + " + " + left.value + " = " + f.display);
-
+                    pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
                 }
 
                 f.value = left.value + right.value;
@@ -710,9 +769,24 @@ export default class huffmancodingtree extends React.Component {
                 q.push(f);
                 q.sort(function(a,b){return a.data-b.data;});
             }
+
+            steps.push(new EmptyStep())
+            messages.push("Comparing the left and right values.");
+            pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
+
             if(right.character == '-' && left.character == '-'){
+                steps.push(new EmptyStep())
+                messages.push("Left character = " + left.character + " and right character = " + right.character);
+                pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
+
+                steps.push(new EmptyStep())
+                messages.push("Checking character count.");
+                pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
 
                 if(k <= 20){
+                    steps.push(new EmptyStep())
+                    messages.push("Character count <= 20");
+                    pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
 
                     let f = new Node(this.ref, "hidden", left.value + right.value, x+modx-7, y-modx-10, i);
                     i++;
@@ -727,20 +801,25 @@ export default class huffmancodingtree extends React.Component {
 
                     steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                     messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display);
+                    pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
                     steps.push(new EmptyStep())
                     messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display)
+                    pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
 
                     f = new Node(this.ref, "hidden", left.value + right.value, x+modx-7, y-modx-10, i, f.lEdge, f.rEdge, f.left, f.right);
                     i++;
 
                     steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
 
                     steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
 
                     steps.push(new EmptyStep())
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
 
                     p++;
                     console.log("right.character == '-' && left.character == '-': " + p);
@@ -765,6 +844,10 @@ export default class huffmancodingtree extends React.Component {
                     q.sort(function(a,b){return a.data-b.data;});
                 }
                 else if(k > 20){
+                    steps.push(new EmptyStep())
+                    messages.push("Character count > 20");
+                    pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
+
                     let f = new Node(this.ref, "hidden", left.value + right.value, x+modx-35, y-modx-10, i);
                     i++;
                     
@@ -778,20 +861,25 @@ export default class huffmancodingtree extends React.Component {
 
                     steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                     messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display);
+                    pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
                     steps.push(new EmptyStep())
                     messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display)
+                    pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
 
                     f = new Node(this.ref, "hidden", left.value + right.value, x+modx-35, y-modx-10, i, f.lEdge, f.rEdge, f.left, f.right)
                     i++
 
                     steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(34, this.props.lines));
 
                     steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(34, this.props.lines));
 
                     steps.push(new EmptyStep())
                     messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                    pseudocodeArr.push(new HighlightLineStep(35, this.props.lines));
 
                     p++;
                     console.log("right.character == '-' && left.character == '-': " + p);
@@ -816,8 +904,15 @@ export default class huffmancodingtree extends React.Component {
                     q.sort(function(a,b){return a.data-b.data;});
                 }
             }
+            steps.push(new EmptyStep())
+            messages.push("Comparing the left and right values.");
+            pseudocodeArr.push(new HighlightLineStep(38, this.props.lines));
+
             if(right.character != '-' && left.character != '-' && k >= 10){
-                
+                steps.push(new EmptyStep())
+                messages.push("Left character = " + left.character + " and right character = " + right.character);
+                pseudocodeArr.push(new HighlightLineStep(38, this.props.lines));
+
                 let f = new Node(this.ref, "hidden", left.value + right.value, moveRightParentx+65, moveRightParenty, i);
                 i++
 
@@ -831,20 +926,25 @@ export default class huffmancodingtree extends React.Component {
                 
                 steps.push(new ShowLeftRightNodesHighlighted(f.left, f.right))
                 messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display);
+                pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
                 steps.push(new EmptyStep())
                 messages.push("We take the next two items from our priority queue: " + f.left.display + " and " + f.right.display)
+                pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
 
                 f = new Node(this.ref, "hidden", left.value + right.value, moveRightParentx+65, moveRightParenty, i, f.lEdge, f.rEdge, f.left, f.right)
                 i++
 
                 steps.push(new ShowParentWithEdges(f, f.lEdge, f.rEdge));
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(40, this.props.lines));
 
                 steps.push(new UnhighlightNodes(f.left, f.right, f, f.lEdge, f.rEdge))
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(40, this.props.lines));
 
                 steps.push(new EmptyStep())
                 messages.push("To get our parent node, we sum left and right childs, so: " + left.value + " + " + right.value + " = " + f.display);
+                pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
 
                 h++;
                 console.log("right.character != '-' && left.character != '-' && k >= 10: " + h);
@@ -922,8 +1022,10 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Huffman Coding Tree insertion complete!");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
         this.setState({steps: steps});
         this.setState({messages: messages});
+        this.props.handleCodeStepsChange(pseudocodeArr);
     }
 
     turnOffRunning() {
@@ -964,6 +1066,8 @@ export default class huffmancodingtree extends React.Component {
 										// button so as not to ruin the visualizer
 		if (this.state.stepId === this.state.steps.length) return; // At the end of the step queue
 		
+        this.props.codeSteps[this.state.stepId].forward();
+
 		// Uses the step's fastForward function and displays associated message
 		this.state.steps[this.state.stepId].fastForward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
@@ -980,6 +1084,7 @@ export default class huffmancodingtree extends React.Component {
 			this.setState({running: false});
 			return;
 		}
+        this.props.codeSteps[this.state.stepId].forward();
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
@@ -1074,6 +1179,10 @@ export default class huffmancodingtree extends React.Component {
                         </div>
                     </tr> */}
                 </table>
+                <div class="parent-svg">
+                <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+                    <Pseudocode algorithm={"huffman"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
+                </div>
             </div>
         )
     }

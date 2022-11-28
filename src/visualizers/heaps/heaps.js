@@ -285,7 +285,8 @@ export default class binarysearchtree extends React.Component {
             messages: [],
             maxLevel: 0,
             running: false,
-            root: null
+            root: null,
+            interval: null,
         };
         
 		// Bindings
@@ -900,6 +901,7 @@ export default class binarysearchtree extends React.Component {
     }
 
     run(){
+        clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -910,7 +912,9 @@ export default class binarysearchtree extends React.Component {
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		// d3.timeout(this.run, this.state.waitTime);
+        this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
     }
 
     playPreorder() {
@@ -965,6 +969,11 @@ export default class binarysearchtree extends React.Component {
 			console.log("We ran");
 		}
 	}
+
+    componentWillUnmount() {
+        console.log("component unmounted")
+        clearInterval(this.state.interval);
+      }
 
     render() {
         return (

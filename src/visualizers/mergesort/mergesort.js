@@ -726,7 +726,8 @@ export default class MergeSort extends React.Component {
 			stepTime: 300,
 			waitTime: (9 * 2000) / 8,
 			inputMode: false,
-			restartFlag: false
+			restartFlag: false,
+			interval: null,
 		};
 
 		this.ref = React.createRef();
@@ -806,7 +807,7 @@ export default class MergeSort extends React.Component {
 		pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
 		
 		messages.push("<h1>Slicing Array (Right)</h1>");
-		steps.push(new PartitionStep(0, midpoint, partition.length, partition, stepTime));
+		steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
 
 		const left = partition.slice(0, midpoint);
@@ -816,15 +817,15 @@ export default class MergeSort extends React.Component {
 		// messages.push("<h1>Swapping values</h1>");
 		// steps.push(new SortedStep(0, 3, ids, stepTime))
 
-		const lMerge = this.sortRecursive(arr, left, ids, steps, messages, stepTime,pseudocodeArr);
 		messages.push("<h1>Running Merge Sort on Left Partition.</h1>");
-		steps.push(new PartitionStep(0, midpoint, partition.length, partition, stepTime));
+		steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
+		const lMerge = this.sortRecursive(arr, left, ids, steps, messages, stepTime,pseudocodeArr);
 
-		const rMerge = this.sortRecursive(arr, right, ids, steps, messages, stepTime,pseudocodeArr);
 		messages.push("<h1>Running Merge Sort on Right Partition.</h1>");
-		steps.push(new PartitionStep(0, midpoint, partition.length, partition, stepTime));
+		steps.push(new EmptyStep());
 		pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
+		const rMerge = this.sortRecursive(arr, right, ids, steps, messages, stepTime,pseudocodeArr);
 
 		messages.push("<h1>Merging</h1>");
 		steps.push(new EmptyStep());
@@ -1156,6 +1157,7 @@ export default class MergeSort extends React.Component {
 	}
 
 	run() {
+		clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -1165,7 +1167,9 @@ export default class MergeSort extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.props.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+		this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
 	}
 
 	play() {
@@ -1285,6 +1289,11 @@ export default class MergeSort extends React.Component {
 		x = parseFloat(value);
 		return (x | 0) === x;
 	}
+
+	componentWillUnmount() {
+		console.log("component unmounted")
+		clearInterval(this.state.interval);
+	  }
 
 	render() {
 		return (

@@ -72,7 +72,8 @@ export default class Floodfill extends React.Component {
       running: false,
       stepId: 0,
       stepTime: 300,
-      waitTime: 1500
+      waitTime: 1500,
+      interval: null
     };
 
     this.ref = React.createRef();
@@ -179,7 +180,7 @@ export default class Floodfill extends React.Component {
     var steps = [];
     var messages = [];
     var pseudocodeArr = [];
-    //var lines = this.props.this.props.lines;
+    var lines = this.props.lines;
     // var arr = { ID:[], color:[]}
     col = Math.floor(Math.random() * 10);
     row = Math.floor(Math.random() * 10);
@@ -207,55 +208,76 @@ export default class Floodfill extends React.Component {
     steps.push(new EmptyStep());
     messages.push("<h1>Performing Floodfill Algorithm.</h1>");
     pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
-    floodFillUtil(board, col, row, n);
+    
+    console.log("We're reaching the recursion");
+
+
+    console.log(this.props.lines);
+
+    board = floodFillUtil(board, col, row, n);
 
     // i = col, j = row
     function floodFillUtil(board, i, j, n){
+        console.log(messages.length);
+        console.log(steps.length);
+        console.log(pseudocodeArr.length);
+        console.log(lines);
+        //var lines = this.props.lines;
+
         steps.push(new EmptyStep());
         messages.push("<h1>Performing Floodfill Algorithm.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(6, lines))
+
+        console.log(pseudocodeArr.length);
 
         steps.push(new EmptyStep());
         messages.push("<h1>Checking Recursive Base Case.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(7, lines))
+
+        console.log(pseudocodeArr.length);
         // Base cases
         if (i < 0 || i > n || j < 0 || j > n) {
           steps.push(new EmptyStep());
           messages.push("<h1>Base Case Passed. Returning.</h1>");
-          pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
+          pseudocodeArr.push(new HighlightLineStep(8, lines))
 
-          return [steps, messages, board];
+          return board;
         }
-        if (board[i][j] != "UCFGOLD") return [steps, messages, board];
+        if (board[i][j] != "UCFGOLD") return board;
 
         //console.log(i + " " + j)
         steps.push(new TileStep(i, j, localStorage.getItem('accentColor')));
         messages.push("<h1>MegaTile at (" + i + " , "+ j +") is in range.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
+        pseudocodeArr.push(new HighlightLineStep(10, lines))
 
         board[i][j] = localStorage.getItem('accentColor');
 
+        console.log("we've made it to the recursive calls.");
+
         steps.push(new EmptyStep());
         messages.push("<h1>Recursively Calling performFloodfill.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
-        [steps, messages, board] = floodFillUtil(board, i - 1, j, n);
+        pseudocodeArr.push(new HighlightLineStep(11, lines))
+
+        board = floodFillUtil(board, i - 1, j, n);
         steps.push(new EmptyStep());
         messages.push("<h1>Recursively Calling performFloodfill.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
-        [steps, messages, board] = floodFillUtil(board, i + 1, j, n);
+        pseudocodeArr.push(new HighlightLineStep(12, lines))
+
+        board = floodFillUtil(board, i + 1, j, n);
         steps.push(new EmptyStep());
         messages.push("<h1>Recursively Calling performFloodfill.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
-        [steps, messages, board] = floodFillUtil(board, i, j + 1, n);
+        pseudocodeArr.push(new HighlightLineStep(13, lines))
+
+        board = floodFillUtil(board, i, j + 1, n);
         steps.push(new EmptyStep());
         messages.push("<h1>Recursively Calling performFloodfill.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
-        [steps, messages, board] = floodFillUtil(board, i, j - 1, n);
+        pseudocodeArr.push(new HighlightLineStep(14, lines))
+        board = floodFillUtil(board, i, j - 1, n);
 
         steps.push(new EmptyStep());
         messages.push("<h1>Returning Current Board.</h1>");
-        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
-        return [steps, messages, board];
+        pseudocodeArr.push(new HighlightLineStep(15, lines))
+        return board;
         
     }
 
@@ -271,8 +293,8 @@ export default class Floodfill extends React.Component {
     messages.push("<h1>Finished Floodfill!</h1>");
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
-    this.setState({steps: steps, messages: messages});
     this.props.handleCodeStepsChange(pseudocodeArr);
+    this.setState({steps: steps, messages: messages});
   }
 
   turnOffRunning() {
@@ -282,24 +304,24 @@ export default class Floodfill extends React.Component {
   forward() {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
-    if (this.stepId === this.steps.length) return;
+    if (this.state.stepId === this.state.steps.length) return;
 
-    this.props.codeSteps[this.stepId].forward();
+    this.props.codeSteps[this.state.stepId].forward();
 
-    document.getElementById("message").innerHTML = this.state.messages[this.stepId];
-    this.state.steps[this.stepId].forward();
+    document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+    this.state.steps[this.state.stepId].forward();
 
-    console.log(this.state.steps[this.stepId]);
-    this.setState({stepId: this.stepId + 1});
+    console.log(this.state.steps[this.state.stepId]);
+    this.setState({stepId: this.state.stepId + 1});
     d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
     console.log("BACKWARD CLICKED");
     if (this.state.running) return;
-    if (this.stepId - 1 < 0) return;
+    if (this.state.stepId - 1 < 0) return;
 
-    var stepId = this.stepId - 1;
+    var stepId = this.state.stepId - 1;
     document.getElementById("message").innerHTML = this.state.messages[stepId - 1];
     this.state.steps[stepId].backward();
 
@@ -309,23 +331,27 @@ export default class Floodfill extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
+
     if (!this.state.running) return;
-    if (this.stepId === this.steps.length) {
+    if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
       return;
     }
 
     console.log(this.state.steps);
     console.log(this.props.codeSteps);
-    console.log(this.stepId);
+    console.log(this.state.stepId);
 
-    this.props.codeSteps[this.stepId].forward();
+    this.props.codeSteps[this.state.stepId].forward();
 
-    document.getElementById("message").innerHTML = this.state.messages[this.stepId];
-    this.state.steps[this.stepId].forward();
+    document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
+    this.state.steps[this.state.stepId].forward();
 
-    this.setState({stepId: this.stepId + 1});
-    d3.timeout(this.run, this.props.waitTime);
+    this.setState({stepId: this.state.stepId + 1});
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -346,9 +372,9 @@ export default class Floodfill extends React.Component {
   restart() {
     console.log("RESTART CLICKED");
 
-    if (this.stepId - 1 < 0) return;
+    if (this.state.stepId - 1 < 0) return;
 
-    var stepId = this.stepId;
+    var stepId = this.state.stepId;
 
     document.getElementById("message").innerHTML = "<h1>Welcome to Floodfill!</h1>";
 
@@ -379,6 +405,11 @@ export default class Floodfill extends React.Component {
 
   refreshPage() {
     window.location.reload(false);
+  }
+  
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

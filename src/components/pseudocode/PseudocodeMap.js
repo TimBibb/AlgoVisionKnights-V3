@@ -764,10 +764,10 @@ export const map = {
 
     fibonacci: [ //done
         "fib(n){",
-        tab + "if(n <= 1) {",
-        tab + tab + "return n;",
+        tab + "if(n <= 1) {", //1
+        tab + tab + "return n;", //2
         tab + "}",
-        tab + "return fib(n - 1) + fib(n - 2);",
+        tab + "return fib(n - 1) + fib(n - 2);", //4
         "}"
     ],
 

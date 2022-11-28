@@ -48,11 +48,11 @@ class Node {
       .attr('y',(55 * this.y) + 50)
       .style("fill", "url(#grad)")
       .attr("stroke-width", "2")
-      .attr("stroke", "grey")
+      .attr("stroke", localStorage.getItem('secondaryColor'))
 			
 		container
       .append('line')
-      .style("stroke", "grey")
+      .style("stroke", localStorage.getItem('secondaryColor'))
       .style("stroke-width", 2)
 		 	.attr("x1", (150 * this.x) + 435)
 		 	.attr("y1", (55 * this.y) + 50)
@@ -66,12 +66,12 @@ class Node {
 			.attr("x", (150 * this.x) + 405)
 			.style("text-anchor", "middle")
 			.style("font-size", "28px")
-			.style("fill", "white")
+			.style("fill", localStorage.getItem('primaryColor'))
 			
     if (this.x < 4) {
       container
         .append('line')
-        .style("stroke", "white")
+        .style("stroke", localStorage.getItem('primaryColor'))
         .style("stroke-width", 5)
         .attr("x1", (150 * this.x) + 465)
         .attr("y1", (55 * this.y) + 75)
@@ -92,7 +92,7 @@ class Node {
 			.attr("orient", "auto")
 			.append("path")
 			.attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
-			.style("stroke", "white")
+			.style("stroke", localStorage.getItem('primaryColor'))
     
     ;}
 }
@@ -108,13 +108,15 @@ class ShowNodeStep {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+    svg.select("#" + this.id1).attr("visibility", "hidden");
+		// svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class HighlightNodeStep {
@@ -122,7 +124,7 @@ class HighlightNodeStep {
 		this.id = id;
 	}
 	forward(svg){
-		svg.select("#" + this.id).select("rect").style("fill", "#FFD700");
+		svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('accentColor'));
 	}
 
 	fastForward(svg) {
@@ -130,14 +132,17 @@ class HighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+    svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('secondaryColor'));
+		svg.select("#" + this.id).select("rect").style("fill", "url(#grad)");
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
+
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class DeHighlightNodeStep {
@@ -153,14 +158,15 @@ class DeHighlightNodeStep {
 	}
 
 	backward(svg) {
-		svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
+    svg.select("#" + this.id).select("rect").style("fill", localStorage.getItem('accentColor'));
+		// svg.select("#" + this.ids[this.id1]).select("rect").style("fill", "#EF3F88");
+		// svg.select("#" + this.ids[this.id2]).select("rect").style("fill", "gray");
 
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
+		// svg.selectAll(".qTxt").attr("visibility", "hidden");
 
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		// if (this.id1 !== this.id2) {
+		// 	svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
+		// }
 	}
 }
 class RemoveNodeStep {
@@ -171,19 +177,13 @@ class RemoveNodeStep {
 	forward(svg) {
     console.log(this.node.id)
     console.log(this.id);
-		svg.select("#" + this.id).remove();
+		svg.select("#" + this.id).attr("visibility", "hidden");
 	}
 	fastForward(svg) {
 		this.forward(svg);
 	}
 	backward(svg) {
-		svg.select("#" + this.idArr[this.id1]).select("rect").style("fill", "#EF3F88");
-		svg.select("#" + this.idArr[this.id2]).select("rect").style("fill", "gray");
-		svg.selectAll(".qTxt").attr("visibility", "hidden");
-
-		if (this.id1 !== this.id2) {
-			svg.selectAll("#qTxt" + this.id1).attr("visibility", "visible");
-		}
+		svg.select("#" + this.id).attr("visibility", "visible");
 	}
 }
 
@@ -319,10 +319,13 @@ function modRand(n) {
       };
   
       let svg = d3
-        .select(this.ref.current)
-        .append("svg")
-        .attr("width", "1600px")
-        .attr("height", "700px");
+      .select(this.ref.current)
+      .append("svg")
+      .attr("width", "100%")
+      .attr("height", "650px");
+
+      svg.attr("perserveAspectRatio", "xMinYMid")
+      svg.attr("viewBox", "0 0 " + 1500 + " " + (650))
   
       let left = 400;
       let line = 310;
@@ -336,19 +339,19 @@ function modRand(n) {
         .attr("dominant-baseline", "middle")
         .attr("font-size", "25px")
         .attr("font-weight", "bold")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("");
   
       let hashFunction = svg
         .append("text")
-        .attr("x", "1200px")
+        .attr("x", "1150px")
         .attr("y", "300px")
         .attr("id", "Function")
         .attr("text-anchor", "start")
         .attr("dominant-baseline", "middle")
         .attr("font-size", "25px")
         .attr("font-weight", "bold")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("h(x) = x % [length of table]");
   
       let hashEvaluation = svg
@@ -360,7 +363,7 @@ function modRand(n) {
         .attr("dominant-baseline", "middle")
         .attr("font-size", "25px")
         .attr("font-weight", "bold")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("");
   
       svg
@@ -369,7 +372,7 @@ function modRand(n) {
         .attr("y1", "0px")
         .attr("x2", line + "px")
         .attr("y2", "650px")
-        .attr("stroke", "white");
+        .attr("stroke", localStorage.getItem('primaryColor'));
   
       let allArrowPos = [];
   
@@ -383,7 +386,7 @@ function modRand(n) {
           .attr("y1", 50 + i * (height / tableLen) + "px")
           .attr("x2", line + 25 + "px")
           .attr("y2", 50 + i * (height / tableLen) + "px")
-          .attr("stroke", "white");
+          .attr("stroke", localStorage.getItem('primaryColor'));
   
         if (i < tableLen) {
           info.table.push(null);
@@ -393,7 +396,7 @@ function modRand(n) {
           svg
             .append("g")
             .attr("id", "Entry" + i)
-            .style("fill", "white");
+            .style("fill", localStorage.getItem('primaryColor'));
   
           svg
             .select("#Entry" + i)
@@ -435,7 +438,7 @@ function modRand(n) {
         .attr("font-size", "30px")
         .attr("font-weight", "bold")
         .attr("visibility", "visible")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("Index");
   
       svg
@@ -448,7 +451,7 @@ function modRand(n) {
         .attr("font-size", "30px")
         .attr("font-weight", "bold")
         .attr("visibility", "visible")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("Value");
   
       let arrow = svg
@@ -461,7 +464,7 @@ function modRand(n) {
         .attr("font-size", "50px")
         .attr("font-weight", "bold")
         .attr("visibility", "visible")
-        .style("fill", "white")
+        .style("fill", localStorage.getItem('primaryColor'))
         .text("→");
 
         // Linked List
@@ -469,8 +472,8 @@ function modRand(n) {
         .append("linearGradient")
         .attr("id", "grad")
         .attr("x1", "35%").attr("x2", "100%").attr("y1", "100%").attr("y2", "100%");
-        grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(153,204,255)");
-        grad.append("stop").attr("offset", "50%").style("stop-color", "rgb(129,230,129)");
+        grad.append("stop").attr("offset", "50%").style("stop-color", localStorage.getItem('secondaryColor'));
+        grad.append("stop").attr("offset", "50%").style("stop-color", localStorage.getItem('accentColor'));
   
 
       info.arrowPos = allArrowPos[0];
@@ -952,6 +955,8 @@ function modRand(n) {
         for (const step of this.steps[this.stepId - 1]) step.backward(svg);
         this.stepId = this.stepId - 1;
       }
+
+      document.getElementById("message").innerHTML = "<h1>Welcome to Hash Table Linked List!</h1>";
   
       this.running = false;
       this.stepId = 0;
@@ -998,7 +1003,7 @@ function modRand(n) {
     refreshPage() {
       window.location.reload(false);
     }
-
+    
     render() {
       return (
         <div>

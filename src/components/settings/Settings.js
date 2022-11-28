@@ -15,10 +15,10 @@ function defaultColors(){
     localStorage.setItem('primaryColorG', '255')
     localStorage.setItem('primaryColorB', '255')
     // default secondaryColor
-    localStorage.setItem('secondaryColor', '#404243')
-    localStorage.setItem('secondaryColorR', '64')
-    localStorage.setItem('secondaryColorG', '66')
-    localStorage.setItem('secondaryColorB', '67')
+    localStorage.setItem('secondaryColor', '#5D6365')
+    localStorage.setItem('secondaryColorR', '93')
+    localStorage.setItem('secondaryColorG', '96')
+    localStorage.setItem('secondaryColorB', '101')
     // default accentColor
     localStorage.setItem('accentColor', '#FFC904')
     localStorage.setItem('accentColorR', '255')
@@ -39,6 +39,41 @@ function defaultColors(){
     localStorage.setItem('nodeColorR', '27')
     localStorage.setItem('nodeColorG', '32')
     localStorage.setItem('nodeColorB', '61')
+
+    window.location.reload(false);
+}
+
+function skybluePalette(){
+    // default primaryColor
+    localStorage.setItem('primaryColor', '#000000')
+    localStorage.setItem('primaryColorR', '0')
+    localStorage.setItem('primaryColorG', '0')
+    localStorage.setItem('primaryColorB', '0')
+    // default secondaryColor
+    localStorage.setItem('secondaryColor', '#8B979D')
+    localStorage.setItem('secondaryColorR', '139')
+    localStorage.setItem('secondaryColorG', '151')
+    localStorage.setItem('secondaryColorB', '157')
+    // default accentColor
+    localStorage.setItem('accentColor', '#91C1FF')
+    localStorage.setItem('accentColorR', '145')
+    localStorage.setItem('accentColorG', '193')
+    localStorage.setItem('accentColorB', '255')
+    // default backgroundColor
+    localStorage.setItem('backgroundColor', '#FFFFFF')
+    localStorage.setItem('backgroundColorR', '255')
+    localStorage.setItem('backgroundColorG', '255')
+    localStorage.setItem('backgroundColorB', '255')
+    // default cardColor
+    localStorage.setItem('cardColor', '#748498')
+    localStorage.setItem('cardColorR', '116')
+    localStorage.setItem('cardColorG', '132')
+    localStorage.setItem('cardColorB', '152')
+    // default nodeColor
+    localStorage.setItem('nodeColor', '#4D5159')
+    localStorage.setItem('nodeColorR', '77')
+    localStorage.setItem('nodeColorG', '81')
+    localStorage.setItem('nodeColorB', '89')
 
     window.location.reload(false);
 }
@@ -298,7 +333,6 @@ class Settings extends React.Component {
         <div>
             <div className='settings-container'>
                 {/* Primary Color */}
-                <Typography id="settings-title"> Primary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClick }>
                 <div style={ styles.primaryColor } />
                 </div>
@@ -306,9 +340,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onClose }/>
                 <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
                 </div> : null }
+                <Typography id="settings-title"> Primary Color </Typography>
 
                 {/* Secondary Color */}
-                <Typography id="settings-title"> Secondary Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
                 <div style={ styles.secondaryColor } />
                 </div>
@@ -316,9 +350,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
                 <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
                 </div> : null }
+                <Typography id="settings-title"> Secondary Color </Typography>
 
                 {/* Accent Color */}
-                <Typography id="settings-title"> Accent Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
                 <div style={ styles.accentColor } />
                 </div>
@@ -326,9 +360,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
                 <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
                 </div> : null }
+                <Typography id="settings-title"> Accent Color </Typography>
 
                 {/* Background Color */}
-                <Typography id="settings-title"> Background Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
                 <div style={ styles.backgroundColor } />
                 </div>
@@ -336,9 +370,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
                 <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
                 </div> : null }
+                <Typography id="settings-title"> Background Color </Typography>
 
                 {/* Card Color */}
-                <Typography id="settings-title"> Card Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickCardColor }>
                 <div style={ styles.cardColor } />
                 </div>
@@ -346,9 +380,9 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseCardColor }/>
                 <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
                 </div> : null }
+                <Typography id="settings-title"> Card Color </Typography>
 
                 {/* Node Color */}
-                <Typography id="settings-title"> Node Color: </Typography>
                 <div style={ styles.swatch } onClick={ this.onClickNodeColor }>
                 <div style={ styles.nodeColor } />
                 </div>
@@ -356,12 +390,14 @@ class Settings extends React.Component {
                 <div style={ styles.cover } onClick={ this.onCloseNodeColor }/>
                 <SketchPicker color={ this.state.nodeColor } onChange={ this.onChangeNodeColor } />
                 </div> : null }
+                <Typography id="settings-title"> Node Color </Typography>
 
             </div>
             <div className='settings-container'>
                 <div className="button-location">
                     <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
                     <button class="button4" onClick={defaultColors}>Default Colors</button>
+                    <button class="button4" onClick={skybluePalette}>Skyblue Palette</button>
                 </div>
             </div>
         </div>

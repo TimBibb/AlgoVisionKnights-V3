@@ -5,7 +5,7 @@ import "../css/button.css";
 import "../css/messages.css";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import { GRAY, GRAYBLACK, UCF_GOLD } from "../../assets/colors";
-
+import {Pseudocode, HighlightLineStep} from "../../components/pseudocode/Pseudocode";
 
 class EmptyStep {
   forward() {}
@@ -44,7 +44,7 @@ class TileStep{
   }
 
   backward(){
-    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === "white") ? UCF_GOLD : "white");
+    d3.select("#code"+ this.rowID + this.colID).attr("fill", (this.color === localStorage.getItem('accentColor')) ? localStorage.getItem('backgroundColor') : localStorage.getItem('accentColor'));
   }
 }
 
@@ -147,7 +147,7 @@ export default class Floodfill extends React.Component {
           board[i][j] = 'BLACKGRAY';
         }
         else {
-            tile.attr("fill", UCF_GOLD);
+            tile.attr("fill", localStorage.getItem('backgroundColor'));
             board[i][j] = 'UCFGOLD';
         }
 
@@ -178,6 +178,8 @@ export default class Floodfill extends React.Component {
   floodfill(board, col, row, n) {
     var steps = [];
     var messages = [];
+    var pseudocodeArr = [];
+    //var lines = this.props.this.props.lines;
     // var arr = { ID:[], color:[]}
     col = Math.floor(Math.random() * 10);
     row = Math.floor(Math.random() * 10);
@@ -190,48 +192,87 @@ export default class Floodfill extends React.Component {
     console.log(board)
     steps.push(new EmptyStep());
     messages.push("<h1>Beginning Floodfill!</h1>");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     steps.push(new EmptyStep());
     messages.push("<h1>We have a board of " + n + "x" + n + "</h1>");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     steps.push(new EmptyStep());
     messages.push("<h1>We first select a random tile: (" + (col)+ " , "+ (row) + ")</h1>");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     // console.log("board: " + board + " col: " + col + " row: " + row + " n: " + n);
 
+    steps.push(new EmptyStep());
+    messages.push("<h1>Performing Floodfill Algorithm.</h1>");
+    pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
     floodFillUtil(board, col, row, n);
 
     // i = col, j = row
     function floodFillUtil(board, i, j, n){
+        steps.push(new EmptyStep());
+        messages.push("<h1>Performing Floodfill Algorithm.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
+
+        steps.push(new EmptyStep());
+        messages.push("<h1>Checking Recursive Base Case.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(7, this.props.lines))
         // Base cases
-        if (i < 0 || i > n || j < 0 || j > n) return [steps, messages, board];
+        if (i < 0 || i > n || j < 0 || j > n) {
+          steps.push(new EmptyStep());
+          messages.push("<h1>Base Case Passed. Returning.</h1>");
+          pseudocodeArr.push(new HighlightLineStep(8, this.props.lines))
+
+          return [steps, messages, board];
+        }
         if (board[i][j] != "UCFGOLD") return [steps, messages, board];
 
         //console.log(i + " " + j)
-        steps.push(new TileStep(i, j, "white"));
+        steps.push(new TileStep(i, j, localStorage.getItem('accentColor')));
         messages.push("<h1>MegaTile at (" + i + " , "+ j +") is in range.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(10, this.props.lines))
 
-        board[i][j] = "white";
+        board[i][j] = localStorage.getItem('accentColor');
 
+        steps.push(new EmptyStep());
+        messages.push("<h1>Recursively Calling performFloodfill.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
         [steps, messages, board] = floodFillUtil(board, i - 1, j, n);
+        steps.push(new EmptyStep());
+        messages.push("<h1>Recursively Calling performFloodfill.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines))
         [steps, messages, board] = floodFillUtil(board, i + 1, j, n);
+        steps.push(new EmptyStep());
+        messages.push("<h1>Recursively Calling performFloodfill.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
         [steps, messages, board] = floodFillUtil(board, i, j + 1, n);
+        steps.push(new EmptyStep());
+        messages.push("<h1>Recursively Calling performFloodfill.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(14, this.props.lines))
         [steps, messages, board] = floodFillUtil(board, i, j - 1, n);
 
+        steps.push(new EmptyStep());
+        messages.push("<h1>Returning Current Board.</h1>");
+        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines))
         return [steps, messages, board];
         
     }
 
-    messages.push("<h1>All our tiles have been filled with the new color</h1>");
 		steps.push(new EmptyStep());
-
     messages.push("<h1>All our tiles have been filled with the new color</h1>");
-		steps.push(new EmptyStep());
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+		steps.push(new EmptyStep());
+    messages.push("<h1>All our tiles have been filled with the new color</h1>");
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
+
+		steps.push(new EmptyStep());
     messages.push("<h1>Finished Floodfill!</h1>");
-		steps.push(new EmptyStep());
+    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     this.setState({steps: steps, messages: messages});
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -241,22 +282,24 @@ export default class Floodfill extends React.Component {
   forward() {
     console.log("FORWARD CLICKED");
     if (this.state.running) return;
-    if (this.state.stepId === this.state.steps.length) return;
+    if (this.stepId === this.steps.length) return;
 
-    document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-    this.state.steps[this.state.stepId].forward();
+    this.props.codeSteps[this.stepId].forward();
 
-    console.log(this.state.steps[this.state.stepId]);
-    this.setState({stepId: this.state.stepId + 1});
+    document.getElementById("message").innerHTML = this.state.messages[this.stepId];
+    this.state.steps[this.stepId].forward();
+
+    console.log(this.state.steps[this.stepId]);
+    this.setState({stepId: this.stepId + 1});
     d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   backward() {
     console.log("BACKWARD CLICKED");
     if (this.state.running) return;
-    if (this.state.stepId - 1 < 0) return;
+    if (this.stepId - 1 < 0) return;
 
-    var stepId = this.state.stepId - 1;
+    var stepId = this.stepId - 1;
     document.getElementById("message").innerHTML = this.state.messages[stepId - 1];
     this.state.steps[stepId].backward();
 
@@ -267,15 +310,21 @@ export default class Floodfill extends React.Component {
 
   run() {
     if (!this.state.running) return;
-    if (this.state.stepId === this.state.steps.length) {
+    if (this.stepId === this.steps.length) {
       this.setState({ running: false });
       return;
     }
 
-    document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-    this.state.steps[this.state.stepId].forward();
+    console.log(this.state.steps);
+    console.log(this.props.codeSteps);
+    console.log(this.stepId);
 
-    this.setState({stepId: this.state.stepId + 1});
+    this.props.codeSteps[this.stepId].forward();
+
+    document.getElementById("message").innerHTML = this.state.messages[this.stepId];
+    this.state.steps[this.stepId].forward();
+
+    this.setState({stepId: this.stepId + 1});
     d3.timeout(this.run, this.props.waitTime);
   }
 
@@ -297,9 +346,9 @@ export default class Floodfill extends React.Component {
   restart() {
     console.log("RESTART CLICKED");
 
-    if (this.state.stepId - 1 < 0) return;
+    if (this.stepId - 1 < 0) return;
 
-    var stepId = this.state.stepId;
+    var stepId = this.stepId;
 
     document.getElementById("message").innerHTML = "<h1>Welcome to Floodfill!</h1>";
 
@@ -346,6 +395,14 @@ export default class Floodfill extends React.Component {
         </div>
         <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Floodfill!</h1></span></div>
         <div ref={this.ref} class="center-screen"></div>
+        <div class="parent-svg">
+					<div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+					<Pseudocode algorithm={"floodfill"} lines={this.props.lines} 
+								handleLinesChange={this.props.handleLinesChange} code={this.props.code} 
+								handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} 
+								handleCodeStepsChange={this.handleCodeStepsChange}>
+					</Pseudocode>
+				</div>
       </div>
     );
   }

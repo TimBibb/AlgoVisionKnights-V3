@@ -1,35 +1,51 @@
 .inputValue {
     border-radius: 15px;
+    border-color: var(--accentColor);
     margin-right: 15px;
     width: 5%;
     height: 40px;
     font-size: 24px;
     padding-left: 20px;
+    background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+    outline: var(--accentColor);
 }
 .inputValue2 {
     font-size: 15px;
 	border-radius: 15px;
+    border-color: var(--accentColor);
     width: 85px;
     height: 50px;
 	padding-left: 10px;
+    background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+    outline: var(--accentColor);
 }
 
 
 .sortInput {
     border-radius: 15px;
+    border-color: var(--accentColor);
     font-size: 20px;
 	border-radius: 15px;
     width: 300px;
     height: 55px;
     padding-left: 10px;
+    background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+    outline: var(--accentColor);
 }
 
 .searchInput {
     border-radius: 15px;
+    border-color: var(--accentColor);
     font-size: 20px;
     width: 85px;
     height: 55px;
     padding-left: 10px;
+    background-color: var(--backgroundColor);
+    color: var(--primaryColor);
+    outline: var(--accentColor);
 }
 
 /* Use to hide spinhox in input */

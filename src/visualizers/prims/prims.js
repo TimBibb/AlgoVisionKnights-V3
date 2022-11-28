@@ -140,8 +140,8 @@ export default class Prims extends React.Component {
         this.ref.current,
         graph.nodeInfo[0].circle.attr.id,
         graph.nodeInfo[0].text.attr.id,
-        "gray",
-        "white"
+        localStorage.getItem('secondaryColor'),
+        localStorage.getItem('accentColor')
       )
     );
     createMessage("We will start with node 0 to build the MST from.");
@@ -171,8 +171,8 @@ export default class Prims extends React.Component {
           this.ref.current,
           graph.edgeInfo[edgeId].line.attr.id,
           graph.edgeInfo[edgeId].text.attr.id,
-          "gray",
-          "#FFCE36"
+          localStorage.getItem('secondaryColor'),
+          localStorage.getItem('accentColor')
         )
       );
       createMessage("Insert edge (" + node1 + ", " + node2 + ") into the queue.");
@@ -204,8 +204,8 @@ export default class Prims extends React.Component {
           this.ref.current,
           graph.edgeInfo[currentId].line.attr.id,
           graph.edgeInfo[currentId].text.attr.id,
-          "#FFCE36",
-          "white"
+          localStorage.getItem('accentColor'),
+          localStorage.getItem('accentColor')
         )
       );
       createMessage(
@@ -235,8 +235,8 @@ export default class Prims extends React.Component {
             this.ref.current,
             graph.edgeInfo[currentId].line.attr.id,
             graph.edgeInfo[currentId].text.attr.id,
-            "white",
-            "#444444"
+            localStorage.getItem('accentColor'),
+            localStorage.getItem('secondaryColor')
           )
         );
         createMessage("Ignore this edge.");
@@ -263,7 +263,7 @@ export default class Prims extends React.Component {
           this.ref.current,
           graph.edgeInfo[currentId].line.attr.id,
           graph.edgeInfo[currentId].text.attr.id,
-          "white",
+          localStorage.getItem('accentColor'),
           "#1ACA1E"
         )
       );
@@ -272,8 +272,8 @@ export default class Prims extends React.Component {
           this.ref.current,
           graph.nodeInfo[unvisitedNode].circle.attr.id,
           graph.nodeInfo[unvisitedNode].text.attr.id,
-          "gray",
-          "white"
+          localStorage.getItem('secondaryColor'),
+          localStorage.getItem('accentColor')
         )
       );
       createMessage(
@@ -306,8 +306,8 @@ export default class Prims extends React.Component {
             this.ref.current,
             graph.edgeInfo[edgeId].line.attr.id,
             graph.edgeInfo[edgeId].text.attr.id,
-            "gray",
-            "#FFCE36"
+            localStorage.getItem('secondaryColor'),
+            localStorage.getItem('accentColor')
           )
         );
         createMessage("Insert the edge (" + from + ", " + to + ") into the queue.");

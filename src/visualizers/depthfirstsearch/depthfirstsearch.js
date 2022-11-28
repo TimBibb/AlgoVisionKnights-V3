@@ -109,7 +109,7 @@ export default class DepthFirstSearch extends React.Component {
 
     let graph = createDefaultGraph(this.ref, isWeighted, isDirected);
     let stack = [];
-    stack.push(new Number(this.ref, "stack", "7%", "10%", "Stack", "grey", "visible"));
+    stack.push(new Number(this.ref, "stack", "7%", "10%", "Stack", localStorage.getItem('secondaryColor'), "visible"));
     
     this.setState({graph: graph, stack: stack});
   }
@@ -163,7 +163,7 @@ export default class DepthFirstSearch extends React.Component {
         graph.nodeInfo[head].circle.attr.id,
         graph.nodeInfo[head].text.attr.id,
         "gray",
-        "yellow"
+        localStorage.getItem('accentColor')
       )
     );
     createMessage("Currently at node " + head + ".");
@@ -195,7 +195,7 @@ export default class DepthFirstSearch extends React.Component {
         nodeStack.push(graph.adjacencyList[head][node][1]);
         edgeStack.push(graph.adjacencyList[head][node][2]);
         let ys = 20 + (numsInStack*10);
-        stack.push(new Number(this.ref, "stack" + nums, "7%", ys + "%", graph.adjacencyList[head][node][1], "grey", "hidden"));
+        stack.push(new Number(this.ref, "stack" + nums, "7%", ys + "%", graph.adjacencyList[head][node][1], localStorage.getItem('secondaryColor'), "hidden"));
         numStack.push(nums);
         addStep(
           new StackChangeStep(
@@ -259,7 +259,7 @@ export default class DepthFirstSearch extends React.Component {
             this.ref.current,
             graph.edgeInfo[e].attr.id,
             "gray",
-            "yellow"
+            localStorage.getItem('accentColor')
           )
         );
         createMessage("Traveling to node " + s + ".");
@@ -273,7 +273,7 @@ export default class DepthFirstSearch extends React.Component {
             graph.nodeInfo[s].circle.attr.id,
             graph.nodeInfo[s].text.attr.id,
             "gray",
-            "yellow"
+            localStorage.getItem('accentColor')
           )
         );
         createMessage("Marking node " + s + " as visited.");
@@ -294,7 +294,7 @@ export default class DepthFirstSearch extends React.Component {
             this.ref.current,
             graph.edgeInfo[e].attr.id,
             "gray",
-            "yellow"
+            localStorage.getItem('accentColor')
           )
         );
         createMessage("Traveling to node " + s + ".");
@@ -306,8 +306,8 @@ export default class DepthFirstSearch extends React.Component {
             this.ref.current,
             graph.nodeInfo[s].circle.attr.id,
             graph.nodeInfo[s].text.attr.id,
-            "yellow",
-            "white"
+            localStorage.getItem('accentColor'),
+            "1ACA1E"
           )
         );
         createMessage("Node " + s + " has already been visited.");
@@ -319,8 +319,8 @@ export default class DepthFirstSearch extends React.Component {
             this.ref.current,
             graph.nodeInfo[s].circle.attr.id,
             graph.nodeInfo[s].text.attr.id,
-            "white",
-            "yellow"
+            "EF3F88",
+            localStorage.getItem('accentColor')
           )
         );
         createMessage("Node " + s + " has already been visited.");
@@ -331,8 +331,8 @@ export default class DepthFirstSearch extends React.Component {
           new EdgeColorChangeStep(
             this.ref.current,
             graph.edgeInfo[e].attr.id,
-            "yellow",
-            "black"
+            localStorage.getItem('accentColor'),
+            localStorage.getItem('cardColor')
           )
         );
         createMessage("Traveling back to parent node.");
@@ -364,7 +364,7 @@ export default class DepthFirstSearch extends React.Component {
           nodeStack.push(graph.adjacencyList[s][node][1]);
           edgeStack.push(graph.adjacencyList[s][node][2]);
           let ys = 20 + (numsInStack*10);
-          stack.push(new Number(this.ref, "stack" + nums, "7%", ys + "%", graph.adjacencyList[s][node][1], "grey", "hidden"));
+          stack.push(new Number(this.ref, "stack" + nums, "7%", ys + "%", graph.adjacencyList[s][node][1], localStorage.getItem('secondaryColor'), "hidden"));
           numStack.push(nums);
           addStep(
             new StackChangeStep(

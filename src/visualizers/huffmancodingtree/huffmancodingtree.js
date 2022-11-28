@@ -10,6 +10,7 @@ import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";
 import { create, gray, svg, tree } from "d3";
 import { GRAY, UCF_GOLD } from "../../assets/colors";
+import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 
 var x = 35;
 var mid = 0;
@@ -60,12 +61,12 @@ class NewNodeStep {
     }
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+		svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.node.id).attr("visibility", "visible");
         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         console.log(" EDGE EXISTS " + this.edge)
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 		// svg.select("#" + this.ids[this.id1]).selectAll("text").text(this.element);
@@ -79,7 +80,7 @@ class UnhideEdges {
 
     forward(svg) {
         if (this.edge) {
-            // svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            // svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
@@ -92,13 +93,13 @@ class ShowLeftRightNodesHighlighted{
 	}
 
     forward(svg) {
-        svg.select("#" + this.left.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.left.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.left.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.left.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.left.id).attr("visibility", "visible");
         svg.select("#" + this.left.textId).attr("visibility", "visible");
 
-        svg.select("#" + this.right.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.right.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.right.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.right.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.right.id).attr("visibility", "visible");
         svg.select("#" + this.right.textId).attr("visibility", "visible");
 	}
@@ -108,13 +109,13 @@ class ShowLeftRightNodesHighlighted{
     }
 
     backward(svg){
-        svg.select("#" + this.left.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.left.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.left.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.left.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.left.id).attr("visibility", "hidden");
         svg.select("#" + this.left.textId).attr("visibility", "hidden");
 
-        svg.select("#" + this.right.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.right.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.right.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.right.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.right.id).attr("visibility", "hidden");
         svg.select("#" + this.right.textId).attr("visibility", "hidden");
     }
@@ -130,17 +131,17 @@ class UnhighlightNodes{
 	}
 
     forward(svg) {
-        svg.select("#" + this.left.id).attr("stroke", GRAY);
-        svg.select("#" + this.left.textId).attr("stroke", GRAY);
+        svg.select("#" + this.left.id).attr("stroke", localStorage.getItem('secondaryColor'));
+        svg.select("#" + this.left.textId).attr("stroke", localStorage.getItem('secondaryColor'));
 
-        svg.select("#" + this.right.id).attr("stroke", GRAY);
-        svg.select("#" + this.right.textId).attr("stroke", GRAY);
+        svg.select("#" + this.right.id).attr("stroke", localStorage.getItem('secondaryColor'));
+        svg.select("#" + this.right.textId).attr("stroke", localStorage.getItem('secondaryColor'));
 
-        svg.select("#" + this.parent.id).attr("stroke", GRAY);
-        svg.select("#" + this.parent.textId).attr("stroke", GRAY);
+        svg.select("#" + this.parent.id).attr("stroke", localStorage.getItem('secondaryColor'));
+        svg.select("#" + this.parent.textId).attr("stroke", localStorage.getItem('secondaryColor'));
 
-        svg.select("#" + this.leftEdge.id).style("stroke", GRAY);
-        svg.select("#" + this.rightEdge.id).style("stroke", GRAY);
+        svg.select("#" + this.leftEdge.id).style("stroke", localStorage.getItem('secondaryColor'));
+        svg.select("#" + this.rightEdge.id).style("stroke", localStorage.getItem('secondaryColor'));
 	}
 
     fastForward(svg){
@@ -148,17 +149,17 @@ class UnhighlightNodes{
     }
 
     backward(svg){
-        svg.select("#" + this.left.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.left.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.left.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.left.textId).attr("stroke", localStorage.getItem('accentColor'));
 
-        svg.select("#" + this.right.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.right.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.right.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.right.textId).attr("stroke", localStorage.getItem('accentColor'));
 
-        svg.select("#" + this.parent.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.parent.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.parent.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.parent.textId).attr("stroke", localStorage.getItem('accentColor'));
 
-        svg.select("#" + this.leftEdge.id).style("stroke", UCF_GOLD);
-        svg.select("#" + this.rightEdge.id).style("stroke", UCF_GOLD);
+        svg.select("#" + this.leftEdge.id).style("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.rightEdge.id).style("stroke", localStorage.getItem('accentColor'));
     }
 }
 
@@ -170,14 +171,14 @@ class ShowParentWithEdges{
 	}
 
     forward(svg) {
-        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.node.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.node.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.node.id).attr("visibility", "visible");
         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
 
-        svg.select("#" + this.leftEdge.id).style("stroke", UCF_GOLD);
+        svg.select("#" + this.leftEdge.id).style("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.leftEdge.id).attr("visibility", "visible");
-        svg.select("#" + this.rightEdge.id).style("stroke", UCF_GOLD);
+        svg.select("#" + this.rightEdge.id).style("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.rightEdge.id).attr("visibility", "visible");
 	}
 
@@ -186,14 +187,14 @@ class ShowParentWithEdges{
     }
 
     backward(svg){
-        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
-        svg.select("#" + this.node.textId).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
+        svg.select("#" + this.node.textId).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.node.id).attr("visibility", "hidden");
         svg.select("#" + this.node.node.textId).attr("visibility", "hidden");
 
-        svg.select("#" + this.leftEdge.id).style("stroke", UCF_GOLD);
+        svg.select("#" + this.leftEdge.id).style("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.leftEdge.id).attr("visibility", "hidden");
-        svg.select("#" + this.rightEdge.id).style("stroke", UCF_GOLD);
+        svg.select("#" + this.rightEdge.id).style("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.rightEdge.id).attr("visibility", "hidden");
     }
 }
@@ -206,11 +207,11 @@ class HighlightNodeStep {
 
     forward(svg) {
         console.log(this.node)
-        svg.select("#" + this.node.id).attr("stroke", UCF_GOLD);
+        svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('accentColor'));
         svg.select("#" + this.node.id).attr("visibility", "visible");
         svg.select("#" + this.node.node.textId).attr("visibility", "visible");
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", UCF_GOLD);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('accentColor'));
             svg.select("#" + this.edge.id).attr("visibility", "visible");
         }
 	}
@@ -223,9 +224,9 @@ class UnHighlightNodeStep {
 	}
 
     forward(svg) {
-		svg.select("#" + this.node.id).attr("stroke", GRAY);
+		svg.select("#" + this.node.id).attr("stroke", localStorage.getItem('secondaryColor'));
         if (this.edge) {
-            svg.select("#" + this.edge.id).style("stroke", GRAY);
+            svg.select("#" + this.edge.id).style("stroke", localStorage.getItem('secondaryColor'));
         }
 	}
 }
@@ -240,15 +241,15 @@ class UnHighlightPathStep {
         var node = this.root;
         var edge = null;
         while (node != null) {
-            svg.select("#" + node.id).attr("stroke", GRAY);
+            svg.select("#" + node.id).attr("stroke", localStorage.getItem('secondaryColor'));
             if (this.finalVal < node.value) {
                 edge = node.lEdge;
                 node = node.left;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else  if (this.finalVal > node.value) {
                 edge = node.rEdge;
                 node = node.right;
-                svg.select("#" + edge.id).style("stroke", GRAY);
+                svg.select("#" + edge.id).style("stroke", localStorage.getItem('secondaryColor'));
             } else {
                 return;
             }
@@ -1051,6 +1052,7 @@ export default class huffmancodingtree extends React.Component {
                     <button class="button" onClick={this.refreshPage}>Restart</button>
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
+                    <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Huffman Coding Tree!</h1></span></div>
                 <table>

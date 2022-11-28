@@ -205,7 +205,7 @@ export default class Dijkstras extends React.Component {
 			}
 
 			messages.push("<h1>Node " + head[0] + " is the current head node.</h1>");
-			steps.push(new ColorNodeStep(head[0], (head[0] === first) ? "#1ACA1E" : "gray", "#648FFF"));
+			steps.push(new ColorNodeStep(head[0], (head[0] === first) ? "#1ACA1E" : "gray", localStorage.getItem('accentColor')));
 			pseudocodeArr.push(new HighlightLineStep(5, this.props.lines))
 
 			for (var i = 0; i < graph.adjacencyList[head[0]].length; i++) {
@@ -321,7 +321,7 @@ export default class Dijkstras extends React.Component {
 			visitedNum++;
 
 			messages.push("<h1>Finished with Node " + head[0] + ".</h1>");
-			steps.push(new ColorNodeStep(head[0], "#648FFF", (head[0] !== first) ? "black" : "#1ACA1E"));
+			steps.push(new ColorNodeStep(head[0], localStorage.getItem('accentColor'), (head[0] !== first) ? "black" : "#1ACA1E"));
 			pseudocodeArr.push(new HighlightLineStep(33, this.props.lines))
 		}
 
@@ -376,14 +376,14 @@ export default class Dijkstras extends React.Component {
 				.style("font-family", "Merriweather")
 				.attr("font-weight", "bold")
 				.style("font-size", "26px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 			var dTxt = svg.append("text").text("Distance: ∞")
 				.attr("id", "dTxt" + i)
 				.style("font-family", "Merriweather")
 				.attr("font-weight", "bold")
 				.style("font-size", "26px")
-				.style("fill", "white");
+				.style("fill", localStorage.getItem('primaryColor'));
 
 			if (i === 0) {
 				pTxt

@@ -314,11 +314,12 @@ export default class HeapSort extends React.Component {
   }
 
   sort(arr, size, steps, heapLines, heapCircs, heapVals, vals, stepTime) {
-    //var pseudocodeArr = [];
+    var pseudocodeArr = [];
     
     var messages = [];
     messages.push("<h1>Begin by building a heap from the bottom up.</h1>");
     steps.push([new EmptyStep()]);
+    pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
 
     var stepBuffer = [];
     var currentMessage = "";
@@ -355,14 +356,21 @@ export default class HeapSort extends React.Component {
 
     // heapify
 
+    messages.push("<h1>Now building Heap.</h1>");
+    steps.push([new EmptyStep()]);
+    pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+
     // All the leaves are heaps
     for (let i = size; i > size / 2; i--) {
       currentMessage = "<h1>Insert " + arr[i] + ".</h1>";
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[i].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[i].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
       addStep(
         new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor'))
       );
+      pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
       flushBuffer();
       currentMessage = "<h1>This node has no children.</h1>";
       addStep(
@@ -374,49 +382,115 @@ export default class HeapSort extends React.Component {
           localStorage.getItem('accentColor')
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
       flushBuffer();
     }
     for (let i = Math.floor(size / 2); i >= 1; i--) {
       currentMessage = "<h1>Insert " + arr[i] + ".</h1>";
       
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[i].attr.id));
-     
+      pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[i].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
       addStep(
         new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor'))
       );
+      pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
 
       let l = i * 2;
       let r = i * 2 + 1;
-      if (l <= size)
+      if (l <= size){
         addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapLines[l].attr.id));
-      if (r <= size)
+        pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+      }
+      if (r <= size){
         addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapLines[r].attr.id));
+        pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+      }
 
       flushBuffer();
 
       let v = i;
       while (true) {
+
+        messages.push("<h1>Calculating Necessary Swaps</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(1,this.props.lines));
+
         l = v * 2;
         r = v * 2 + 1;
 
+        messages.push("<h1>Is the left side greater than the array size?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(12,this.props.lines));
+
         if (l > size) {
+          messages.push("<h1>Is the left side greater than the array size?</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(13,this.props.lines));
+
           currentMessage = "<h1>" + arr[v] + " has no children.</h1>";
           break;
         }
 
         let c = -1;
-        if (r > size) c = l;
-        else if (arr[l] > arr[r]) c = l;
-        else c = r;
 
+        messages.push("<h1>Is the right side greater than the array size?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(16,this.props.lines));
+
+        if (r > size) {
+          messages.push("<h1>Yes! Setting a variable c equal to the left side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(17,this.props.lines));
+
+          c = l;
+        }
+        else if (arr[l] > arr[r]) {
+          messages.push("<h1>Is the current left value greater than the right?</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(19,this.props.lines));
+
+          messages.push("<h1>Yes! Setting a variable c equal to the left side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(20,this.props.lines));
+          c = l;
+        }
+        else {
+          messages.push("<h1>The right side is not greater than the size.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(22,this.props.lines));
+
+          messages.push("<h1>Setting a variable c equal to the right side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(23,this.props.lines));
+          c = r;
+        }
+
+        messages.push("<h1>Is the current c value of the array the greatest?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(25,this.props.lines));
         if (arr[c] > arr[v]) {
           currentMessage =
             "<h1>Swap " + arr[v] + " with it's largest child: " + arr[c] + ".</h1>";
           swap(this.ref.current, v, c);
           flushBuffer();
+          
+          messages.push("<h1>Yes, setting a variable v equal to c.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(26,this.props.lines));
+
           v = c;
         } else {
+          messages.push("<h1>No, c is not the greatest.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(27,this.props.lines));
+
+          messages.push("<h1>Break from the loop.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(28,this.props.lines));
+
           currentMessage = "<h1>" + arr[v] + " doesn't have a child larger than it.</h1>";
           break;
         }
@@ -430,11 +504,15 @@ export default class HeapSort extends React.Component {
           localStorage.getItem('accentColor')
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
       flushBuffer();
     }
 
     // sort
     for (let i = size; i > 1; i--) {
+      messages.push("<h1>Starting the Sorting Iterations.</h1>");
+      steps.push([new EmptyStep()]);
+      pseudocodeArr.push(new HighlightLineStep(32,this.props.lines));
       // change this vvv
       currentMessage = "<h1>Swap the first and last positions of the heap.</h1>";
       addStep(
@@ -448,6 +526,7 @@ export default class HeapSort extends React.Component {
           heapVals[1].attr.y
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(33,this.props.lines));
       addStep(
         new TranslateXYStep(
           this.ref.current,
@@ -459,11 +538,15 @@ export default class HeapSort extends React.Component {
           heapVals[i].attr.y
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(34,this.props.lines));
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[i].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(35,this.props.lines));
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapLines[i].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(36,this.props.lines));
       swapVals(this.ref.current, 1, i);
       flushBuffer();
       addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[1].attr.id));
+      pseudocodeArr.push(new HighlightLineStep(37,this.props.lines));
       heapVals[i].attr.x = heapVals[1].attr.x;
       heapVals[i].attr.y = heapVals[1].attr.y;
       heapVals[1].attr.x = vals[i].attr.x;
@@ -480,6 +563,7 @@ export default class HeapSort extends React.Component {
         new ChangeNumberColorStep(this.ref.current, stepTime, vals[i].attr.id, localStorage.getItem('accentColor'), "#1ACA1E")
       );
       flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(37,this.props.lines));
 
       let v = 1;
       currentMessage =
@@ -496,9 +580,23 @@ export default class HeapSort extends React.Component {
           localStorage.getItem('primaryColor')
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(37,this.props.lines));
       flushBuffer();
       while (true) {
+
+        messages.push("<h1>Calculating Necessary Swaps</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(39,this.props.lines));
+
+        messages.push("<h1>Does arr[v] have any Children?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(40,this.props.lines));
+
         if (v * 2 >= i) {
+          messages.push("<h1>Yes, there are children. Breaking from the loop.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(41,this.props.lines));
+
           currentMessage = "<h1>" + arr[v] + " has no children.</h1>";
           break;
         }
@@ -507,18 +605,57 @@ export default class HeapSort extends React.Component {
         let l = v * 2;
         let r = v * 2 + 1;
 
-        if (r >= i) c = l;
-        else if (arr[l] > arr[r]) c = l;
-        else c = r;
+        messages.push("<h1>Does the right side have a greater value?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(46,this.props.lines));
+        if (r >= i) {
+          messages.push("<h1>Yes, setting a variable c equal to the left side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(47,this.props.lines));
+          c = l;
+        }
+        else if (arr[l] > arr[r]) {
+          messages.push("<h1>Yes, setting a variable c equal to the left side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(49,this.props.lines));
 
+          messages.push("<h1>Yes, setting a variable c equal to the left side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(50,this.props.lines));
+          c = l;
+        }
+        else {
+          messages.push("<h1>No, setting a variable c equal to the right side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(52,this.props.lines));
+
+          messages.push("<h1>No, setting a variable c equal to the right side.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(53,this.props.lines));
+          c = r;
+        }
+
+        messages.push("<h1>Is the value of c the largest child?</h1>");
+        steps.push([new EmptyStep()]);
+        pseudocodeArr.push(new HighlightLineStep(55,this.props.lines));
         if (arr[c] > arr[v]) {
+          messages.push("<h1>Yes, swapping with the largest child c.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(56,this.props.lines));
           currentMessage =
             "<h1>Swap " + arr[v] + " with it's largest child: " + arr[c] + ".</h1>";
           swap(this.ref.current, v, c);
           flushBuffer();
           v = c;
         } else {
+          messages.push("<h1>No, breaking from the loop.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(58,this.props.lines));
           currentMessage = "<h1>" + arr[v] + " doesn't have a child larger than it.</h1>";
+          
+          messages.push("<h1>No, breaking from the loop.</h1>");
+          steps.push([new EmptyStep()]);
+          pseudocodeArr.push(new HighlightLineStep(59,this.props.lines));
           break;
         }
       }
@@ -531,16 +668,20 @@ export default class HeapSort extends React.Component {
           localStorage.getItem('accentColor')
         )
       );
+      pseudocodeArr.push(new HighlightLineStep(32,this.props.lines));
       flushBuffer();
     }
 
     currentMessage = "<h1>Since " + arr[1] + " is the last number, it is in sorted position.</h1>";
 
     addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapVals[1].attr.id));
+    pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
     addStep(new FlipVisibilityStep(this.ref.current, stepTime, heapCircs[1].attr.id));
+    pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
     addStep(
       new ChangeNumberColorStep(this.ref.current, stepTime, vals[1].attr.id, localStorage.getItem('accentColor'), "#1ACA1E")
     );
+    pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
     flushBuffer();
 
     // addStep(new FlipVisibilityStep(this.ref.current, stepTime, circNumIds[1]));
@@ -550,6 +691,7 @@ export default class HeapSort extends React.Component {
 
     currentMessage = "<h1>Finished Heap Sort!</h1>";
     addStep(new EmptyStep());
+    pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
     flushBuffer();
 
     this.setState({
@@ -558,7 +700,7 @@ export default class HeapSort extends React.Component {
       messages: messages,
     });
 
-    //this.props.handleCodeStepsChange(pseudocodeArr);
+    this.props.handleCodeStepsChange(pseudocodeArr);
   }
 
   turnOffRunning() {
@@ -570,7 +712,7 @@ export default class HeapSort extends React.Component {
     if (this.state.running) return;
     if (this.state.stepId === this.state.steps.length) return;
 
-    //this.props.codeSteps[this.state.stepId].forward();
+    this.props.codeSteps[this.state.stepId].forward();
 
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.fastForward();
@@ -601,7 +743,7 @@ export default class HeapSort extends React.Component {
       this.setState({ running: false });
       return;
     }
-    //this.props.codeSteps[this.state.stepId].forward();
+    this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });

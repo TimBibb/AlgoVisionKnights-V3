@@ -823,34 +823,84 @@ export const map = {
         "avlMain() {",
         tab + "var root = null;",
         tab + "var val = Math.floor(Math.random() * 100);",
-        tab + "while(i < MAX_NODE) {",
+        tab + "while(i < MAX_NODE) {", //3
         tab + tab + "val = Math.floor(Math.random() * 100);",
-        tab + tab + "if(!root) {",
+        tab + tab + "if(!root) {", //5
         tab + tab + tab + "root = new Node(val);",
         tab + tab + tab + "i++;",
         tab + tab + "}",
-        tab + tab + "else {",
+        tab + tab + "else {", //9
         tab + tab + tab + "insertValue(root, val);",
-        tab + tab + tab + "i++;",
         tab + tab + "}",
         tab + "}",
         "}",
         "",
-        "insertValue(node, val) {",
+        "insertValue(node, val) {", //15
         tab + "if(node == null) {",
         tab + tab + "node = new Node(val);",
         tab + tab + "return node;",
         tab + "}",
-        tab + "if(val < node.value) {",
+        tab + "else if(val < node.value) {", //20
         tab + tab + "node.left = insertValue(node.left, val);",
         tab + "}",
-        tab + "if(val > node.value) {",
+        tab + "else if(val > node.value) {", //23
         tab + tab + "node.right = insertValue(node.right, val);",
         tab + "}",
-        tab + "if(val == node.value) {",
+        tab + "else {", //26
         tab + tab + "return node;",
         tab + "}",
-        tab + "return node;",
+        tab + "var balance = node.height;", //29
+        tab + "if(balance > 1) {",
+        tab + tab + "if(val < node.left.value) {", //31
+        tab + tab + tab + "rotateRight(node);",
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + tab + "else if(val > node.left.value) {", //35
+        tab + tab + tab + "rotateLeft(node);",
+        tab + tab + tab + "rotateRight(node);",
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + "}",
+        tab + "if(balance < -1) {", //41
+        tab + tab + "if(val > node.right.value) {",
+        tab + tab + tab + "rotateLeft(node);", //43
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + tab + "else if(val < node.right.value) {", //46
+        tab + tab + tab + "rotateRight(node);", //47
+        tab + tab + tab + "rotateLeft(node);", //48
+        tab + tab + tab + "return node;", //49
+        tab + tab + "}",
+        tab + "}",
+        tab + "return node;", //52
+        "}",
+        "",
+        "rotateLeft(node) {", //55
+        tab + "let nodeY = node.right;",
+        tab + "let temp = nodeY.left;",
+        tab + "nodeY.left = node;",
+        tab + "node.right = temp;",
+        tab + "rotate(nodeY);", //60
+        "}",
+        "",
+        "rotateRight(node) {", //63
+        tab + "let nodeX = node.left;",
+        tab + "let temp = nodeX.right;",
+        tab + "nodeX.right = node;",
+        tab + "node.left = temp;",
+        tab + "rotate(nodeX);", //68
+        "}",
+        "",
+        "rotate(node) {", //71
+        tab + "if(node != null) {",
+        tab + tab + "if(node.left != null) {", //73
+        tab + tab + tab + "rotate(node.left);",
+        tab + tab + "}",
+        tab + tab + "if(node.right != null) {",
+        tab + tab + tab + "rotate(node.right);",
+        tab + tab + "}",
+        tab + "}",
+        tab + "return;",
         "}"
     ],
 }

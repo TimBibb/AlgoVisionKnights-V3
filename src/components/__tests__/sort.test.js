@@ -2,10 +2,18 @@ import Sum from '../sum.js';
 import BubbleSort from '../../visualizers/bubblesort/bubblesort';
 
 
-//let sort = new BubbleSort();
+let sort = new BubbleSort();
 
 test('tests',() => {
     expect(Sum(1,2)).toBe(3);
+});
+
+test('check if bubblesort sum works', () => {
+    expect(sort.sum(1,2)).toBe(3);
+});
+
+test('unsorted array should be produced in ascending order', () => {
+    expect(sort.sort([3,2,1])).toBe([1,2,3]);
 });
 
 

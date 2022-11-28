@@ -42,7 +42,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!d3-array)/\" --env=jsdom",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {

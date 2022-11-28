@@ -109,6 +109,7 @@ export default class BreadthFirstSearch extends React.Component {
       stepId: 0,
       stepTime: 1900,
       waitTime: 6000,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -554,6 +555,7 @@ export default class BreadthFirstSearch extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -571,7 +573,9 @@ export default class BreadthFirstSearch extends React.Component {
     for (const step of this.state.steps[this.state.stepId]) step.forward(svg);
 
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -618,6 +622,10 @@ export default class BreadthFirstSearch extends React.Component {
       this.run();
       console.log("We ran");
     }
+  }
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
     render() {

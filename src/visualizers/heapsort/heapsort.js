@@ -195,7 +195,8 @@ export default class HeapSort extends React.Component {
       running: false,
       stepId: 0,
       inputMode: false,
-      flag: false
+      flag: false,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -738,6 +739,7 @@ export default class HeapSort extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -747,7 +749,9 @@ export default class HeapSort extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -876,6 +880,11 @@ export default class HeapSort extends React.Component {
 		x = parseFloat(value);
 		return (x | 0) === x;
 	}
+
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
+  }
 
   render() {
     return (

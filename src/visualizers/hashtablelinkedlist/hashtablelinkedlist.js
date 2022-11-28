@@ -280,6 +280,7 @@ function modRand(n) {
   
       this.state = {
         rendered: false,
+        interval: null,
       };
   
       this.stepId = 0;
@@ -908,6 +909,7 @@ function modRand(n) {
     }
   
     run() {
+      clearInterval(this.state.interval)
       if (!this.running) return;
       if (this.stepId === this.steps.length) {
         this.running = false;
@@ -927,7 +929,9 @@ function modRand(n) {
       for (const step of this.steps[this.stepId]) step.forward(svg);
       this.props.codeSteps[this.stepId].forward();
       this.stepId = this.stepId + 1;
-      d3.timeout(this.run, this.props.waitTime);
+      // d3.timeout(this.run, this.props.waitTime);
+      this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
     }
   
     play() {
@@ -1002,6 +1006,10 @@ function modRand(n) {
 
     refreshPage() {
       window.location.reload(false);
+    }
+    componentWillUnmount() {
+      console.log("component unmounted")
+      clearInterval(this.state.interval);
     }
     
     render() {

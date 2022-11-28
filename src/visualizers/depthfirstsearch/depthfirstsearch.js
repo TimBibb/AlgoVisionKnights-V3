@@ -79,6 +79,7 @@ export default class DepthFirstSearch extends React.Component {
       waitTime: 2000,
       running: false,
       stepId: 0,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -439,6 +440,8 @@ export default class DepthFirstSearch extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
+
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -448,7 +451,9 @@ export default class DepthFirstSearch extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
   
   play() {
@@ -491,6 +496,11 @@ export default class DepthFirstSearch extends React.Component {
       this.run();
       console.log("We ran");
     }
+  }
+
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

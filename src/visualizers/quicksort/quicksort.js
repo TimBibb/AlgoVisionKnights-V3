@@ -434,7 +434,8 @@ export default class QuickSort extends React.Component {
 			stepTime: 300,
 			waitTime: (9 * 2000) / 8,
 			inputMode: false,
-			restartFlag: false
+			restartFlag: false,
+			interval: null,
 		};
 
 		this.ref = React.createRef();
@@ -939,6 +940,7 @@ export default class QuickSort extends React.Component {
 	}
 
 	run() {
+		clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -948,7 +950,9 @@ export default class QuickSort extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.props.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+		this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
 	}
 
 	play() {
@@ -1070,6 +1074,11 @@ export default class QuickSort extends React.Component {
 		x = parseFloat(value);
 		return (x | 0) === x;
 	}
+
+	componentWillUnmount() {
+		console.log("component unmounted")
+		clearInterval(this.state.interval);
+	  }
 	
 
 	render() {

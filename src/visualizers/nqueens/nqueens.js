@@ -69,7 +69,8 @@ export default class Queens extends React.Component {
       running: false,
       stepId: 0,
       stepTime: 300,
-      waitTime: (9 * 2000) / 8
+      waitTime: (9 * 2000) / 8,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -379,6 +380,7 @@ export default class Queens extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       //this.setState({ running: false });
@@ -396,7 +398,9 @@ export default class Queens extends React.Component {
     
     this.setState({stepId: this.state.stepId + 1});
     //this.state.stepId = this.state.stepId + 1;
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -445,6 +449,11 @@ export default class Queens extends React.Component {
       this.run();
       console.log("We ran");
     }
+  }
+
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

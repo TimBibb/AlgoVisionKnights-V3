@@ -72,7 +72,8 @@ export default class Floodfill extends React.Component {
       running: false,
       stepId: 0,
       stepTime: 300,
-      waitTime: 1500
+      waitTime: 1500,
+      interval: null
     };
 
     this.ref = React.createRef();
@@ -330,6 +331,8 @@ export default class Floodfill extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
+
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -346,7 +349,9 @@ export default class Floodfill extends React.Component {
     this.state.steps[this.state.stepId].forward();
 
     this.setState({stepId: this.state.stepId + 1});
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -400,6 +405,11 @@ export default class Floodfill extends React.Component {
 
   refreshPage() {
     window.location.reload(false);
+  }
+  
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

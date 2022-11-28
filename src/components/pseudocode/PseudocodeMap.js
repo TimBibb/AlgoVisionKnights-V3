@@ -432,51 +432,85 @@ export const map = {
 
     hashtablelinkedlist: [
         "insert(num) {",
-        tab + "let hash = num % tableLen;",
-        tab + "if (hash < 0)",
-        tab + tab + "hash += tableLen;",
-        tab + "for (let i = 0; i < tableLen; i++) {",
+        tab + "if(size == tableLen) {", 
+        tab + tab + "return;",
+        tab + "}",
+        tab + "let hash = num % tableLen;", //4
+        tab + "if (hash < 0) {",
+        tab + tab + "hash += tableLen;", //6
+        tab + "}",
+        tab + "for (let i = 0; i < tableLen; i++) {", //8
         tab + tab + "let index = (hash + i) % tableLen;",
         tab + tab + "let current = table[index];",
-        tab + tab + "if (current === null)",
+        tab + tab + "if (current == null) {", //11
         tab + tab + tab + "table[index] = new Node(num);",
-        tab + tab + "else {",
-        tab + tab + tab + "if (current.data === num)",
+        tab + tab + "}",
+        tab + tab + "else {", //14
+        tab + tab + tab + "if (current.data == num) {",
         tab + tab + tab + tab + "return;",
+        tab + tab + tab + "}",
         tab + tab + tab + "while(current.next != null) {",
-        tab + tab + tab + tab + "if (current.next.data === num)",
-        tab + tab + tab + tab + tab +"return;",
+        tab + tab + tab + tab + "if (current.next.data === num) {",
+        tab + tab + tab + tab + tab + "return;",
+        tab + tab + tab + tab + "}",
         tab + tab + tab + tab + "current = current.next;",
         tab + tab + tab + "}",
         tab + tab + tab + "current.next = new Node(num);",
         tab + tab + "}",
         tab + "}",
         "}",
-        "delete(num) {",
-        tab + "let hash = num % tableLen;",
-        tab + "if (hash < 0)",
+        "delete(num) {", //28
+        tab + "if(size == 0) {",
+        tab + tab + "return;",
+        tab + "}",
+        tab + "let hash = num % tableLen;", //32
+        tab + "if (hash < 0) {",
         tab + tab + "hash += tableLen;",
-        tab + "for (let i = 0; i < tableLen; i++) {",
+        tab + "}",
+        tab + "for (let i = 0; i < tableLen; i++) {", //36
         tab + tab + "let index = (hash + i) % tableLen;",
         tab + tab + "let current = table[index];",
-        tab + tab + "if (current === null)",
+        tab + tab + "if (current == null) {",
         tab + tab + tab + "return;",
-        tab + tab + "else {",
-        tab + tab + tab + "if (current.data === num) {",
-        tab + tab + tab + tab + "current = current.next;",
-        tab + tab + tab + tab + "return;",
-        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "if (current.data == num) {", //42
+        tab + tab + tab + "current = current.next;",
+        tab + tab + "}",
+        tab + tab + "else {", //45
         tab + tab + tab + "while(current.next != null) {",
-        tab + tab + tab + tab + "if (current.next.data === num) {",
-        tab + tab + tab + tab + tab +"current.next = current.next.next;",
-        tab + tab + tab + tab + tab +"return;",
+        tab + tab + tab + tab + "if(current.next.data == num) {",
+        tab + tab + tab + tab + tab + "current.next = current.next.next;",
         tab + tab + tab + tab + "}",
-        tab + tab + tab + tab + "current = current.next;",
+        tab + tab + tab + "current = current.next;",
         tab + tab + tab + "}",
+        tab + tab + "return;",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+        "search(num) {", //56
+        tab + "let hash = num % tableLen;",
+        tab + "if(hash < 0) {",
+        tab + tab + "hash += tableLen;",
+        tab + "}",
+        tab + "for(let i = 0; i < tableLen; i++) {", //61
+        tab + tab + "let index = (hash + i) % tableLen;", //62
+        tab + tab + "if(current == null) {", //63
+        tab + tab + tab + "return;", //64
+        tab + tab + "}", //65
+        tab + tab + "if(current.data == num) {", //66
+        tab + tab + tab + "Value Found.", //67
+        tab + tab + "}",//68
+        tab + tab + "else {", //69,
+        tab + tab + tab + "while(current.next != null) {", //70
+        tab + tab + tab + tab + "if(current.next.data == num) {", //71
+        tab + tab + tab + tab + tab + "Value Found.", //72
+        tab + tab + tab + tab + "}", //73
+        tab + tab + tab + tab + "current = current.next;", //74
+        tab + tab + tab + "}", //75
+        tab + tab + "Value Not Found.", //76
         tab + tab + "}",
         tab + "}",
         "}"
-
     ],
 
     dijkstras: [ //fixed tabbing and added closing bracket

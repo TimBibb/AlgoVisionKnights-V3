@@ -13,6 +13,7 @@ import { GRAY, UCF_GOLD } from "../../assets/colors";
 import SpeedSlider from "../../components/speedSlider/SpeedSlider";
 import { Pseudocode } from "../../components/pseudocode/Pseudocode";
 import { HighlightLineStep } from "../../components/pseudocode/Pseudocode";
+import "../css/input.css"
 
 var x = 35;
 var mid = 0;
@@ -361,6 +362,9 @@ export default class huffmancodingtree extends React.Component {
             running: false,
             root: null,
             interval: null,
+            svg: null,
+            intTest: null,
+            inserting: false,
         };
         
 		// Bindings
@@ -376,6 +380,11 @@ export default class huffmancodingtree extends React.Component {
 		this.run = this.run.bind(this);
         this.handleZoom = this.handleZoom.bind(this);
         this.simluate = this.simulate.bind(this);
+        this.handleInsertion = this.handleInsertion.bind(this);
+        this.isRunningCheck = this.isRunningCheck.bind(this);
+        this.startRunning = this.startRunning.bind(this);
+        this.clearSteps = this.clearSteps.bind(this);
+        this.newAdd = this.newAdd.bind(this);
 	}
 
     handleZoom(e) {
@@ -404,7 +413,7 @@ export default class huffmancodingtree extends React.Component {
             .call(zoom);
 
         svgGroup.attr("visibility", "visible");
-
+        this.setState({svg: svgGroup})
         console.log("initialized");
         return svgGroup;
     }
@@ -421,7 +430,16 @@ export default class huffmancodingtree extends React.Component {
         console.log("ADD CLICKED");
     }
 
+    newAdd(word) {
+        this.helper(word)
+    }
+
     simulate() {
+        var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
+        this.helper(ranWords)
+    }
+
+    helper(ranWords) {
         console.log("SIMULATING");
 
         var level = 0;
@@ -436,7 +454,7 @@ export default class huffmancodingtree extends React.Component {
         var l = 0
         let q = [];
         // for usage of ranWords: https://www.npmjs.com/package/random-words
-        var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
+        // var ranWords = randomWords({exactly: 1, join: '', maxLength: 5});
 
         steps.push(new EmptyStep())
         messages.push("Starting to work on the tree!");
@@ -1125,25 +1143,38 @@ export default class huffmancodingtree extends React.Component {
         document.getElementById("message").innerHTML = "Welcome to Huffman Coding Tree!";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
+        this.initialize()
         i = 0;
         j = 0;
 
 	}
 
+    restartInsertion() {
+		console.log("RESTART CLICKED");
+        
+		d3.select(this.ref.current).select("svg").remove();
+        document.getElementById("message").innerHTML = "Welcome to Huffman Coding Tree!";
+
+		this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null, svg: null, inserting: true});
+        this.initialize();
+        i = 0;
+        j = 0;
+	}
+
     componentDidMount() {
         this.initialize();   
-        this.simulate();
+        // this.simulate();
     }
 
     // Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
         // console.log(this.state.root);
 		// Part of restart -> Reinitialize with original array
-        if (this.state.root !== prevState.root && this.state.root === null) {
+        if (this.state.svg !== prevState.svg && this.state.svg != null && !this.state.inserting) {
 			console.log("Steps changed");
-			var svg = this.initialize();
+			// var svg = this.initialize();
             this.simulate();
-			svg.attr("visibility", "visible");
+			// svg.attr("visibility", "visible");
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
@@ -1154,12 +1185,65 @@ export default class huffmancodingtree extends React.Component {
 
     refreshPage() {
         window.location.reload(false);
-      }
+    }
 
-      componentWillUnmount() {
-        console.log("component unmounted")
-        clearInterval(this.state.interval);
-      }
+    componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
+    }
+
+    clearSteps() {
+        console.log("clearing steps")
+		this.setState({steps: [], messages: [], stepId: 0});
+	}
+
+    isRunningCheck(id) {
+        if (this.state.running) {
+          d3.select(id).property("value", "Error: Visualizer Running");
+          return true;
+        }
+    
+        return false;
+    }
+
+    startRunning() {
+        this.setState({running: true})
+        clearInterval(this.state.intTest)
+    }
+
+    handleInsertion() {
+        let x = d3.select("#insertionValue").property("value");
+        console.log(`Called huffman(${x})`);
+        // var root = this.state.root
+
+    
+        let isRunning = this.isRunningCheck("#insertionValue");
+        if (isRunning) return;
+
+        if (x.length > 5) {
+            document.getElementById("message").innerHTML = "Please use a word smaller than 5 characters";
+            return
+        }
+        // document.getElementById("message").innerHTML = "Let's insert "+ parseInt(x) + " into the tree.";
+
+        if (!this.state.inserting) {
+            // root = null
+            this.setState({inserting: true})
+            this.restartInsertion();
+        } else {
+            this.clearSteps()
+        }
+
+		// this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null, svg: null});
+        // this.initialize();
+        // this.restart()
+        // this.fastForward();
+    
+        this.newAdd(x);
+        console.log("trying to run")
+        this.setState({intTest: setInterval(this.startRunning, 1500)})
+        // this.setState({running: true})
+    }
 
     render() {
         return (
@@ -1173,6 +1257,10 @@ export default class huffmancodingtree extends React.Component {
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+                </div>
+                <div id="insertion" class="center-screen">
+                    <input class="inputValue2" type="string" id="insertionValue" placeholder="ex. algo"></input>
+                    <button class="button" id="insertBut" onClick={this.handleInsertion}>Insert</button>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Huffman Coding Tree!</h1></span></div>
                 <table>

@@ -1257,7 +1257,7 @@ export default class huffmancodingtree extends React.Component {
                     {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
                     <button class="button" onClick={this.pause}>Pause</button>
                     {/* <button class="button" onClick={this.add}>Add</button> */}
-                    <button class="button" onClick={this.refreshPage}>Restart</button>
+                    <button class="button" onClick={this.restart}>Restart</button>
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>

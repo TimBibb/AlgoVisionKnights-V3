@@ -1251,7 +1251,7 @@ function modRand(n) {
           <div class="center-screen" id="banner">
             <button class="button" onClick={this.play}>Play</button>
             <button class="button" onClick={this.pause}>Pause</button>
-            <button class="button" onClick={this.refreshPage}>Restart</button>
+            <button class="button" onClick={this.restart}>Restart</button>
             <button class="button" onClick={this.backward}>Step Backward</button>
             <button class="button" onClick={this.forward}>Step Forward</button>
             <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>

@@ -24,7 +24,7 @@ function OppositeVisibility(attr) {
 class Step {
   constructor(ref, stepTime) {
     this.ref = ref;
-    this.stepTime = stepTime;
+    stepTime = stepTime;
   }
   forward() {
     console.log("Step has no foward function");
@@ -67,11 +67,11 @@ class ChangeNumberColorStep extends Step {
     this.oldColor = oldColor;
     this.newColor = newColor;
   }
-  forward() {
+  forward(stepTime) {
     d3.select(this.ref)
       .select(this.id)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .style("fill", this.newColor);
   }
   fastForward() {
@@ -90,11 +90,11 @@ class SwapXStep {
     this.id1 = "#" + id1;
     this.id2 = "#" + id2;
   }
-  forward() {
+  forward(stepTime) {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
     var x2 = d3.select(this.ref).select(this.id2).attr("x");
-    d3.select(this.ref).select(this.id1).transition().duration(this.stepTime).attr("x", x2);
-    d3.select(this.ref).select(this.id2).transition().duration(this.stepTime).attr("x", x1);
+    d3.select(this.ref).select(this.id1).transition().duration(stepTime).attr("x", x2);
+    d3.select(this.ref).select(this.id2).transition().duration(stepTime).attr("x", x1);
   }
   fastForward() {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
@@ -116,7 +116,7 @@ class SwapXYStep extends Step {
     this.id1 = "#" + id1;
     this.id2 = "#" + id2;
   }
-  forward() {
+  forward(stepTime) {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
     var y1 = d3.select(this.ref).select(this.id1).attr("y");
     var x2 = d3.select(this.ref).select(this.id2).attr("x");
@@ -124,13 +124,13 @@ class SwapXYStep extends Step {
     d3.select(this.ref)
       .select(this.id1)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", x2)
       .attr("y", y2);
     d3.select(this.ref)
       .select(this.id2)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", x1)
       .attr("y", y1);
   }
@@ -161,11 +161,11 @@ class TranslateXYStep extends Step {
     this.oldX = oldX;
     this.oldY = oldY;
   }
-  forward() {
+  forward(stepTime) {
     d3.select(this.ref)
       .select(this.id)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", this.newX)
       .attr("y", this.newY);
   }
@@ -747,7 +747,7 @@ export default class HeapSort extends React.Component {
     }
     this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-    for (const step of this.state.steps[this.state.stepId]) step.forward();
+    for (const step of this.state.steps[this.state.stepId]) step.forward(this.props.waitTime);
     this.setState({ stepId: this.state.stepId + 1 });
     // d3.timeout(this.run, this.props.waitTime);
     this.setState({interval: setInterval(this.run, this.props.waitTime)})

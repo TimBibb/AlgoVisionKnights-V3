@@ -789,11 +789,11 @@ export default class HashTable extends React.Component {
     }else if(example === 1){
       map = [74, 19, 100, 41, 47, 98, 32, 78, 19];
     }else if(example === 2){
-      map = [25, 12, 34, 56, 47, 98, 32, 45, 65];
+      map = [66, 12, 27, 44, 98, 32, 54, 43, 98];
     }else if(example === 3){
-      map = [27, 12, 34, 56, 47, 98, 32, 45, 65];
+      map = [27, 37, 38, 115, 87, 65, 23, 76, 90];
     }else if(example === 4){
-      map = [28, 12, 34, 56, 47, 98, 32, 45, 65];
+      map = [54, 76, 109, 23, 67, 32, 98, 99, 43];
     }
 
 

@@ -465,6 +465,7 @@ export default class InsertionSort extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
+		this.sortCaller = this.sortCaller.bind(this);
 	}
 
 	printArray(arr, size) {
@@ -474,7 +475,7 @@ export default class InsertionSort extends React.Component {
 		}
 	}
 
-	sort(arr, ids, size, stepTime)
+	sort(arr, ids, size, stepTime,lines)
 	{
 		let steps = [];
 		let messages = [];
@@ -483,31 +484,31 @@ export default class InsertionSort extends React.Component {
 
 		messages.push("<h1>Beginning Insertion Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
         messages.push("<h1>Index 0 is a one element array, and is therefore sorted.</h1>");
 		steps.push(new SortedStep(0, 0, ids));
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
         
         for(i = 1; i < size; i++)
         {
             messages.push("<h1>Selecting our next insertion index.</h1>");
 		    steps.push(new InsertSwapStep(i, ids));
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
 
             messages.push("<h1>Pull elements out of our " + (i+1) + " index array and sort them (left to right).</h1>");
 		    steps.push(new PartitionStep(0, i, ids));
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
             
             for(j = i-1; j >= 0; j--)
             {
 				messages.push("<h1>Pull elements out of our " + (i+1) + " index array and sort them (left to right).</h1>");
 				steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
+				pseudocodeArr.push(new HighlightLineStep(3,lines));
 
 				messages.push("<h1>Checking if " + arr[j] + " > " + arr[j+1] + "</h1>");
                 steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+				pseudocodeArr.push(new HighlightLineStep(4,lines));
 
                 if(arr[j] > arr[j+1])
                 {
@@ -515,43 +516,47 @@ export default class InsertionSort extends React.Component {
 					messages.push("<h1>Scooch " + arr[j] + " to the right.</h1>");
                     steps.push(new SwapStep(j+1, j, ids, stepTime));
                     [arr[j+1], arr[j]] = [arr[j], arr[j+1]];
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
 
 					messages.push(str);
                     steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
                 }
                 else
                 {
 					messages.push("<h1>" + arr[j] + " < " + arr[j+1] + "</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(7,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(7,lines));
 
                     messages.push("<h1>Insert is in its sorted spot.</h1>");
 		            steps.push(new PartSortedStep(0, j + 1, ids));
-					pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(8,lines));
                     break;
                 }
             }
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new SortedStep(j + 1, i, ids));
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
 
             messages.push("<h1>Indices 0 through " + i + " are in sorted order.</h1>");
 		    steps.push(new UnpartitionStep(0, i, ids));
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
         }
 
 		messages.push("<h1>Finished Insertion Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
-		this.setState({steps: steps});
-		this.setState({messages: messages});
-		this.props.handleCodeStepsChange(pseudocodeArr);
-
+		return [arr,pseudocodeArr,steps,messages];
 		console.log(steps);
 		console.log(messages);
+	}
+	sortCaller(arr, ids, size, stepTime) {
+		let lines = this.props.lines;
+		var [array,pseudocodeArr,steps,messages] = this.sort(arr, ids, size, stepTime,lines);
+		this.props.handleCodeStepsChange(pseudocodeArr);
+		this.setState({steps: steps});
+		this.setState({messages: messages});
 	}
 
 	dataInit(size) {
@@ -766,7 +771,7 @@ export default class InsertionSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("YO")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 				this.play();
 				this.setState({inputMode: false});
 			}
@@ -794,7 +799,7 @@ export default class InsertionSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("YO")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 			}
 			// Part of restart -> Reinitialize with original array
 			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
@@ -864,7 +869,7 @@ export default class InsertionSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen">
-					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<input class="sortInput"type="text" id="insertVal" placeholder="ex. 3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Insertion Sort!</h1></span></div>

@@ -353,6 +353,7 @@ export default class BubbleSort extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
+		this.sortCaller = this.sortCaller.bind(this);
 	}
 
 	NavigateToDashboard(){
@@ -366,7 +367,7 @@ export default class BubbleSort extends React.Component {
 		}
 	}
 
-	sort(arr, ids, size, stepTime)
+	sort(arr, ids, size, stepTime,lines)
 	{
 		let steps = [];
 		let messages = [];
@@ -375,78 +376,78 @@ export default class BubbleSort extends React.Component {
 
 		messages.push("<h1>Beginning Bubble Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
         for (i = 0; i < size; i++) {
             messages.push("<h1>Select the leftmost element.</h1>");
 		    steps.push(new BubbleSwapStep(0, 0, ids));
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
 
             for(j = 0; j < size - i - 1; j++){
                 messages.push("<h1>Attempt to Bubble Up.</h1>");
 		        steps.push(new QSwapStep(j+1, ids));
-                pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
+                pseudocodeArr.push(new HighlightLineStep(3,lines));
                 if (arr[j] > arr[j+1]) {
 					messages.push("<h1>" + arr[j] + " > " + arr[j+1] + "</h1>");
 		            steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(4,lines));
 
                     messages.push("<h1>Bubble Up!</h1>");
 		            steps.push(new SwapStep(j, j+1, ids, stepTime));
                     [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
 
                     messages.push("<h1>Bubble Up!</h1>");
 		            steps.push(new UncolorStep(j, ids));
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
                 }
                 else {
 					messages.push("<h1>" + arr[j] + " < " + arr[j + 1] + "</h1>");
 		            steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(4,lines));
 
                     messages.push("<h1>No change.</h1>");
 		            steps.push(new UncolorStep(j+1, ids));
-					pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(4,lines));
 
                     messages.push("<h1>Increment our Bubble pointer.</h1>");
                     steps.push(new BubbleSwapStep(j, j+1, ids, stepTime));
-					pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(3,lines));
                 }
             }
 
 			messages.push("<h1>Reached the end of the unsorted array.</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(6,lines));
 
             messages.push("<h1>" + arr[j] + " sorted.</h1>");
 		    steps.push(new SortedStep(j, ids));
-			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(6,lines));
             
 			messages.push("<h1>" + arr[j] + " is now it its sorted position.</h1>");
 		    steps.push(new EmptyStep());
-			pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(6,lines));
 
             if (i !== size - 1) {
                 messages.push("<h1>Reset our Bubble pointer.</h1>");
 		        steps.push(new EmptyStep());
-				pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+				pseudocodeArr.push(new HighlightLineStep(2,lines));
             }
         } 
 
 		messages.push("<h1>Finished Bubble Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
+		//this.props.handleCodeStepsChange(pseudocodeArr);
+		return [arr,pseudocodeArr,steps,messages];
+	}
 
-		//console.log("Sorted");
-		//this.printArray(arr, size);
-
+	sortCaller(arr, ids, size, stepTime) {
+		let lines = this.props.lines;
+		var [array,pseudocodeArr,steps,messages] = this.sort(arr, ids, size, stepTime,lines);
+		this.props.handleCodeStepsChange(pseudocodeArr);
 		this.setState({steps: steps});
 		this.setState({messages: messages});
-		this.props.handleCodeStepsChange(pseudocodeArr);
-
-		//console.log(steps);
-		//console.log(messages);
 	}
 
 	dataInit(size) {
@@ -690,7 +691,7 @@ export default class BubbleSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("2")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 				this.play();
 				this.setState({inputMode: false});
 			}
@@ -718,7 +719,7 @@ export default class BubbleSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("2a")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 			}
 			// Part of restart -> Reinitialize with original array
 			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
@@ -790,7 +791,7 @@ export default class BubbleSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen">
-					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<input class="sortInput"type="text" id="insertVal" placeholder="ex. 3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Bubble Sort!</h1></span></div>

@@ -438,6 +438,9 @@ export default class huffmancodingtree extends React.Component {
         steps.push(new EmptyStep())
         messages.push("Starting to work on the tree!");
 
+        steps.push(new EmptyStep())
+        messages.push("The random string we will use to work on the tree is: \"" + ranWords + "\"");
+
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
         // steps.push(new EmptyStep())

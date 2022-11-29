@@ -455,7 +455,11 @@ export default class avl extends React.Component {
             messages: [],
             maxLevel: 0,
             running: false,
-            root: null
+            root: null,
+            interval: null,
+            svg: null,
+            intTest: null,
+            inserting: false,
         };
         
 		// Bindings
@@ -471,6 +475,10 @@ export default class avl extends React.Component {
 		this.run = this.run.bind(this);
         this.handleZoom = this.handleZoom.bind(this);
         this.simluate = this.simulate.bind(this);
+        this.handleInsertion = this.handleInsertion.bind(this);
+        this.isRunningCheck = this.isRunningCheck.bind(this);
+        this.startRunning = this.startRunning.bind(this);
+        this.clearSteps = this.clearSteps.bind(this);
 	}
 
     handleZoom(e) {
@@ -501,7 +509,86 @@ export default class avl extends React.Component {
         svgGroup.attr("visibility", "visible");
 
         console.log("initialized");
+        this.setState({svg: svgGroup})
         return svgGroup;
+    }
+
+    newAdd(val, oldroot) {
+        console.log("newAdd running");
+        var steps = []
+        var messages = []
+        var pseudocodeArr = [];
+        var root = oldroot;
+
+        steps.push(new EmptyStep());
+        messages.push("Welcome to the AVL Tree Simulation.");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+
+        steps.push(new EmptyStep());
+        messages.push("Our tree is currently empty. Let's add some nodes!");
+        pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+
+        steps.push(new EmptyStep());
+        messages.push("There are less nodes than the max allowed.");
+        pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+
+        //console.log(root);
+        console.log(val);
+
+        steps.push(new EmptyStep());
+        messages.push("The next value we will insert into the tree is " + val);
+        pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+
+        steps.push(new EmptyStep());
+        messages.push("Does the tree have a root node?");
+        pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+        if(!root) {
+
+            steps.push(new EmptyStep());
+            messages.push("The tree does not have a root node. Setting the root!");
+            pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+            root = new Node(this.ref, val, x, y, i, 0);
+            var tempMod = (root.level*mod) > 15 ? 15 : (root.level*mod);
+            root.leftEdge = new Edges(this.ref, root.x-3, root.y+1.5, root.x-17+tempMod, root.y+8, j++);
+            root.rightEdge = new Edges(this.ref, root.x+3, root.y+1.5, root.x+17-tempMod, root.y+8, j++);
+            // this.setState({root: root})
+            //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
+            // steps.push(new UnHighlightNodeStep(this.state.root, null));
+            //steps.push(new UnHighlightPathStep(root, val));
+
+            steps.push(new NewNodeStep(root, null));
+            messages.push("The tree is empty, let's add "+ val + " as the root node.");
+            pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+
+            steps.push(new UnHighlightPathStep(root, val));
+            messages.push("The tree has a root node!");
+            pseudocodeArr.push(new HighlightLineStep(7, this.props.lines));
+            i++;
+        }
+        else{
+            
+            steps.push(new EmptyStep());
+            messages.push("Yes! It has root!");
+            pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
+            
+            steps.push(new EmptyStep());
+            messages.push("We will be inserting a new value into the tree!");
+            pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
+
+            [root, steps, messages, pseudocodeArr] = this.insertingvalue(root, steps, messages, val, x, y, root.level, pseudocodeArr);
+
+        }
+
+        steps.push(new EmptyStep())
+        messages.push("AVL Tree insertion complete!");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+
+        this.setState({steps: steps});
+        this.setState({messages: messages});
+        this.setState({root: root})
+        this.props.handleCodeStepsChange(pseudocodeArr);
     }
 
     simulate() {
@@ -549,7 +636,7 @@ export default class avl extends React.Component {
                 var tempMod = (root.level*mod) > 15 ? 15 : (root.level*mod);
                 root.leftEdge = new Edges(this.ref, root.x-3, root.y+1.5, root.x-17+tempMod, root.y+8, j++);
                 root.rightEdge = new Edges(this.ref, root.x+3, root.y+1.5, root.x+17-tempMod, root.y+8, j++);
-                this.setState({root: root})
+                // this.setState({root: root})
                 //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
                 // steps.push(new UnHighlightNodeStep(this.state.root, null));
                 //steps.push(new UnHighlightPathStep(root, val));
@@ -583,8 +670,11 @@ export default class avl extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("AVL Tree insertion complete!");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+
         this.setState({steps: steps});
         this.setState({messages: messages});
+        this.setState({root:root})
         this.props.handleCodeStepsChange(pseudocodeArr);
         
     }
@@ -831,10 +921,11 @@ export default class avl extends React.Component {
 
 		this.setState({stepId: this.state.stepId + 1});
 
-		d3.timeout(this.turnOffRunning, this.state.waitTime); // Calls function after wait time
+		d3.timeout(this.turnOffRunning, this.props.waitTime); // Calls function after wait time
     }
 
     run(){
+        clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -845,7 +936,9 @@ export default class avl extends React.Component {
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg g"));
 		document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.state.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+        this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
     }
 
     playPreorder() {
@@ -873,33 +966,104 @@ export default class avl extends React.Component {
 		d3.select(this.ref.current).select("svg").remove();
         document.getElementById("message").innerHTML = "Welcome to AVL!";
 
-		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
+		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null, svg: null, inserting: false});
+        this.initialize();
         i = 0;
         j = 0;
 
 	}
 
+    restartInsertion() {
+		console.log("RESTART CLICKED");
+        
+		d3.select(this.ref.current).select("svg").remove();
+        document.getElementById("message").innerHTML = "Welcome to AVL Tree Insertion!";
+
+		this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null, svg: null, inserting: true});
+        this.initialize();
+        i = 0;
+        j = 0;
+	}
+
+    clearSteps() {
+        console.log("clearing steps")
+		this.setState({steps: [], messages: [], stepId: 0});
+	}
+
+
     componentDidMount() {
         this.initialize();   
-        this.simulate();
+        // this.simulate();
     }
 
     // Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
         // console.log(this.state.root);
 		// Part of restart -> Reinitialize with original array
-        if (this.state.root !== prevState.root && this.state.root === null) {
-			console.log("Steps changed");
-			var svg = this.initialize();
+        if (this.state.svg !== prevState.svg && this.state.svg != null && !this.state.inserting) {
+            console.log("first")
             this.simulate();
-			svg.attr("visibility", "visible");
-		}
+        }
+        // else if (this.state.root !== prevState.root && this.state.root === null) {
+		// 	console.log("Steps changed");
+		// 	var svg = this.initialize();
+        //     this.simulate();
+		// 	svg.attr("visibility", "visible");
+		// }
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
 			this.run();
 			console.log("We ran");
 		}
 	}
+
+    componentWillUnmount() {
+        console.log("component unmounted")
+        clearInterval(this.state.interval);
+    }
+
+    isRunningCheck(id) {
+        if (this.state.running) {
+          d3.select(id).property("value", "Error: Visualizer Running");
+          return true;
+        }
+    
+        return false;
+    }
+
+    startRunning() {
+        this.setState({running: true})
+        clearInterval(this.state.intTest)
+    }
+
+    handleInsertion() {
+        let x = d3.select("#insertionValue").property("value");
+        console.log(`Called insertion(${x})`);
+        var root = this.state.root
+    
+        let isRunning = this.isRunningCheck("#insertionValue");
+        if (isRunning) return;
+        document.getElementById("message").innerHTML = "Let's insert "+ parseInt(x) + " into the tree.";
+
+        if (!this.state.inserting) {
+            root = null
+            this.setState({inserting: true})
+            this.restartInsertion();
+        } else {
+            this.clearSteps()
+        }
+
+		// this.setState({running: false, steps: [], messages: [], tree: [], stepId: 0, root: null, svg: null});
+        // this.initialize();
+        // this.restart()
+        // this.fastForward();
+        var int = parseInt(x)
+    
+        this.newAdd(parseInt(x), root);
+        console.log("trying to run")
+        this.setState({intTest: setInterval(this.startRunning, 1500)})
+        // this.setState({running: true})
+    }
 
     render() {
         return (
@@ -913,6 +1077,10 @@ export default class avl extends React.Component {
                     {/* <button class="button" onClick={this.backward}>Step Backward</button>  */}
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
+                </div>
+                <div id="insertion" class="center-screen">
+                    <input class="inputValue2"type="number" id="insertionValue" placeholder="ex. 25"></input>
+                    <button class="button" id="insertBut" onClick={this.handleInsertion}>Insert</button>
                 </div>
                 <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to AVL!</h1></span></div>
                 <table>

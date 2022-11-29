@@ -439,7 +439,10 @@ export default class huffmancodingtree extends React.Component {
         messages.push("Starting to work on the tree!");
 
         steps.push(new EmptyStep())
-        messages.push("The random string we will use to work on the tree is: \"" + ranWords + "\"");
+        messages.push("We chose a random word: \"" + ranWords + "\"");
+
+        steps.push(new EmptyStep())
+        messages.push("We chose a random word: \"" + ranWords + "\"");
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -461,17 +464,16 @@ export default class huffmancodingtree extends React.Component {
         //converting hash map into array
         arr.letters = Array.from(letterMapSorted.keys());
         arr.numbers = Array.from(letterMapSorted.values());
+
         
         // for printing the frequency of the letters as a message
         for(let i = 0; i < arr.letters.length;i++)
             arr.node[i] = " " + arr.letters[i] + " " + arr.numbers[i];
 
-        // steps.push(new EmptyStep())
-        // messages.push("Letter frequency for this word: " + arr.node);
-        // steps.push(new EmptyStep())
-        // messages.push("Letter frequency for this word: " + arr.node);
-        // steps.push(new EmptyStep())
-        // messages.push("Letter frequency for this word: " + arr.node);
+        steps.push(new EmptyStep())
+        messages.push("Letter frequency for this word: [" + arr.node + "]");
+        steps.push(new EmptyStep())
+        messages.push("Letter frequency for this word: [" + arr.node + "]");
 
         MAX_NODE = (arr.letters.length * 2) - 1;
         console.log(MAX_NODE)

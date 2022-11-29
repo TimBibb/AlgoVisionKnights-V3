@@ -96,11 +96,13 @@ export default class HashTable extends React.Component {
     this.state = {
       rendered: false,
       interval: null,
-
+      running: false,
+      pseudocodeArr: [],
+      inputMode: false,
+      simulationMode: false
     };
 
     this.stepId = 0;
-    this.running = false;
     this.info = {};
     this.messages = [];
     this.currentMessage = "";
@@ -120,9 +122,9 @@ export default class HashTable extends React.Component {
     this.run = this.run.bind(this);
 
     // this.isRunningCheck = this.isRunningCheck.bind(this);
-    // this.handleInsertion = this.handleInsertion.bind(this);
-    // this.handleDeletion = this.handleDeletion.bind(this);
-    // this.handleSearch = this.handleSearch.bind(this);
+    this.handleInsertion = this.handleInsertion.bind(this);
+    this.handleDeletion = this.handleDeletion.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   
   }
 
@@ -292,7 +294,6 @@ export default class HashTable extends React.Component {
 
     info.arrowPos = allArrowPos[0];
     info.allArrowPos = allArrowPos;
-
     this.info = info;
 
     this.setState({ rendered: true });
@@ -314,65 +315,38 @@ export default class HashTable extends React.Component {
   }
 
   insertion(x) {
-    var pseudocodeArr = [];
+    //let pseudocodeArr = [];
 
-    this.createMessage(`Beginning the insertion process!`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
-
-    console.log("made it to insertion");
-
-    this.createMessage(`Checking if the hash table is already full.`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
-
+    //console.log("made it to insertion");
     if (this.info.size === this.info.tableLen) {
       this.createMessage(`The hash table is currently full.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
-      return pseudocodeArr;
+      this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+      //this.props.handleCodeStepsChange(pseudocodeArr);
+      return this.state.pseudocodeArr;
     }
 
-    console.log("made it past size check");
-
-    this.createMessage(`Calculating hash value.`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+    //console.log("made it past size check");
 
     let hash = x % this.info.tableLen;
     let firstDeleted = -1;
 
-    this.createMessage(`Is the hash value less than 0?`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
-
-    if (hash < 0) {
-      this.createMessage(`Current hash value is less than 0`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
-
-      hash += this.info.tableLen;
-    }
+    if (hash < 0) hash += this.info.tableLen;
 
     let newOperation = `Insert: ${x}`;
     this.createMessage(`We will now insert ${x} into the hash table.`);
     this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
     this.addStep(new ChangeTextStep(`Evaluation`, "", this.info.evaluation));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
     this.info.operation = newOperation;
 
     let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
     this.createMessage(`Using the hash function we get that the hash of ${x} is ${hash}.`);
     this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, ""));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
     this.info.evaluation = newEvaluation;
 
     this.info.size = this.info.size + 1;
@@ -382,30 +356,20 @@ export default class HashTable extends React.Component {
     );
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
     for (let i = 0; i < this.info.tableLen; i++) {
-      this.createMessage(`Insertion iteration ${(i+1)}.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
-
-      this.createMessage(`Setting index.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
-
       let index = (hash + i) % this.info.tableLen;
 
       let newArrowPos = {
         x: this.info.allArrowPos[index].x,
         y: this.info.allArrowPos[index].y,
       };
-
+      
       this.createMessage(`Check the index ${index}.`);
       this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(10, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
       this.info.arrowPos = newArrowPos;
 
       if (this.info.deleted[index] && firstDeleted === -1) {
@@ -414,40 +378,22 @@ export default class HashTable extends React.Component {
         );
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
-
+        this.state.pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+        
         firstDeleted = index;
-
-        this.createMessage(
-          `Remember that the first deleted element we've found is at index ${index}.`
-        );
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(12, this.props.lines));
-
         continue;
       }
-
-      this.createMessage(`What value is at the current index?`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
 
       if (this.info.table[index] === x) {
         this.createMessage(`Since ${x} already exists, we will not reinsert it.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
-        return pseudocodeArr;;
+        this.state.pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+        //this.props.handleCodeStepsChange(pseudocodeArr);
+        return this.state.pseudocodeArr;
       }
-
+      
       if (this.info.table[index] === null) {
-
-        this.createMessage(`The current index is empty.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
-
         if (firstDeleted === -1) {
           let newText = `${x}`;
 
@@ -456,119 +402,71 @@ export default class HashTable extends React.Component {
           );
           this.addStep(new ChangeTextStep(`Value${index}`, newText, this.info.tableText[index]));
           this.flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
-
-          this.createMessage(
-            `We found no already deleted entries, so we will place ${x} at this index.`
-          );
-          this.addStep(new EmptyStep());
-          this.flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
+          this.state.pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
 
           this.info.table[index] = x;
           this.info.tableText[index] = newText;
           this.info.deleted[index] = false;
-          return pseudocodeArr;
+          //this.props.handleCodeStepsChange(pseudocodeArr);
+          
+          return this.state.pseudocodeArr;
         } else {
+          
           break;
         }
       }
-
-      this.createMessage(`Has the value at the current index been deleted?`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(25, this.props.lines));
-
+      
       if (this.info.deleted[index]) {
         this.createMessage(`The value at index ${index} is deleted, move to the next one.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
       } else {
         this.createMessage(`There is already a value at index ${index}, move to the next one.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
-
-        this.createMessage(`There is already a value at index ${index}, move to the next one.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
       }
-
-      this.createMessage(`Insertion complete.`);
+      
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
     }
-
+    
     this.createMessage(`Although this entry is empty, we already found a deleted entry.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
 
     this.createMessage(`Replace the first deleted entry we found.`);
     this.addStep(
       new ChangeTextPositionStep(`Arrow`, this.info.allArrowPos[firstDeleted], this.info.arrowPos)
     );
-    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), `#444444`));
+    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), localStorage.getItem('secondaryColor')));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
 
     let newText = `${x}`;
-
+    
     this.info.table[firstDeleted] = x;
     this.info.tableText[firstDeleted] = newText;
     this.info.deleted[firstDeleted] = false;
 
     this.info.arrowPos = this.info.allArrowPos[firstDeleted];
-
+    
     this.setState({ messages: this.messages, steps: this.steps });
+    console.log(this.state.pseudocodeArr);
+    //this.props.handleCodeStepsChange(this.state.pseudocodeArr);
 
-    return pseudocodeArr;
+    return this.state.pseudocodeArr;
   }
 
   deletion(x) {
-    var pseudocodeArr = [];
-
-    this.createMessage(`Beginning the deletion process!`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
-
-    this.createMessage(`Checking if the hash table is empty.`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(34, this.props.lines));
-
     if (this.info.size === 0) {
       this.createMessage(`There are no entries, so there is nothing to remove.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(35, this.props.lines));
-      return pseudocodeArr;
+     this.state.pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+      return this.state.pseudocodeArr;
     }
-
-    this.createMessage(`Calculating hash value.`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(37, this.props.lines));
 
     let hash = x % this.info.tableLen;
 
-    this.createMessage(`Is the hash value less than 0?`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(38, this.props.lines));
-
-    if (hash < 0) {
-      this.createMessage(`Current hash value is less than 0`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
-
-      hash += this.info.tableLen;
-    }
+    if (hash < 0) hash += this.info.tableLen;
 
     let newOperation = `Delete: ${x}`;
     let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
@@ -576,28 +474,13 @@ export default class HashTable extends React.Component {
     this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
     this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, this.info.evaluation));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
     this.info.operation = newOperation;
     this.info.evaluation = newEvaluation;
 
     this.info.size = this.info.size - 1;
 
-    this.createMessage(`Beginning linear iteration for deletion`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
-
     for (let i = 0; i < this.info.tableLen; i++) {
-      this.createMessage(`Deletion iteration ${(i+1)}.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
-
-      this.createMessage(`Setting index.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(42, this.props.lines));
-
       let index = (hash + i) % this.info.tableLen;
 
       let newArrowPos = {
@@ -608,92 +491,50 @@ export default class HashTable extends React.Component {
       this.createMessage(`Check the index ${index}.`);
       this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(43, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
       this.info.arrowPos = newArrowPos;
 
       if (this.info.deleted[index]) {
         this.createMessage(`This value has already been deleted, so ignore it and continue.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(44, this.props.lines));
+        this.state.pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
         continue;
       }
 
-      this.createMessage(`Does the current index contain our desired value?`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(46, this.props.lines));
-
       if (this.info.table[index] === x) {
         this.createMessage(`We have found ${x}! Mark it as deleted.`);
-        this.addStep(new ChangeEntryColorStep(`Entry${index}`, `#444444`, localStorage.getItem('primaryColor')));
+        this.addStep(new ChangeEntryColorStep(`Entry${index}`, localStorage.getItem('secondaryColor'), localStorage.getItem('primaryColor')));
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(47, this.props.lines));
+        this.state.pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
 
         this.info.deleted[index] = true;
 
-        return pseudocodeArr;;
+        return this.state.pseudocodeArr;
       }
 
-      this.createMessage(`Checking if the current node is empty.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(49, this.props.lines));
-
-      if (this.info.table[index] == null) {
-        this.createMessage(`The current node is empty.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(50, this.props.lines));
-
-        break;
-      }
+      if (this.info.table[index] == null) break;
 
       this.createMessage(`The value at index ${index} does not match, continue.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
     }
 
     this.createMessage(`No entry matching ${x} was found. There is nothing to delete.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(23, this.props.lines));
 
     this.setState({ message: this.messages, steps: this.steps });
 
-    return pseudocodeArr;
+    return this.state.pseudocodeArr;
   }
 
   search(x) {
-
-    var pseudocodeArr = [];
-
-    this.createMessage(`Beginning the searching process!`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(54, this.props.lines));
-
-    this.createMessage(`Calculating hash value.`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(55, this.props.lines));
-
     let hash = x % this.info.tableLen;
 
-    this.createMessage(`Is the hash value less than 0?`);
-    this.addStep(new EmptyStep());
-    this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(56, this.props.lines));
-
-    if (hash < 0) {
-      this.createMessage(`Current hash value is less than 0`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(57, this.props.lines));
-
-      hash += this.info.tableLen;
-    }
+    if (hash < 0) hash += this.info.tableLen;
 
     let newOperation = `Search: ${x}`;
     let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
@@ -701,21 +542,11 @@ export default class HashTable extends React.Component {
     this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
     this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, this.info.evaluation));
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(59, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
     this.info.operation = newOperation;
     this.info.evaluation = newEvaluation;
 
     for (let i = 0; i < this.info.tableLen; i++) {
-      this.createMessage(`Searching iteration ${(i+1)}.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(59, this.props.lines));
-
-      this.createMessage(`Setting index.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(60, this.props.lines));
-
       let index = (hash + i) % this.info.tableLen;
 
       let newArrowPos = this.info.allArrowPos[index];
@@ -723,59 +554,43 @@ export default class HashTable extends React.Component {
       this.createMessage(`Check the index ${index}.`);
       this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(61, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
       this.info.arrowPos = newArrowPos;
 
       if (this.info.deleted[index]) {
         this.createMessage(`This value has been deleted, so ignore it and continue.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(62, this.props.lines));
+        this.state.pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
 
         continue;
       }
-
-      this.createMessage(`Checking if search value is in current index.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(64, this.props.lines));
 
       if (this.info.table[index] === x) {
         this.createMessage(`We have found ${x}!`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(65, this.props.lines));
+        this.state.pseudocodeArr.push(new HighlightLineStep(31, this.props.lines));
 
-        return pseudocodeArr;
+        return this.state.pseudocodeArr;
       }
 
-      this.createMessage(`Checking if current index is empty.`);
-      this.addStep(new EmptyStep());
-      this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(67, this.props.lines));
-
-      if (this.info.table[index] === null) {
-        this.createMessage(`Current index is empty.`);
-        this.addStep(new EmptyStep());
-        this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(68, this.props.lines));
-        break;
-      }
+      if (this.info.table[index] === null) break;
 
       this.createMessage(`The value at index ${index} does not match, continue.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(59, this.props.lines));
+      this.state.pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
     }
 
     this.createMessage(`No entry matching ${x} was found.`);
     this.addStep(new EmptyStep());
     this.flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(54, this.props.lines));
+    this.state.pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
 
     this.setState({ message: this.messages, steps: this.steps });
 
-    return pseudocodeArr;
+    return this.state.pseudocodeArr;
   }
 
   hashTable() {
@@ -834,13 +649,13 @@ export default class HashTable extends React.Component {
   }
 
   turnOffRunning() {
-    this.running = true;
+    this.setState({running: true});
   }
 
   forward() {
-    if (this.running) return;
+    if (this.state.running) return;
     if (this.stepId === this.steps.length) return;
-    this.running = true;
+    this.setState({running: true});
 
     console.log(this.props.codeSteps);
     console.log(this.steps);
@@ -855,13 +670,13 @@ export default class HashTable extends React.Component {
     this.props.codeSteps[this.stepId].forward();
     this.stepId = this.stepId + 1;
 
-    this.running = false;
+    this.setState({running: false});
   }
 
   backward() {
-    if (this.running) return;
+    if (this.state.running) return;
     if (this.stepId - 1 < 0) return;
-    this.running = true;
+    this.setState({running: true});
 
     let svg = d3.select(this.ref.current).select("svg");
     let stepId = this.stepId - 1;
@@ -872,81 +687,87 @@ export default class HashTable extends React.Component {
 
     this.stepId = stepId;
 
-    this.running = false;
+    this.setState({running: false});
   }
 
   run() {
     clearInterval(this.state.interval)
-    if (!this.running) return;
+    if (!this.state.running) return;
     if (this.stepId === this.steps.length) {
-      this.running = false;
+      this.setState({running: false});
       return;
     }
 
-    console.log(this.props.codeSteps);
-    console.log(this.steps);
-    console.log(this.stepId);
+    //console.log(this.props.codeSteps);
+    //console.log(this.steps);
+    //console.log(this.stepId);
 
     let svg = d3.select(this.ref.current).select("svg");
-
-    console.log(this.props.codeSteps[this.stepId]);
-    this.props.codeSteps[this.stepId].forward();
-
     document.getElementById("message").innerHTML = this.messages[this.stepId];
     for (const step of this.steps[this.stepId]) step.forward(svg);
     this.props.codeSteps[this.stepId].forward();
     this.stepId = this.stepId + 1;
     // d3.timeout(this.run, this.props.waitTime);
     this.setState({interval: setInterval(this.run, this.props.waitTime)})
-
   }
 
   play() {
-    if (this.running) return;
-    this.running = true;
+    if (this.state.running || this.state.inputMode) {
+      if (this.state.inputMode) {
+        this.setState({running: true});
+        this.run();
+      }
+      return;
+    } 
+    this.setState({running: true, simulationMode: true});
+    this.hashTable();
     this.run();
     console.log("PLAY CLICKED");
   }
 
   pause() {
-    this.running = false;
+    this.setState({running: false});
     console.log("PAUSE CLICKED");
   }
 
   restart() {
-    if (this.running) return;
     if (this.stepId - 1 < 0) return;
-    this.running = true;
-
+    this.setState({running: true});
     let svg = d3.select(this.ref.current).select("svg");
-
+    svg.remove();
     document.getElementById("message").innerHTML = this.messages[0];
     while (this.stepId - 1 >= 0) {
       for (const step of this.steps[this.stepId - 1]) step.backward(svg);
       this.stepId = this.stepId - 1;
     }
 
-    this.running = false;
+    document.getElementById("message").innerHTML = "<h1>Welcome to Hash Table Linked List!</h1>";
+    this.steps = [];
+    this.messages = [];
+    this.stepId = 0;
+    this.setState({pseudocodeArr : [], inputMode: false, running:false, simulationMode: false});
   }
 
   componentDidMount() {
     this.initialize();
+    console.log("1");
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.size !== prevState.size) {
-      console.log("SIZE CHANGED");
+    if (this.state.pseudocodeArr.length !== prevState.pseudocodeArr.length) {
+      console.log("3");
       this.initialize();
-    } else if (this.state.rendered !== prevState.rendered) {
-      this.hashTable();
-      console.log("steps created");
-    }
+    } else if (this.state.running !== prevState.running && this.state.running === true)
+      {
+        this.run();
+        console.log("We ran");
+      }
   }
 
   fastForward() {
-    if (this.running) return;
+    if (this.state.running) return;
     if (this.stepId === this.steps.length) return;
-    this.running = true;
+    this.setState({running: true});
 
     let svg = d3.select(this.ref.current).select("svg");
 
@@ -955,11 +776,11 @@ export default class HashTable extends React.Component {
       this.stepId = this.stepId + 1;
     }
 
-    this.running = false;
+    this.setState({running: false});
   }
 
   isRunningCheck(id) {
-    if (this.running) {
+    if (this.state.running) {
       d3.select(id).property("value", "Error: Visualizer Running");
       return true;
     }
@@ -968,40 +789,47 @@ export default class HashTable extends React.Component {
   }
 
   handleInsertion() {
-    let x = d3.select("#insertionValue").property("value");
-    console.log(`Called insertion(${x})`);
-   
-
-    let isRunning = this.isRunningCheck("#insertionValue");
-    if (isRunning) return;
-    this.fastForward();
-
-    this.insertion(parseInt(x));
-    this.play();
+    if (this.state.running || this.state.simulationMode) {
+      console.log("Already running")
+      return;
+    }
+    let pseudocodeArr = [];
+    let input = d3.select("#insertionValue").property("value");
+    console.log(`Called insertion(${input})`);
+    this.setState({running: true, inputMode: true});
+    pseudocodeArr = this.insertion(input);  
+    this.props.handleCodeStepsChange(pseudocodeArr);
+    this.run();
   }
 
   handleDeletion() {
-    let x = d3.select("#deletionValue").property("value");
-    console.log(`Called deletion(${x})`);
-
-    let isRunning = this.isRunningCheck("#deletionValue");
-    if (isRunning) return;
-    this.fastForward();
-
-    this.deletion(x);
-    this.play();
+    if (this.state.running || this.state.simulationMode) {
+      console.log("Already running")
+      return;
+    }
+    let pseudocodeArr = [];
+    let input = d3.select("#deletionValue").property("value");
+    console.log(`Called deletion(${input})`);
+    this.setState({running: true});
+    pseudocodeArr = this.deletion(input);
+    console.log(pseudocodeArr);  
+    this.props.handleCodeStepsChange(pseudocodeArr);
+    this.run();
   }
 
   handleSearch() {
-    let x = d3.select("#searchValue").property("value");
-    console.log(`Called search(${x})`);
-
-    let isRunning = this.isRunningCheck("#searchValue");
-    if (isRunning) return;
-    this.fastForward();
-
-    this.search(x);
-    this.play();
+    if (this.state.running || this.state.simulationMode) {
+      console.log("Already running")
+      return;
+    }
+    let pseudocodeArr = [];
+    let input = d3.select("#searchValue").property("value");
+    console.log(`Called search(${input})`);
+    this.setState({running: true});
+    pseudocodeArr = this.search(input);
+    console.log(pseudocodeArr);  
+    this.props.handleCodeStepsChange(pseudocodeArr);
+    this.run();
   }
   componentWillUnmount() {
     console.log("component unmounted")
@@ -1021,17 +849,17 @@ export default class HashTable extends React.Component {
         </div>
         <div class="center-screen">
           <div id="insertion" class="center-screen">
-            <input class="inputValue2"type="number" id="insertionValue"></input>
+            <input class="inputValue2"type="number" id="insertionValue" placeholder="Val"></input>
             <button class="button" id="insertBut" onClick={this.handleInsertion}>Insert</button>
           </div>
 
           <div id="deletion" class="center-screen">
-          <input class="inputValue2" type="number" id="deletionValue"></input>
+          <input class="inputValue2" type="number" id="deletionValue" placeholder="Val"></input>
             <button class="button" id="removeBut" onClick={this.handleDeletion}>Delete</button>
           </div>
 
           <div id="search" class="center-screen">
-          <input class="inputValue2" type="number" id="searchValue"></input>
+          <input class="inputValue2" type="number" id="searchValue" placeholder="Val"></input>
             <button class="button" id="searchBut" onClick={this.handleSearch}>Search</button>
           </div>
         </div>

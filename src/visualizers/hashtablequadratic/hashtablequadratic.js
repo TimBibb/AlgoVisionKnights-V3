@@ -512,7 +512,7 @@ export default class HashTable extends React.Component {
     this.addStep(
       new ChangeTextPositionStep(`Arrow`, this.info.allArrowPos[firstDeleted], this.info.arrowPos)
     );
-    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), `#444444`));
+    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), localStorage.getItem('secondaryColor')));
     this.flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
@@ -624,7 +624,7 @@ export default class HashTable extends React.Component {
 
       if (this.info.table[index] === x) {
         this.createMessage(`We have found ${x}! Mark it as deleted.`);
-        this.addStep(new ChangeEntryColorStep(`Entry${index}`, `#444444`, localStorage.getItem('primaryColor')));
+        this.addStep(new ChangeEntryColorStep(`Entry${index}`, localStorage.getItem('secondaryColor'), localStorage.getItem('primaryColor')));
         this.flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(49, this.props.lines));
 
@@ -782,6 +782,22 @@ export default class HashTable extends React.Component {
     let map = [];
     for (let i = 0; i < 55; i++) map.push(i);
 
+    var example = Math.floor(Math.random() * 5);
+
+    if(example === 0){
+      map = [23, 12, 34, 56, 7, 5, 85, 45, 65];
+    }else if(example === 1){
+      map = [74, 19, 100, 41, 47, 98, 32, 78, 19];
+    }else if(example === 2){
+      map = [66, 12, 27, 44, 98, 32, 54, 43, 98];
+    }else if(example === 3){
+      map = [27, 37, 38, 115, 87, 65, 23, 76, 90];
+    }else if(example === 4){
+      map = [54, 76, 109, 23, 67, 32, 98, 99, 43];
+    }
+
+
+
     // for (let i = 0; i < 1000; i++) {
     //   let x = randInRange(0, map.length);
     //   let y = randInRange(0, map.length);
@@ -799,10 +815,10 @@ export default class HashTable extends React.Component {
       [5, "INSERT"],
       [1, "DELETE"],
       [1, "SEARCH"],
-      [15, "INSERT"],
+      [4, "INSERT"],
       [6, "DELETE"],
       [7, "DELETE"],
-      [26, "INSERT"],
+      [8, "INSERT"],
       [0, "SEARCH"],
     ];
 

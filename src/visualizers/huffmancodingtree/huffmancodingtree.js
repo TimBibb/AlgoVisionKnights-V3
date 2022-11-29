@@ -462,9 +462,11 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("We chose a random word: \"" + ranWords + "\"");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         steps.push(new EmptyStep())
         messages.push("We chose a random word: \"" + ranWords + "\"");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -494,8 +496,10 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Letter frequency for this word: [" + arr.node + "]");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
         steps.push(new EmptyStep())
         messages.push("Letter frequency for this word: [" + arr.node + "]");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         MAX_NODE = (arr.letters.length * 2) - 1;
         console.log(MAX_NODE)
@@ -1253,7 +1257,7 @@ export default class huffmancodingtree extends React.Component {
                     {/* <button class="button" onClick={this.playPreorder}>Preorder</button> */}
                     <button class="button" onClick={this.pause}>Pause</button>
                     {/* <button class="button" onClick={this.add}>Add</button> */}
-                    <button class="button" onClick={this.refreshPage}>Restart</button>
+                    <button class="button" onClick={this.restart}>Restart</button>
                     <button class="button" onClick={this.backward}>Step Backward</button> 
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
@@ -1274,7 +1278,7 @@ export default class huffmancodingtree extends React.Component {
                     </tr> */}
                 </table>
                 <div class="parent-svg">
-                <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+                <div id="visualizerDiv" ref={this.ref} class="center-screen tree-vis grabbable"></div>
                     <Pseudocode algorithm={"huffman"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
                 </div>
             </div>

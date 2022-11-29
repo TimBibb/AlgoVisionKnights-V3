@@ -376,7 +376,8 @@ export default class binarysearch extends React.Component {
 		if (this.state.stepId - 1 < 0) return;
 		let stepId = this.state.stepId - 1;
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
-        console.log(this.state.steps[stepId]);
+        this.props.codeSteps[stepId].forward();
+		console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Binary Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
 		d3.timeout(this.turnOffRunning, this.props.waitTime);

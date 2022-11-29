@@ -22,21 +22,3 @@
 	width: 100%;
 }
 
-.tree-vis {
-	border: 2px solid var(--secondaryColor);
-	border-radius: 25px;
-}
-
-.grabbable {
-    cursor: move; /* fallback if grab cursor is unsupported */
-    cursor: grab;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
-}
-
- /* (Optional) Apply a "closed-hand" cursor during drag operation. */
-.grabbable:active {
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
-}

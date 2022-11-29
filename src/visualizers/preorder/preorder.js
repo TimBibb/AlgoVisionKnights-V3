@@ -252,7 +252,8 @@ export default class binarysearchtree extends React.Component {
             messages: [],
             maxLevel: 0,
             running: false,
-            root: null
+            root: null,
+            interval: null,
         };
         
 		// Bindings
@@ -325,7 +326,7 @@ export default class binarysearchtree extends React.Component {
             if(!root) {
                 root = new Node(this.ref, val, x, y, i);
                 console.log(root);
-                this.setState({root: root})
+                // this.setState({root: root})
                 i++;
             } else {
                 let node = root;
@@ -384,7 +385,7 @@ export default class binarysearchtree extends React.Component {
                 }
             }
         }
-
+        this.setState({root: root})
         return root;
     }
 
@@ -485,6 +486,7 @@ export default class binarysearchtree extends React.Component {
     }
 
     run(){
+        clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -494,7 +496,9 @@ export default class binarysearchtree extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
         document.getElementById("message").innerHTML = "<h1>" +  this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.props.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+        this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
     }
 
     playPreorder() {
@@ -529,14 +533,17 @@ export default class binarysearchtree extends React.Component {
     componentDidMount() {
         this.initialize();   
         var root = this.buildTree();
-        this.preorder(root);
+        // this.preorder(root);
     }
 
     // Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
         // console.log(this.state.root);
 		// Part of restart -> Reinitialize with original array
-        if (this.state.root !== prevState.root && this.state.root === null) {
+        if (this.state.root !== prevState.root && this.state.root != null){
+            this.preorder(this.state.root)
+        }
+        else if (this.state.root !== prevState.root && this.state.root === null) {
 			console.log("Steps changed");
 			var svg = this.initialize();
             var root = this.buildTree();
@@ -549,6 +556,11 @@ export default class binarysearchtree extends React.Component {
 			console.log("We ran");
 		}
 	}
+
+    componentWillUnmount() {
+        console.log("component unmounted")
+        clearInterval(this.state.interval);
+      }
 
     render() {
         return (

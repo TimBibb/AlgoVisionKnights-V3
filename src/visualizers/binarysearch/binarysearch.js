@@ -111,7 +111,9 @@ export default class binarysearch extends React.Component {
 			waitTime: 2000, // Milliseconds between each step
 			target: -1,
 			inputMode: false,
-			inputFlag: false
+			inputFlag: false,
+			interval: null,
+
 		};
 
 		// Bindings
@@ -382,6 +384,8 @@ export default class binarysearch extends React.Component {
 
 	// For the play button
 	run() {
+		clearInterval(this.state.interval)
+
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -389,9 +393,13 @@ export default class binarysearch extends React.Component {
 		}
 		this.state.steps[this.state.stepId].forward(d3.select(this.ref.current).select("svg"));
 		this.props.codeSteps[this.state.stepId].forward();
+		console.log(this.state)
+
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
 		d3.timeout(this.run, this.props.waitTime);
+		this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
 	}
 
 	play() {
@@ -425,6 +433,11 @@ export default class binarysearch extends React.Component {
 	// First function to run
 	componentDidMount() {
 		this.dataInit(this.state.size);
+	}
+	
+	componentWillUnmount() {
+		console.log("component unmounted")
+		clearInterval(this.state.interval);
 	}
 
 	//Calls functions depending on the change in state

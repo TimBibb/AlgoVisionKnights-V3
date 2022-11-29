@@ -356,7 +356,8 @@ export default class SelectionSort extends React.Component {
 			stepId: 0,
 			stepTime: 300,
 			waitTime: 2000,
-			inputMode: false
+			inputMode: false,
+			interval: null,
 		};
 
 		this.ref = React.createRef();
@@ -369,6 +370,7 @@ export default class SelectionSort extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
+		this.sortCaller = this.sortCaller.bind(this);
 	}
 
 	printArray(arr, size) {
@@ -378,7 +380,7 @@ export default class SelectionSort extends React.Component {
 		}
 	}
 
-	sort(arr, ids, size, stepTime)
+	sort(arr, ids, size, stepTime,lines)
 	{
 		var smallest;
 		var i, j;
@@ -388,86 +390,92 @@ export default class SelectionSort extends React.Component {
 
 		messages.push("<h1>Beginning Selection Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
 		for (i = 0; i < size-1; i++)
 		{
 			steps.push(new SmallestSwapStep(i, i, ids));
 			smallest = i;
 			messages.push("<h1>" + arr[smallest] + " is the current smallest.</h1>");
-			pseudocodeArr.push(new HighlightLineStep(3,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(3,lines));
 
 			for (j = i+1; j < size; j++)
 			{
 				steps.push(new ColorSwapStep(j, j, ids));
 				messages.push("<h1>Move Search forward and check the next element.</h1>");
-				pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+				pseudocodeArr.push(new HighlightLineStep(4,lines));
 				if(arr[j] < arr[smallest])
 				{
 					steps.push(new EmptyStep());
 					messages.push("<h1>" + arr[j] + " < " + arr[smallest] + "</h1>");
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
 
 					steps.push(new SmallestSwapStep(smallest, j, ids));
 					messages.push("<h1>" + arr[j] + " is the new smallest element.</h1>");
-					pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(6,lines));
 
 					smallest = j;
 					// messages.push("<h1>" + arr[smallest] + " is the new smallest element.</h1>");
 					// steps.push(new EmptyStep());
-					// pseudocodeArr.push(new HighlightLineStep(6,this.props.lines));
+					// pseudocodeArr.push(new HighlightLineStep(6,lines));
 				}
 				else
 				{
 					messages.push("<h1>" + arr[j] + " >= " + arr[smallest] + "</h1>");
 					steps.push(new EmptyStep());
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
 
 					messages.push("<h1>Keep our current smallest.</h1>");
 					steps.push(new UncolorStep(j, ids));
-					pseudocodeArr.push(new HighlightLineStep(5,this.props.lines));
+					pseudocodeArr.push(new HighlightLineStep(5,lines));
 				}
 
 			}
 
 			messages.push("<h1>Reached the end of the array.</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(4,lines));
 
 			messages.push("<h1>" + arr[smallest] + " is the smallest element.</h1>");
 			steps.push(new EmptyStep());
-			pseudocodeArr.push(new HighlightLineStep(4,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(4,lines));
 			
 			steps.push(new SwapStep(smallest, i, ids, stepTime));
 			[arr[smallest], arr[i]] = [arr[i], arr[smallest]];
 			messages.push("<h1>Swap our smallest element into index " + i + ".</h1>");
-			pseudocodeArr.push(new HighlightLineStep(8,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(8,lines));
 
 			steps.push(new SortedStep(i, ids));
 			messages.push("<h1>Index " + i + " has been sorted.</h1>");
-			pseudocodeArr.push(new HighlightLineStep(2,this.props.lines));
+			pseudocodeArr.push(new HighlightLineStep(2,lines));
 		}
 
 		steps.push(new SmallestSwapStep(i, i, ids));
 		messages.push("<h1>There is only one index left so it is sorted.</h1>");
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
 		steps.push(new SortedStep(i, ids));
 		messages.push("<h1>There is only one index left so it is sorted.</h1>");
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
 		messages.push("<h1>Finished Selection Sort!</h1>");
 		steps.push(new EmptyStep());
-		pseudocodeArr.push(new HighlightLineStep(0,this.props.lines));
+		pseudocodeArr.push(new HighlightLineStep(0,lines));
 
-		this.setState({steps: steps});
-		this.setState({messages: messages});
-		this.props.handleCodeStepsChange(pseudocodeArr);
-
-
+		return [arr,pseudocodeArr,steps,messages];
 		console.log(steps);
 		console.log(messages);
 	}
+
+	sortCaller(arr, ids, size, stepTime) {
+		let lines = this.props.lines;
+		var [array,pseudocodeArr,steps,messages] = this.sort(arr, ids, size, stepTime,lines);
+		this.props.handleCodeStepsChange(pseudocodeArr);
+		this.setState({steps: steps});
+		this.setState({messages: messages});
+	}
+
+
 
 	dataInit(size) {
 		let arr = [];
@@ -641,6 +649,7 @@ export default class SelectionSort extends React.Component {
 	}
 
 	run() {
+		clearInterval(this.state.interval)
 		if (!this.state.running) return;
 		if (this.state.stepId === this.state.steps.length) {
 			this.setState({running: false});
@@ -650,7 +659,9 @@ export default class SelectionSort extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
 		this.setState({stepId: this.state.stepId + 1});
-		d3.timeout(this.run, this.props.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+		this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
 	}
 
 	play() {
@@ -695,7 +706,7 @@ export default class SelectionSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("YO")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 				this.play();
 				this.setState({inputMode: false});
 			}
@@ -723,7 +734,7 @@ export default class SelectionSort extends React.Component {
 			else if (this.state.ids.length > prevState.ids.length) {
 				d3.select(this.ref.current).select("svg").attr("visibility", "visible");
 				console.log("YO")
-				this.sort([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
+				this.sortCaller([...this.state.arr], this.state.ids, this.state.arr.length, this.state.stepTime);
 			}
 			// Part of restart -> Reinitialize with original array
 			else if (this.state.steps.length !== prevState.steps.length && this.state.steps.length === 0) {
@@ -776,6 +787,11 @@ export default class SelectionSort extends React.Component {
 		return (x | 0) === x;
 	}
 
+	componentWillUnmount() {
+		console.log("component unmounted")
+		clearInterval(this.state.interval);
+	  }
+
 	render() {
 		return (
 			<div>
@@ -788,7 +804,7 @@ export default class SelectionSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen">
-					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<input class="sortInput"type="text" id="insertVal" placeholder="ex. 3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Selection Sort!</h1></span></div>

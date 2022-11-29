@@ -242,6 +242,7 @@ export default class singlylinkedlist extends React.Component {
 			MAX_NODE : 8,
 			MAX_INPUT : 999,
 			MIN_INPUT : -999,
+			interval: null,
 		};
 	
 		// Bindings
@@ -526,6 +527,7 @@ export default class singlylinkedlist extends React.Component {
 
 	//For the autoplay button
 	run() {
+		clearInterval(this.state.interval)
 		console.log("Inside run()");
 		if (!this.state.running) {
 			console.log("Not running");
@@ -543,7 +545,9 @@ export default class singlylinkedlist extends React.Component {
 		this.props.codeSteps[this.state.stepId].forward();
 		document.getElementById("message").innerHTML = this.state.messagesArr[this.state.stepId];
 		this.setState({stepId : this.state.stepId + 1});
-		d3.timeout(this.run, this.props.waitTime);
+		// d3.timeout(this.run, this.props.waitTime);
+		this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
 	}
 
 	play() {
@@ -651,6 +655,11 @@ export default class singlylinkedlist extends React.Component {
 			}
 		}
 	}
+
+	componentWillUnmount() {
+		console.log("component unmounted")
+		clearInterval(this.state.interval);
+	  }
 	
 	render() {
 		return (

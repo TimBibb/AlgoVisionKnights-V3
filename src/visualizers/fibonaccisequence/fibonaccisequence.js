@@ -369,6 +369,7 @@ export default class FibonacciSequence extends React.Component {
       waitTime: 2000,
       running: false,
       stepId: 0,
+      interval: null
     };
 
     this.ref = React.createRef();
@@ -435,9 +436,14 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
+    addStep(new EmptyStep());
     createMessage("Since 4 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).")
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 0, 0, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 0, "hidden", "visible"));
@@ -454,9 +460,14 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
+    addStep(new EmptyStep());
     createMessage("Since 3 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 1, 1, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 1, "hidden", "visible"));
@@ -473,9 +484,14 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
+    addStep(new EmptyStep());
     createMessage("Since 2 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     addStep(new NodeColorChangeStep(this.ref.current, 2, 2, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 2, "hidden", "visible"));
@@ -491,12 +507,17 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+    addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
     addStep(new NodeVisibilityChangeStep(this.ref.current, 3, 3, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 12, 12, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 3, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
@@ -512,12 +533,17 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+    addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
     addStep(new NodeVisibilityChangeStep(this.ref.current, 4, 4, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 13, 13, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 13, 13, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 12, 12, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
@@ -548,12 +574,17 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+    addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
     addStep(new NodeVisibilityChangeStep(this.ref.current, 5, 5, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 14, 14, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 14, 14, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 11, 11, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
@@ -585,9 +616,14 @@ export default class FibonacciSequence extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
     addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
+    addStep(new EmptyStep());
     createMessage("Since 2 is not a base case, we use the formula fib(n) = fib(n-1) + fib(n-2).");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 6, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 6, 6, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
@@ -603,12 +639,17 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+    addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
     addStep(new NodeVisibilityChangeStep(this.ref.current, 7, 7, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 16, 16, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 1 is a base case, we return its value of 1.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EdgeVisibilityChangeStep(this.ref.current, 7, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('accentColor'), localStorage.getItem('secondaryColor')));
@@ -624,12 +665,17 @@ export default class FibonacciSequence extends React.Component {
     flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
 
+    addStep(new EmptyStep());
+    createMessage("Checking the base case.")
+    flushBuffer();
+    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+
     addStep(new NodeVisibilityChangeStep(this.ref.current, 8, 8, "visible", "hidden"));
     addStep(new NodeVisibilityChangeStep(this.ref.current, 17, 17, "hidden", "visible"));
     addStep(new NodeColorChangeStep(this.ref.current, 17, 17, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
     createMessage("Since 0 is a base case, we return its value of 0.");
     flushBuffer();
-    pseudocodeArr.push(new HighlightLineStep(1, this.props.lines))
+    pseudocodeArr.push(new HighlightLineStep(2, this.props.lines))
 
     addStep(new EmptyStep());
     addStep(new NodeColorChangeStep(this.ref.current, 16, 16, localStorage.getItem('secondaryColor'), localStorage.getItem('accentColor')));
@@ -710,6 +756,8 @@ export default class FibonacciSequence extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
+
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -721,7 +769,8 @@ export default class FibonacciSequence extends React.Component {
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
     for (const step of this.state.steps[this.state.stepId]) step.forward();
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
   }
 
   play() {
@@ -762,6 +811,10 @@ export default class FibonacciSequence extends React.Component {
 			console.log("We're restarting");
 			this.initialize();
 		}
+  }
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
   }
 
   render() {

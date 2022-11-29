@@ -24,7 +24,7 @@ function OppositeVisibility(attr) {
 class Step {
   constructor(ref, stepTime) {
     this.ref = ref;
-    this.stepTime = stepTime;
+    stepTime = stepTime;
   }
   forward() {
     console.log("Step has no foward function");
@@ -67,11 +67,11 @@ class ChangeNumberColorStep extends Step {
     this.oldColor = oldColor;
     this.newColor = newColor;
   }
-  forward() {
+  forward(stepTime) {
     d3.select(this.ref)
       .select(this.id)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .style("fill", this.newColor);
   }
   fastForward() {
@@ -90,11 +90,11 @@ class SwapXStep {
     this.id1 = "#" + id1;
     this.id2 = "#" + id2;
   }
-  forward() {
+  forward(stepTime) {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
     var x2 = d3.select(this.ref).select(this.id2).attr("x");
-    d3.select(this.ref).select(this.id1).transition().duration(this.stepTime).attr("x", x2);
-    d3.select(this.ref).select(this.id2).transition().duration(this.stepTime).attr("x", x1);
+    d3.select(this.ref).select(this.id1).transition().duration(stepTime).attr("x", x2);
+    d3.select(this.ref).select(this.id2).transition().duration(stepTime).attr("x", x1);
   }
   fastForward() {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
@@ -116,7 +116,7 @@ class SwapXYStep extends Step {
     this.id1 = "#" + id1;
     this.id2 = "#" + id2;
   }
-  forward() {
+  forward(stepTime) {
     var x1 = d3.select(this.ref).select(this.id1).attr("x");
     var y1 = d3.select(this.ref).select(this.id1).attr("y");
     var x2 = d3.select(this.ref).select(this.id2).attr("x");
@@ -124,13 +124,13 @@ class SwapXYStep extends Step {
     d3.select(this.ref)
       .select(this.id1)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", x2)
       .attr("y", y2);
     d3.select(this.ref)
       .select(this.id2)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", x1)
       .attr("y", y1);
   }
@@ -161,11 +161,11 @@ class TranslateXYStep extends Step {
     this.oldX = oldX;
     this.oldY = oldY;
   }
-  forward() {
+  forward(stepTime) {
     d3.select(this.ref)
       .select(this.id)
       .transition()
-      .duration(this.stepTime)
+      .duration(stepTime)
       .attr("x", this.newX)
       .attr("y", this.newY);
   }
@@ -195,7 +195,8 @@ export default class HeapSort extends React.Component {
       running: false,
       stepId: 0,
       inputMode: false,
-      flag: false
+      flag: false,
+      interval: null,
     };
 
     this.ref = React.createRef();
@@ -732,12 +733,13 @@ export default class HeapSort extends React.Component {
 
     document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Heap Sort!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward();
-    this.state.steps[--stepId].backward();
+    // this.state.steps[--stepId].backward();
     this.setState({ stepId: stepId });
     d3.timeout(this.turnOffRunning, this.props.waitTime);
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.state.running) return;
     if (this.state.stepId === this.state.steps.length) {
       this.setState({ running: false });
@@ -745,9 +747,11 @@ export default class HeapSort extends React.Component {
     }
     this.props.codeSteps[this.state.stepId].forward();
     document.getElementById("message").innerHTML = this.state.messages[this.state.stepId];
-    for (const step of this.state.steps[this.state.stepId]) step.forward();
+    for (const step of this.state.steps[this.state.stepId]) step.forward(this.props.waitTime);
     this.setState({ stepId: this.state.stepId + 1 });
-    d3.timeout(this.run, this.props.waitTime);
+    // d3.timeout(this.run, this.props.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -877,6 +881,11 @@ export default class HeapSort extends React.Component {
 		return (x | 0) === x;
 	}
 
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
+  }
+
   render() {
     return (
       <div>
@@ -889,7 +898,7 @@ export default class HeapSort extends React.Component {
           <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
         </div>
         <div class="center-screen">
-					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<input class="sortInput"type="text" id="insertVal" placeholder="ex. 3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
         <div id="message-pane" class="center-screen">

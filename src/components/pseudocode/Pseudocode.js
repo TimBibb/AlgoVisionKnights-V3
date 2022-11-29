@@ -3,7 +3,6 @@ import { map } from './PseudocodeMap';
 import * as d3 from "d3";
 import Line from "../../foundation/pseudocode/Line";
 import './Pseudocode.css';
-
 class HighlightLineStep {
 	// pass in the line number you want to highlight
 	// pass in the lines array
@@ -20,7 +19,11 @@ class HighlightLineStep {
 		// 	pseudocodeSvg.select("#line" + count).attr("visibility", "hidden");
 		// }
         if (d3.select("#pseudoSvg").empty()) return;
-        console.log("this.lines = " + this.lines)
+        var myElement = document.getElementById('line' + this.lineNum);
+        document.getElementById("pseudoSvg").parentElement.scrollTop = (myElement.getAttribute("y") - 130 > 0) ? myElement.getAttribute("y") - 130 : 0
+        console.log("scrolling to ", myElement.getAttribute("y"))
+
+        // console.log("this.lines = " + this.lines)
 		for (let i = 0; i < this.lines.length; i++) {
 			d3.select("#pseudoSvg").select("#line" + i).attr("visibility", "hidden");
 		}
@@ -37,7 +40,7 @@ class Pseudocode extends React.Component {
         super(props)
         console.log("props" + props);
         this.state = {
-            svg: {}
+            svg: {},
         }
         this.algorithm = props.algorithm
         this.getLines = this.getLines.bind(this);
@@ -78,8 +81,16 @@ class Pseudocode extends React.Component {
 
         this.setState({svg: pseudocodeSvg})
         let lines = []
+        var longestLine = -1;
         for (let line in code) {
-            lines.push(new Line(code[line], line, pseudocodeSvg));
+            if (code[line].length > longestLine)
+                longestLine = code[line].length
+        }
+        console.log("longestLine", longestLine)
+        var lineLength = longestLine * 7
+        pseudocodeSvg.attr("width", lineLength+25)
+        for (let line in code) {
+            lines.push(new Line(code[line], line, pseudocodeSvg, lineLength));
             
             // this.props.setLines([...this.props.lines, new Line(code[line], line, pseudocodeSvg)])
             // this.props.setPseudoValues({
@@ -102,6 +113,8 @@ class Pseudocode extends React.Component {
     componentDidUpdate() {
         console.log(this.props);
     }
+
+
 
     render() {
         return <div id="pseudocodeDiv" class="right-screen"></div>

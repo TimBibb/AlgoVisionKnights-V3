@@ -350,76 +350,240 @@ export const map = {
     ],
 
     hashtable: [
-        "insertion(value) {",
-        tab + "if (info == tableLength) ",
-        tab + tab + "Hash Table Full!",
-        tab + "for(i = 0; i < tableLength; i++) {",
-        tab + tab + "if (info.deleted[index] && firstDeleted == -1) ",
-        tab + tab + tab + "firstDeleted = index;",
-        tab + tab + "if (info.table[index] == value) ",
-        tab + tab + tab + "Skip to Prevent Reinsertion!",
-        tab + tab + "if (info.table[index] == null) ",
-        tab + tab + tab + "if(firstDeleted == -1) ",
-        tab + tab + tab + tab + "Insert Value!",
-        tab + tab + "if (info.deleted[index]) ",
-        tab + tab + tab + "Already Deleted! Move Forward",
-        tab + tab + "else ",
-        tab + tab + tab + "Occupied! Move Forward",
-        tab + "}", //15
-        "}", //16
-        "deletion(x) {",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Already Deleted!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Value Found! Marked as Deleted",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //25
-        "}", //26
-        "search(x) {",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Ignore Value!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Found Value!",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //35
-        "}" //36
+        "insertion(num) {", 
+        tab + "if (size == tableLength) {",
+        tab + tab + "return;",
+        tab + "}",
+        tab + "let hash = num % tableLen;", //4
+        tab + "if (hash < 0) {", //5
+        tab + tab + "hash += tableLen;", //6 
+        tab + "}", //7
+        tab + "for(i = 0; i < tableLength; i++) {", //8
+        tab + tab + "let index = (hash + i) % tableLen;", //9
+        tab + tab + "if (info.deleted[index] && firstDeleted == -1) {", //10
+        tab + tab + tab + "firstDeleted = index;", //11
+        tab + tab + tab + "continue;", //12
+        tab + tab + "}", //13
+        tab + tab + "if (info.table[index] == num) {", //14
+        tab + tab + tab + "return;", //15
+        tab + tab + "}", //16
+        tab + tab + "if (info.table[index] == null) {", //17
+        tab + tab + tab + "if(firstDeleted == -1) {", //18
+        tab + tab + tab + tab + "info.table[index] = num;", //19
+        tab + tab + tab + "}", //20
+        tab + tab + tab + "else {", //21
+        tab + tab + tab + tab + "break;", //22
+        tab + tab + tab + "}", //23
+        tab + tab + "}", //24
+        tab + tab + "if (info.deleted[index]) {", //25
+        tab + tab + tab + "Already Deleted! Move Forward", //26
+        tab + tab + "}", //27
+        tab + tab + "else {", //28
+        tab + tab + tab + "Occupied! Move Forward", //29
+        tab + tab + "}", //30
+        tab + "}", //31
+        "}", //32
+        "deletion(num) {", //33
+        tab + "if (size == 0) {", //34
+        tab + tab + "return;", //35
+        tab + "}", //36
+        tab + "let hash = num % tableLen;", //37 
+        tab + "if (hash < 0) {", //38
+        tab + tab + "hash += tableLen;", //39 
+        tab + "}", //40
+        tab + "for(i = 0; i < tableLength; i++){", //41
+        tab + tab + "let index = (hash + i) % tableLen;", //42
+        tab + tab + "if(deleted[index]) {", //43
+        tab + tab + tab + "continue;", //44
+        tab + tab + "}", //45
+        tab + tab + "if(table[index] == num) {", //46
+        tab + tab + tab + "info.deleted[index] = true;", //47
+        tab + tab + "}", //48
+        tab + tab + "if(table[index] == null) {", //49
+        tab + tab + tab + "break;", //50
+        tab + tab + "}", //51
+        tab + "}", //52
+        "}", //53
+        "search(num) {", //54
+        tab + "let hash = num % tableLen;", //55
+        tab + "if (hash < 0) {", //56
+        tab + tab + "hash += tableLen;", //57 
+        tab + "}", //58
+        tab + "for(i = 0; i < tableLength; i++){", //59
+        tab + tab + "let index = (hash + i) % tableLen;", //60
+        tab + tab + "if(deleted[index]) {", //61
+        tab + tab + tab + "continue;", //62
+        tab + tab + "}", //63
+        tab + tab + "if(table[index] == num) {", //64
+        tab + tab + tab + "return;", //65
+        tab + tab + "}", //66
+        tab + tab + "if(table[index] == null) {", //67
+        tab + tab + tab + "break;", //68
+        tab + tab + "}", //69
+        tab + "}",  //70
+        "}" //71
     ],
 
     hashtablequadratic: [
-        "insertion(x)",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index] && firstDeleted == -1)",
-        tab + tab + tab + "Found First Deleted Index!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Skip to Prevent Reinsertion!",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "Insert x;",
-        tab + "}", //8
-        "deletion(x)",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Value Already Deleted!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Value Found! Marked as Deleted",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //17
-        "search(x)",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Ignore",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Value Found!",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //26
-        "}" //27
+        "insertion(num) {", //0
+        tab + "if (size == tableLength) {", //1
+        tab + tab + "return;", //2
+        tab + "}", //3
+        tab + "let hash = num % tableLen;", //4
+        tab + "if (hash < 0) {", //5
+        tab + tab + "hash += tableLen;", //6 
+        tab + "}", //7
+        tab + "for(i = 0; i < tableLength; i++) {", //8
+        tab + tab + "let temp_i = i * i;", //9
+        tab + tab + "let index = (hash + temp_i) % tableLen;", //10
+        tab + tab + "if (info.deleted[index] && firstDeleted == -1) {", //11
+        tab + tab + tab + "firstDeleted = index;", //12
+        tab + tab + tab + "continue;", //13
+        tab + tab + "}", //14
+        tab + tab + "if (info.table[index] == num) {", //15
+        tab + tab + tab + "return;", //16
+        tab + tab + "}", //17
+        tab + tab + "if (info.table[index] == null) {", //18
+        tab + tab + tab + "if(firstDeleted == -1) {", //19
+        tab + tab + tab + tab + "info.table[index] = num;", //20 
+        tab + tab + tab + "}", //21
+        tab + tab + tab + "else {", //22
+        tab + tab + tab + tab + "break;", //23 
+        tab + tab + tab + "}", //24
+        tab + tab + "}", //25
+        tab + tab + "if (info.deleted[index]) {", //26
+        tab + tab + tab + "Already Deleted! Move Forward", //27 
+        tab + tab + "}", //28
+        tab + tab + "else {", //29
+        tab + tab + tab + "Occupied! Move Forward", //30
+        tab + tab + "}", //31
+        tab + "}", //32
+        "}", //33
+        "deletion(num) {", //34
+        tab + "if (size == 0) {", //35
+        tab + tab + "return;", //36
+        tab + "}", //37
+        tab + "let hash = num % tableLen;", //38
+        tab + "if (hash < 0) {", //39
+        tab + tab + "hash += tableLen;", //40 
+        tab + "}", //41
+        tab + "for(i = 0; i < tableLength; i++){", //42
+        tab + tab + "let temp_i = i * i;", //43
+        tab + tab + "let index = (hash + temp_i) % tableLen;", //44
+        tab + tab + "if(deleted[index]) {", //45
+        tab + tab + tab + "continue;", //46
+        tab + tab + "}", //47
+        tab + tab + "if(table[index] == num) {", //48
+        tab + tab + tab + "info.deleted[index] = true;", //49
+        tab + tab + "}", //50
+        tab + tab + "if(table[index] == null) {", //51
+        tab + tab + tab + "break;", //52
+        tab + tab + "}", //53
+        tab + "}", //54
+        "}", //55
+        "search(num) {", //56
+        tab + "let hash = num % tableLen;", //57
+        tab + "if (hash < 0) {", //58
+        tab + tab + "hash += tableLen;", //59
+        tab + "}", //60
+        tab + "for(i = 0; i < tableLength; i++){", //61
+        tab + tab + "let temp_i = i * i;", //62
+        tab + tab + "let index = (hash + i) % tableLen;", //63
+        tab + tab + "if(deleted[index]) {", //64
+        tab + tab + tab + "continue;", //65
+        tab + tab + "}", //66
+        tab + tab + "if(table[index] == num) {", //67
+        tab + tab + tab + "return;", //68
+        tab + tab + "}", //69
+        tab + tab + "if(table[index] == null) {", //70
+        tab + tab + tab + "break;", //71
+        tab + tab + "}", //72
+        tab + "}",  //73
+        "}" //74
     ],
-    hashtablelinkedlist: [],
+
+    hashtablelinkedlist: [
+        "insert(num) {",
+        tab + "if(size == tableLen) {", 
+        tab + tab + "return;",
+        tab + "}",
+        tab + "let hash = num % tableLen;", //4
+        tab + "if (hash < 0) {",
+        tab + tab + "hash += tableLen;", //6
+        tab + "}",
+        tab + "for (let i = 0; i < tableLen; i++) {", //8
+        tab + tab + "let index = (hash + i) % tableLen;",
+        tab + tab + "let current = table[index];",
+        tab + tab + "if (current == null) {", //11
+        tab + tab + tab + "table[index] = new Node(num);",
+        tab + tab + "}",
+        tab + tab + "else {", //14
+        tab + tab + tab + "if (current.data == num) {",
+        tab + tab + tab + tab + "return;",
+        tab + tab + tab + "}",
+        tab + tab + tab + "while(current.next != null) {",
+        tab + tab + tab + tab + "if (current.next.data === num) {",
+        tab + tab + tab + tab + tab + "return;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + tab + "current = current.next;",
+        tab + tab + tab + "}",
+        tab + tab + tab + "current.next = new Node(num);",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+        "delete(num) {", //28
+        tab + "if(size == 0) {",
+        tab + tab + "return;",
+        tab + "}",
+        tab + "let hash = num % tableLen;", //32
+        tab + "if (hash < 0) {",
+        tab + tab + "hash += tableLen;",
+        tab + "}",
+        tab + "for (let i = 0; i < tableLen; i++) {", //36
+        tab + tab + "let index = (hash + i) % tableLen;",
+        tab + tab + "let current = table[index];",
+        tab + tab + "if (current == null) {",
+        tab + tab + tab + "return;",
+        tab + tab + "}",
+        tab + tab + "if (current.data == num) {", //42
+        tab + tab + tab + "current = current.next;",
+        tab + tab + "}",
+        tab + tab + "else {", //45
+        tab + tab + tab + "while(current.next != null) {",
+        tab + tab + tab + tab + "if(current.next.data == num) {",
+        tab + tab + tab + tab + tab + "current.next = current.next.next;",
+        tab + tab + tab + tab + "}",
+        tab + tab + tab + "current = current.next;",
+        tab + tab + tab + "}",
+        tab + tab + "return;",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+        "search(num) {", //56
+        tab + "let hash = num % tableLen;",
+        tab + "if(hash < 0) {",
+        tab + tab + "hash += tableLen;",
+        tab + "}",
+        tab + "for(let i = 0; i < tableLen; i++) {", //61
+        tab + tab + "let index = (hash + i) % tableLen;", //62
+        tab + tab + "if(current == null) {", //63
+        tab + tab + tab + "return;", //64
+        tab + tab + "}", //65
+        tab + tab + "if(current.data == num) {", //66
+        tab + tab + tab + "Value Found.", //67
+        tab + tab + "}",//68
+        tab + tab + "else {", //69,
+        tab + tab + tab + "while(current.next != null) {", //70
+        tab + tab + tab + tab + "if(current.next.data == num) {", //71
+        tab + tab + tab + tab + tab + "Value Found.", //72
+        tab + tab + tab + tab + "}", //73
+        tab + tab + tab + tab + "current = current.next;", //74
+        tab + tab + tab + "}", //75
+        tab + tab + "Value Not Found.", //76
+        tab + tab + "}",
+        tab + "}",
+        "}"
+    ],
 
     dijkstras: [ //fixed tabbing and added closing bracket
         "dijkstras(graph, first) {",
@@ -672,23 +836,26 @@ export const map = {
 
     fibonacci: [ //done
         "fib(n){",
-        tab + "if(n <= 1) {",
-        tab + tab + "return n;",
+        tab + "if(n <= 1) {", //1
+        tab + tab + "return n;", //2
         tab + "}",
-        tab + "return fib(n - 1) + fib(n - 2);",
+        tab + "return fib(n - 1) + fib(n - 2);", //4
         "}"
     ],
 
     hanoi: [
-        "hanoi(n, from, to, aux){",
+        "hanoi(n, source, auxillary, destination) {",
         tab + "if(n == 0) {",
         tab + tab + "return;",
         tab + "}",
         tab + "if(n > 1) {", //4
-        tab + tab + "Move n - 1 Disks to Aux",
+        tab + tab + "Move n - 1 disks to auxillary.",
         tab + "}",
-        tab + "hanoi(n - 1, from, aux, to);",
-        tab + "hanoi(n - 1, aux, to, from);",
+        tab + "hanoi(n - 1, source, destination, auxillary);",
+        tab + "if(n > 1) {",
+        tab + tab + "Move n - 1 disks to destination.",
+        tab + "}",
+        tab + "hanoi(n - 1, auxillary, source, destination);",
         "}"
     ],
 
@@ -699,31 +866,31 @@ export const map = {
         tab + "var nodeVisited, edgeSelected, nodes;",
         tab + "for(const edge of graph.edges) {",
         tab + tab + "let [node1, node2, _weight, edgeId] = edge;",
-        tab + tab + "pq.push(edgeId);",
+        tab + tab + "pq.push(edgeId);", //6
         tab + "}",
         tab + "for(let i = 0; pq.length > 0 && i < 50; i++) {",
         tab + tab + "let currentId = pq[0];",
         tab + tab + "let [node1, node2, _weight, edgeId] = graph.edges[currentId];",
         tab + tab + "[pq[0], pq[pq.length - 1]] = [pq[pq.length - 1], pq[0]];",
-        tab + tab + "pq.pop();",
+        tab + tab + "pq.pop();", //12
         tab + tab + "if(nodeVisited[node1] && nodeVisited[node2]) {",
         tab + tab + tab + "if(!NodesConnected.United(node1, node2)) {",
         tab + tab + tab + tab + "Both nodes already added.",
         tab + tab + tab + "}",
         tab + tab + tab + "else {",
         tab + tab + tab + tab + "Ignore the edge.",
-        tab + tab + tab + tab + "continue;",
+        tab + tab + tab + tab + "continue;", //19
         tab + tab + tab + "}",
         tab + tab + "}",
         tab + tab + "if(nodeVisited[node1] = false && nodeVisited[node2] = false) {",
-        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "nodeVisited[node1] = true;", //23
         tab + tab + tab + "nodeVisited[node2] = true;",
         tab + tab + tab + "edgeSelected[edgeId] = true;",
         tab + tab + tab + "NodesConnected.Connect(node1, node2);",
         tab + tab + tab + "Include edge and both nodes in the tree.",
         tab + tab + "}",
         tab + tab + "else if(nodeVisited[node1] = false && nodeVisited[node2] = true) {",
-        tab + tab + tab + "nodeVisited[node1] = true;",
+        tab + tab + tab + "nodeVisited[node1] = true;", //30
         tab + tab + tab + "edgeSelected[edgeId] = true;",
         tab + tab + tab + "NodesConnected.Connect(node1, node2);",
         tab + tab + tab + "Include edge and node 1 in the tree.",
@@ -755,6 +922,139 @@ export const map = {
         tab + "performFloodfill(board, i, j+1, n);",
         tab + "performFloodfill(board, i, j-1, n);",
         tab + "return board;",
+        "}"
+    ],
+
+    AVL: [
+        "avlMain() {",
+        tab + "var root = null;",
+        tab + "var val = Math.floor(Math.random() * 100);",
+        tab + "while(i < MAX_NODE) {", //3
+        tab + tab + "val = Math.floor(Math.random() * 100);",
+        tab + tab + "if(!root) {", //5
+        tab + tab + tab + "root = new Node(val);",
+        tab + tab + tab + "i++;",
+        tab + tab + "}",
+        tab + tab + "else {", //9
+        tab + tab + tab + "insertValue(root, val);",
+        tab + tab + "}",
+        tab + "}",
+        "}",
+        "",
+        "insertValue(node, val) {", //15
+        tab + "if(node == null) {",
+        tab + tab + "node = new Node(val);",
+        tab + tab + "return node;",
+        tab + "}",
+        tab + "else if(val < node.value) {", //20
+        tab + tab + "node.left = insertValue(node.left, val);",
+        tab + "}",
+        tab + "else if(val > node.value) {", //23
+        tab + tab + "node.right = insertValue(node.right, val);",
+        tab + "}",
+        tab + "else {", //26
+        tab + tab + "return node;",
+        tab + "}",
+        tab + "var balance = node.height;", //29
+        tab + "if(balance > 1) {",
+        tab + tab + "if(val < node.left.value) {", //31
+        tab + tab + tab + "rotateRight(node);",
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + tab + "else if(val > node.left.value) {", //35
+        tab + tab + tab + "rotateLeft(node);",
+        tab + tab + tab + "rotateRight(node);",
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + "}",
+        tab + "if(balance < -1) {", //41
+        tab + tab + "if(val > node.right.value) {",
+        tab + tab + tab + "rotateLeft(node);", //43
+        tab + tab + tab + "return node;",
+        tab + tab + "}",
+        tab + tab + "else if(val < node.right.value) {", //46
+        tab + tab + tab + "rotateRight(node);", //47
+        tab + tab + tab + "rotateLeft(node);", //48
+        tab + tab + tab + "return node;", //49
+        tab + tab + "}",
+        tab + "}",
+        tab + "return node;", //52
+        "}",
+        "",
+        "rotateLeft(node) {", //55
+        tab + "let nodeY = node.right;",
+        tab + "let temp = nodeY.left;",
+        tab + "nodeY.left = node;",
+        tab + "node.right = temp;",
+        tab + "rotate(nodeY);", //60
+        "}",
+        "",
+        "rotateRight(node) {", //63
+        tab + "let nodeX = node.left;",
+        tab + "let temp = nodeX.right;",
+        tab + "nodeX.right = node;",
+        tab + "node.left = temp;",
+        tab + "rotate(nodeX);", //68
+        "}",
+        "",
+        "rotate(node) {", //71
+        tab + "if(node != null) {",
+        tab + tab + "if(node.left != null) {", //73
+        tab + tab + tab + "rotate(node.left);",
+        tab + tab + "}",
+        tab + tab + "if(node.right != null) {",
+        tab + tab + tab + "rotate(node.right);",
+        tab + tab + "}",
+        tab + "}",
+        tab + "return;",
+        "}"
+    ],
+
+    huffman: [
+        "huffmanCodingTree() {",
+        tab + "var root = null;",
+        tab + "var k, l;",
+        tab + "var priorityQueue;",
+        tab + "let workingQueue = priorityQueue;",
+        tab + "while(q.length > 1) {", //5
+        tab + tab + "let left = priorityQueue[0];",
+        tab + tab + "let right = priortityQueue[0];",
+        tab + tab + "if(!root) {", //8
+        tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + "}",
+        tab + tab + "if(leftChar == '-' && rightChar != '-') {", //13
+        tab + tab + tab + "The current parent has edges.",
+        tab + tab + "}",
+        tab + tab + "if(rightChar == '-' && leftChar != '-') {", //16
+        tab + tab + tab + "if(k < 20) {", //17
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "}",
+        tab + tab + tab + "if(k >= 20) {", //20
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "}",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;", //23
+        tab + tab + tab + "priorityQueue.push(workingQueue);", //24
+        tab + tab + "}",
+        tab + tab + "if(rightChar == '-' && leftChar == '-') {", //26
+        tab + tab + tab + "if(k <= 20) {", //27
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + tab + "}",
+        tab + tab + tab + "else if(k > 20) {", //32
+        tab + tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + tab + "}",
+        tab + tab + "}",
+        tab + tab + "if(rightChar != '-' && leftChar != '-' && k >= 10) {", //38
+        tab + tab + tab + "Pull next two items from priorityQueue.",
+        tab + tab + tab + "workingQueue = leftValue + rightValue;",
+        tab + tab + tab + "priorityQueue.push(workingQueue);",
+        tab + tab + "}",
+        tab + "}",
         "}"
     ]
 }

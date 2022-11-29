@@ -287,6 +287,7 @@ export default class binarysearchtree extends React.Component {
             running: false,
             root: null,
             interval: null,
+            svg: null,
         };
         
 		// Bindings
@@ -330,7 +331,7 @@ export default class binarysearchtree extends React.Component {
             .call(zoom);
 
         svgGroup.attr("visibility", "visible");
-
+        this.setState({svg: svgGroup})
         console.log("initialized");
         return svgGroup;
     }
@@ -845,7 +846,7 @@ export default class binarysearchtree extends React.Component {
         // }
 
         steps.push(new EmptyStep())
-        messages.push("Heaps insertion complete!");
+        messages.push("Max Heapify complete!");
         pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
         console.log(this.state.root);
         this.setState({steps: steps});
@@ -940,9 +941,10 @@ export default class binarysearchtree extends React.Component {
 		console.log("RESTART CLICKED");
 
 		d3.select(this.ref.current).select("svg").remove();
-        document.getElementById("message").innerHTML = "Welcome to Heaps!";
+        document.getElementById("message").innerHTML = "Welcome to Max Heapify!";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
+        this.initialize()
         i = 0;
         j = 0;
 
@@ -950,18 +952,18 @@ export default class binarysearchtree extends React.Component {
 
     componentDidMount() {
         this.initialize();   
-        this.simulate();
+        // this.simulate();
     }
 
     // Calls functions depending on the change in state
 	componentDidUpdate(prevProps, prevState) {
         // console.log(this.state.root);
 		// Part of restart -> Reinitialize with original array
-        if (this.state.root !== prevState.root && this.state.root === null) {
-			console.log("Steps changed");
-			var svg = this.initialize();
+        if (this.state.svg !== prevState.svg && this.state.svg != null) {
+			// console.log("Steps changed");
+			// var svg = this.initialize();
             this.simulate();
-			svg.attr("visibility", "visible");
+			// svg.attr("visibility", "visible");
 		}
 		else if (this.state.running !== prevState.running && this.state.running === true)
 		{
@@ -988,7 +990,7 @@ export default class binarysearchtree extends React.Component {
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
-                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Heaps!</h1></span></div>
+                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Max Heapify!</h1></span></div>
                 <table>
                     <tr>
                         <div ref={this.ref} class=""></div>
@@ -1000,7 +1002,7 @@ export default class binarysearchtree extends React.Component {
                     </tr> */}
                 </table>
                 <div class="parent-svg">
-                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen tree-vis grabbable"></div>
 					<Pseudocode algorithm={"heaps"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
                 </div>
             </div>

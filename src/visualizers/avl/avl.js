@@ -522,16 +522,16 @@ export default class avl extends React.Component {
         var root = oldroot;
 
         steps.push(new EmptyStep());
-        messages.push("Welcome to the AVL Tree Simulation.");
+        messages.push("Starting AVL Tree Insertion Simulation.");
         pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
-        steps.push(new EmptyStep());
-        messages.push("Our tree is currently empty. Let's add some nodes!");
-        pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+        // steps.push(new EmptyStep());
+        // messages.push("Our tree is currently empty. Let's add some nodes!");
+        // pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 
-        steps.push(new EmptyStep());
-        messages.push("There are less nodes than the max allowed.");
-        pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+        // steps.push(new EmptyStep());
+        // messages.push("There are less nodes than the max allowed.");
+        // pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
 
         //console.log(root);
         console.log(val);
@@ -689,12 +689,12 @@ export default class avl extends React.Component {
         var tempMod = (lev*mod) > 15 ? 15 : (lev*mod);
 
         steps.push(new EmptyStep());
-        messages.push("Is the root value null?");
+        messages.push("Is the current node value null?");
         pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
         if(node === null){
             steps.push(new EmptyStep());
-            messages.push("The root is equal to null. Inserting value!");
+            messages.push("The current node is equal to null. Inserting value!");
             pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
 
             node = new Node(this.ref, val, x, y, i, lev);
@@ -1044,7 +1044,7 @@ export default class avl extends React.Component {
     
         let isRunning = this.isRunningCheck("#insertionValue");
         if (isRunning) return;
-        document.getElementById("message").innerHTML = "Let's insert "+ parseInt(x) + " into the tree.";
+        //document.getElementById("message").innerHTML = "Let's insert "+ parseInt(x) + " into the tree.";
 
         if (!this.state.inserting) {
             root = null

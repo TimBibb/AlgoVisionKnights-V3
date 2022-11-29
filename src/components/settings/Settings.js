@@ -78,6 +78,41 @@ function skybluePalette(){
     window.location.reload(false);
 }
 
+function V2teamPalette(){
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#FFFFFF')
+  localStorage.setItem('primaryColorR', '255')
+  localStorage.setItem('primaryColorG', '255')
+  localStorage.setItem('primaryColorB', '255')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#808080')
+  localStorage.setItem('secondaryColorR', '128')
+  localStorage.setItem('secondaryColorG', '128')
+  localStorage.setItem('secondaryColorB', '128')
+  // default accentColor
+  localStorage.setItem('accentColor', '#FF335C')
+  localStorage.setItem('accentColorR', '255')
+  localStorage.setItem('accentColorG', '51')
+  localStorage.setItem('accentColorB', '92')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#1b203d')
+  localStorage.setItem('backgroundColorR', '27')
+  localStorage.setItem('backgroundColorG', '32')
+  localStorage.setItem('backgroundColorB', '61')
+  // default cardColor
+  localStorage.setItem('cardColor', '#262D4A')
+  localStorage.setItem('cardColorR', '38')
+  localStorage.setItem('cardColorG', '45')
+  localStorage.setItem('cardColorB', '74')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#1B203D')
+  localStorage.setItem('nodeColorR', '27')
+  localStorage.setItem('nodeColorG', '32')
+  localStorage.setItem('nodeColorB', '61')
+
+  window.location.reload(false);
+}
+
 class Settings extends React.Component {
     
     // primaryColor = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : "#FFFFFF"
@@ -398,6 +433,7 @@ class Settings extends React.Component {
                     <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
                     <button class="button4" onClick={defaultColors}>Default Colors</button>
                     <button class="button4" onClick={skybluePalette}>Skyblue Palette</button>
+                    <button class="button4" onClick={V2teamPalette}>V2 Team Palette</button>
                 </div>
             </div>
         </div>

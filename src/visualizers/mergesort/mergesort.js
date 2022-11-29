@@ -1198,10 +1198,9 @@ export default class MergeSort extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-		var svg = d3.select(this.ref.current).select("svg");
-        svg.remove();
-        document.getElementById("message").innerHTML = "<h1>Welcome to Merge Sort!</h1>";
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
+		d3.select(this.ref.current).select("svg").remove();
+        document.getElementById("message").innerHTML = "<h1>Welcome to Merge Sort!</h1>"; 
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	
 	}
 

@@ -692,7 +692,7 @@ function modRand(n) {
           //this.createMessage(`There is already a value at index ${index}, let's iterate through the linkedlist.`);
         }
         
-        this.createMessage(`The value at index ${index} is deleted, move to the next one.`);
+        this.createMessage(`Insertion complete.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
@@ -773,7 +773,7 @@ function modRand(n) {
       this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
       this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, this.info.evaluation));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
       this.info.operation = newOperation;
       this.info.evaluation = newEvaluation;
   

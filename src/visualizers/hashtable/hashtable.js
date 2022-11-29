@@ -511,7 +511,7 @@ export default class HashTable extends React.Component {
     this.addStep(
       new ChangeTextPositionStep(`Arrow`, this.info.allArrowPos[firstDeleted], this.info.arrowPos)
     );
-    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), `#444444`));
+    this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, localStorage.getItem('primaryColor'), localStorage.getItem('secondaryColor')));
     this.flushBuffer();
     pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
@@ -626,7 +626,7 @@ export default class HashTable extends React.Component {
 
       if (this.info.table[index] === x) {
         this.createMessage(`We have found ${x}! Mark it as deleted.`);
-        this.addStep(new ChangeEntryColorStep(`Entry${index}`, `#444444`, localStorage.getItem('primaryColor')));
+        this.addStep(new ChangeEntryColorStep(`Entry${index}`, localStorage.getItem('secondaryColor'), localStorage.getItem('primaryColor')));
         this.flushBuffer();
         pseudocodeArr.push(new HighlightLineStep(47, this.props.lines));
 

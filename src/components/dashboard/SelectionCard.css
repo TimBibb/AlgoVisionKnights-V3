@@ -72,6 +72,15 @@ span.MuiButton-label {
     margin-bottom: 1em;
 }
 
+@media (max-width: 450px) {
+	.category {
+		max-width: 95%;
+	}
+	#card-info {
+		max-height: 200px;
+	}
+}
+
 th{
 	color: var(--primaryColor) !important;
 	background-color: var(--cardColor) !important;

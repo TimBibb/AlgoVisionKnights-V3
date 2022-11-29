@@ -372,7 +372,7 @@ export default class LinearSearch extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
-		this.props.codeSteps[this.state.stepId].forward();
+		this.props.codeSteps[stepId].forward();
         console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Linear Search!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});

@@ -1136,7 +1136,7 @@ export default class binarysearchtree extends React.Component {
                     </tr> */}
                 </table>
                 <div class="parent-svg">
-                    <div id="visualizerDiv" ref={this.ref} class="center-screen"></div>
+                    <div id="visualizerDiv" ref={this.ref} class="center-screen tree-vis grabbable"></div>
 					<Pseudocode algorithm={"bststructure"} lines={this.props.lines} handleLinesChange={this.props.handleLinesChange} code={this.props.code} handleCodeChange={this.props.handleCodeChange} codeSteps={this.state.codeSteps} handleCodeStepsChange={this.handleCodeStepsChange}></Pseudocode>
                 </div>
             </div>

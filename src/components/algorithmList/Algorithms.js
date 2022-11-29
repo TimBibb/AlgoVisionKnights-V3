@@ -109,15 +109,8 @@ const algorithms = {
 			category: 'Data Structures'
 		},
 		{
-			name: 'Hash Table',
+			name: 'Hash Table Linear Probing',
 			path: 'hashtable',
-			type: 'js',
-			description: <HashTable />,
-			category: 'Data Structures'
-		},
-		{
-			name: 'Hash Table Linked List',
-			path: 'hashtablelinkedlist',
 			type: 'js',
 			description: <HashTable />,
 			category: 'Data Structures'
@@ -129,6 +122,14 @@ const algorithms = {
 			description: <HashTable />,
 			category: 'Data Structures'
 		},
+		{
+			name: 'Hash Table Linked List',
+			path: 'hashtablelinkedlist',
+			type: 'js',
+			description: <HashTable />,
+			category: 'Data Structures'
+		},
+
 		
 		// {
 		// 	name: 'Tries',
@@ -233,7 +234,7 @@ const algorithms = {
 			category: 'Trees'
 		},
 		{
-			name: 'Heaps',
+			name: 'Max Heapify',
 			path: 'heaps',
 			type: 'js',
 			description: <Heaps />,

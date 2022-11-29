@@ -1093,7 +1093,7 @@ export default class QuickSort extends React.Component {
 					<SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
 				</div>
 				<div class="center-screen">
-					<input class="sortInput"type="text" id="insertVal" placeholder="3,5,2,3,4,5"></input>
+					<input class="sortInput"type="text" id="insertVal" placeholder="ex. 3,5,2,3,4,5"></input>
 					<button class="button" id="insertBut" onClick={this.handleInsert}>Insert</button>
 				</div>
 				<div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Quick Sort!</h1></span></div>

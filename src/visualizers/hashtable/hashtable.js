@@ -712,7 +712,13 @@ export default class HashTable extends React.Component {
   }
 
   play() {
-    if (this.state.running || this.state.inputMode) return;
+    if (this.state.running || this.state.inputMode) {
+      if (this.state.inputMode) {
+        this.setState({running: true});
+        this.run();
+      }
+      return;
+    } 
     this.setState({running: true, simulationMode: true});
     this.hashTable();
     this.run();

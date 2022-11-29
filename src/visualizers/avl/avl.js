@@ -5,6 +5,7 @@ import createDefaultTree from "../../foundation/tree/CreateDefaultTree";
 import Number from "../../foundation/Number";
 import "../css/button.css";
 import "../css/messages.css";
+import "../css/input.css";
 import LabeledNode from "../../foundation/tree/LabeledNode";
 import Edge from "../../foundation/tree/Edge";
 import { MessageSharp, StoreSharp } from "@material-ui/icons";

@@ -740,6 +740,7 @@ export default class MergeSort extends React.Component {
 		this.turnOffRunning = this.turnOffRunning.bind(this);
 		this.run = this.run.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
+		this.sortCaller = this.sortCaller.bind(this);
 	}
 
 	printArray(arr, size) {
@@ -761,13 +762,22 @@ export default class MergeSort extends React.Component {
 	//SortedStep
 	//SwapStep
 
+	sortCaller(arr, ids, stepTime) {
+		let lines = this.props.lines;
+		var [array,pseudocodeArr,steps,messages] = this.sort(arr, ids, stepTime, lines);
+		this.props.handleCodeStepsChange(pseudocodeArr);
+		this.setState({steps: steps});
+		this.setState({messages: messages});
+	}
 
-	sort(arr, ids, stepTime) {
+	sort(arr, ids, stepTime,lines) {
 		let steps = [];
 		let messages = [];
 		let test = [];
 		let pseudocodeArr = [];
 		
+		// sortRecursive doesn't have lines in parameter yet
+		// componentDidUpdate needs to update sort to sortCaller
 		[steps, messages, test, pseudocodeArr] = this.sortRecursive(arr, [...ids], ids, steps, messages, stepTime, pseudocodeArr);
 		//console.log(pseudocodeArr);
 		this.setState({steps: steps, messages: messages})

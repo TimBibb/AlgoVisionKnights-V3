@@ -280,6 +280,7 @@ function modRand(n) {
   
       this.state = {
         rendered: false,
+        interval: null,
       };
   
       this.stepId = 0;
@@ -500,37 +501,66 @@ function modRand(n) {
     }
   
     insertion(x) {
-      let pseudocodeArr = [];
+      var pseudocodeArr = [];
+
+      this.createMessage(`Beginning the insertion process!`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+
+      this.createMessage(`Checking if the hash table is already full.`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(1, this.props.lines));
+
       //console.log("made it to insertion");
       if (this.info.size === this.info.tableLen) {
         this.createMessage(`The hash table is currently full.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(2, this.props.lines));
+
         return pseudocodeArr;
       }
   
       //console.log("made it past size check");
   
       // Get hash value
+      this.createMessage(`Calculating hash value.`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+
       let hash = x % this.info.tableLen;
       let firstDeleted = -1;
       
-      if (hash < 0) hash += this.info.tableLen;
+      this.createMessage(`Is the hash value less than 0?`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(5, this.props.lines));
+
+      if (hash < 0) {
+        this.createMessage(`Current hash value is less than 0`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+
+        hash += this.info.tableLen;
+      }
   
       let newOperation = `Insert: ${x}`;
       this.createMessage(`We will now insert ${x} into the hash table.`);
       this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
       this.addStep(new ChangeTextStep(`Evaluation`, "", this.info.evaluation));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
       this.info.operation = newOperation;
   
       let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
       this.createMessage(`Using the hash function we get that the hash of ${x} is ${hash}.`);
       this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, ""));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
       this.info.evaluation = newEvaluation;
   
       this.info.size = this.info.size + 1;
@@ -540,9 +570,19 @@ function modRand(n) {
       );
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
   
       for (let i = 0; i < this.info.tableLen; i++) {
+        this.createMessage(`Insertion iteration ${(i+1)}.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(8, this.props.lines));
+
+        this.createMessage(`Setting index.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
+
         let index = (hash + i) % this.info.tableLen;
         let newArrowPos = {
           x: this.info.allArrowPos[index].x,
@@ -552,7 +592,7 @@ function modRand(n) {
         this.createMessage(`Check the index ${index}.`);
         this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(3, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
         this.info.arrowPos = newArrowPos;
   
         if (this.info.deleted[index] && firstDeleted === -1) {
@@ -561,65 +601,108 @@ function modRand(n) {
           );
           this.addStep(new EmptyStep());
           this.flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(4, this.props.lines));
+          pseudocodeArr.push(new HighlightLineStep(9, this.props.lines));
           firstDeleted = index;
           continue;
         }
   
         let currentNode = this.info.table[index];
+
+        this.createMessage(`Is our current node empty?`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
+
         if (currentNode === null) {
             // No node at the head, so make one and set it to the head
             let newNode = new Node(x, index + "_" + 0, this.ref, 0, index);
             this.createMessage(`At index ` + index + `, the head is null so we will create our first node.`);
             this.addStep(new ShowNodeStep(newNode.id));
-            //this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(12, this.props.lines));
+            this.flushBuffer();
             this.info.table[index] = new DataNode(x,"g"+index+"_"+0);
         } else {
           this.createMessage(`Let's place our value at the end of the linked list.`);
+          this.addStep(new EmptyStep());
+          this.flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(14, this.props.lines));
           let xCounter = 1;
+
+          this.createMessage(`Is our value already in the list?`);
+          this.addStep(new EmptyStep());
+          this.flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(15, this.props.lines));
           if (currentNode.data === x) {
             this.createMessage(`Since ${x} already exists, we will skip to prevent duplicates.`);
             this.addStep(new EmptyStep());
             this.flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+            pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
             return pseudocodeArr;
           }
           while (currentNode.next != null) {
+
+            this.createMessage(`The next node is not empty.`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
+
+            this.createMessage(`Does the next node already contain our value?`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(19, this.props.lines));
+
                 if (currentNode.next.data === x) {
                   //console.log(x);
                   this.createMessage(`Since ${x} already exists, we will skip to prevent duplicates.`);
                   this.addStep(new EmptyStep());
                   this.flushBuffer();
-                  pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+                  pseudocodeArr.push(new HighlightLineStep(20, this.props.lines));
                   return pseudocodeArr;
                 }
                 // Finding the tail node
+                this.createMessage(`Updating our current node.`);
+                this.addStep(new EmptyStep());
+                this.flushBuffer();
+                pseudocodeArr.push(new HighlightLineStep(22, this.props.lines));
+
                 currentNode = currentNode.next;
                 xCounter++;
             }
             // set our tail to the new node
+            this.createMessage(`Setting tail to the new node.`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
+
             currentNode.next = new DataNode(x,"g"+index+"_"+xCounter);
             let newNode = new Node(x, index+"_"+xCounter, this.ref, xCounter, index);
+            this.createMessage(`Setting tail to the new node.`);
             this.addStep(new ShowNodeStep(newNode.id))
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(24, this.props.lines));
         }  
         
         if (this.info.deleted[index]) {
           this.createMessage(`The value at index ${index} is deleted, move to the next one.`);
+          this.addStep(new EmptyStep());
+          this.flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
         } 
         else {
           //this.createMessage(`There is already a value at index ${index}, let's iterate through the linkedlist.`);
         }
         
+        this.createMessage(`The value at index ${index} is deleted, move to the next one.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(11, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
         return pseudocodeArr;
       }
   
       this.createMessage(`Although this entry is empty, we already found a deleted entry.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
   
       this.createMessage(`Replace the first deleted entry we found.`);
       this.addStep(
@@ -627,7 +710,7 @@ function modRand(n) {
       );
       this.addStep(new ChangeEntryColorStep(`Entry${firstDeleted}`, `white`, `#444444`));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(16, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
   
       let newText = `${x}`;
   
@@ -643,31 +726,75 @@ function modRand(n) {
     }
   
     deletion(x) {
-      var pseudocodeArr = [];
   
+      var pseudocodeArr = [];
+
+      this.createMessage(`Beginning the deletion process!`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
+
+      this.createMessage(`Checking if the hash table is empty.`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
+
       if (this.info.size === 0) {
         this.createMessage(`There are no entries, so there is nothing to remove.`);
         this.addStep(new EmptyStep());
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(30, this.props.lines));
         return pseudocodeArr;
       }
   
+      this.createMessage(`Calculating hash value.`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
       let hash = x % this.info.tableLen;
-      if (hash < 0) hash += this.info.tableLen;
+
+      this.createMessage(`Is the hash value less than 0?`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(33, this.props.lines));
+
+      if (hash < 0) {
+        this.createMessage(`Current hash value is less than 0`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(34, this.props.lines));
+
+        hash += this.info.tableLen;
+      }
+
       let newOperation = `Delete: ${x}`;
       let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
       this.createMessage(`We will now delete ${x} from the hash table.`);
       this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
       this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, this.info.evaluation));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(17, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(32, this.props.lines));
       this.info.operation = newOperation;
       this.info.evaluation = newEvaluation;
   
       this.info.size = this.info.size - 1;
   
+      this.createMessage(`Beginning linear iteration for deletion`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
+
       for (let i = 0; i < this.info.tableLen; i++) {
+        this.createMessage(`Insertion iteration ${(i+1)}.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
+
+        this.createMessage(`Setting index.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(37, this.props.lines));
+
         let index = (hash + i) % this.info.tableLen;
   
         let newArrowPos = {
@@ -678,48 +805,80 @@ function modRand(n) {
         this.createMessage(`Check the index ${index}.`);
         this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(18, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(37, this.props.lines));
         this.info.arrowPos = newArrowPos;
   
         let currentNode = this.info.table[index];
+
+        this.createMessage(`Is our current node empty?`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(39, this.props.lines));
+
         if (currentNode === null) {
           this.createMessage(`At index ` + index + `, the head is null so we do not have a linked list here. Not found`);
           this.addStep(new EmptyStep());
+          this.flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(40, this.props.lines));
           return pseudocodeArr;
         }
+
+        this.createMessage(`Are we already at the location of our desired deletion?`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(42, this.props.lines));
+
         if (currentNode.data === x) {
           this.createMessage(`We have found ${x}! Mark it as deleted.`);
           let id = "g" + index + "_" + 0;
           this.addStep(new RemoveNodeStep(id,currentNode));
-          
-          currentNode = currentNode.next;
-          
           this.flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
+          pseudocodeArr.push(new HighlightLineStep(43, this.props.lines));  
+
+          currentNode = currentNode.next;
+        
           return pseudocodeArr;
         }
         else {
+          this.createMessage(`We are not at the desired location. Is the next node empty?`);
+          this.addStep(new EmptyStep());
+          this.flushBuffer();
+          pseudocodeArr.push(new HighlightLineStep(45, this.props.lines));
           let xCounter = 1;
           while (currentNode.next !== null) {
+            this.createMessage(`Checking next node.`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(46, this.props.lines));
+
+            this.createMessage(`Does the next node contain our desired deletion?`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(47, this.props.lines));
             if (currentNode.next.data === x) {
               console.log("FOUND, DELETE");
               this.createMessage(`We have found ${x}! Mark it as deleted.`);
               let id = "g" + index + "_" + xCounter;
               this.addStep(new RemoveNodeStep(id,currentNode.next));
-              
+              this.flushBuffer();
+              pseudocodeArr.push(new HighlightLineStep(48, this.props.lines));
+
               currentNode.next = currentNode.next.next;
               
-              this.flushBuffer();
-              pseudocodeArr.push(new HighlightLineStep(21, this.props.lines));
               return pseudocodeArr;
             }
+
+            this.createMessage(`Adjust current node.`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(50, this.props.lines));
             currentNode = currentNode.next;
             xCounter++;
           }
           this.createMessage(`No entry matching ${x} was found. There is nothing to delete.`);
           this.addStep(new EmptyStep());
           this.flushBuffer();
-          pseudocodeArr.push(new HighlightLineStep(26, this.props.lines));
+          pseudocodeArr.push(new HighlightLineStep(52, this.props.lines));
           this.setState({ message: this.messages, steps: this.steps });
           return pseudocodeArr;
         }
@@ -727,12 +886,34 @@ function modRand(n) {
     }
   
     search(x) {
-      var pseudocodeArr = [];
   
+      var pseudocodeArr = [];
+
+      this.createMessage(`Beginning the searching process!`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(56, this.props.lines));
+
+      this.createMessage(`Calculating hash value.`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(57, this.props.lines));
+
       let hash = x % this.info.tableLen;
       
+      this.createMessage(`Is the hash value less than 0?`);
+      this.addStep(new EmptyStep());
+      this.flushBuffer();
+      pseudocodeArr.push(new HighlightLineStep(58, this.props.lines));
 
-      if (hash < 0) hash += this.info.tableLen;
+      if (hash < 0) {
+        this.createMessage(`Current hash value is less than 0`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(59, this.props.lines));
+
+        hash += this.info.tableLen;
+      }
   
       let newOperation = `Search: ${x}`;
       let newEvaluation = `h(${x}) = ${x} % ${this.info.tableLen} = ${hash}`;
@@ -740,11 +921,21 @@ function modRand(n) {
       this.addStep(new ChangeTextStep(`Operation`, newOperation, this.info.operation));
       this.addStep(new ChangeTextStep(`Evaluation`, newEvaluation, this.info.evaluation));
       this.flushBuffer();
-      pseudocodeArr.push(new HighlightLineStep(27, this.props.lines));
+      pseudocodeArr.push(new HighlightLineStep(61, this.props.lines));
       this.info.operation = newOperation;
       this.info.evaluation = newEvaluation;
   
       for(let i = 0; i < this.info.tableLen; i++) {
+        this.createMessage(`Searching iteration ${(i+1)}.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(61, this.props.lines));
+
+        this.createMessage(`Setting index.`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(62, this.props.lines));
+
         let index = (hash + i) % this.info.tableLen;
         let newArrowPos = {
           x: this.info.allArrowPos[index].x,
@@ -753,43 +944,86 @@ function modRand(n) {
         this.createMessage(`Check the index ${index}.`);
         this.addStep(new ChangeTextPositionStep(`Arrow`, newArrowPos, this.info.arrowPos));
         this.flushBuffer();
-        pseudocodeArr.push(new HighlightLineStep(28, this.props.lines));
+        pseudocodeArr.push(new HighlightLineStep(62, this.props.lines));
         this.info.arrowPos = newArrowPos;
       
         let currentNode = this.info.table[index];
+
+        this.createMessage(`Is our current node empty?`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(63, this.props.lines));
+
         if (currentNode === null) {
             this.createMessage(`At index ` + index + `, the head is null so we do not have a linked list here. Not found`);
             this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(64, this.props.lines));
             return pseudocodeArr;
         }
+
+        this.createMessage(`Are we already at the location of our desired value?`);
+        this.addStep(new EmptyStep());
+        this.flushBuffer();
+        pseudocodeArr.push(new HighlightLineStep(66, this.props.lines));
+
         if (currentNode.data === x) {
               this.createMessage(`Found ${x}!`);
               let id = "g" + index + "_" + 0;
               this.addStep(new HighlightNodeStep(id));
               this.flushBuffer();
-              pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+              pseudocodeArr.push(new HighlightLineStep(67, this.props.lines));
+
+              this.createMessage(`Found ${x}!`);
               this.addStep(new DeHighlightNodeStep(id));
+              this.flushBuffer();
+              pseudocodeArr.push(new HighlightLineStep(67, this.props.lines));
               return pseudocodeArr;
         }
         else {
+            this.createMessage(`We are not at the desired location. Is the next node empty?`);
+            this.addStep(new EmptyStep());
+            this.flushBuffer();
+            pseudocodeArr.push(new HighlightLineStep(69, this.props.lines));
             let xCounter = 1;
             while (currentNode.next !== null) {
+
+              this.createMessage(`Checking next node.`);
+              this.addStep(new EmptyStep());
+              this.flushBuffer();
+              pseudocodeArr.push(new HighlightLineStep(70, this.props.lines));
+
+              this.createMessage(`Does the next node contain our desired value?`);
+              this.addStep(new EmptyStep());
+              this.flushBuffer();
+              pseudocodeArr.push(new HighlightLineStep(71, this.props.lines));
+
               if (currentNode.next.data === x) {
                 this.createMessage(`Found ${x}!`);
                 let id = "g" + index + "_" + xCounter;
                 this.addStep(new HighlightNodeStep(id));
                 this.flushBuffer();
-                pseudocodeArr.push(new HighlightLineStep(6, this.props.lines));
+                pseudocodeArr.push(new HighlightLineStep(72, this.props.lines));
+
+                this.createMessage(`Found ${x}!`);
                 this.addStep(new DeHighlightNodeStep(id));
+                this.flushBuffer();
+                pseudocodeArr.push(new HighlightLineStep(72, this.props.lines));
                 return pseudocodeArr;
               }
+
+              this.createMessage(`Adjust current node.`);
+              this.addStep(new EmptyStep());
+              this.flushBuffer();
+              pseudocodeArr.push(new HighlightLineStep(74, this.props.lines));
+
               currentNode = currentNode.next;
               xCounter++;
             }
             this.createMessage(`No entry matching ${x} was found.`);
             this.addStep(new EmptyStep());
             this.flushBuffer();
-            pseudocodeArr.push(new HighlightLineStep(36, this.props.lines));
+            pseudocodeArr.push(new HighlightLineStep(76, this.props.lines));
             this.setState({ message: this.messages, steps: this.steps });
             return pseudocodeArr;
         }  
@@ -908,6 +1142,7 @@ function modRand(n) {
     }
   
     run() {
+      clearInterval(this.state.interval)
       if (!this.running) return;
       if (this.stepId === this.steps.length) {
         this.running = false;
@@ -927,7 +1162,9 @@ function modRand(n) {
       for (const step of this.steps[this.stepId]) step.forward(svg);
       this.props.codeSteps[this.stepId].forward();
       this.stepId = this.stepId + 1;
-      d3.timeout(this.run, this.props.waitTime);
+      // d3.timeout(this.run, this.props.waitTime);
+      this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
     }
   
     play() {
@@ -1002,6 +1239,10 @@ function modRand(n) {
 
     refreshPage() {
       window.location.reload(false);
+    }
+    componentWillUnmount() {
+      console.log("component unmounted")
+      clearInterval(this.state.interval);
     }
     
     render() {

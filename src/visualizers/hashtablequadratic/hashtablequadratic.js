@@ -94,6 +94,7 @@ export default class HashTable extends React.Component {
 
     this.state = {
       rendered: false,
+      interval: null,
     };
 
     this.stepId = 0;
@@ -686,6 +687,7 @@ export default class HashTable extends React.Component {
   }
 
   run() {
+    clearInterval(this.state.interval)
     if (!this.running) return;
     if (this.stepId === this.steps.length) {
       this.running = false;
@@ -700,7 +702,9 @@ export default class HashTable extends React.Component {
     for (const step of this.steps[this.stepId]) step.forward(svg);
 
     this.stepId = this.stepId + 1;
-    d3.timeout(this.run, this.waitTime);
+    // d3.timeout(this.run, this.waitTime);
+    this.setState({interval: setInterval(this.run, this.props.waitTime)})
+
   }
 
   play() {
@@ -805,6 +809,11 @@ export default class HashTable extends React.Component {
   //   this.search(x);
   //   this.play();
   // }
+
+  componentWillUnmount() {
+    console.log("component unmounted")
+    clearInterval(this.state.interval);
+  }
 
   render() {
     return (

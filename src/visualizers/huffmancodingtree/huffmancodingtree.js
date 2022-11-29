@@ -462,9 +462,11 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("We chose a random word: \"" + ranWords + "\"");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         steps.push(new EmptyStep())
         messages.push("We chose a random word: \"" + ranWords + "\"");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         console.log("this is a random string: " + ranWords + " length: " + ranWords.length);
 
@@ -494,8 +496,10 @@ export default class huffmancodingtree extends React.Component {
 
         steps.push(new EmptyStep())
         messages.push("Letter frequency for this word: [" + arr.node + "]");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
         steps.push(new EmptyStep())
         messages.push("Letter frequency for this word: [" + arr.node + "]");
+        pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
 
         MAX_NODE = (arr.letters.length * 2) - 1;
         console.log(MAX_NODE)

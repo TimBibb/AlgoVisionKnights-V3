@@ -948,6 +948,7 @@ export default class huffmancodingtree extends React.Component {
         console.log("BACKWARDS CLICKED");
         if(this.state.running) return;
         if(this.state.stepId === this.state.steps.length) return;
+        if (this.state.stepId - 1 < 0) return;
 
         let stepId = this.state.stepId - 1;
 

@@ -496,7 +496,7 @@ export default class HashTable extends React.Component {
         pseudocodeArr.push(new HighlightLineStep(29, this.props.lines));
       }
 
-      this.createMessage(`Iteration complete.`);
+      this.createMessage(`Insertion complete.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(0, this.props.lines));
@@ -588,7 +588,7 @@ export default class HashTable extends React.Component {
     pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));
 
     for (let i = 0; i < this.info.tableLen; i++) {
-      this.createMessage(`Insertion iteration ${(i+1)}.`);
+      this.createMessage(`Deletion iteration ${(i+1)}.`);
       this.addStep(new EmptyStep());
       this.flushBuffer();
       pseudocodeArr.push(new HighlightLineStep(41, this.props.lines));

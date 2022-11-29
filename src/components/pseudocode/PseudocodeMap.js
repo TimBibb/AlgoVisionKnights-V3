@@ -425,36 +425,81 @@ export const map = {
     ],
 
     hashtablequadratic: [
-        "insertion(x) {",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index] && firstDeleted == -1)",
-        tab + tab + tab + "Found First Deleted Index!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Skip to Prevent Reinsertion!",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "Insert x;",
-        tab + "}", //8
-        "}",
-        "deletion(x) {",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Value Already Deleted!",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Value Found! Marked as Deleted",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //17
-        "}",
-        "search(x) {",
-        tab + "for(i = 0; i < tableLength; i++){",
-        tab + tab + "if(deleted[index])",
-        tab + tab + tab + "Ignore",
-        tab + tab + "if(table[index] == x)",
-        tab + tab + tab + "Value Found!",
-        tab + tab + "if(table[index] == null)",
-        tab + tab + tab + "break;",
-        tab + "}", //26
-        "}"
+        "insertion(num) {", //0
+        tab + "if (size == tableLength) {", //1
+        tab + tab + "return;", //2
+        tab + "}", //3
+        tab + "let hash = num % tableLen;", //4
+        tab + "if (hash < 0) {", //5
+        tab + tab + "hash += tableLen;", //6 
+        tab + "}", //7
+        tab + "for(i = 0; i < tableLength; i++) {", //8
+        tab + tab + "let temp_i = i * i;", //9
+        tab + tab + "let index = (hash + temp_i) % tableLen;", //10
+        tab + tab + "if (info.deleted[index] && firstDeleted == -1) {", //11
+        tab + tab + tab + "firstDeleted = index;", //12
+        tab + tab + tab + "continue;", //13
+        tab + tab + "}", //14
+        tab + tab + "if (info.table[index] == num) {", //15
+        tab + tab + tab + "return;", //16
+        tab + tab + "}", //17
+        tab + tab + "if (info.table[index] == null) {", //18
+        tab + tab + tab + "if(firstDeleted == -1) {", //19
+        tab + tab + tab + tab + "info.table[index] = num;", //20 
+        tab + tab + tab + "}", //21
+        tab + tab + tab + "else {", //22
+        tab + tab + tab + tab + "break;", //23 
+        tab + tab + tab + "}", //24
+        tab + tab + "}", //25
+        tab + tab + "if (info.deleted[index]) {", //26
+        tab + tab + tab + "Already Deleted! Move Forward", //27 
+        tab + tab + "}", //28
+        tab + tab + "else {", //29
+        tab + tab + tab + "Occupied! Move Forward", //30
+        tab + tab + "}", //31
+        tab + "}", //32
+        "}", //33
+        "deletion(num) {", //34
+        tab + "if (size == 0) {", //35
+        tab + tab + "return;", //36
+        tab + "}", //37
+        tab + "let hash = num % tableLen;", //38
+        tab + "if (hash < 0) {", //39
+        tab + tab + "hash += tableLen;", //40 
+        tab + "}", //41
+        tab + "for(i = 0; i < tableLength; i++){", //42
+        tab + tab + "let temp_i = i * i;", //43
+        tab + tab + "let index = (hash + temp_i) % tableLen;", //44
+        tab + tab + "if(deleted[index]) {", //45
+        tab + tab + tab + "continue;", //46
+        tab + tab + "}", //47
+        tab + tab + "if(table[index] == num) {", //48
+        tab + tab + tab + "info.deleted[index] = true;", //49
+        tab + tab + "}", //50
+        tab + tab + "if(table[index] == null) {", //51
+        tab + tab + tab + "break;", //52
+        tab + tab + "}", //53
+        tab + "}", //54
+        "}", //55
+        "search(num) {", //56
+        tab + "let hash = num % tableLen;", //57
+        tab + "if (hash < 0) {", //58
+        tab + tab + "hash += tableLen;", //59
+        tab + "}", //60
+        tab + "for(i = 0; i < tableLength; i++){", //61
+        tab + tab + "let temp_i = i * i;", //62
+        tab + tab + "let index = (hash + i) % tableLen;", //63
+        tab + tab + "if(deleted[index]) {", //64
+        tab + tab + tab + "continue;", //65
+        tab + tab + "}", //66
+        tab + tab + "if(table[index] == num) {", //67
+        tab + tab + tab + "return;", //68
+        tab + tab + "}", //69
+        tab + tab + "if(table[index] == null) {", //70
+        tab + tab + tab + "break;", //71
+        tab + tab + "}", //72
+        tab + "}",  //73
+        "}" //74
     ],
 
     hashtablelinkedlist: [

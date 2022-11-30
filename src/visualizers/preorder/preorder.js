@@ -399,7 +399,7 @@ export default class binarysearchtree extends React.Component {
         [steps, messages, list, pseudocodeArr] = this.preorderRecursive(root, steps, messages, list, pseudocodeArr);
         messages.push("Finished preorder! our final list is ", list)
         this.setState({steps: steps, messages: messages})
-        this.props.handleCodeStepsChange(pseudocodeArr);
+        this.props.handleCodeStepsChange(pseudocodeArr); 
     }
 
     preorderRecursive(root, steps, messages, list, pseudocodeArr) {

@@ -1135,6 +1135,7 @@ function modRand(n) {
       document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Hash Table!</h1>" : this.messages[stepId - 1];
   
       for (const step of this.steps[stepId]) step.backward(svg);
+      this.props.codeSteps[stepId].forward();
   
       this.stepId = stepId;
   

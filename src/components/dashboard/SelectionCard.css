@@ -153,13 +153,13 @@ th{
 
 .selected {
     display: inline-block !important;
-    color: var(--accentColor) !important;
+    color: var(--cardColor) !important;
     text-align: center;
     /* padding: 14px !important; */
     text-decoration: none !important;
     text-transform: capitalize !important;
     /* border: 1px solid #FFC904 !important; */
-    background-color: #363847 !important;
+    background-color: var(--accentColor) !important;
     margin: 0.5em !important;
 }
 

@@ -912,7 +912,7 @@ export default class QuickSort extends React.Component {
 			this.state.steps[stepId] instanceof UnpartitionStep || this.state.steps[stepId] instanceof SwapStep) {
 				console.log(this.state.steps[stepId]);
 				this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
-				this.props.codeSteps[this.state.stepId].forward();
+				this.props.codeSteps[stepId].forward();
 		}
 		else { // Or make a new svg and run steps up until step before
 			d3.select(this.ref.current).select("svg").remove();
@@ -964,17 +964,9 @@ export default class QuickSort extends React.Component {
 
 	restart() {
 		console.log("RESTART CLICKED");
-
-		var svg = d3.select(this.ref.current).select("svg");
-		//console.log(svg);
-
-        svg.remove();
-		//console.log("Removed og");
-
-        document.getElementById("message").innerHTML = "<h1>Welcome to Quick Sort!</h1>";
-
-		//console.log("Reset state");
-		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0, restartFlag: true});
+		d3.select(this.ref.current).select("svg").remove();
+        document.getElementById("message").innerHTML = "<h1>Welcome to Quicksort!</h1>"; 
+		this.setState({running: false, steps: [], ids: [], messages: [], stepId: 0});
 	}
 
 	componentDidMount() {
@@ -1035,7 +1027,7 @@ export default class QuickSort extends React.Component {
 	}
 	
 	handleInsert() {
-		if (this.state.running || this.state.inputMode || this.state.restartFlag) {
+		if (this.state.running || this.state.inputMode) {
 			return;
 		}
 		let input = document.getElementById("insertVal").value;

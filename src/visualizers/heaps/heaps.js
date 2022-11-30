@@ -872,12 +872,13 @@ export default class binarysearchtree extends React.Component {
     backward(){
         console.log("BACKWARDS CLICKED");
         if(this.state.running) return;
-        if(this.state.stepId === this.state.steps.length) return;
+        if (this.state.stepId - 1 < 0) return;
 
         let stepId = this.state.stepId - 1;
 
-        this.state.steps[this.state.stepId].backward(d3.select(this.ref.current).select("svg"));
-        document.getElementById("message").innerHTML = "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
+        this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+        this.props.codeSteps[stepId].forward();
+        document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "Welcome to Max Heapify!" : this.state.messages[stepId - 1];
 
 		this.setState({stepId: stepId});
 

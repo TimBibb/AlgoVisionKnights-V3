@@ -519,6 +519,7 @@ export default class singlylinkedlist extends React.Component {
 		if (this.state.stepId - 1 < 0) return;
 		let stepId = this.state.stepId - 1;
 		this.state.stepsArr[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[stepId].forward();
 		//console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Singly Linked List!</h1>" : this.state.messagesArr[stepId - 1];
 		this.setState({ stepId: stepId });
@@ -551,9 +552,16 @@ export default class singlylinkedlist extends React.Component {
 	}
 
 	play() {
-		if (this.state.flag) {
+		if (this.state.running || this.state.inputMode) {
+			if (this.state.inputMode) {
+				this.setState({running: true});
+				this.run();
+			  }
 			return;
 		}
+		//if (this.state.flag) {
+		//	return;
+		//}
 		console.log("Play clicked");
 		if (this.state.running || this.state.inputMode) return;
 		this.setState({flag : true});
@@ -564,7 +572,7 @@ export default class singlylinkedlist extends React.Component {
 
 	pause() {
 		console.log("PAUSE CLICKED");
-		this.setState({ running: false });
+		this.setState({ running: false, flag: false });
 	}
 
 	restart() {

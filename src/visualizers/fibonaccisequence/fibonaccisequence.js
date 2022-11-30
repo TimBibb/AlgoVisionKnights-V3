@@ -750,6 +750,7 @@ export default class FibonacciSequence extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		for (const step of this.state.steps[stepId]) step.backward();
+    this.props.codeSteps[stepId].forward();
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Fibonacci Sequence!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
 		d3.timeout(this.turnOffRunning, this.props.waitTime);

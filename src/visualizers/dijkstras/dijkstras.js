@@ -257,6 +257,7 @@ export default class Dijkstras extends React.Component {
 					pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
 
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
+					steps.push(new EmptyStep());
 					pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
 
 				}
@@ -291,6 +292,7 @@ export default class Dijkstras extends React.Component {
 					pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
 
 					messages.push(this.newDistanceMessage(v, graph.distances[v]));
+					steps.push(new EmptyStep());
 					pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
 				}
 				else
@@ -308,6 +310,7 @@ export default class Dijkstras extends React.Component {
 					pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 
 					messages.push(this.sameDistanceMessage(v, head[0]));
+					steps.push(new EmptyStep());
 					pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 				}
 
@@ -454,6 +457,7 @@ export default class Dijkstras extends React.Component {
 
 		console.log(this.state.steps[stepId]);
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
+		this.props.codeSteps[stepId].forward();
 		
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Dijkstra's!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});

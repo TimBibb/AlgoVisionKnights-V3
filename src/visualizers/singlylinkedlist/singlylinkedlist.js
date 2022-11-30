@@ -551,9 +551,16 @@ export default class singlylinkedlist extends React.Component {
 	}
 
 	play() {
-		if (this.state.flag) {
+		if (this.state.running || this.state.inputMode) {
+			if (this.state.inputMode) {
+				this.setState({running: true});
+				this.run();
+			  }
 			return;
 		}
+		//if (this.state.flag) {
+		//	return;
+		//}
 		console.log("Play clicked");
 		if (this.state.running || this.state.inputMode) return;
 		this.setState({flag : true});
@@ -564,7 +571,7 @@ export default class singlylinkedlist extends React.Component {
 
 	pause() {
 		console.log("PAUSE CLICKED");
-		this.setState({ running: false });
+		this.setState({ running: false, flag: false });
 	}
 
 	restart() {

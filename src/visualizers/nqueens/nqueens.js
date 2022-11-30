@@ -370,9 +370,9 @@ export default class Queens extends React.Component {
     if (this.state.stepId - 1 < 0) return;
 
     var stepId = this.state.stepId - 1;
-    document.getElementById("message").innerHTML = this.state.messages[stepId - 1];
+    document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to nQueens!</h1>" : this.state.messages[stepId - 1];
     this.state.steps[stepId].backward();
-    this.props.codeSteps[this.state.stepId].forward();
+    this.props.codeSteps[stepId].forward();
 
     console.log(this.state.steps[stepId]);
     this.setState({stepId: stepId});

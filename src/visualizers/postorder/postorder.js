@@ -442,6 +442,7 @@ export default class binarysearchtree extends React.Component {
 		var stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg g"));
+        this.props.codeSteps[stepId].forward();
 		console.log(this.state.steps[stepId]);
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Postorder Sort!</h1>" : "<h1>" + this.state.messages[this.state.stepId] + "</h1>";
 		this.setState({stepId: stepId});

@@ -549,6 +549,7 @@ export default class BreadthFirstSearch extends React.Component {
     var stepId = this.state.stepId - 1;
     document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Breadth First Search!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward(svg);
+    this.props.codeSteps[stepId].forward();
   
     this.setState({stepId: stepId});
     d3.timeout(this.turnOffRunning, this.props.waitTime);

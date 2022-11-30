@@ -9,73 +9,73 @@ function NavigateToDashboard(){
 }
 
 function defaultColors(){
-    // default primaryColor
-    localStorage.setItem('primaryColor', '#FFFFFF')
-    localStorage.setItem('primaryColorR', '255')
-    localStorage.setItem('primaryColorG', '255')
-    localStorage.setItem('primaryColorB', '255')
-    // default secondaryColor
-    localStorage.setItem('secondaryColor', '#5D6365')
-    localStorage.setItem('secondaryColorR', '93')
-    localStorage.setItem('secondaryColorG', '96')
-    localStorage.setItem('secondaryColorB', '101')
-    // default accentColor
-    localStorage.setItem('accentColor', '#FFC904')
-    localStorage.setItem('accentColorR', '255')
-    localStorage.setItem('accentColorG', '201')
-    localStorage.setItem('accentColorB', '4')
-    // default backgroundColor
-    localStorage.setItem('backgroundColor', '#000000')
-    localStorage.setItem('backgroundColorR', '0')
-    localStorage.setItem('backgroundColorG', '0')
-    localStorage.setItem('backgroundColorB', '0')
-    // default cardColor
-    localStorage.setItem('cardColor', '#181818')
-    localStorage.setItem('cardColorR', '24')
-    localStorage.setItem('cardColorG', '24')
-    localStorage.setItem('cardColorB', '24')
-    // default nodeColor
-    localStorage.setItem('nodeColor', '#1B203D')
-    localStorage.setItem('nodeColorR', '27')
-    localStorage.setItem('nodeColorG', '32')
-    localStorage.setItem('nodeColorB', '61')
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#FFFFFF')
+  localStorage.setItem('primaryColorR', '255')
+  localStorage.setItem('primaryColorG', '255')
+  localStorage.setItem('primaryColorB', '255')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#5D6365')
+  localStorage.setItem('secondaryColorR', '93')
+  localStorage.setItem('secondaryColorG', '96')
+  localStorage.setItem('secondaryColorB', '101')
+  // default accentColor
+  localStorage.setItem('accentColor', '#FFC904')
+  localStorage.setItem('accentColorR', '255')
+  localStorage.setItem('accentColorG', '201')
+  localStorage.setItem('accentColorB', '4')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#000000')
+  localStorage.setItem('backgroundColorR', '0')
+  localStorage.setItem('backgroundColorG', '0')
+  localStorage.setItem('backgroundColorB', '0')
+  // default cardColor
+  localStorage.setItem('cardColor', '#181818')
+  localStorage.setItem('cardColorR', '24')
+  localStorage.setItem('cardColorG', '24')
+  localStorage.setItem('cardColorB', '24')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#1B203D')
+  localStorage.setItem('nodeColorR', '27')
+  localStorage.setItem('nodeColorG', '32')
+  localStorage.setItem('nodeColorB', '61')
 
-    window.location.reload(false);
+  window.location.reload(false);
 }
 
 function skybluePalette(){
-    // default primaryColor
-    localStorage.setItem('primaryColor', '#000000')
-    localStorage.setItem('primaryColorR', '0')
-    localStorage.setItem('primaryColorG', '0')
-    localStorage.setItem('primaryColorB', '0')
-    // default secondaryColor
-    localStorage.setItem('secondaryColor', '#8B979D')
-    localStorage.setItem('secondaryColorR', '139')
-    localStorage.setItem('secondaryColorG', '151')
-    localStorage.setItem('secondaryColorB', '157')
-    // default accentColor
-    localStorage.setItem('accentColor', '#91C1FF')
-    localStorage.setItem('accentColorR', '145')
-    localStorage.setItem('accentColorG', '193')
-    localStorage.setItem('accentColorB', '255')
-    // default backgroundColor
-    localStorage.setItem('backgroundColor', '#FFFFFF')
-    localStorage.setItem('backgroundColorR', '255')
-    localStorage.setItem('backgroundColorG', '255')
-    localStorage.setItem('backgroundColorB', '255')
-    // default cardColor
-    localStorage.setItem('cardColor', '#748498')
-    localStorage.setItem('cardColorR', '116')
-    localStorage.setItem('cardColorG', '132')
-    localStorage.setItem('cardColorB', '152')
-    // default nodeColor
-    localStorage.setItem('nodeColor', '#4D5159')
-    localStorage.setItem('nodeColorR', '77')
-    localStorage.setItem('nodeColorG', '81')
-    localStorage.setItem('nodeColorB', '89')
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#000000')
+  localStorage.setItem('primaryColorR', '0')
+  localStorage.setItem('primaryColorG', '0')
+  localStorage.setItem('primaryColorB', '0')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#8B979D')
+  localStorage.setItem('secondaryColorR', '139')
+  localStorage.setItem('secondaryColorG', '151')
+  localStorage.setItem('secondaryColorB', '157')
+  // default accentColor
+  localStorage.setItem('accentColor', '#91C1FF')
+  localStorage.setItem('accentColorR', '145')
+  localStorage.setItem('accentColorG', '193')
+  localStorage.setItem('accentColorB', '255')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#FFFFFF')
+  localStorage.setItem('backgroundColorR', '255')
+  localStorage.setItem('backgroundColorG', '255')
+  localStorage.setItem('backgroundColorB', '255')
+  // default cardColor
+  localStorage.setItem('cardColor', '#748498')
+  localStorage.setItem('cardColorR', '116')
+  localStorage.setItem('cardColorG', '132')
+  localStorage.setItem('cardColorB', '152')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#4D5159')
+  localStorage.setItem('nodeColorR', '77')
+  localStorage.setItem('nodeColorG', '81')
+  localStorage.setItem('nodeColorB', '89')
 
-    window.location.reload(false);
+  window.location.reload(false);
 }
 
 function V2teamPalette(){
@@ -109,6 +109,111 @@ function V2teamPalette(){
   localStorage.setItem('nodeColorR', '27')
   localStorage.setItem('nodeColorG', '32')
   localStorage.setItem('nodeColorB', '61')
+
+  window.location.reload(false);
+}
+
+function darkBluePalette(){
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#FFFFFF')
+  localStorage.setItem('primaryColorR', '255')
+  localStorage.setItem('primaryColorG', '255')
+  localStorage.setItem('primaryColorB', '255')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#7D8183')
+  localStorage.setItem('secondaryColorR', '125')
+  localStorage.setItem('secondaryColorG', '129')
+  localStorage.setItem('secondaryColorB', '131')
+  // default accentColor
+  localStorage.setItem('accentColor', '#4A90E2')
+  localStorage.setItem('accentColorR', '74')
+  localStorage.setItem('accentColorG', '144')
+  localStorage.setItem('accentColorB', '226')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#000000')
+  localStorage.setItem('backgroundColorR', '0')
+  localStorage.setItem('backgroundColorG', '0')
+  localStorage.setItem('backgroundColorB', '0')
+  // default cardColor
+  localStorage.setItem('cardColor', '#3D4957')
+  localStorage.setItem('cardColorR', '61')
+  localStorage.setItem('cardColorG', '73')
+  localStorage.setItem('cardColorB', '87')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#B1A7A7')
+  localStorage.setItem('nodeColorR', '177')
+  localStorage.setItem('nodeColorG', '167')
+  localStorage.setItem('nodeColorB', '167')
+
+  window.location.reload(false);
+}
+
+function darkRedPalette(){
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#FFFFFF')
+  localStorage.setItem('primaryColorR', '255')
+  localStorage.setItem('primaryColorG', '255')
+  localStorage.setItem('primaryColorB', '255')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#918181')
+  localStorage.setItem('secondaryColorR', '145')
+  localStorage.setItem('secondaryColorG', '129')
+  localStorage.setItem('secondaryColorB', '129')
+  // default accentColor
+  localStorage.setItem('accentColor', '#D0021B')
+  localStorage.setItem('accentColorR', '208')
+  localStorage.setItem('accentColorG', '2')
+  localStorage.setItem('accentColorB', '27')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#000000')
+  localStorage.setItem('backgroundColorR', '0')
+  localStorage.setItem('backgroundColorG', '0')
+  localStorage.setItem('backgroundColorB', '0')
+  // default cardColor
+  localStorage.setItem('cardColor', '#573D3D')
+  localStorage.setItem('cardColorR', '87')
+  localStorage.setItem('cardColorG', '61')
+  localStorage.setItem('cardColorB', '61')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#673535')
+  localStorage.setItem('nodeColorR', '103')
+  localStorage.setItem('nodeColorG', '53')
+  localStorage.setItem('nodeColorB', '53')
+
+  window.location.reload(false);
+}
+
+function protanopiaPalette(){
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#FFFFFF')
+  localStorage.setItem('primaryColorR', '255')
+  localStorage.setItem('primaryColorG', '255')
+  localStorage.setItem('primaryColorB', '255')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#918181')
+  localStorage.setItem('secondaryColorR', '145')
+  localStorage.setItem('secondaryColorG', '129')
+  localStorage.setItem('secondaryColorB', '129')
+  // default accentColor
+  localStorage.setItem('accentColor', '#D0021B')
+  localStorage.setItem('accentColorR', '208')
+  localStorage.setItem('accentColorG', '2')
+  localStorage.setItem('accentColorB', '27')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#000000')
+  localStorage.setItem('backgroundColorR', '0')
+  localStorage.setItem('backgroundColorG', '0')
+  localStorage.setItem('backgroundColorB', '0')
+  // default cardColor
+  localStorage.setItem('cardColor', '#573D3D')
+  localStorage.setItem('cardColorR', '87')
+  localStorage.setItem('cardColorG', '61')
+  localStorage.setItem('cardColorB', '61')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#673535')
+  localStorage.setItem('nodeColorR', '103')
+  localStorage.setItem('nodeColorG', '53')
+  localStorage.setItem('nodeColorB', '53')
 
   window.location.reload(false);
 }
@@ -434,6 +539,8 @@ class Settings extends React.Component {
                     <button class="button4" onClick={defaultColors}>Default Colors</button>
                     <button class="button4" onClick={skybluePalette}>Skyblue Palette</button>
                     <button class="button4" onClick={V2teamPalette}>V2 Team Palette</button>
+                    <button class="button4" onClick={darkBluePalette}>Dark Blue Palette</button>
+                    <button class="button4" onClick={darkRedPalette}>Dark Red Palette</button>
                 </div>
             </div>
         </div>

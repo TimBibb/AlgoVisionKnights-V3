@@ -628,7 +628,7 @@ export default class BubbleSort extends React.Component {
 		let stepId = this.state.stepId - 1;
 
 		this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
-		this.props.codeSteps[this.state.stepId].forward();
+		this.props.codeSteps[stepId].forward();
 		document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Bubble Sort!</h1>" : this.state.messages[stepId - 1];
 		this.setState({stepId: stepId});
 		d3.timeout(this.turnOffRunning, this.props.waitTime);

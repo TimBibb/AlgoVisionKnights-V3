@@ -733,6 +733,8 @@ export default class HeapSort extends React.Component {
 
     document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "<h1>Welcome to Heap Sort!</h1>" : this.state.messages[stepId - 1];
     for (const step of this.state.steps[stepId]) step.backward();
+
+    this.props.codeSteps[stepId].forward();
     // this.state.steps[--stepId].backward();
     this.setState({ stepId: stepId });
     d3.timeout(this.turnOffRunning, this.props.waitTime);

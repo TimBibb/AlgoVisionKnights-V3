@@ -3,6 +3,7 @@ import { SketchPicker } from 'react-color'
 import reactCSS from 'reactcss'
 import {Typography} from '@material-ui/core';
 import './Settings.css';
+import { Row, Col, Container } from 'react-bootstrap';
 
 function NavigateToDashboard(){
 	window.location.href = "/";
@@ -185,39 +186,73 @@ function darkRedPalette(){
 
 function protanopiaPalette(){
   // default primaryColor
-  localStorage.setItem('primaryColor', '#FFFFFF')
-  localStorage.setItem('primaryColorR', '255')
-  localStorage.setItem('primaryColorG', '255')
-  localStorage.setItem('primaryColorB', '255')
+  localStorage.setItem('primaryColor', '#000000')
+  localStorage.setItem('primaryColorR', '0')
+  localStorage.setItem('primaryColorG', '0')
+  localStorage.setItem('primaryColorB', '0')
   // default secondaryColor
-  localStorage.setItem('secondaryColor', '#918181')
-  localStorage.setItem('secondaryColorR', '145')
-  localStorage.setItem('secondaryColorG', '129')
-  localStorage.setItem('secondaryColorB', '129')
+  localStorage.setItem('secondaryColor', '#C6D4E1')
+  localStorage.setItem('secondaryColorR', '198')
+  localStorage.setItem('secondaryColorG', '212')
+  localStorage.setItem('secondaryColorB', '225')
   // default accentColor
-  localStorage.setItem('accentColor', '#D0021B')
-  localStorage.setItem('accentColorR', '208')
-  localStorage.setItem('accentColorG', '2')
-  localStorage.setItem('accentColorB', '27')
+  localStorage.setItem('accentColor', '#44749D')
+  localStorage.setItem('accentColorR', '68')
+  localStorage.setItem('accentColorG', '116')
+  localStorage.setItem('accentColorB', '157')
   // default backgroundColor
-  localStorage.setItem('backgroundColor', '#000000')
-  localStorage.setItem('backgroundColorR', '0')
-  localStorage.setItem('backgroundColorG', '0')
-  localStorage.setItem('backgroundColorB', '0')
+  localStorage.setItem('backgroundColor', '#EBE7E0')
+  localStorage.setItem('backgroundColorR', '235')
+  localStorage.setItem('backgroundColorG', '231')
+  localStorage.setItem('backgroundColorB', '224')
   // default cardColor
-  localStorage.setItem('cardColor', '#573D3D')
-  localStorage.setItem('cardColorR', '87')
-  localStorage.setItem('cardColorG', '61')
-  localStorage.setItem('cardColorB', '61')
+  localStorage.setItem('cardColor', '#BDB8AD')
+  localStorage.setItem('cardColorR', '189')
+  localStorage.setItem('cardColorG', '184')
+  localStorage.setItem('cardColorB', '173')
   // default nodeColor
-  localStorage.setItem('nodeColor', '#673535')
-  localStorage.setItem('nodeColorR', '103')
-  localStorage.setItem('nodeColorG', '53')
-  localStorage.setItem('nodeColorB', '53')
+  localStorage.setItem('nodeColor', '#828080')
+  localStorage.setItem('nodeColorR', '130')
+  localStorage.setItem('nodeColorG', '128')
+  localStorage.setItem('nodeColorB', '128')
 
   window.location.reload(false);
 }
 
+function deuteranopiaPalette(){
+  // default primaryColor
+  localStorage.setItem('primaryColor', '#382119')
+  localStorage.setItem('primaryColorR', '56')
+  localStorage.setItem('primaryColorG', '33')
+  localStorage.setItem('primaryColorB', '25')
+  // default secondaryColor
+  localStorage.setItem('secondaryColor', '#ABC3C9')
+  localStorage.setItem('secondaryColorR', '171')
+  localStorage.setItem('secondaryColorG', '195')
+  localStorage.setItem('secondaryColorB', '201')
+  // default accentColor
+  localStorage.setItem('accentColor', '#B85E5E')
+  localStorage.setItem('accentColorR', '184')
+  localStorage.setItem('accentColorG', '94')
+  localStorage.setItem('accentColorB', '94')
+  // default backgroundColor
+  localStorage.setItem('backgroundColor', '#E0DCD3')
+  localStorage.setItem('backgroundColorR', '224')
+  localStorage.setItem('backgroundColorG', '220')
+  localStorage.setItem('backgroundColorB', '211')
+  // default cardColor
+  localStorage.setItem('cardColor', '#CCBE9F')
+  localStorage.setItem('cardColorR', '204')
+  localStorage.setItem('cardColorG', '190')
+  localStorage.setItem('cardColorB', '159')
+  // default nodeColor
+  localStorage.setItem('nodeColor', '#D8918B')
+  localStorage.setItem('nodeColorR', '216')
+  localStorage.setItem('nodeColorG', '145')
+  localStorage.setItem('nodeColorB', '139')
+
+  window.location.reload(false);
+}
 class Settings extends React.Component {
     
     // primaryColor = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : "#FFFFFF"
@@ -471,77 +506,91 @@ class Settings extends React.Component {
  
       return (
         <div>
+          <Container>
+            <Row>
+              <Col>
+                <div className='settings-container'>
+                  {/* Primary Color */}
+                  <div style={ styles.swatch } onClick={ this.onClick }>
+                  <div style={ styles.primaryColor } />
+                  </div>
+                  { this.state.showPicker ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onClose }/>
+                  <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
+                  </div> : null }
+                  <Typography id="settings-title"> Primary Color </Typography>
+
+                  {/* Secondary Color */}
+                  <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
+                  <div style={ styles.secondaryColor } />
+                  </div>
+                  { this.state.showPickerSecondaryColor ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
+                  <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
+                  </div> : null }
+                  <Typography id="settings-title"> Secondary Color </Typography>
+
+                  {/* Accent Color */}
+                  <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
+                  <div style={ styles.accentColor } />
+                  </div>
+                  { this.state.showPickerAccentColor ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
+                  <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
+                  </div> : null }
+                  <Typography id="settings-title"> Accent Color </Typography>
+
+                  {/* Background Color */}
+                  <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
+                  <div style={ styles.backgroundColor } />
+                  </div>
+                  { this.state.showPickerBackgroundColor ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
+                  <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
+                  </div> : null }
+                  <Typography id="settings-title"> Background Color </Typography>
+
+                  {/* Card Color */}
+                  <div style={ styles.swatch } onClick={ this.onClickCardColor }>
+                  <div style={ styles.cardColor } />
+                  </div>
+                  { this.state.showPickerCardColor ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onCloseCardColor }/>
+                  <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
+                  </div> : null }
+                  <Typography id="settings-title"> Card Color </Typography>
+
+                  {/* Node Color */}
+                  <div style={ styles.swatch } onClick={ this.onClickNodeColor }>
+                  <div style={ styles.nodeColor } />
+                  </div>
+                  { this.state.showPickerNodeColor ? <div style={ styles.popover }>
+                  <div style={ styles.cover } onClick={ this.onCloseNodeColor }/>
+                  <SketchPicker color={ this.state.nodeColor } onChange={ this.onChangeNodeColor } />
+                  </div> : null }
+                  <Typography id="settings-title"> Node Color </Typography>
+                  
+                </div>
+              </Col>
+              <Col>
+                  <Typography id="settings-title"> Templates </Typography>
+                  <div className="button-template">
+                    <button class="button4 skyBlueButton" onClick={skybluePalette}>Skyblue Palette</button>
+                    <button class="button4 V2teamButton" onClick={V2teamPalette}>V2 Team Palette</button>
+                    <button class="button4 darkBlueButton" onClick={darkBluePalette}>Dark Blue Palette</button>
+                    <button class="button4 darkRedButton" onClick={darkRedPalette}>Dark Red Palette</button>
+                    <button class="button4 protanopiaButton" onClick={protanopiaPalette}>Protanopia Palette</button>
+                    <button class="button4 deuteranopiaButton" onClick={deuteranopiaPalette}>Deuteranopia Palette</button>
+                  </div>
+              </Col>
+            </Row>
+            </Container>
+
             <div className='settings-container'>
-                {/* Primary Color */}
-                <div style={ styles.swatch } onClick={ this.onClick }>
-                <div style={ styles.primaryColor } />
-                </div>
-                { this.state.showPicker ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onClose }/>
-                <SketchPicker color={ this.state.primaryColor } onChange={ this.onChange } />
-                </div> : null }
-                <Typography id="settings-title"> Primary Color </Typography>
-
-                {/* Secondary Color */}
-                <div style={ styles.swatch } onClick={ this.onClickSecondaryColor }>
-                <div style={ styles.secondaryColor } />
-                </div>
-                { this.state.showPickerSecondaryColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseSecondaryColor }/>
-                <SketchPicker color={ this.state.secondaryColor } onChange={ this.onChangeSecondaryColor } />
-                </div> : null }
-                <Typography id="settings-title"> Secondary Color </Typography>
-
-                {/* Accent Color */}
-                <div style={ styles.swatch } onClick={ this.onClickAccentColor }>
-                <div style={ styles.accentColor } />
-                </div>
-                { this.state.showPickerAccentColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseAccentColor }/>
-                <SketchPicker color={ this.state.accentColor } onChange={ this.onChangeAccentColor } />
-                </div> : null }
-                <Typography id="settings-title"> Accent Color </Typography>
-
-                {/* Background Color */}
-                <div style={ styles.swatch } onClick={ this.onClickBackgroundColor }>
-                <div style={ styles.backgroundColor } />
-                </div>
-                { this.state.showPickerBackgroundColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseBackgroundColor }/>
-                <SketchPicker color={ this.state.backgroundColor } onChange={ this.onChangeBackgroundColor } />
-                </div> : null }
-                <Typography id="settings-title"> Background Color </Typography>
-
-                {/* Card Color */}
-                <div style={ styles.swatch } onClick={ this.onClickCardColor }>
-                <div style={ styles.cardColor } />
-                </div>
-                { this.state.showPickerCardColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseCardColor }/>
-                <SketchPicker color={ this.state.cardColor } onChange={ this.onChangeCardColor } />
-                </div> : null }
-                <Typography id="settings-title"> Card Color </Typography>
-
-                {/* Node Color */}
-                <div style={ styles.swatch } onClick={ this.onClickNodeColor }>
-                <div style={ styles.nodeColor } />
-                </div>
-                { this.state.showPickerNodeColor ? <div style={ styles.popover }>
-                <div style={ styles.cover } onClick={ this.onCloseNodeColor }/>
-                <SketchPicker color={ this.state.nodeColor } onChange={ this.onChangeNodeColor } />
-                </div> : null }
-                <Typography id="settings-title"> Node Color </Typography>
-
-            </div>
-            <div className='settings-container'>
-                <div className="button-location">
-                    <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
-                    <button class="button4" onClick={defaultColors}>Default Colors</button>
-                    <button class="button4" onClick={skybluePalette}>Skyblue Palette</button>
-                    <button class="button4" onClick={V2teamPalette}>V2 Team Palette</button>
-                    <button class="button4" onClick={darkBluePalette}>Dark Blue Palette</button>
-                    <button class="button4" onClick={darkRedPalette}>Dark Red Palette</button>
-                </div>
+              <div className="button-location">
+                <button class="button3" onClick={NavigateToDashboard}>Dashboard</button>
+                <button class="button4" onClick={defaultColors}>Default Colors</button>
+              </div>
             </div>
         </div>
       )

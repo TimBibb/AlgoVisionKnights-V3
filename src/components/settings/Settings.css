@@ -3,21 +3,40 @@
 	font-weight: 'bold';
 	color: var(--primaryColor);
 	text-align: center;
-    width: 100%;
-    margin-bottom: 1em;
+  width: 100%;
+  margin-bottom: 1em;
 }
 
 .settings-container{
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .button-location{
 	margin-left: 3%;
 	/* display: flex; */
 	float: left;
+}
+
+.button-template{
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  float: left;
+  flex-direction: column;
+  align-items: center;
+  align-content: space-around;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.templates-buttons {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .button3 {
@@ -48,30 +67,60 @@
     color: var(--primaryColor);
   }
   
-  .button4 {
-    background-color: var(--accentColor);
-    border: 2.5px solid var(--accentColor);
-    color: var(--backgroundColor);
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 4px 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 15px;
-  }
+.button4 {
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--backgroundColor);
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 4px 4px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: 15px;
+}
   
-  .button4:hover {
-    background-color: var(--accentColor);
-    border: 2.5px solid var(--accentColor);
-    color: var(--primaryColor);
-  }
+.button4:hover {
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--primaryColor);
+}
   
-  .button4:active {
-    background-color: var(--accentColor);
-    border: 2.5px solid var(--accentColor);
-    color: var(--backgroundColor);
-  }
+.button4:active {
+  background-color: var(--accentColor);
+  border: 2.5px solid var(--accentColor);
+  color: var(--backgroundColor);
+}
+
+.skyBlueButton, .skyBlueButton:hover, .skyBlueButton:active{
+  background-color: #91C1FF;
+  border: 2.5px solid #91C1FF;
+}
+
+.V2teamButton, .V2teamButton:hover, .V2teamButton:active{
+  background-color: #FF335C;
+  border: 2.5px solid #FF335C;
+}
+
+.darkBlueButton, .darkBlueButton:hover, .darkBlueButton:active{
+  background-color: #4A90E2;
+  border: 2.5px solid #4A90E2;
+}
+
+.darkRedButton, .darkRedButton:hover, .darkRedButton:active{
+  background-color: #D0021B;
+  border: 2.5px solid #D0021B;
+}
+
+.protanopiaButton, .protanopiaButton:hover, .protanopiaButton:active{
+  background-color: #44749D;
+  border: 2.5px solid #44749D;
+}
+
+.deuteranopiaButton, .deuteranopiaButton:hover, .deuteranopiaButton:active{
+  background-color: #B85E5E;
+  border: 2.5px solid #B85E5E;
+}

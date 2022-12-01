@@ -234,7 +234,7 @@ const algorithms = {
 			category: 'Trees'
 		},
 		{
-			name: 'Max Heapify',
+			name: 'Min Heapify',
 			path: 'heaps',
 			type: 'js',
 			description: <Heaps />,

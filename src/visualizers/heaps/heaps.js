@@ -351,13 +351,24 @@ export default class binarysearchtree extends React.Component {
     simulate() {
         console.log("SIMULATING");
         //var svg = this.initialize();
-        var val = Math.floor((Math.random() * 13));
-        var val_left = Math.floor((Math.random() * 13) + 14);
-        var val_right = Math.floor((Math.random() * 13) + 28);
+        
+        // Min Heap created
+        // var val = Math.floor((Math.random() * 13));
+        // var val_left = Math.floor((Math.random() * 13) + 14);
+        // var val_right = Math.floor((Math.random() * 13) + 28);
+        // var val_left2 = Math.floor((Math.random() * 13) + 42);
+        // var val_right2 = Math.floor((Math.random() * 13) + 56);
+        // var val_left3 = Math.floor((Math.random() * 13) + 71);
+        // var val_right3 = Math.floor((Math.random() * 13) + 85);
+
+        // Max Heap created
+        var val = Math.floor((Math.random() * 13) + 85);
+        var val_left = Math.floor((Math.random() * 13) + 71);
+        var val_right = Math.floor((Math.random() * 13) + 56);
         var val_left2 = Math.floor((Math.random() * 13) + 42);
-        var val_right2 = Math.floor((Math.random() * 13) + 56);
-        var val_left3 = Math.floor((Math.random() * 13) + 71);
-        var val_right3 = Math.floor((Math.random() * 13) + 85);
+        var val_right2 = Math.floor((Math.random() * 13) + 28);
+        var val_left3 = Math.floor((Math.random() * 13) + 14);
+        var val_right3 = Math.floor((Math.random() * 13));
 
         // var val = Math.floor((Math.random() * 15) + 31);
         // var val_left = Math.floor((Math.random() * 15) + 16);
@@ -420,13 +431,13 @@ export default class binarysearchtree extends React.Component {
             messages.push("Next iteration for value k.");
             pseudocodeArr.push(new HighlightLineStep(3, this.props.lines))
 
-            if(node.left.left.value > node.left.value || node.left.right.value > node.left.value){
+            if(node.left.left.value < node.left.value || node.left.right.value < node.left.value){
 
                 steps.push(new EmptyStep())
                 messages.push("On the left side, we can see that a triangle forms.");
                 pseudocodeArr.push(new HighlightLineStep(4, this.props.lines))
 
-                if(node.left.left.value > node.left.right.value){
+                if(node.left.left.value < node.left.right.value){
 
                     steps.push(new EmptyStep())
                     messages.push("Checking if the left-most node has a greater value than the rightmost.");
@@ -435,15 +446,15 @@ export default class binarysearchtree extends React.Component {
                     temp = node.left.value;
 
                     steps.push(new HighlightNodeStep(node.left.left, null));
-                    messages.push( node.left.left.value + " is greater than " + node.left.right.value);
+                    messages.push( node.left.left.value + " is less than " + node.left.right.value);
                     pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.left.right, null));
-                    messages.push( node.left.left.value + " is greater than " + node.left.right.value);
+                    messages.push( node.left.left.value + " is less than " + node.left.right.value);
                     pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.left.right, null));
-                    messages.push(node.left.left.value + " is greater than " + node.left.right.value);
+                    messages.push(node.left.left.value + " is less than " + node.left.right.value);
                     pseudocodeArr.push(new HighlightLineStep(6, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.left, null));
@@ -464,10 +475,10 @@ export default class binarysearchtree extends React.Component {
                     node.left.left.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.left.left, null));
-                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
+                    messages.push("So we swap " + node.left.value + " with the parent " + node.left.left.value);
                     pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
                     steps.push(new UnHighlightNodeStep(node.left, null));
-                    messages.push("So we swap " + node.left.left.value + " with the parent " + node.left.value);
+                    messages.push("So we swap " + node.left.value + " with the parent " + node.left.left.value);
                     pseudocodeArr.push(new HighlightLineStep(9, this.props.lines))
                 }
                 else{
@@ -478,18 +489,18 @@ export default class binarysearchtree extends React.Component {
                     temp = node.left.value;
 
                     // steps.push(new EmptyStep());
-                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    // messages.push( node.left.right.value + " is less than " + node.left.left.value);
 
                     steps.push(new HighlightNodeStep(node.left.right, null));
-                    messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    messages.push( node.left.right.value + " is less than " + node.left.left.value);
                     pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.left.left, null));
-                    messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    messages.push( node.left.right.value + " is less than " + node.left.left.value);
                     pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.left.left, null));
-                    messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    messages.push( node.left.right.value + " is less than " + node.left.left.value);
                     pseudocodeArr.push(new HighlightLineStep(11, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.left, null));
@@ -510,20 +521,20 @@ export default class binarysearchtree extends React.Component {
                     node.left.right.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.left.right, null));
-                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
+                    messages.push("So we swap " + node.left.value + " with the parent " + node.left.right.value);
                     pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
                     steps.push(new UnHighlightNodeStep(node.left, null));
-                    messages.push("So we swap " + node.left.right.value + " with the parent " + node.left.value);
+                    messages.push("So we swap " + node.left.value + " with the parent " + node.left.right.value);
                     pseudocodeArr.push(new HighlightLineStep(13, this.props.lines))
                 }
             }
-            if(node.right.left.value > node.right.value || node.right.right.value > node.right.value){
+            if(node.right.left.value < node.right.value || node.right.right.value < node.right.value){
                 
                 steps.push(new EmptyStep());
                 messages.push("On the right side, we can see that another triangle forms.");
                 pseudocodeArr.push(new HighlightLineStep(17, this.props.lines))
 
-                if(node.right.left.value > node.right.right.value){
+                if(node.right.left.value < node.right.right.value){
                     steps.push(new EmptyStep())
                     messages.push("Checking if right's left node has a greater value than its right.");
                     pseudocodeArr.push(new HighlightLineStep(19, this.props.lines))
@@ -531,14 +542,14 @@ export default class binarysearchtree extends React.Component {
                     temp = node.right.value;
 
                     steps.push(new HighlightNodeStep(node.right.left, null));
-                    messages.push(node.right.left.value + " is greater than " + node.right.right.value);
+                    messages.push(node.right.left.value + " is less than " + node.right.right.value);
                     pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
                     steps.push(new HighlightNodeStep(node.right.right, null));
-                    messages.push(node.right.left.value + " is greater than " + node.right.right.value);
+                    messages.push(node.right.left.value + " is less than " + node.right.right.value);
                     pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.right.right, null));
-                    messages.push(node.right.left.value + " is greater than " + node.right.right.value);
+                    messages.push(node.right.left.value + " is less than " + node.right.right.value);
                     pseudocodeArr.push(new HighlightLineStep(21, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.right, null));
@@ -556,13 +567,13 @@ export default class binarysearchtree extends React.Component {
                     node.right.left.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.right.left, null));
-                    messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
+                    messages.push("So we swap " + node.right.value + " with the parent " + node.right.leftvalue);
                     pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
                     steps.push(new UnHighlightNodeStep(node.right, null));
-                    messages.push("So we swap " + node.right.left.value + " with the parent " + node.right.value);
+                    messages.push("So we swap " + node.right.value + " with the parent " + node.right.left.value);
                     pseudocodeArr.push(new HighlightLineStep(22, this.props.lines))
                 }
-                else if(node.right.left.value < node.right.right.value){
+                else if(node.right.left.value > node.right.right.value){
                     steps.push(new EmptyStep())
                     messages.push("Checking if right's left node has a smaller value than its right.");
                     pseudocodeArr.push(new HighlightLineStep(24, this.props.lines))
@@ -570,17 +581,17 @@ export default class binarysearchtree extends React.Component {
                     temp = node.right.value;
 
                     // steps.push(new EmptyStep());
-                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    // messages.push( node.left.right.value + " is less than " + node.left.left.value);
 
                     steps.push(new HighlightNodeStep(node.right.right, null));
-                    messages.push( node.right.right.value + " is greater than " + node.right.left.value);
+                    messages.push( node.right.right.value + " is less than " + node.right.left.value);
                     pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
                     steps.push(new HighlightNodeStep(node.right.left, null));
-                    messages.push( node.right.right.value + " is greater than " + node.right.left.value);
+                    messages.push( node.right.right.value + " is less than " + node.right.left.value);
                     pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.right.left, null));
-                    messages.push( node.right.right.value + " is greater than " + node.right.left.value);
+                    messages.push( node.right.right.value + " is less than " + node.right.left.value);
                     pseudocodeArr.push(new HighlightLineStep(26, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.right, null));
@@ -598,36 +609,36 @@ export default class binarysearchtree extends React.Component {
                     node.right.right.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.right.right, null));
-                    messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
+                    messages.push("So we swap " + node.right.value + " with the parent " + node.right.right.value);
                     pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
                     steps.push(new UnHighlightNodeStep(node.right, null));
-                    messages.push("So we swap " + node.right.right.value + " with the parent " + node.right.value);
+                    messages.push("So we swap " + node.right.value + " with the parent " + node.right.right.value);
                     pseudocodeArr.push(new HighlightLineStep(27, this.props.lines))
                 }
             }
-            if(node.left.value > root.value || node.right.value > root.value){
+            if(node.left.value < root.value || node.right.value < root.value){
                 
                 steps.push(new EmptyStep());
                 messages.push("Now we go to the top triangle, where we have the main root with its childs");
                 pseudocodeArr.push(new HighlightLineStep(30, this.props.lines))
 
-                if(node.left.value > node.right.value){
+                if(node.left.value < node.right.value){
                     steps.push(new EmptyStep())
-                    messages.push("Checking if the left node's value is greater than the right.");
+                    messages.push("Checking if the left node's value is less than the right.");
                     pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
 
                     temp = root.value;
 
                     steps.push(new HighlightNodeStep(node.left, null));
-                    messages.push( node.left.value + " is greater than " + node.right.value);
+                    messages.push( node.left.value + " is less than " + node.right.value);
                     pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.right, null));
-                    messages.push( node.left.value + " is greater than " + node.right.value);
+                    messages.push( node.left.value + " is less than " + node.right.value);
                     pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.right, null));
-                    messages.push( node.left.value + " is greater than " + node.right.value);
+                    messages.push( node.left.value + " is less than " + node.right.value);
                     pseudocodeArr.push(new HighlightLineStep(31, this.props.lines))
 
                     steps.push(new HighlightNodeStep(root, null));
@@ -645,13 +656,13 @@ export default class binarysearchtree extends React.Component {
                     node.left.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.left, null));
-                    messages.push("So we swap " + node.left.value + " with the parent " + root.value);
+                    messages.push("So we swap " + root.value + " with the parent " + node.left.value);
                     pseudocodeArr.push(new HighlightLineStep(34, this.props.lines))
                     steps.push(new UnHighlightNodeStep(root, null));
-                    messages.push("So we swap " + node.left.value + " with the parent " + root.value);
+                    messages.push("So we swap " + root.value + " with the parent " + node.left.value);
                     pseudocodeArr.push(new HighlightLineStep(34, this.props.lines))
                 }
-                else if(node.left.value < node.right.value){
+                else if(node.left.value > node.right.value){
                     steps.push(new EmptyStep())
                     messages.push("Checking if the left node's value is less than the right.");
                     pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
@@ -659,18 +670,18 @@ export default class binarysearchtree extends React.Component {
                     temp = root.value;
 
                     // steps.push(new EmptyStep());
-                    // messages.push( node.left.right.value + " is greater than " + node.left.left.value);
+                    // messages.push( node.left.right.value + " is less than " + node.left.left.value);
 
                     steps.push(new HighlightNodeStep(node.right, null));
-                    messages.push( node.right.value + " is greater than " + node.left.value);
+                    messages.push( node.right.value + " is less than " + node.left.value);
                     pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
 
                     steps.push(new HighlightNodeStep(node.left, null));
-                    messages.push( node.right.value + " is greater than " + node.left.value);
+                    messages.push( node.right.value + " is less than " + node.left.value);
                     pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
 
                     steps.push(new UnHighlightNodeStep(node.left, null));
-                    messages.push( node.right.value + " is greater than " + node.left.value);
+                    messages.push( node.right.value + " is less than " + node.left.value);
                     pseudocodeArr.push(new HighlightLineStep(36, this.props.lines))
 
                     steps.push(new HighlightNodeStep(root, null));
@@ -688,10 +699,10 @@ export default class binarysearchtree extends React.Component {
                     node.right.value = temp;
 
                     steps.push(new UnHighlightNodeStep(node.right, null));
-                    messages.push("So we swap " + node.right.value + " with the parent " + root.value);
+                    messages.push("So we swap " + root.value + " with the parent " + node.right.value);
                     pseudocodeArr.push(new HighlightLineStep(39, this.props.lines))
                     steps.push(new UnHighlightNodeStep(root, null));
-                    messages.push("So we swap " + node.right.value + " with the parent " + root.value);
+                    messages.push("So we swap " + root.value + " with the parent " + node.right.value);
                     pseudocodeArr.push(new HighlightLineStep(39, this.props.lines))
                 }
             }
@@ -703,150 +714,8 @@ export default class binarysearchtree extends React.Component {
             k++;
         }
 
-        // while (i < MAX_NODE) {
-        //     val = Math.floor((Math.random() * 15) + 31);
-        //     val_left = Math.floor((Math.random() * 15) + 16);
-        //     val_right = Math.floor((Math.random() * 15) + 61);
-        //     steps.push(new EmptyStep());
-        //     messages.push("The next value we will insert into the tree is " + val );
-        //     console.log("level " + level);
-        //     if(!root) {
-        //         root = new Node(this.ref, val, x, y, i);
-        //         this.setState({root: root})
-        //         //this.state.root = new LabeledNode(ref, "node" + i, "label" + i, x + "%", y + "%", num, "visible", "gray");
-        //         steps.push(new NewNodeStep(root, null));
-        //         messages.push("The tree is empty, let's add "+ val + " as the root node.");
-                
-        //         // steps.push(new UnHighlightNodeStep(this.state.root, null));
-        //         steps.push(new UnHighlightPathStep(root, val));
-        //         messages.push("The tree is empty, let's add "+ val + " as the root node.");
-        //         i++;
-        //     } else {
-        //         let node = root;
-        //         //y += 10;
-        //         level = 0
-        //         var firstStep = true;
-
-        //         console.log("root created: " + root.value)
-
-        //         while(true) {
-        //             var tempMod = (level*modifier) > 15 ? 15 : (level*modifier);
-        //             console.log(node.value);
-        //             if (firstStep) {
-        //                 steps.push(new HighlightNodeStep(node, null));
-        //                 messages.push("The next value we will insert into the tree is " + val );
-        //                 firstStep = false;
-        //             } else {
-        //                 steps.push(new HighlightNodeStep(node, null));
-        //                 messages.push("");
-        //             }
-
-        //             if(val_left < node.value) {
-        //                 // steps.push(new EmptyStep());
-        //                 // messages.push( val + " is less than " + node.value );
-
-        //                 // steps.push(new UnHighlightNodeStep(node, null));
-        //                 // messages.push(val + " is less than " + node.value);
-
-        //                 if(node.left != null) {
-        //                     var edge = node.lEdge;
-        //                     node = node.left;
-        //                     steps.push(new HighlightNodeStep(node, edge));
-        //                     messages.push("Let's traverse to the left edge of the node.");
-
-        //                     // steps.push(new UnHighlightNodeStep(node, edge));
-        //                     // messages.push("Let's traverse to the left edge of the node.");
-        //                 } else {
-        //                     temp_x = node.x - 20 + tempMod;
-        //                     temp_y = node.y + 10;
-        //                     temp_x2 = node.x - 17 + tempMod;
-        //                     temp_y2 = node.y + 8;
-
-        //                     node.lEdge = new Edge(this.ref, "edge" + j, node.x-3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
-        //                     node.left = new Node(this.ref, val_left, temp_x, temp_y, i, level===1);
-
-        //                     steps.push(new EmptyStep());
-        //                     messages.push( node.value + " has no left child.");
-
-        //                     steps.push(new NewNodeStep(node.left, node.lEdge));
-        //                     messages.push("Let's insert " + val_left + " to the left of node " + node.value );
-
-        //                     // steps.push(new UnHighlightNodeStep(node.left, node.lEdge));
-        //                     steps.push(new UnHighlightPathStep(root, val));
-        //                     messages.push("Let's insert " + val_left + " to the left of node " + node.value );
-
-        //                     //node.left = new LabeledNode(ref, "node" + i, "label" + i, (x/2) + "%", y + "%", num, "visible", "gray");
-        //                     // let edge = new Edge(this.ref, "edge" + j, node.x + "%", node.y + "%", temp_x + "%", temp_y + "%", "visible");
-        //                     // if (level > this.state.maxLevel) {
-        //                     //     this.setState({maxLevel: level});
-        //                     //     this.adjustDistances(root, level);
-        //                     // }
-        //                     i++;
-        //                     j++;
-        //                     console.log("Left node created: " + node.value + " " + node.id)
-
-        //                     break;
-        //                 }
-        //             } 
-        //             else if (val_right > node.value) {
-        //                 steps.push(new EmptyStep());
-        //                 messages.push( val + " is greater than " + node.value );
-
-        //                 // steps.push(new UnHighlightNodeStep(node, null));
-        //                 // messages.push(val + " is greater than " + node.value);
-
-        //                 if(node.right != null) {
-        //                     var edge = node.rEdge
-        //                     node = node.right;
-        //                     steps.push(new HighlightNodeStep(node, edge));
-        //                     messages.push("Let's traverse to the right edge of the node.");
-        //                     // node.value = root.value;
-        //                     // steps.push(new UnHighlightNodeStep(node, edge));
-        //                     // messages.push("Let's traverse to the right edge of the node.");
-        //                 } else {
-        //                     temp_x = node.x + 20 - tempMod;
-        //                     temp_y = node.y + 10;
-        //                     temp_x2 = node.x + 17 - tempMod;
-        //                     temp_y2 = node.y + 8;
-        //                     node.rEdge = new Edge(this.ref, "edge" + j, node.x+3 + "%", node.y+1.5 + "%", temp_x2 + "%", temp_y2 + "%", "visible");
-        //                     node.right = new Node(this.ref, val_right, temp_x, temp_y, i, level===1);
-
-        //                     steps.push(new EmptyStep());
-        //                     messages.push( node.value + " has no right child.");
-
-        //                     steps.push(new NewNodeStep(node.right, node.rEdge));
-        //                     messages.push("Let's insert " + val_right + " to the right of node " + node.value );
-
-        //                     // steps.push(new UnHighlightNodeStep(node.right, node.rEdge));
-        //                     steps.push(new UnHighlightPathStep(root, val_right));
-        //                     messages.push("Let's insert " + val_right + " to the right of node " + node.value );
-
-        //                     //node.right = new LabeledNode(ref, "node" + i, "label" + i, (x + (x/2)) + "%", y + "%", num, "visible", "gray");
-        //                     // if (level > this.state.maxLevel) {
-        //                     //     this.setState({maxLevel: level});
-        //                     //     this.adjustDistances(root, level);
-        //                     // }
-        //                     i++;
-        //                     j++;
-        //                     break;
-        //                 }
-        //             }
-        //              else {
-        //                 steps.push(new EmptyStep());
-        //                 messages.push(val + " is equal to " + node.value);
-
-        //                 // steps.push(new UnHighlightNodeStep(node, null));
-        //                 steps.push(new UnHighlightPathStep(root, val));
-        //                 messages.push("There cannot be duplicate values in a BST, so we will move on.");
-        //                 break;
-        //             }
-        //             level++;
-        //         }
-        //     }
-        // }
-
         steps.push(new EmptyStep())
-        messages.push("Max Heapify complete!");
+        messages.push("Min Heapify complete!");
         pseudocodeArr.push(new HighlightLineStep(0, this.props.lines))
         console.log(this.state.root);
         this.setState({steps: steps});
@@ -878,7 +747,7 @@ export default class binarysearchtree extends React.Component {
 
         this.state.steps[stepId].backward(d3.select(this.ref.current).select("svg"));
         this.props.codeSteps[stepId].forward();
-        document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "Welcome to Max Heapify!" : this.state.messages[stepId - 1];
+        document.getElementById("message").innerHTML = (stepId - 1 < 0) ? "Welcome to Min Heapify!" : this.state.messages[stepId - 1];
 
 		this.setState({stepId: stepId});
 
@@ -942,7 +811,7 @@ export default class binarysearchtree extends React.Component {
 		console.log("RESTART CLICKED");
 
 		d3.select(this.ref.current).select("svg").remove();
-        document.getElementById("message").innerHTML = "Welcome to Max Heapify!";
+        document.getElementById("message").innerHTML = "Welcome to Min Heapify!";
 
 		this.setState({running: false, steps: [], messages: [], tree: [], maxLevel: -1, stepId: 0, root: null});
         this.initialize()
@@ -991,7 +860,7 @@ export default class binarysearchtree extends React.Component {
                     <button class="button" onClick={this.forward}>Step Forward</button>
                     <SpeedSlider waitTimeMultiplier={this.props.waitTimeMultiplier} handleSpeedUpdate={this.props.handleSpeedUpdate}/>
                 </div>
-                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Max Heapify!</h1></span></div>
+                <div class="center-screen" id="message-pane"><span id="message"><h1>Welcome to Min Heapify!</h1></span></div>
                 <table>
                     <tr>
                         <div ref={this.ref} class=""></div>
